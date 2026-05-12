@@ -18,6 +18,7 @@ import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -605,8 +606,3 @@ export struct ChatPage {
     })
   }
 }
-
-// 错误颜色（从 design-tokens 导入）
-const ErrorColors = {
-  Error500: '#E84026'
-};

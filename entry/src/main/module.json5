@@ -14,7 +14,7 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "targetSdkVersion": 12,
+    "targetSdkVersion": 20,
     "compatibleSdkVersion": 12,
     "querySchemes": [
       "plugs",
@@ -186,7 +186,7 @@
             ]
           }
         ]
-      },
+      }
     ],
     "intents": [
       {
@@ -260,7 +260,7 @@
             }
           ]
         }
-      },
+      }
     ]
   }
 }

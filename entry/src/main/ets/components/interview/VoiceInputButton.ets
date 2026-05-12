@@ -8,6 +8,7 @@ import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -363,8 +364,3 @@ export struct VoiceInputButton {
     .layoutWeight(1)
   }
 }
-
-// 错误色（用于录音状态）
-const ErrorColors = {
-  Error500: '#E84026'
-};

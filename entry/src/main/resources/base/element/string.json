@@ -291,6 +291,94 @@
     {
       "name": "network_error",
       "value": "网络连接失败"
+    },
+    {
+      "name": "permission_internet_reason",
+      "value": "用于访问网络服务"
+    },
+    {
+      "name": "permission_network_info_reason",
+      "value": "用于获取网络状态"
+    },
+    {
+      "name": "permission_set_network_reason",
+      "value": "用于网络设置"
+    },
+    {
+      "name": "permission_wifi_state_reason",
+      "value": "用于获取WiFi状态"
+    },
+    {
+      "name": "permission_wifi_info_reason",
+      "value": "用于获取WiFi信息"
+    },
+    {
+      "name": "permission_push_token_reason",
+      "value": "用于接收消息推送"
+    },
+    {
+      "name": "permission_push_message_reason",
+      "value": "用于接收推送消息"
+    },
+    {
+      "name": "permission_biometric_reason",
+      "value": "用于生物识别认证"
+    },
+    {
+      "name": "permission_read_media_reason",
+      "value": "用于读取媒体文件"
+    },
+    {
+      "name": "permission_write_media_reason",
+      "value": "用于保存媒体文件"
+    },
+    {
+      "name": "permission_read_image_reason",
+      "value": "用于读取图片文件"
+    },
+    {
+      "name": "permission_write_image_reason",
+      "value": "用于保存图片文件"
+    },
+    {
+      "name": "permission_read_file_reason",
+      "value": "用于读取文件"
+    },
+    {
+      "name": "permission_write_file_reason",
+      "value": "用于保存文件"
+    },
+    {
+      "name": "permission_distributed_reason",
+      "value": "用于跨设备数据同步"
+    },
+    {
+      "name": "hms_app_id",
+      "value": ""
+    },
+    {
+      "name": "hms_cp_id",
+      "value": ""
+    },
+    {
+      "name": "hms_product_id",
+      "value": ""
+    },
+    {
+      "name": "hms_client_id",
+      "value": ""
+    },
+    {
+      "name": "hms_client_secret",
+      "value": ""
+    },
+    {
+      "name": "hms_api_key",
+      "value": ""
+    },
+    {
+      "name": "hms_cert_fingerprint",
+      "value": ""
     }
   ]
 }
