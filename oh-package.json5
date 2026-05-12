@@ -5,7 +5,8 @@
   "dependencies": {
     "@hw-agconnect/core": "^1.0.0",
     "@hw-agconnect/auth": "^1.0.0",
-    "@hw-agconnect/push": "^1.0.0"
+    "@hw-agconnect/push": "^1.0.0",
+    "@mlethe/multi-api": "^1.0.0"
   },
   "devDependencies": {},
   "dynamicDependencies": {}

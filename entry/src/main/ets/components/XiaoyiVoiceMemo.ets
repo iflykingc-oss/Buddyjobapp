@@ -1,9 +1,11 @@
 import { agentFramework } from '@kit.IntelligentAgentKit';
 import { audio } from '@kit.AudioKit';
 import { fileIo } from '@kit.CoreFileKit';
+import { common } from '@kit.AbilityKit';
 import { promptAction } from '@kit.ArkUI';
 import { ApiService } from '../services/ApiService';
 import { XiaoyiService } from '../services/XiaoyiService';
+import { ShareUtils, ShareType } from '../utils/share';
 import { Logger } from '../utils/logger';
 import {
   BrandColors,
@@ -45,9 +47,11 @@ export struct XiaoyiVoiceMemo {
   private audioRecorder: audio.AudioRecorder | null = null;
   private timer: number | null = null;
   private recordFilePath: string = '';
+  private uiContext: common.UIAbilityContext | null = null;
 
   aboutToAppear() {
     this.initAudioRecorder();
+    this.uiContext = getContext(this) as common.UIAbilityContext;
   }
 
   aboutToDisappear() {
@@ -764,14 +768,123 @@ export struct XiaoyiVoiceMemo {
 
   /**
    * 分享备忘录
+   * 使用系统分享能力（UIAbilityContext.startAbility）分享 AI 生成的摘要
+   * 支持分享到微信、QQ 等第三方应用
    */
-  private shareMemo() {
-    // 调用系统分享
+  private async shareMemo() {
+    if (!this.uiContext) {
+      promptAction.showToast({ message: '分享功能不可用' });
+      return;
+    }
+
+    // 构建分享内容
+    const shareTitle = '一职搭子 - 面试要点记录';
+    const shareContent = `【面试要点摘要】\n\n` +
+      `${this.summary}\n\n` +
+      `【关键要点】\n` +
+      `${this.keyPoints.map((point, index) => `${index + 1}. ${point}`).join('\n')}`;
+
+    try {
+      // 使用 ShareUtils 发起系统分享
+      await ShareUtils.shareTextWithTitle(
+        shareTitle,
+        shareContent,
+        this.uiContext,
+        {
+          onSuccess: () => {
+            Logger.info(TAG, 'Memo shared successfully');
+          },
+          onFailure: (error: string) => {
+            Logger.error(TAG, `Share failed: ${error}`);
+            promptAction.showToast({ message: '分享失败，请重试' });
+          }
+        }
+      );
+    } catch (error) {
+      Logger.error(TAG, 'Error sharing memo:', JSON.stringify(error));
+      promptAction.showToast({ message: '分享失败' });
+    }
+  }
+
+  /**
+   * 分享纯文本摘要（快捷分享）
+   */
+  private async shareTextSummary() {
+    if (!this.uiContext || !this.summary) {
+      return;
+    }
+
+    try {
+      await ShareUtils.shareText(this.summary, this.uiContext);
+    } catch (error) {
+      Logger.error(TAG, 'Error sharing text summary:', JSON.stringify(error));
+    }
+  }
+
+  /**
+   * 分享到微信
+   */
+  private async shareToWeChat() {
+    if (!this.uiContext) {
+      return;
+    }
+
     const shareContent = `面试要点摘要：\n${this.summary}\n\n关键要点：\n${this.keyPoints.map((p, i) => `${i + 1}. ${p}`).join('\n')}`;
 
-    // 触发分享
-    Logger.info(TAG, 'Sharing memo:', shareContent);
-    promptAction.showToast({ message: '分享功能开发中' });
+    try {
+      await ShareUtils.shareToWeChat(
+        {
+          title: '一职搭子 - 面试记录',
+          content: shareContent,
+          type: ShareType.TEXT
+        },
+        this.uiContext,
+        {
+          onSuccess: () => {
+            Logger.info(TAG, 'Shared to WeChat successfully');
+          },
+          onFailure: (error: string) => {
+            Logger.error(TAG, `Share to WeChat failed: ${error}`);
+            promptAction.showToast({ message: '分享到微信失败，请确认已安装微信' });
+          }
+        }
+      );
+    } catch (error) {
+      Logger.error(TAG, 'Error sharing to WeChat:', JSON.stringify(error));
+    }
+  }
+
+  /**
+   * 分享到QQ
+   */
+  private async shareToQQ() {
+    if (!this.uiContext) {
+      return;
+    }
+
+    const shareContent = `面试要点摘要：\n${this.summary}\n\n关键要点：\n${this.keyPoints.map((p, i) => `${i + 1}. ${p}`).join('\n')}`;
+
+    try {
+      await ShareUtils.shareToQQ(
+        {
+          title: '一职搭子 - 面试记录',
+          content: shareContent,
+          type: ShareType.TEXT
+        },
+        this.uiContext,
+        {
+          onSuccess: () => {
+            Logger.info(TAG, 'Shared to QQ successfully');
+          },
+          onFailure: (error: string) => {
+            Logger.error(TAG, `Share to QQ failed: ${error}`);
+            promptAction.showToast({ message: '分享到QQ失败，请确认已安装QQ' });
+          }
+        }
+      );
+    } catch (error) {
+      Logger.error(TAG, 'Error sharing to QQ:', JSON.stringify(error));
+    }
   }
 
   /**

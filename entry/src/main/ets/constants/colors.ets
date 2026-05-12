@@ -2,7 +2,10 @@
  * 一职搭子 颜色常量
  *
  * 基于设计系统 design-tokens.ets 导出的颜色
- * 保持与 Web 端一致的视觉体验
+ * 对齐华为 HarmonyOS 色彩规范：
+ *   - 中性色使用 HarmonyOS 推荐灰阶
+ *   - 功能色遵循 HarmonyOS 规范值
+ *   - 品牌色保持应用一致性
  */
 
 import {
@@ -11,6 +14,7 @@ import {
   SuccessColors,
   WarningColors,
   ErrorColors,
+  InfoColors,
   SemanticColors,
   DarkSemanticColors,
 } from './design-tokens';
@@ -24,10 +28,11 @@ export const Colors = {
   primaryLight: BrandColors.Brand400,
   primaryDark: BrandColors.Brand600,
 
-  // 状态色
+  // 状态色 - HarmonyOS 规范
   success: SuccessColors.Success500,
   warning: WarningColors.Warning500,
   error: ErrorColors.Error500,
+  info: InfoColors.Info500,
 
   // 背景色
   background: SemanticColors.Background,
@@ -50,7 +55,7 @@ export const Colors = {
   transparent: 'transparent',
 
   // Tab 未选中
-  tabInactive: NeutralColors.Neutral400,
+  tabInactive: NeutralColors.Neutral300,
 } as const;
 
 // ============================================
@@ -62,10 +67,11 @@ export const DarkColors = {
   primaryLight: BrandColors.Brand300,
   primaryDark: BrandColors.Brand500,
 
-  // 状态色
+  // 状态色 - HarmonyOS 规范
   success: DarkSemanticColors.Success,
   warning: DarkSemanticColors.Warning,
   error: DarkSemanticColors.Error,
+  info: DarkSemanticColors.Info,
 
   // 背景色
   background: DarkSemanticColors.Background,
@@ -95,6 +101,7 @@ export {
   SuccessColors,
   WarningColors,
   ErrorColors,
+  InfoColors,
   SemanticColors,
   DarkSemanticColors,
 };

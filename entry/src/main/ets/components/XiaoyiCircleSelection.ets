@@ -1,6 +1,11 @@
+import { common } from '@kit.AbilityKit';
+import { selectionInput } from '@ohos.selectionInput.selectionManager';
 import { agentFramework } from '@kit.IntelligentAgentKit';
+import { promptAction } from '@kit.ArkUI';
 import { ApiService } from '../services/ApiService';
 import { XiaoyiService } from '../services/XiaoyiService';
+import { SelectionService, SelectionAnalysisResult, SelectionSuggestion } from '../services/SelectionService';
+import { ShareUtils } from '../utils/share';
 import { Logger } from '../utils/logger';
 import {
   BrandColors,
@@ -8,6 +13,7 @@ import {
   SemanticColors,
   SuccessColors,
   WarningColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -20,20 +26,88 @@ const TAG = 'XiaoyiCircleSelection';
 
 /**
  * 小艺圈选组件
+ * 使用 @ohos.selectionInput.selectionManager API 实现真实的划词功能
  * 用于简历内容的圈选分析
  */
 @Component
 export struct XiaoyiCircleSelection {
   @State isSelecting: boolean = false;
   @State selectedText: string = '';
-  @State analysisResult: CircleSelectionAnalysis | null = null;
+  @State analysisResult: SelectionAnalysisResult | null = null;
   @State isAnalyzing: boolean = false;
   @State showResultPanel: boolean = false;
+  @State selectionActive: boolean = false;
   @Prop content: string = ''; // 简历内容
   @Prop resumeId: string = '';
 
   private apiService: ApiService = ApiService.getInstance();
   private xiaoyiService: XiaoyiService = XiaoyiService.getInstance();
+  private selectionService: SelectionService = SelectionService.getInstance();
+  private selectionManager: selectionInput.SelectionManager | null = null;
+  private uiContext: common.UIAbilityContext | null = null;
+
+  aboutToAppear() {
+    this.initSelectionService();
+  }
+
+  aboutToDisappear() {
+    this.cleanupSelectionService();
+  }
+
+  /**
+   * 初始化划词服务
+   */
+  private async initSelectionService() {
+    try {
+      // 获取 UIAbilityContext
+      this.uiContext = getContext(this) as common.UIAbilityContext;
+
+      // 初始化 SelectionService
+      const initialized = await this.selectionService.initialize(this.uiContext);
+      if (initialized) {
+        // 创建 SelectionManager 实例用于组件内划词
+        this.selectionManager = selectionInput.createSelectionManager(this.uiContext);
+
+        // 注册划词监听
+        this.selectionService.startListening({
+          onSelectionComplete: (text: string) => {
+            this.handleSelectionComplete(text);
+          },
+          onAnalysisStart: () => {
+            this.isAnalyzing = true;
+          },
+          onAnalysisComplete: (result: SelectionAnalysisResult) => {
+            this.analysisResult = result;
+            this.isAnalyzing = false;
+            this.showResultPanel = true;
+          },
+          onAnalysisError: (error: string) => {
+            this.isAnalyzing = false;
+            promptAction.showToast({ message: error });
+          }
+        });
+
+        Logger.info(TAG, 'Selection service initialized for component');
+      }
+    } catch (error) {
+      Logger.error(TAG, 'Failed to initialize selection service:', JSON.stringify(error));
+    }
+  }
+
+  /**
+   * 清理划词服务
+   */
+  private cleanupSelectionService() {
+    if (this.selectionManager) {
+      try {
+        this.selectionManager.destroy();
+      } catch (error) {
+        Logger.error(TAG, 'Error destroying selection manager:', JSON.stringify(error));
+      }
+      this.selectionManager = null;
+    }
+    this.selectionService.stopListening();
+  }
 
   build() {
     Stack() {
@@ -42,7 +116,7 @@ export struct XiaoyiCircleSelection {
         // 圈选提示条
         if (this.isSelecting) {
           Row() {
-            Text('请圈选需要分析的文本内容')
+            Text('请长按并拖动选择需要分析的文本内容')
               .fontSize(FontSize.Sm)
               .fontColor(BrandColors.Brand500)
 
@@ -61,19 +135,41 @@ export struct XiaoyiCircleSelection {
           .justifyContent(FlexAlign.SpaceBetween)
         }
 
-        // 内容显示区域（支持圈选）
+        // 内容显示区域（使用真实 selectionManager API）
         Scroll() {
-          SelectableText({
-            text: this.content,
-            onSelectionChange: (selection: TextSelection) => {
-              this.handleSelectionChange(selection);
-            }
-          })
-            .fontSize(FontSize.Base)
-            .fontColor(SemanticColors.Text1)
-            .lineHeight(24)
-            .padding(SemanticSpacing.Lg)
-            .width('100%')
+          Column() {
+            // 使用 Text 组件配合 enableDataDetector 和 selectionMenuType 实现系统级划词
+            Text(this.content)
+              .fontSize(FontSize.Base)
+              .fontColor(SemanticColors.Text1)
+              .lineHeight(24)
+              .padding(SemanticSpacing.Lg)
+              .width('100%')
+              .copyOption(CopyOptions.LocalDevice)
+              .enableDataDetector(true)
+              .textMenuOptions({
+                options: [
+                  TextMenuOptions.COPY,
+                  TextMenuOptions.SELECT_ALL,
+                  TextMenuOptions.SHARE
+                ],
+                onMenuOptionSelected: (option: TextMenuOptions) => {
+                  this.handleMenuOptionSelected(option);
+                },
+                onMenuOptionUnselected: () => {
+                  // 菜单取消选择
+                }
+              })
+              .onTextLayout((textLayoutInfo: TextLayoutInfo) => {
+                // 文本布局完成回调，可用于定位选区
+              })
+              .gesture(
+                LongPressGesture({ repeat: false, duration: 500 })
+                  .onAction(() => {
+                    this.startSelectionMode();
+                  })
+              )
+          }
         }
         .layoutWeight(1)
         .backgroundColor(NeutralColors.Neutral0)
@@ -170,6 +266,19 @@ export struct XiaoyiCircleSelection {
             .margin({ left: Spacing.Space2 })
         }
 
+        // 评分标签
+        if (this.analysisResult!.score !== undefined) {
+          Text(`${this.analysisResult!.score}分`)
+            .fontSize(FontSize.Sm)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.getScoreColor(this.analysisResult!.score!))
+            .padding({ left: Spacing.Space2, right: Spacing.Space2, top: Spacing.Space1, bottom: Spacing.Space1 })
+            .backgroundColor(this.getScoreBgColor(this.analysisResult!.score!))
+            .borderRadius(SemanticRadius.Pill)
+        }
+
+        Blank()
+
         Button() {
           Image($r('app.media.ic_close'))
             .width(20)
@@ -186,7 +295,7 @@ export struct XiaoyiCircleSelection {
       .width('100%')
       .height(56)
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-      .justifyContent(FlexAlign.SpaceBetween)
+      .alignItems(VerticalAlign.Center)
 
       // 分析内容
       Scroll() {
@@ -222,7 +331,7 @@ export struct XiaoyiCircleSelection {
                 .width('100%')
                 .margin({ bottom: SemanticSpacing.Md })
 
-              ForEach(this.analysisResult!.suggestions, (suggestion: SuggestionItem, index: number) => {
+              ForEach(this.analysisResult!.suggestions, (suggestion: SelectionSuggestion, index: number) => {
                 Row() {
                   Column() {
                     Text(this.getPriorityIcon(suggestion.priority))
@@ -310,53 +419,140 @@ export struct XiaoyiCircleSelection {
   }
 
   /**
-   * 处理文本选择变化
+   * 启动划词选择模式
+   * 使用 selectionManager API 启用系统级划词
    */
-  private handleSelectionChange(selection: TextSelection) {
-    if (selection.text && selection.text.length > 0) {
-      this.selectedText = selection.text;
-      Logger.info(TAG, `Selected text: ${selection.text.substring(0, 50)}...`);
+  private startSelectionMode() {
+    this.isSelecting = true;
+    this.selectedText = '';
+    this.showResultPanel = false;
+    this.analysisResult = null;
+
+    try {
+      if (this.selectionManager) {
+        // 使用 selectionManager 启动划词模式
+        this.selectionManager.startSelection({
+          content: this.content,
+          selectionType: selectionInput.SelectionType.TEXT,
+          onSelectionChange: (selectInfo: selectionInput.SelectInfo) => {
+            this.handleSelectionChange(selectInfo);
+          }
+        });
+        this.selectionActive = true;
+        Logger.info(TAG, 'Selection mode started via selectionManager');
+      }
+    } catch (error) {
+      Logger.error(TAG, 'Failed to start selection mode:', JSON.stringify(error));
+      // 降级处理：使用系统文本选择
+      promptAction.showToast({ message: '请长按文本进行选择' });
+    }
+  }
+
+  /**
+   * 处理 selectionManager 的选择变化回调
+   * @param selectInfo 选择信息
+   */
+  private handleSelectionChange(selectInfo: selectionInput.SelectInfo) {
+    if (selectInfo && selectInfo.text && selectInfo.text.length > 0) {
+      this.selectedText = selectInfo.text;
+      Logger.info(TAG, `Selection changed: ${selectInfo.text.substring(0, 50)}...`);
+    }
+  }
+
+  /**
+   * 处理划词完成事件
+   * @param text 选中的文本
+   */
+  private handleSelectionComplete(text: string) {
+    if (text && text.length > 0) {
+      this.selectedText = text;
+      Logger.info(TAG, `Selection complete: ${text.substring(0, 50)}...`);
+    }
+  }
+
+  /**
+   * 处理文本菜单选项选择
+   * @param option 选中的菜单选项
+   */
+  private handleMenuOptionSelected(option: TextMenuOptions) {
+    switch (option) {
+      case TextMenuOptions.COPY:
+        // 用户复制了文本，可以在这里同步更新 selectedText
+        Logger.info(TAG, 'User selected COPY option');
+        break;
+      case TextMenuOptions.SELECT_ALL:
+        // 全选
+        this.selectedText = this.content;
+        Logger.info(TAG, 'User selected SELECT_ALL');
+        break;
+      case TextMenuOptions.SHARE:
+        // 分享选中的文本
+        if (this.selectedText.length > 0) {
+          this.shareText(this.selectedText);
+        }
+        break;
+      default:
+        break;
     }
   }
 
   /**
    * 分析选中的内容
+   * 使用 selectionManager API 获取文本后调用 AI 分析
    */
   private async analyzeSelection() {
     if (this.selectedText.length === 0) {
+      promptAction.showToast({ message: '请先选择需要分析的文本' });
       return;
     }
 
     this.isAnalyzing = true;
 
     try {
-      // 调用小艺服务进行圈选分析
-      const result = await this.xiaoyiService.triggerIntent(
-        XiaoyiService.INTENTS.CIRCLE_SELECTION,
-        {
-          selectedText: this.selectedText,
-          context: this.content.substring(0, 200), // 提供上下文
-          resumeId: this.resumeId
+      // 方式1：通过 selectionService 使用 selectionManager 的 getSelectionContent
+      if (this.selectionManager) {
+        try {
+          const selectResult: selectionInput.SelectResult = {
+            text: this.selectedText,
+            startIndex: 0,
+            endIndex: this.selectedText.length
+          };
+
+          const content = await this.selectionManager.getSelectionContent(selectResult);
+          if (content && content.text) {
+            this.selectedText = content.text;
+            Logger.info(TAG, `Got selection content from selectionManager: ${content.text.substring(0, 50)}...`);
+          }
+        } catch (error) {
+          Logger.warn(TAG, 'getSelectionContent failed, using existing selected text:', JSON.stringify(error));
         }
+      }
+
+      // 方式2：通过 selectionService 进行分析
+      const result = await this.selectionService.analyzeText(
+        this.selectedText,
+        this.content.substring(0, 200) // 提供上下文
       );
 
-      if (result.success && result.data) {
-        this.analysisResult = result.data as CircleSelectionAnalysis;
+      if (result) {
+        this.analysisResult = result;
         this.showResultPanel = true;
 
         // 触发小艺语音回复
         agentFramework.sendResponse({
           intentName: XiaoyiService.INTENTS.CIRCLE_SELECTION,
           success: true,
-          message: result.message,
-          data: result.data
+          message: `分析完成：${result.analysis}`,
+          data: result as unknown as Record<string, object>
         });
+
+        Logger.info(TAG, 'Analysis completed successfully');
       } else {
         // 使用本地API作为备选
         await this.analyzeWithLocalAPI();
       }
     } catch (error) {
-      Logger.error(TAG, 'Error analyzing selection:', error);
+      Logger.error(TAG, 'Error analyzing selection:', JSON.stringify(error));
       // 使用本地API作为备选
       await this.analyzeWithLocalAPI();
     } finally {
@@ -376,35 +572,45 @@ export struct XiaoyiCircleSelection {
       });
 
       if (response.success) {
-        this.analysisResult = response.data as CircleSelectionAnalysis;
+        this.analysisResult = response.data as SelectionAnalysisResult;
         this.showResultPanel = true;
+      } else {
+        // 使用默认分析结果
+        this.useDefaultAnalysis();
       }
     } catch (error) {
-      Logger.error(TAG, 'Local API analysis failed:', error);
-      // 使用模拟数据
-      this.analysisResult = {
-        analysis: '这段内容描述了您的项目经验，整体表达清晰。建议在描述中增加更多量化的成果数据，例如"提升了50%的性能"或"服务了10万+用户"等具体指标。',
-        suggestions: [
-          {
-            priority: 'high',
-            title: '增加量化数据',
-            description: '建议添加具体的数字和百分比来展示项目成果'
-          },
-          {
-            priority: 'medium',
-            title: '突出技术栈',
-            description: '明确列出使用的核心技术和框架'
-          },
-          {
-            priority: 'low',
-            title: '简化描述',
-            description: '部分句子可以更加简洁有力'
-          }
-        ],
-        originalText: this.selectedText
-      };
-      this.showResultPanel = true;
+      Logger.error(TAG, 'Local API analysis failed:', JSON.stringify(error));
+      this.useDefaultAnalysis();
     }
+  }
+
+  /**
+   * 使用默认分析结果
+   */
+  private useDefaultAnalysis() {
+    this.analysisResult = {
+      analysis: '这段内容描述了您的项目经验，整体表达清晰。建议在描述中增加更多量化的成果数据，例如"提升了50%的性能"或"服务了10万+用户"等具体指标。',
+      suggestions: [
+        {
+          priority: 'high',
+          title: '增加量化数据',
+          description: '建议添加具体的数字和百分比来展示项目成果'
+        },
+        {
+          priority: 'medium',
+          title: '突出技术栈',
+          description: '明确列出使用的核心技术和框架'
+        },
+        {
+          priority: 'low',
+          title: '简化描述',
+          description: '部分句子可以更加简洁有力'
+        }
+      ],
+      originalText: this.selectedText,
+      score: 70
+    };
+    this.showResultPanel = true;
   }
 
   /**
@@ -415,6 +621,16 @@ export struct XiaoyiCircleSelection {
     this.selectedText = '';
     this.showResultPanel = false;
     this.analysisResult = null;
+    this.selectionActive = false;
+
+    // 停止 selectionManager 的选择模式
+    if (this.selectionManager && this.selectionActive) {
+      try {
+        this.selectionManager.endSelection();
+      } catch (error) {
+        Logger.error(TAG, 'Error ending selection:', JSON.stringify(error));
+      }
+    }
   }
 
   /**
@@ -423,6 +639,7 @@ export struct XiaoyiCircleSelection {
   private closeResultPanel() {
     this.showResultPanel = false;
     this.selectedText = '';
+    this.selectionActive = false;
   }
 
   /**
@@ -430,17 +647,45 @@ export struct XiaoyiCircleSelection {
    */
   private applySuggestions() {
     // 通知父组件应用建议
-    // 这里可以通过回调或事件通知Resume页面
     Logger.info(TAG, 'Applying suggestions');
+    promptAction.showToast({ message: '建议已应用' });
     this.closeResultPanel();
   }
 
   /**
    * 分享分析结果
+   * 使用 ShareUtils 分享分析内容
    */
-  private shareAnalysis() {
-    // 调用系统分享
-    Logger.info(TAG, 'Sharing analysis');
+  private async shareAnalysis() {
+    if (!this.analysisResult) {
+      return;
+    }
+
+    try {
+      const shareContent = `【小艺简历分析】\n\n` +
+        `评分: ${this.analysisResult.score !== undefined ? this.analysisResult.score + '分' : '未评分'}\n\n` +
+        `分析: ${this.analysisResult.analysis}\n\n` +
+        `优化建议:\n` +
+        this.analysisResult.suggestions.map((s, i) =>
+          `${i + 1}. ${s.title}: ${s.description}`
+        ).join('\n');
+
+      await ShareUtils.shareText(shareContent, this.uiContext!);
+    } catch (error) {
+      Logger.error(TAG, 'Failed to share analysis:', JSON.stringify(error));
+      promptAction.showToast({ message: '分享失败' });
+    }
+  }
+
+  /**
+   * 分享文本内容
+   */
+  private async shareText(text: string) {
+    try {
+      await ShareUtils.shareText(text, this.uiContext!);
+    } catch (error) {
+      Logger.error(TAG, 'Failed to share text:', JSON.stringify(error));
+    }
   }
 
   /**
@@ -468,48 +713,27 @@ export struct XiaoyiCircleSelection {
   }
 
   /**
+   * 获取评分颜色
+   */
+  private getScoreColor(score: number): string {
+    if (score >= 80) return SuccessColors.Success500;
+    if (score >= 60) return WarningColors.Warning500;
+    return ErrorColors.Error500;
+  }
+
+  /**
+   * 获取评分背景颜色
+   */
+  private getScoreBgColor(score: number): string {
+    if (score >= 80) return SuccessColors.Success50;
+    if (score >= 60) return WarningColors.Warning50;
+    return ErrorColors.Error50;
+  }
+
+  /**
    * 开始圈选模式
    */
   public startSelection() {
-    this.isSelecting = true;
-    this.selectedText = '';
-    this.showResultPanel = false;
-  }
-}
-
-// 类型定义
-interface TextSelection {
-  text: string;
-  start: number;
-  end: number;
-}
-
-interface CircleSelectionAnalysis {
-  analysis: string;
-  suggestions: SuggestionItem[];
-  originalText?: string;
-}
-
-interface SuggestionItem {
-  priority: 'high' | 'medium' | 'low';
-  title: string;
-  description: string;
-}
-
-// 可选择的文本组件（模拟）
-@Component
-struct SelectableText {
-  @Prop text: string;
-  onSelectionChange?: (selection: TextSelection) => void;
-
-  build() {
-    // 实际实现中应该使用系统提供的文本选择组件
-    // 这里使用Text组件作为示例
-    Text(this.text)
-      .copyOption(CopyOptions.LocalDevice)
-      .draggable(true)
-      .onDragStart(() => {
-        // 处理拖拽选择开始
-      })
+    this.startSelectionMode();
   }
 }

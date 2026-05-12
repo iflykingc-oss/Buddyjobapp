@@ -14,6 +14,13 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
+    "querySchemes": [
+      "plugs",
+      "share",
+      "hwid",
+      "hmscore",
+      "push"
+    ],
     "abilities": [
       {
         "name": "EntryAbility",
@@ -151,6 +158,28 @@
         "type": "intelligentAgent",
         "description": "小艺智能体扩展能力",
         "visible": true
+      },
+      {
+        "name": "SelectionExtensionAbility",
+        "srcEntry": "./ets/services/SelectionExtensionAbility.ets",
+        "type": "selection",
+        "description": "小艺圈选分析扩展能力",
+        "visible": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.text"
+            ],
+            "actions": [
+              "ohos.want.action.sendText"
+            ],
+            "uris": [
+              {
+                "type": "text/plain"
+              }
+            ]
+          }
+        ]
       }
     ],
     "intents": [

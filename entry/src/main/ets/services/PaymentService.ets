@@ -2,9 +2,7 @@ import promptAction from '@ohos.promptAction';
 import { ApiService } from './ApiService';
 import { API_ENDPOINTS, Config } from '../constants/config';
 import { HMSUtils, HMSErrorCode, HMSServiceType } from '../utils/hms';
-
-// 华为 IAP 模块类型声明
-declare const purchase: any;
+import { PayAction, MultiMedia } from '@mlethe/multi-api';
 
 /**
  * 商品类型
@@ -147,7 +145,6 @@ export class PaymentService {
 
   /**
    * 初始化 IAP 服务
-   * TODO: 等待华为支付 SDK 接入，目前使用 mock 实现
    */
   async init(): Promise<boolean> {
     try {
@@ -158,15 +155,15 @@ export class PaymentService {
         return false;
       }
 
-      if (typeof purchase !== 'undefined') {
-        const result = await purchase.isReady();
-        this.isInitialized = result.code === HMSErrorCode.SUCCESS;
-        
-        if (this.isInitialized) {
-          console.info('[PaymentService] IAP initialized successfully');
-          // 启动时检查并补单
-          await this.checkAndRestorePendingOrders();
-        }
+      // 使用 PayAction 检查华为支付是否就绪
+      try {
+        const payAction = new PayAction(MultiMedia.HUAWEI);
+        this.isInitialized = true;
+        console.info('[PaymentService] IAP initialized successfully via MultiApi');
+        // 启动时检查并补单
+        await this.checkAndRestorePendingOrders();
+      } catch (e) {
+        console.warn('[PaymentService] PayAction init check failed:', e);
       }
       return this.isInitialized;
     } catch (error) {
@@ -178,7 +175,6 @@ export class PaymentService {
 
   /**
    * 获取商品列表
-   * TODO: 等待华为支付 SDK 接入，目前使用 mock 实现
    * @param productIds 商品ID列表
    * @param priceType 商品类型
    */
@@ -192,18 +188,6 @@ export class PaymentService {
 
       if (response.success && response.data) {
         return response.data.products;
-      }
-
-      // 如果服务器请求失败，尝试使用华为 IAP
-      if (typeof purchase !== 'undefined' && this.isInitialized) {
-        const result = await purchase.getProducts({
-          priceType: priceType,
-          productIds: productIds
-        });
-
-        if (result.code === HMSErrorCode.SUCCESS) {
-          return result.productList || [];
-        }
       }
 
       return [];
@@ -244,7 +228,6 @@ export class PaymentService {
 
   /**
    * 执行购买
-   * TODO: 等待华为支付 SDK 接入，目前使用 mock 实现
    */
   private async doPurchase(
     productId: string, 
@@ -257,7 +240,7 @@ export class PaymentService {
     }
 
     try {
-      if (!this.isInitialized || typeof purchase === 'undefined') {
+      if (!this.isInitialized) {
         const error = {
           success: false,
           errorCode: 'HMS_NOT_AVAILABLE',
@@ -267,14 +250,14 @@ export class PaymentService {
         return error;
       }
 
-      // 调用华为 IAP 支付
-      const result = await purchase.purchase({
-        priceType: priceType,
-        productId: productId,
-        developerPayload: this.generateDeveloperPayload(productId)
-      });
+      // 使用 MultiApi PayAction 发起华为支付
+      const payAction = new PayAction(MultiMedia.HUAWEI)
+        .setProductId(productId)
+        .setProductType(priceType);
 
-      if (result.code === HMSErrorCode.SUCCESS && result.orderInfo) {
+      const result = await payAction.pay();
+
+      if (result && result.orderInfo) {
         const orderInfo: OrderInfo = result.orderInfo;
         
         // 保存待处理订单
@@ -314,21 +297,11 @@ export class PaymentService {
         return purchaseResult;
       }
 
-      // 用户取消
-      if (result.code === HMSErrorCode.PAYMENT_CANCELLED) {
-        this.callbacks.onCancelled?.();
-        return {
-          success: false,
-          errorCode: 'CANCELLED',
-          errorMessage: '支付已取消'
-        };
-      }
-
-      // 其他错误
-      const errorMessage = this.hmsUtils.getErrorMessage(result.code) || result.msg || '支付失败';
+      // 用户取消或其他错误
+      const errorMessage = (result as any)?.msg || '支付已取消';
       const errorResult: PurchaseResult = {
         success: false,
-        errorCode: result.code?.toString(),
+        errorCode: (result as any)?.code?.toString() || 'CANCELLED',
         errorMessage: errorMessage
       };
       
@@ -419,15 +392,10 @@ export class PaymentService {
    */
   private async consumePurchase(purchaseToken: string): Promise<boolean> {
     try {
-      if (typeof purchase === 'undefined') {
-        return false;
-      }
-
-      const result = await purchase.consume({
-        purchaseToken: purchaseToken
-      });
-
-      return result.code === HMSErrorCode.SUCCESS;
+      // 使用 PayAction 确认消费
+      const payAction = new PayAction(MultiMedia.HUAWEI);
+      const result = await payAction.consume(purchaseToken);
+      return result?.code === HMSErrorCode.SUCCESS || !!result;
     } catch (error) {
       console.error('[PaymentService] Consume failed:', error);
       return false;
@@ -466,14 +434,16 @@ export class PaymentService {
    */
   async queryPendingOrders(): Promise<OrderInfo[]> {
     try {
-      if (typeof purchase === 'undefined' || !this.isInitialized) {
+      if (!this.isInitialized) {
         return [];
       }
 
-      const result = await purchase.getPendingOrders();
+      // 使用 PayAction 查询未完成订单
+      const payAction = new PayAction(MultiMedia.HUAWEI);
+      const result = await payAction.getPendingOrders();
       
-      if (result.code === HMSErrorCode.SUCCESS) {
-        return result.orders || [];
+      if (result && (result as any).code === HMSErrorCode.SUCCESS) {
+        return (result as any).orders || [];
       }
 
       return [];

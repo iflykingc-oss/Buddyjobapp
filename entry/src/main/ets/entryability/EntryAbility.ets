@@ -5,6 +5,7 @@ import { HMSUtils, HMSServiceType } from '../utils/hms';
 import { AuthService } from '../services/AuthService';
 import { PushService } from '../services/PushService';
 import { agconnect } from '@hw-agconnect/core';
+import { MultiApi } from '@mlethe/multi-api';
 
 const TAG = 'EntryAbility';
 const DOMAIN = 0x0001;
@@ -71,12 +72,22 @@ export default class EntryAbility extends UIAbility {
   onForeground() {
     hilog.info(DOMAIN, TAG, 'Ability onForeground');
 
+    // MultiApi 前台生命周期处理
+    MultiApi.instance.onForeground();
+
     // 应用切换到前台时，检查 HMS 服务状态
     this.checkHMSServices();
   }
 
   onBackground() {
     hilog.info(DOMAIN, TAG, 'Ability onBackground');
+  }
+
+  onNewWant(want, launchParam) {
+    hilog.info(DOMAIN, TAG, 'Ability onNewWant');
+
+    // MultiApi 处理 Want 回调
+    MultiApi.instance.handleWant(want);
   }
 
   /**
