@@ -1,8 +1,8 @@
-import ChatPage from './Chat';
-import ResumePage from './Resume';
-import AssessmentPage from './Assessment';
-import KnowledgePage from './Knowledge';
-import ProfilePage from './Profile';
+import { ChatPage } from './Chat';
+import { ResumePage } from './Resume';
+import { AssessmentPage } from './Assessment';
+import { KnowledgePage } from './Knowledge';
+import { ProfilePage } from './Profile';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
 import { WindowUtil } from '../utils/WindowUtil';
 import {

@@ -6,7 +6,7 @@ import { AuthService } from '../services/AuthService';
 import { PushService } from '../services/PushService';
 import { agconnect } from '@hw-agconnect/core';
 import { MultiApi } from '@mlethe/multi-api';
-import WindowUtil from '../utils/WindowUtil';
+import { WindowUtil } from '../utils/WindowUtil';
 
 const TAG = 'EntryAbility';
 const DOMAIN = 0x0001;
@@ -84,10 +84,9 @@ export default class EntryAbility extends UIAbility {
       }
     });
 
-    // 初始化 WindowUtil 并设置主窗口
-    const windowUtil = WindowUtil.getInstance();
-    windowUtil.setMainWindow(mainWindow);
-    AppStorage.setOrCreate('windowUtil', windowUtil);
+    // 初始化 WindowUtil
+    const windowUtil = new WindowUtil();
+    await windowUtil.init();
 
     windowStage.loadContent('pages/Splash', (err, data) => {
       if (err.code) {
@@ -95,11 +94,6 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(DOMAIN, TAG, 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data));
-
-      // 页面加载完成后，初始化窗口信息和尺寸变化监听
-      windowUtil.setUIContext(this.context.uiContext);
-      windowUtil.updateWindowInfo();
-      windowUtil.onWindowSizeChange();
     });
   }
 

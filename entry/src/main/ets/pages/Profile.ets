@@ -36,6 +36,7 @@ export struct ProfilePage {
   // 弹窗控制
   @State showPurchaseSheet: boolean = false;
   @State showDetailSheet: boolean = false;
+  @State isLoading: boolean = false;
 
   private memberService: MemberService = MemberService.getInstance();
 

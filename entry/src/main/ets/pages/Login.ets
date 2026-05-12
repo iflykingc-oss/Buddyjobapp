@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import hilog from '@ohos.hilog';
 import { AuthService } from '../services/AuthService';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
@@ -362,5 +363,3 @@ struct Login {
     }
   }
 }
-
-import hilog from '@ohos.hilog';

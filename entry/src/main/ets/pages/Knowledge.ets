@@ -10,6 +10,7 @@ import {
   NeutralColors,
   SemanticColors,
   DarkSemanticColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -314,6 +315,13 @@ export struct KnowledgePage {
     return this.knowledgeList;
   }
 
+  formatReadCount(count: number): string {
+    if (count >= 10000) {
+      return (count / 10000).toFixed(1) + 'w';
+    }
+    return count.toString();
+  }
+
   build() {
     Column() {
       // 标题栏
@@ -590,13 +598,3 @@ export struct KnowledgePage {
   }
 }
 
-  formatReadCount(count: number): string {
-    if (count >= 10000) {
-      return (count / 10000).toFixed(1) + 'w';
-    }
-    return count.toString();
-  }
-}
-
-// 错误颜色（从design-tokens导入）
-import { ErrorColors } from '../constants/design-tokens';

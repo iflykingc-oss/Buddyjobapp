@@ -1,6 +1,5 @@
 import router from '@ohos.router';
 import { AuthService } from '../../services/AuthService';
-import { UserService } from '../../services/UserService';
 import { AppReviewService } from '../../services/AppReviewService';
 import { promptAction } from '@kit.ArkUI';
 import { ThemeManager, ThemeMode } from '../../utils/Theme';
@@ -31,7 +30,6 @@ struct SettingsPage {
   @State isLoading: boolean = false;
 
   private authService: AuthService = AuthService.getInstance();
-  private userService: UserService = UserService.getInstance();
 
   /**
    * 显示退出登录确认对话框
@@ -68,8 +66,8 @@ struct SettingsPage {
       AppStorage.delete('huaweiAccountInfo');
       AppStorage.delete('token');
 
-      // 3. 清除 LocalStorage 中的 token
-      this.storage.deleteSync('token');
+      // 3. 清除 AppStorage 中的 token（已在上方执行）
+      // AppStorage.delete('token');
 
       // 4. 显示退出成功提示
       promptAction.showToast({ message: '已退出登录' });

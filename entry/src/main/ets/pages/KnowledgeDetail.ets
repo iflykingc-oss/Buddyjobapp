@@ -9,6 +9,7 @@ import {
   NeutralColors,
   SemanticColors,
   DarkSemanticColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -378,5 +379,3 @@ struct KnowledgeDetail {
   }
 }
 
-// 错误颜色（从design-tokens导入）
-import { ErrorColors } from '../constants/design-tokens';
