@@ -1,0 +1,231 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "srcPath": "./entry",
+    "launchType": "standard",
+    "label": "$string:entry_label",
+    "description": "$string:entry_label",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:entry_label",
+        "icon": "$media:icon",
+        "label": "$string:entry_label",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ]
+      }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET",
+        "reason": "$string:permission_internet_reason"
+      },
+      {
+        "name": "ohos.permission.GET_NETWORK_INFO",
+        "reason": "$string:permission_network_info_reason"
+      },
+      {
+        "name": "ohos.permission.SET_NETWORK_INFO",
+        "reason": "$string:permission_set_network_reason"
+      },
+      {
+        "name": "ohos.permission.ACCESS_WIFI_STATE",
+        "reason": "$string:permission_wifi_state_reason"
+      },
+      {
+        "name": "ohos.permission.GET_WIFI_INFO",
+        "reason": "$string:permission_wifi_info_reason"
+      },
+      {
+        "name": "ohos.permission.PUSH_TOKEN",
+        "reason": "$string:permission_push_token_reason"
+      },
+      {
+        "name": "ohos.permission.RECEIVE_PUSH_MESSAGE",
+        "reason": "$string:permission_push_message_reason"
+      },
+      {
+        "name": "ohos.permission.ACCESS_BIOMETRIC",
+        "reason": "$string:permission_biometric_reason"
+      },
+      {
+        "name": "ohos.permission.READ_MEDIA",
+        "reason": "$string:permission_read_media_reason"
+      },
+      {
+        "name": "ohos.permission.WRITE_MEDIA",
+        "reason": "$string:permission_write_media_reason"
+      },
+      {
+        "name": "ohos.permission.READ_IMAGEVIDEO",
+        "reason": "$string:permission_read_image_reason"
+      },
+      {
+        "name": "ohos.permission.WRITE_IMAGEVIDEO",
+        "reason": "$string:permission_write_image_reason"
+      },
+      {
+        "name": "ohos.permission.READ_FILE",
+        "reason": "$string:permission_read_file_reason"
+      },
+      {
+        "name": "ohos.permission.WRITE_FILE",
+        "reason": "$string:permission_write_file_reason"
+      }
+    ],
+    "metadata": [
+      {
+        "name": "hms_account_kit",
+        "value": "true"
+      },
+      {
+        "name": "hms_push_kit",
+        "value": "true"
+      },
+      {
+        "name": "hms_iap_kit",
+        "value": "true"
+      },
+      {
+        "name": "hms_analytics_kit",
+        "value": "true"
+      },
+      {
+        "name": "hms_crash_kit",
+        "value": "true"
+      },
+      {
+        "name": "hms_app_id",
+        "value": "$string:hms_app_id"
+      },
+      {
+        "name": "hms_cp_id",
+        "value": "$string:hms_cp_id"
+      },
+      {
+        "name": "hms_product_id",
+        "value": "$string:hms_product_id"
+      },
+      {
+        "name": "hms_client_id",
+        "value": "$string:hms_client_id"
+      },
+      {
+        "name": "hms_client_secret",
+        "value": "$string:hms_client_secret"
+      },
+      {
+        "name": "hms_api_key",
+        "value": "$string:hms_api_key"
+      },
+      {
+        "name": "hms_cert_fingerprint",
+        "value": "$string:hms_cert_fingerprint"
+      }
+    ],
+    "extensionAbilities": [
+      {
+        "name": "XiaoyiAgentExtension",
+        "srcEntry": "./ets/services/XiaoyiAgentExtension.ets",
+        "type": "intelligentAgent",
+        "description": "小艺智能体扩展能力",
+        "visible": true
+      }
+    ],
+    "intents": [
+      {
+        "intent": {
+          "name": "buddyjob.analyze_resume",
+          "action": "analyze_resume",
+          "entities": [
+            {
+              "name": "resumeId",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.interview_practice",
+          "action": "interview_practice",
+          "entities": [
+            {
+              "name": "jobType",
+              "type": "string"
+            },
+            {
+              "name": "difficulty",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.assess_ability",
+          "action": "assess_ability",
+          "entities": [
+            {
+              "name": "assessmentType",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.circle_selection",
+          "action": "circle_selection",
+          "entities": [
+            {
+              "name": "selectedText",
+              "type": "string"
+            },
+            {
+              "name": "context",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.voice_memo",
+          "action": "voice_memo",
+          "entities": [
+            {
+              "name": "audioUri",
+              "type": "string"
+            },
+            {
+              "name": "interviewId",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

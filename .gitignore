@@ -1,0 +1,24 @@
+# HarmonyOS
+node_modules/
+oh_modules/
+.local/
+.idea/
+*.iml
+.DS_Store
+
+# Build outputs
+build/
+dist/
+*.har
+*.hap
+
+# IDE
+.vscode/
+*.log
+
+# OS
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

@@ -1,0 +1,72 @@
+{
+  "media": [
+    {
+      "name": "app_icon",
+      "value": "media/app_icon.png"
+    },
+    {
+      "name": "icon",
+      "value": "media/ic_launcher.png"
+    },
+    {
+      "name": "ic_chat",
+      "value": "media/ic_chat.png"
+    },
+    {
+      "name": "ic_resume",
+      "value": "media/ic_resume.png"
+    },
+    {
+      "name": "ic_assessment",
+      "value": "media/ic_assessment.png"
+    },
+    {
+      "name": "ic_knowledge",
+      "value": "media/ic_knowledge.png"
+    },
+    {
+      "name": "ic_profile",
+      "value": "media/ic_profile.png"
+    },
+    {
+      "name": "ic_upload",
+      "value": "media/ic_upload.png"
+    },
+    {
+      "name": "ic_search",
+      "value": "media/ic_search.png"
+    },
+    {
+      "name": "ic_order",
+      "value": "media/ic_order.png"
+    },
+    {
+      "name": "ic_favorite",
+      "value": "media/ic_favorite.png"
+    },
+    {
+      "name": "ic_history",
+      "value": "media/ic_history.png"
+    },
+    {
+      "name": "ic_help",
+      "value": "media/ic_help.png"
+    },
+    {
+      "name": "ic_settings",
+      "value": "media/ic_settings.png"
+    },
+    {
+      "name": "ic_about",
+      "value": "media/ic_about.png"
+    },
+    {
+      "name": "ic_arrow_right",
+      "value": "media/ic_arrow_right.png"
+    },
+    {
+      "name": "ic_logo",
+      "value": "media/ic_logo.png"
+    }
+  ]
+}

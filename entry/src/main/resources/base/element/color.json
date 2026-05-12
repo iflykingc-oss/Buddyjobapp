@@ -1,0 +1,19 @@
+{
+  "string": [
+    { "name": "primary", "value": "#8B5CF6" },
+    { "name": "primary_light", "value": "#A78BFA" },
+    { "name": "primary_dark", "value": "#7C3AED" },
+    { "name": "secondary", "value": "#6366F1" },
+    { "name": "success", "value": "#10B981" },
+    { "name": "warning", "value": "#F59E0B" },
+    { "name": "error", "value": "#EF4444" },
+    { "name": "info", "value": "#3B82F6" },
+    { "name": "text_primary", "value": "#1A1A2E" },
+    { "name": "text_secondary", "value": "#64748B" },
+    { "name": "text_hint", "value": "#94A3B8" },
+    { "name": "background", "value": "#F8FAFC" },
+    { "name": "surface", "value": "#FFFFFF" },
+    { "name": "border", "value": "#E2E8F0" },
+    { "name": "divider", "value": "#F1F5F9" }
+  ]
+}

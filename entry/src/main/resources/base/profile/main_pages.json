@@ -1,0 +1,15 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/Login",
+    "pages/Chat",
+    "pages/Resume",
+    "pages/Assessment",
+    "pages/Knowledge",
+    "pages/KnowledgeDetail",
+    "pages/Profile",
+    "pages/profile/OrderHistory",
+    "pages/profile/SettingsPage",
+    "pages/profile/AboutPage"
+  ]
+}

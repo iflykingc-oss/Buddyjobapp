@@ -1,0 +1,12 @@
+{
+  "name": "buddyjob-harmony",
+  "version": "1.0.0",
+  "description": "一职搭子 HarmonyOS App",
+  "dependencies": {
+    "@hw-agconnect/core": "^1.0.0",
+    "@hw-agconnect/auth": "^1.0.0",
+    "@hw-agconnect/push": "^1.0.0"
+  },
+  "devDependencies": {},
+  "dynamicDependencies": {}
+}
