@@ -99,6 +99,10 @@
       {
         "name": "ohos.permission.WRITE_FILE",
         "reason": "$string:permission_write_file_reason"
+      },
+      {
+        "name": "ohos.permission.DISTRIBUTED_DATASYNC",
+        "reason": "$string:permission_distributed_reason"
       }
     ],
     "metadata": [
@@ -180,7 +184,7 @@
             ]
           }
         ]
-      }
+      },
     ],
     "intents": [
       {
@@ -254,7 +258,7 @@
             }
           ]
         }
-      }
+      },
     ]
   }
 }

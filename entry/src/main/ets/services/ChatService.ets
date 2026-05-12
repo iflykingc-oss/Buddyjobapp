@@ -1,12 +1,68 @@
-import file from '@ohos.file.picker';
+/**
+ * ChatService - 聊天服务
+ * 
+ * 支持：
+ * - SSE 流式消息接收
+ * - 断线重连机制
+ * - 消息发送
+ */
+
+import http from '@ohos.net.http';
 import { ApiService } from './ApiService';
 import { Message, ChatSession, SendMessageResult } from '../models/Message';
 import { ResumeAnalysisResult } from '../models/Resume';
-import { API_ENDPOINTS } from '../constants/config';
+import { API_ENDPOINTS, Config } from '../constants/config';
+
+/**
+ * SSE 事件类型
+ */
+export interface SSEEvent {
+  event: string;
+  data: string;
+  id?: string;
+  retry?: number;
+}
+
+/**
+ * SSE 连接状态
+ */
+export type SSEConnectionState = 'disconnected' | 'connecting' | 'connected' | 'error';
+
+/**
+ * SSE 连接配置
+ */
+export interface SSEConfig {
+  url: string;
+  headers?: Record<string, string>;
+  retryInterval?: number;  // 重试间隔（毫秒）
+  maxRetries?: number;     // 最大重试次数
+  timeout?: number;        // 连接超时（毫秒）
+}
+
+/**
+ * 流式消息回调
+ */
+export interface StreamCallbacks {
+  onMessage?: (content: string, done: boolean) => void;
+  onError?: (error: string) => void;
+  onComplete?: (fullContent: string) => void;
+  onConnectionStateChange?: (state: SSEConnectionState) => void;
+}
 
 export class ChatService {
   private apiService: ApiService;
   private static instance: ChatService;
+  
+  // SSE 相关
+  private httpRequest: http.HttpRequest | null = null;
+  private connectionState: SSEConnectionState = 'disconnected';
+  private retryCount: number = 0;
+  private maxRetries: number = 3;
+  private retryInterval: number = 1000;
+  private reconnectTimer: number = -1;
+  private accumulatedContent: string = '';
+  private currentCallbacks: StreamCallbacks | null = null;
+  private currentConfig: SSEConfig | null = null;
 
   private constructor() {
     this.apiService = ApiService.getInstance();
@@ -20,10 +76,9 @@ export class ChatService {
   }
 
   /**
-   * 发送消息
+   * 发送消息（非流式）
    */
   async sendMessage(content: string): Promise<SendMessageResult> {
-    // 构造用户消息
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -33,7 +88,6 @@ export class ChatService {
     };
 
     try {
-      // 调用真实 API
       const response = await this.apiService.post<SendMessageResult>(API_ENDPOINTS.CHAT_SEND, {
         content: content,
         conversationId: AppStorage.get<string>('currentConversationId')
@@ -42,7 +96,6 @@ export class ChatService {
       if (response.success && response.data) {
         return response.data;
       } else {
-        // 返回错误消息
         return {
           content: response.error || '抱歉，发生了错误，请稍后重试。',
           sessionId: AppStorage.get<string>('currentConversationId') || ''
@@ -55,6 +108,269 @@ export class ChatService {
         sessionId: AppStorage.get<string>('currentConversationId') || ''
       };
     }
+  }
+
+  /**
+   * 发送消息并接收流式响应（SSE）
+   * @param content 用户消息内容
+   * @param callbacks 流式回调
+   * @returns 取消连接的函数
+   */
+  async sendMessageStream(
+    content: string,
+    callbacks: StreamCallbacks
+  ): Promise<() => void> {
+    // 保存回调
+    this.currentCallbacks = callbacks;
+    
+    // 构造 SSE URL
+    const baseUrl = AppStorage.get<string>('baseUrl') || Config.API_BASE_URL;
+    const token = AppStorage.get<string>('token');
+    const conversationId = AppStorage.get<string>('currentConversationId');
+    
+    // SSE 配置
+    this.currentConfig = {
+      url: `${baseUrl}${API_ENDPOINTS.CHAT_SEND}/stream`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : '',
+        'Accept': 'text/event-stream'
+      },
+      retryInterval: 1000,
+      maxRetries: 3,
+      timeout: 60000
+    };
+
+    // 重置状态
+    this.accumulatedContent = '';
+    this.retryCount = 0;
+    
+    // 开始 SSE 连接
+    await this.connectSSE({
+      content: content,
+      conversationId: conversationId
+    });
+
+    // 返回取消函数
+    return () => this.disconnectSSE();
+  }
+
+  /**
+   * 连接 SSE
+   */
+  private async connectSSE(body: object): Promise<void> {
+    if (!this.currentConfig) {
+      return;
+    }
+
+    // 更新连接状态
+    this.updateConnectionState('connecting');
+
+    try {
+      // 创建 HTTP 请求
+      this.httpRequest = http.createHttp();
+      
+      // 设置超时
+      const timeout = this.currentConfig.timeout || 60000;
+      
+      // 发起请求
+      const response = await this.httpRequest.request(
+        this.currentConfig.url,
+        {
+          method: http.RequestMethod.POST,
+          header: this.currentConfig.headers,
+          extraData: JSON.stringify(body),
+          connectTimeout: timeout,
+          readTimeout: timeout,
+          expectDataType: http.HttpDataType.STRING
+        }
+      );
+
+      // 检查响应状态
+      if (response.responseCode === 200) {
+        this.updateConnectionState('connected');
+        this.retryCount = 0;
+        
+        // 解析 SSE 响应
+        this.parseSSEResponse(response.result as string);
+      } else if (response.responseCode === 401) {
+        // 未授权
+        this.updateConnectionState('error');
+        this.currentCallbacks?.onError?.('登录已过期，请重新登录');
+      } else {
+        // 其他错误
+        this.updateConnectionState('error');
+        this.handleConnectionError(`请求失败: ${response.responseCode}`);
+      }
+    } catch (error) {
+      console.error('[ChatService] SSE connection failed:', error);
+      this.updateConnectionState('error');
+      this.handleConnectionError(String(error));
+    }
+  }
+
+  /**
+   * 解析 SSE 响应
+   */
+  private parseSSEResponse(responseText: string): void {
+    const lines = responseText.split('\n');
+    let currentEvent: SSEEvent = { event: '', data: '' };
+
+    for (const line of lines) {
+      if (line.startsWith('event:')) {
+        currentEvent.event = line.substring(6).trim();
+      } else if (line.startsWith('data:')) {
+        currentEvent.data = line.substring(5).trim();
+      } else if (line.startsWith('id:')) {
+        currentEvent.id = line.substring(3).trim();
+      } else if (line.startsWith('retry:')) {
+        currentEvent.retry = parseInt(line.substring(6).trim());
+      } else if (line === '') {
+        // 空行表示事件结束
+        if (currentEvent.data) {
+          this.handleSSEEvent(currentEvent);
+        }
+        currentEvent = { event: '', data: '' };
+      }
+    }
+
+    // 处理最后一个事件
+    if (currentEvent.data) {
+      this.handleSSEEvent(currentEvent);
+    }
+  }
+
+  /**
+   * 处理 SSE 事件
+   */
+  private handleSSEEvent(event: SSEEvent): void {
+    try {
+      // 解析数据
+      const data = JSON.parse(event.data);
+      
+      switch (event.event) {
+        case 'message':
+        case 'delta':
+          // 增量消息
+          if (data.content) {
+            this.accumulatedContent += data.content;
+            this.currentCallbacks?.onMessage?.(this.accumulatedContent, false);
+          }
+          break;
+          
+        case 'done':
+        case 'complete':
+          // 完成
+          if (data.content) {
+            this.accumulatedContent = data.content;
+          }
+          this.currentCallbacks?.onMessage?.(this.accumulatedContent, true);
+          this.currentCallbacks?.onComplete?.(this.accumulatedContent);
+          this.disconnectSSE();
+          break;
+          
+        case 'error':
+          // 错误
+          this.currentCallbacks?.onError?.(data.message || '未知错误');
+          this.disconnectSSE();
+          break;
+          
+        default:
+          // 默认处理：尝试作为增量消息
+          if (data.content) {
+            this.accumulatedContent += data.content;
+            this.currentCallbacks?.onMessage?.(this.accumulatedContent, false);
+          } else if (data.delta) {
+            this.accumulatedContent += data.delta;
+            this.currentCallbacks?.onMessage?.(this.accumulatedContent, false);
+          } else if (data.done === true) {
+            this.currentCallbacks?.onMessage?.(this.accumulatedContent, true);
+            this.currentCallbacks?.onComplete?.(this.accumulatedContent);
+            this.disconnectSSE();
+          }
+      }
+    } catch (e) {
+      // JSON 解析失败，可能是纯文本数据
+      if (event.data && event.data !== '[DONE]') {
+        this.accumulatedContent += event.data;
+        this.currentCallbacks?.onMessage?.(this.accumulatedContent, false);
+      } else if (event.data === '[DONE]') {
+        this.currentCallbacks?.onMessage?.(this.accumulatedContent, true);
+        this.currentCallbacks?.onComplete?.(this.accumulatedContent);
+        this.disconnectSSE();
+      }
+    }
+  }
+
+  /**
+   * 处理连接错误
+   */
+  private handleConnectionError(error: string): void {
+    console.error('[ChatService] Connection error:', error);
+    
+    // 检查是否需要重连
+    if (this.retryCount < this.maxRetries) {
+      this.retryCount++;
+      const delay = this.retryInterval * Math.pow(2, this.retryCount - 1); // 指数退避
+      
+      console.log(`[ChatService] Retrying in ${delay}ms (attempt ${this.retryCount}/${this.maxRetries})`);
+      
+      this.reconnectTimer = setTimeout(() => {
+        if (this.currentConfig) {
+          this.connectSSE({});
+        }
+      }, delay);
+    } else {
+      // 超过最大重试次数
+      this.currentCallbacks?.onError?.(`连接失败，请稍后重试: ${error}`);
+      this.updateConnectionState('disconnected');
+    }
+  }
+
+  /**
+   * 断开 SSE 连接
+   */
+  disconnectSSE(): void {
+    // 清除重连定时器
+    if (this.reconnectTimer !== -1) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = -1;
+    }
+    
+    // 销毁 HTTP 请求
+    if (this.httpRequest) {
+      this.httpRequest.destroy();
+      this.httpRequest = null;
+    }
+    
+    // 更新状态
+    this.updateConnectionState('disconnected');
+    
+    // 清理
+    this.currentCallbacks = null;
+    this.currentConfig = null;
+  }
+
+  /**
+   * 更新连接状态
+   */
+  private updateConnectionState(state: SSEConnectionState): void {
+    this.connectionState = state;
+    this.currentCallbacks?.onConnectionStateChange?.(state);
+  }
+
+  /**
+   * 获取当前连接状态
+   */
+  getConnectionState(): SSEConnectionState {
+    return this.connectionState;
+  }
+
+  /**
+   * 是否已连接
+   */
+  isConnected(): boolean {
+    return this.connectionState === 'connected';
   }
 
   /**
@@ -88,11 +404,10 @@ export class ChatService {
   /**
    * 分析简历
    */
-  async analyzeResume(file: file.File): Promise<ResumeAnalysisResult> {
+  async analyzeResume(fileUri: string): Promise<ResumeAnalysisResult> {
     try {
-      // 调用真实 API
       const response = await this.apiService.post<ResumeAnalysisResult>(API_ENDPOINTS.RESUME_ANALYZE, {
-        fileUri: file.uri
+        fileUri: fileUri
       });
 
       if (response.success && response.data) {
@@ -107,9 +422,9 @@ export class ChatService {
   }
 
   /**
-   * 生成模拟回复（备用）
+   * 生成模拟回复（备用/演示用）
    */
-  private generateMockReply(content: string): string {
+  generateMockReply(content: string): string {
     const tips = [
       '根据您的情况，我建议您可以从以下几个方面提升简历质量：\n\n1. 突出项目经验中的量化成果\n2. 优化技能描述，使用行业关键词\n3. 完善自我评价，展现个人优势',
       '面试技巧方面，建议您注意以下几点：\n\n1. 提前了解公司背景和岗位要求\n2. 准备STAR法则描述项目经历\n3. 准备一些反问面试官的问题',
@@ -118,7 +433,6 @@ export class ChatService {
       '简历投递建议：\n\n1. 针对不同岗位定制简历关键词\n2. 选择上午9-11点投递简历\n3. 关注目标公司的招聘节奏\n4. 积极通过内推渠道'
     ];
 
-    // 简单匹配关键词
     if (content.includes('简历')) {
       return tips[0];
     } else if (content.includes('面试')) {
@@ -132,5 +446,39 @@ export class ChatService {
     }
 
     return tips[Math.floor(Math.random() * tips.length)];
+  }
+
+  /**
+   * 模拟流式输出（用于演示/测试）
+   * @param content 用户消息
+   * @param callbacks 流式回调
+   * @param charDelay 字符延迟（毫秒）
+   */
+  async simulateStreamOutput(
+    content: string,
+    callbacks: StreamCallbacks,
+    charDelay: number = 40
+  ): Promise<void> {
+    const fullResponse = this.generateMockReply(content);
+    let currentIndex = 0;
+    
+    this.updateConnectionState('connecting');
+    this.updateConnectionState('connected');
+    
+    return new Promise<void>((resolve) => {
+      const timer = setInterval(() => {
+        if (currentIndex < fullResponse.length) {
+          currentIndex++;
+          const partialContent = fullResponse.substring(0, currentIndex);
+          callbacks.onMessage?.(partialContent, false);
+        } else {
+          clearInterval(timer);
+          callbacks.onMessage?.(fullResponse, true);
+          callbacks.onComplete?.(fullResponse);
+          this.updateConnectionState('disconnected');
+          resolve();
+        }
+      }, charDelay);
+    });
   }
 }
