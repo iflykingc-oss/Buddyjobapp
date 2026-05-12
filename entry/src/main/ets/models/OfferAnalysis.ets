@@ -186,3 +186,99 @@ export interface DimensionComparison {
   /** 说明 */
   description: string;
 }
+
+// ============================================
+// 场景模板（新增）
+// ============================================
+export interface ScenarioTemplate {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  presetOffers: Partial<OfferInput>[];
+}
+
+export const SCENARIO_TEMPLATES: ScenarioTemplate[] = [
+  {
+    id: 'salary_vs_balance',
+    title: '高薪 vs 事少',
+    description: '高薪资但加班多，还是薪资一般但工作生活平衡？',
+    icon: 'ic_balance',
+    presetOffers: [
+      { company: '大厂A', position: '高级工程师', monthlySalary: 35000, annualBonus: 4, workHours: 50, overtimeFrequency: 'often', commuteMinutes: 45 },
+      { company: '外企B', position: '工程师', monthlySalary: 22000, annualBonus: 2, workHours: 38, overtimeFrequency: 'rarely', commuteMinutes: 20 },
+    ]
+  },
+  {
+    id: 'startup_vs_stable',
+    title: '创业公司 vs 国企',
+    description: '高成长潜力还是稳定保障？',
+    icon: 'ic_growth',
+    presetOffers: [
+      { company: '创业公司', position: '技术负责人', monthlySalary: 28000, annualBonus: 6, equity: '0.5%期权，4年归属', workHours: 55, overtimeFrequency: 'always', commuteMinutes: 30 },
+      { company: '国企', position: '技术岗', monthlySalary: 15000, annualBonus: 3, socialInsurance: 0.3, workHours: 35, overtimeFrequency: 'never', commuteMinutes: 40, benefits: [BenefitType.SUPPLEMENTAL_MEDICAL, BenefitType.EXTRA_LEAVE, BenefitType.MEAL_ALLOWANCE, BenefitType.TRANSPORT_ALLOWANCE, BenefitType.HOUSING_ALLOWANCE, BenefitType.HEALTH_CHECKUP] },
+    ]
+  },
+  {
+    id: 'city_compare',
+    title: '跨城市选择',
+    description: '不同城市的 Offer 怎么选？',
+    icon: 'ic_city',
+    presetOffers: [
+      { company: '北京公司', position: '产品经理', monthlySalary: 30000, annualBonus: 3, commuteMinutes: 60 },
+      { company: '成都公司', position: '产品经理', monthlySalary: 18000, annualBonus: 2, commuteMinutes: 15 },
+    ]
+  },
+  {
+    id: 'custom',
+    title: '自由录入',
+    description: '手动输入 Offer 信息进行分析',
+    icon: 'ic_edit',
+    presetOffers: []
+  }
+];
+
+// ============================================
+// 权重配置（新增）
+// ============================================
+export interface WeightConfig {
+  salary: number;    // 薪资待遇权重 0-100
+  balance: number;   // 工作生活平衡权重
+  benefit: number;   // 福利保障权重
+  commute: number;   // 通勤体验权重
+  growth: number;    // 发展潜力权重
+}
+
+export const DEFAULT_WEIGHTS: WeightConfig = {
+  salary: 35,
+  balance: 25,
+  benefit: 15,
+  commute: 10,
+  growth: 15,
+};
+
+export const WEIGHT_LABELS: Record<keyof WeightConfig, { name: string; description: string }> = {
+  salary: { name: '薪资待遇', description: '月薪、年终奖、股权等' },
+  balance: { name: '工作生活平衡', description: '工时、加班频率' },
+  benefit: { name: '福利保障', description: '五险一金、补充福利' },
+  commute: { name: '通勤体验', description: '通勤时间' },
+  growth: { name: '发展潜力', description: '公司前景、成长空间' },
+};
+
+// ============================================
+// 对话消息（新增）
+// ============================================
+export interface OfferChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+  type: 'text' | 'card' | 'suggestion' | 'action';
+  actions?: OfferChatAction[];
+}
+
+export interface OfferChatAction {
+  label: string;
+  action: string;
+  data?: Record<string, Object>;
+}

@@ -49,6 +49,7 @@ export struct KanbanColumnItem {
             JobCardItem({
               card: card,
               columnColor: this.column.color,
+              columnStatus: this.column.status,
               onEdit: (c) => this.onCardEdit?.(c),
               onDelete: (id) => this.onCardDelete?.(id),
               onMove: (id) => this.onCardMove?.(id)

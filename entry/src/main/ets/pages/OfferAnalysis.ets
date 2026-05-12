@@ -1,1597 +1,567 @@
 /**
- * Offer 分析页面
+ * Offer 分析页面（重构版）
  *
- * 提供 Offer 信息录入、AI 分析、多 Offer 对比功能。
- * 使用 Canvas 2D 绘制雷达图，BindSheet 弹窗新增 Offer。
+ * 智能体驱动的 Offer 分析体验：
+ * 1. 场景模板引导 → 快速开始
+ * 2. 对话式录入 → AI 引导填写
+ * 3. 多维度分析 → 雷达图 + 评分卡
+ * 4. 权重自定义 → 滑块调节
+ * 5. What-if 分析 → 实时调参
+ * 6. 多 Offer 对比 → 并排雷达图
  */
 
+import router from '@ohos.router';
 import {
-  OfferInput,
-  OfferAnalysisResult,
-  ComparisonResult,
-  BenefitType,
-  BenefitTypeLabels,
-  OvertimeFrequency,
-  OvertimeFrequencyLabels,
-  DimensionScore,
+  OfferInput, OfferAnalysisResult, ComparisonResult,
+  BenefitType, OvertimeFrequency,
+  WeightConfig, DEFAULT_WEIGHTS, WEIGHT_LABELS,
+  ScenarioTemplate, SCENARIO_TEMPLATES,
   createEmptyOfferInput,
 } from '../models/OfferAnalysis';
 import { OfferAnalysisService } from '../services/OfferAnalysisService';
+import { OfferRadarChart } from '../components/offer/OfferRadarChart';
+import { OfferFormCard } from '../components/offer/OfferFormCard';
+import { OfferScoreCard } from '../components/offer/OfferScoreCard';
+import { OfferWeightSlider } from '../components/offer/OfferWeightSlider';
+import { OfferScenarioPicker } from '../components/offer/OfferScenarioPicker';
+import { OfferWhatIfPanel } from '../components/offer/OfferWhatIfPanel';
 import {
-  BrandColors,
-  NeutralColors,
-  SemanticColors,
-  SuccessColors,
-  WarningColors,
-  ErrorColors,
-  InfoColors,
-  Spacing,
-  SemanticSpacing,
-  BorderRadius,
-  SemanticRadius,
-  FontSize,
-  FontWeight,
-  ComponentSizes,
-  HarmonyDesign,
+  BrandColors, NeutralColors, SemanticColors,
+  SuccessColors, WarningColors, ErrorColors, InfoColors,
+  SemanticSpacing, SemanticRadius, FontSize, FontWeight,
+  ComponentSizes, Duration, Easing, Shadows, HarmonyDesign,
 } from '../constants/design-tokens';
-import { Colors } from '../constants/colors';
 
-// ============================================
-// 页面 Tab 类型
-// ============================================
-type PageTab = 'input' | 'result' | 'compare';
+// 页面阶段
+type PagePhase = 'scenario' | 'input' | 'result' | 'compare' | 'whatif';
 
 @Entry
 @Component
 struct OfferAnalysisPage {
-  // Offer 列表
+  // Offer 数据
   @State offers: OfferInput[] = [];
   @State currentOfferIndex: number = 0;
-  @State currentTab: PageTab = 'input';
-
-  // 表单状态
-  @State formCompany: string = '';
-  @State formPosition: string = '';
-  @State formSalary: string = '';
-  @State formBonus: string = '';
-  @State formEquity: string = '';
-  @State formInsurance: string = '0.2';
-  @State formWorkHours: string = '40';
-  @State formOvertime: OvertimeFrequency = 'sometimes';
-  @State formCommute: string = '30';
-  @State formNote: string = '';
-  @State selectedBenefits: BenefitType[] = [...[BenefitType.SUPPLEMENTAL_MEDICAL, BenefitType.MEAL_ALLOWANCE,
-    BenefitType.TRANSPORT_ALLOWANCE, BenefitType.HEALTH_CHECKUP]];
+  @State phase: PagePhase = 'scenario';
 
   // 分析结果
   @State analysisResult: OfferAnalysisResult | null = null;
   @State comparisonResult: ComparisonResult | null = null;
 
+  // 权重
+  @State weights: WeightConfig = { ...DEFAULT_WEIGHTS };
+
+  // 场景
+  @State selectedScenarioId: string = '';
+
   // UI 状态
   @State isLoading: boolean = false;
-  @State showAddSheet: boolean = false;
-  @State showBenefitPicker: boolean = false;
-  @State showOvertimePicker: boolean = false;
   @State errorMessage: string = '';
-
-  // 雷达图设置
-  private settings: RenderingContextSettings = new RenderingContextSettings(true);
-  private radarContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
-
-  // 对比雷达图设置
-  private compareSettings: RenderingContextSettings = new RenderingContextSettings(true);
-  private compareRadarContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.compareSettings);
+  @State showWeightSheet: boolean = false;
+  @State showOvertimePicker: boolean = false;
+  @State showAddConfirm: boolean = false;
 
   private offerService: OfferAnalysisService = OfferAnalysisService.getInstance();
 
-  // 所有福利类型列表
-  private allBenefits: BenefitType[] = [
-    BenefitType.SUPPLEMENTAL_MEDICAL,
-    BenefitType.EXTRA_LEAVE,
-    BenefitType.MEAL_ALLOWANCE,
-    BenefitType.TRANSPORT_ALLOWANCE,
-    BenefitType.HOUSING_ALLOWANCE,
-    BenefitType.HEALTH_CHECKUP,
-    BenefitType.OTHER,
-  ];
-
-  // 所有加班频率列表
-  private overtimeOptions: OvertimeFrequency[] = ['never', 'rarely', 'sometimes', 'often', 'always'];
-
   aboutToAppear() {
-    AppStorage.setOrCreate('currentPage', 'pages/OfferAnalysis');
-    // 初始化一个空白 Offer
-    if (this.offers.length === 0) {
-      this.offers.push(createEmptyOfferInput());
-    }
-    this.loadFormFromOffer(0);
-  }
-
-  // ============================================
-  // 表单操作
-  // ============================================
-
-  /** 从 Offer 数据加载表单 */
-  loadFormFromOffer(index: number) {
-    if (index < 0 || index >= this.offers.length) return;
-    const offer = this.offers[index];
-    this.formCompany = offer.company;
-    this.formPosition = offer.position;
-    this.formSalary = offer.monthlySalary > 0 ? offer.monthlySalary.toString() : '';
-    this.formBonus = offer.annualBonus > 0 ? offer.annualBonus.toString() : '';
-    this.formEquity = offer.equity;
-    this.formInsurance = offer.socialInsurance > 0 ? offer.socialInsurance.toString() : '0.2';
-    this.formWorkHours = offer.workHours > 0 ? offer.workHours.toString() : '40';
-    this.formOvertime = offer.overtimeFrequency;
-    this.formCommute = offer.commuteMinutes > 0 ? offer.commuteMinutes.toString() : '30';
-    this.formNote = offer.note;
-    this.selectedBenefits = [...offer.benefits];
-    this.currentOfferIndex = index;
-    this.analysisResult = null;
-    this.errorMessage = '';
-  }
-
-  /** 从表单收集数据到 Offer */
-  collectFormToOffer(): OfferInput | null {
-    if (!this.validateForm()) return null;
-
-    return {
-      company: this.formCompany.trim(),
-      position: this.formPosition.trim(),
-      monthlySalary: parseFloat(this.formSalary) || 0,
-      annualBonus: parseFloat(this.formBonus) || 0,
-      equity: this.formEquity.trim(),
-      socialInsurance: parseFloat(this.formInsurance) || 0.2,
-      benefits: [...this.selectedBenefits],
-      workHours: parseFloat(this.formWorkHours) || 40,
-      overtimeFrequency: this.formOvertime,
-      commuteMinutes: parseFloat(this.formCommute) || 30,
-      note: this.formNote.trim(),
-    };
-  }
-
-  /** 表单验证 */
-  validateForm(): boolean {
-    if (!this.formCompany.trim()) {
-      this.errorMessage = '请输入公司名称';
-      return false;
-    }
-    if (!this.formPosition.trim()) {
-      this.errorMessage = '请输入职位名称';
-      return false;
-    }
-    if (!this.formSalary || parseFloat(this.formSalary) <= 0) {
-      this.errorMessage = '请输入有效的月薪';
-      return false;
-    }
-    this.errorMessage = '';
-    return true;
-  }
-
-  /** 保存当前 Offer 到列表 */
-  saveCurrentOffer() {
-    const offer = this.collectFormToOffer();
-    if (!offer) return;
-
-    if (this.currentOfferIndex < this.offers.length) {
-      this.offers[this.currentOfferIndex] = offer;
-    } else {
-      this.offers.push(offer);
-    }
-  }
-
-  /** 切换福利选择 */
-  toggleBenefit(type: BenefitType) {
-    const idx = this.selectedBenefits.indexOf(type);
-    if (idx >= 0) {
-      this.selectedBenefits.splice(idx, 1);
-    } else {
-      this.selectedBenefits.push(type);
-    }
-  }
-
-  // ============================================
-  // 分析操作
-  // ============================================
-
-  /** 开始分析当前 Offer */
-  async startAnalysis() {
-    this.saveCurrentOffer();
-    const offer = this.offers[this.currentOfferIndex];
-    if (!offer) return;
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    try {
-      this.analysisResult = await this.offerService.analyzeOffer(offer);
-      this.currentTab = 'result';
-    } catch (error) {
-      this.errorMessage = '分析失败，请稍后重试';
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  /** 开始对比所有 Offer */
-  async startComparison() {
-    // 先保存当前表单
-    this.saveCurrentOffer();
-
-    const validOffers = this.offers.filter(o => o.company && o.position && o.monthlySalary > 0);
-    if (validOffers.length < 2) {
-      this.errorMessage = '至少需要 2 份完整 Offer 才能对比';
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    try {
-      this.comparisonResult = await this.offerService.compareOffers(validOffers);
-      this.currentTab = 'compare';
-    } catch (error) {
-      this.errorMessage = '对比失败，请稍后重试';
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  /** 添加新 Offer */
-  addNewOffer() {
-    this.saveCurrentOffer();
-    const newOffer = createEmptyOfferInput();
-    this.offers.push(newOffer);
-    this.currentOfferIndex = this.offers.length - 1;
-    this.loadFormFromOffer(this.currentOfferIndex);
-    this.showAddSheet = false;
-    this.currentTab = 'input';
-    this.analysisResult = null;
-  }
-
-  /** 删除指定 Offer */
-  removeOffer(index: number) {
-    if (this.offers.length <= 1) {
-      this.errorMessage = '至少保留一份 Offer';
-      return;
-    }
-    this.offers.splice(index, 1);
-    if (this.currentOfferIndex >= this.offers.length) {
-      this.currentOfferIndex = this.offers.length - 1;
-    }
-    this.loadFormFromOffer(this.currentOfferIndex);
-  }
-
-  // ============================================
-  // 雷达图绘制
-  // ============================================
-
-  /** 绘制单个 Offer 雷达图 */
-  drawRadarChart() {
-    if (!this.analysisResult) return;
-
-    const ctx = this.radarContext;
-    const width = 300;
-    const height = 300;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const maxRadius = 110;
-    const dimensions = this.analysisResult.dimensions;
-    const count = dimensions.length;
-    const angleStep = (Math.PI * 2) / count;
-
-    ctx.clearRect(0, 0, width, height);
-
-    // 绘制背景网格
-    const levels = 5;
-    for (let level = 1; level <= levels; level++) {
-      const r = (maxRadius / levels) * level;
-      ctx.beginPath();
-      for (let i = 0; i <= count; i++) {
-        const angle = angleStep * i - Math.PI / 2;
-        const x = centerX + r * Math.cos(angle);
-        const y = centerY + r * Math.sin(angle);
-        if (i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
+    // 如果从看板跳转过来，检查路由参数
+    const params = router.getParams() as Record<string, string>;
+    if (params?.company && params?.position) {
+      const offer = createEmptyOfferInput();
+      offer.company = params.company;
+      offer.position = params.position;
+      if (params.salary) {
+        offer.monthlySalary = parseInt(params.salary) || 0;
       }
-      ctx.closePath();
-      ctx.strokeStyle = level === levels ? NeutralColors.Neutral300 : NeutralColors.Neutral200;
-      ctx.lineWidth = level === levels ? 1.5 : 0.8;
-      ctx.stroke();
-    }
-
-    // 绘制轴线
-    for (let i = 0; i < count; i++) {
-      const angle = angleStep * i - Math.PI / 2;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
-      ctx.strokeStyle = NeutralColors.Neutral200;
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-    }
-
-    // 绘制数据区域
-    ctx.beginPath();
-    for (let i = 0; i <= count; i++) {
-      const idx = i % count;
-      const angle = angleStep * idx - Math.PI / 2;
-      const r = (dimensions[idx].score / 100) * maxRadius;
-      const x = centerX + r * Math.cos(angle);
-      const y = centerY + r * Math.sin(angle);
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
+      if (params.location) {
+        offer.note = `城市：${params.location}`;
       }
-    }
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(139, 92, 246, 0.2)';
-    ctx.fill();
-    ctx.strokeStyle = BrandColors.Brand500;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // 绘制数据点
-    for (let i = 0; i < count; i++) {
-      const angle = angleStep * i - Math.PI / 2;
-      const r = (dimensions[i].score / 100) * maxRadius;
-      const x = centerX + r * Math.cos(angle);
-      const y = centerY + r * Math.sin(angle);
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = BrandColors.Brand500;
-      ctx.fill();
-      ctx.strokeStyle = NeutralColors.Neutral0;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
-
-    // 绘制标签
-    ctx.font = '12px sans-serif';
-    ctx.fillStyle = NeutralColors.Neutral700;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    for (let i = 0; i < count; i++) {
-      const angle = angleStep * i - Math.PI / 2;
-      const labelR = maxRadius + 22;
-      const x = centerX + labelR * Math.cos(angle);
-      const y = centerY + labelR * Math.sin(angle);
-      ctx.fillText(dimensions[i].name, x, y);
+      this.offers = [offer];
+      this.phase = 'input';
+      this.selectedScenarioId = 'custom';
     }
   }
-
-  /** 绘制对比雷达图 */
-  drawComparisonRadar() {
-    if (!this.comparisonResult) return;
-
-    const ctx = this.compareRadarContext;
-    const width = 320;
-    const height = 320;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const maxRadius = 110;
-    const dimComp = this.comparisonResult.dimensionComparison;
-    const count = dimComp.length;
-    const angleStep = (Math.PI * 2) / count;
-
-    // 对比颜色
-    const compareColors = [
-      { fill: 'rgba(139, 92, 246, 0.15)', stroke: BrandColors.Brand500 },
-      { fill: 'rgba(0, 125, 255, 0.15)', stroke: InfoColors.Info500 },
-      { fill: 'rgba(255, 152, 0, 0.15)', stroke: WarningColors.Warning500 },
-    ];
-
-    ctx.clearRect(0, 0, width, height);
-
-    // 绘制背景网格
-    const levels = 5;
-    for (let level = 1; level <= levels; level++) {
-      const r = (maxRadius / levels) * level;
-      ctx.beginPath();
-      for (let i = 0; i <= count; i++) {
-        const angle = angleStep * i - Math.PI / 2;
-        const x = centerX + r * Math.cos(angle);
-        const y = centerY + r * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.strokeStyle = level === levels ? NeutralColors.Neutral300 : NeutralColors.Neutral200;
-      ctx.lineWidth = level === levels ? 1.5 : 0.8;
-      ctx.stroke();
-    }
-
-    // 绘制轴线
-    for (let i = 0; i < count; i++) {
-      const angle = angleStep * i - Math.PI / 2;
-      ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(centerX + maxRadius * Math.cos(angle), centerY + maxRadius * Math.sin(angle));
-      ctx.strokeStyle = NeutralColors.Neutral200;
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-    }
-
-    // 绘制每个 Offer 的数据区域
-    const offerCount = this.comparisonResult.offers.length;
-    for (let o = 0; o < offerCount; o++) {
-      const color = compareColors[o % compareColors.length];
-      ctx.beginPath();
-      for (let i = 0; i <= count; i++) {
-        const idx = i % count;
-        const angle = angleStep * idx - Math.PI / 2;
-        const score = dimComp[idx].scores[o] || 0;
-        const r = (score / 100) * maxRadius;
-        const x = centerX + r * Math.cos(angle);
-        const y = centerY + r * Math.sin(angle);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.fillStyle = color.fill;
-      ctx.fill();
-      ctx.strokeStyle = color.stroke;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    // 绘制标签
-    ctx.font = '12px sans-serif';
-    ctx.fillStyle = NeutralColors.Neutral700;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    for (let i = 0; i < count; i++) {
-      const angle = angleStep * i - Math.PI / 2;
-      const labelR = maxRadius + 22;
-      const x = centerX + labelR * Math.cos(angle);
-      const y = centerY + labelR * Math.sin(angle);
-      ctx.fillText(dimComp[i].name, x, y);
-    }
-  }
-
-  // ============================================
-  // 辅助方法
-  // ============================================
-
-  /** 获取评分对应颜色 */
-  getScoreColor(score: number): string {
-    if (score >= 85) return SuccessColors.Success500;
-    if (score >= 70) return InfoColors.Info500;
-    if (score >= 55) return WarningColors.Warning500;
-    return ErrorColors.Error500;
-  }
-
-  /** 获取评分进度条颜色 */
-  getProgressColor(score: number): ResourceColor {
-    if (score >= 85) return SuccessColors.Success500;
-    if (score >= 70) return InfoColors.Info500;
-    if (score >= 55) return WarningColors.Warning500;
-    return ErrorColors.Error500;
-  }
-
-  // ============================================
-  // 构建页面
-  // ============================================
 
   build() {
     Column() {
-      // 顶部导航栏
-      this.buildNavBar();
+      // 顶部导航
+      this.TopBar()
 
-      // Tab 切换栏
-      this.buildTabBar();
-
-      // 内容区域
+      // 主内容区
       if (this.isLoading) {
-        this.buildLoadingView();
+        this.LoadingView()
+      } else if (this.errorMessage) {
+        this.ErrorView()
       } else {
-        if (this.currentTab === 'input') {
-          this.buildInputTab();
-        } else if (this.currentTab === 'result') {
-          this.buildResultTab();
-        } else if (this.currentTab === 'compare') {
-          this.buildCompareTab();
+        switch (this.phase) {
+          case 'scenario':
+            this.ScenarioView()
+            break
+          case 'input':
+            this.InputView()
+            break
+          case 'result':
+            this.ResultView()
+            break
+          case 'compare':
+            this.CompareView()
+            break
+          case 'whatif':
+            this.WhatIfView()
+            break
         }
-      }
-
-      // 错误提示
-      if (this.errorMessage) {
-        this.buildErrorToast();
       }
     }
     .width('100%')
     .height('100%')
     .backgroundColor(SemanticColors.Background)
-    .bindSheet($$this.showAddSheet, this.buildAddSheetBuilder(), {
-      height: SheetSize.FIT_CONTENT,
-      showClose: true,
+    .bindSheet($$this.showWeightSheet, this.WeightSheet(), {
+      height: '60%',
       dragBar: true,
-      backgroundColor: SemanticColors.Background,
-      borderRadius: { topLeft: SemanticRadius.BottomSheet, topRight: SemanticRadius.BottomSheet },
+      backgroundColor: SemanticColors.Surface1,
     })
-    .bindSheet($$this.showOvertimePicker, this.buildOvertimeSheetBuilder(), {
-      height: SheetSize.FIT_CONTENT,
-      showClose: true,
+    .bindSheet($$this.showOvertimePicker, this.OvertimeSheet(), {
+      height: '35%',
       dragBar: true,
-      backgroundColor: SemanticColors.Background,
-      borderRadius: { topLeft: SemanticRadius.BottomSheet, topRight: SemanticRadius.BottomSheet },
+      backgroundColor: SemanticColors.Surface1,
     })
   }
 
   // ============================================
-  // 导航栏
+  // 顶部导航
   // ============================================
-
   @Builder
-  buildNavBar() {
+  TopBar() {
     Row() {
-      // 返回按钮
-      Button() {
-        // 左箭头用文字模拟
-        Text('<')
-          .fontSize(FontSize.Xxl)
-          .fontColor(SemanticColors.Text1)
-      }
-      .type(ButtonType.Circle)
-      .backgroundColor(Color.Transparent)
-      .width(ComponentSizes.Button.Lg.height)
-      .height(ComponentSizes.Button.Lg.height)
-      .onClick(() => {
-        // 返回上一页
-      })
+      Image($r('app.media.ic_back'))
+        .width(ComponentSizes.Icon.Lg)
+        .height(ComponentSizes.Icon.Lg)
+        .fillColor(SemanticColors.Text1)
+        .onClick(() => router.back())
 
-      Text('Offer 分析')
-        .fontSize(FontSize.Xl)
-        .fontWeight(FontWeight.Bold)
+      Text(this.getPhaseTitle())
+        .fontSize(FontSize.Lg)
         .fontColor(SemanticColors.Text1)
-        .layoutWeight(1)
-        .textAlign(TextAlign.Center)
+        .fontWeight(FontWeight.Medium)
+        .margin({ left: SemanticSpacing.Sm })
 
-      // 右侧占位
-      Button() {
-        Text('+')
-          .fontSize(FontSize.Xxl)
-          .fontColor(SemanticColors.Text1)
+      Blank()
+
+      // 权重按钮（结果页显示）
+      if (this.phase === 'result' || this.phase === 'whatif') {
+        Text('权重')
+          .fontSize(FontSize.Sm)
+          .fontColor(BrandColors.Brand500)
+          .padding({
+            left: SemanticSpacing.Sm, right: SemanticSpacing.Sm,
+            top: SemanticSpacing.Xs, bottom: SemanticSpacing.Xs
+          })
+          .borderRadius(SemanticRadius.Pill)
+          .backgroundColor(BrandColors.Brand50)
+          .onClick(() => { this.showWeightSheet = true })
+          .margin({ right: SemanticSpacing.Sm })
       }
-      .type(ButtonType.Circle)
-      .backgroundColor(Color.Transparent)
-      .width(ComponentSizes.Button.Lg.height)
-      .height(ComponentSizes.Button.Lg.height)
-      .onClick(() => {
-        this.showAddSheet = true;
-      })
     }
     .width('100%')
     .height(HarmonyDesign.NavBarHeight)
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-    .backgroundColor(SemanticColors.Background)
-  }
-
-  // ============================================
-  // Tab 栏
-  // ============================================
-
-  @Builder
-  buildTabBar() {
-    Row() {
-      this.buildTabItem('录入', 'input', 0)
-      if (this.offers.length >= 2) {
-        this.buildTabItem('对比', 'compare', 1)
-      }
-      if (this.analysisResult) {
-        this.buildTabItem('分析', 'result', this.offers.length >= 2 ? 2 : 1)
-      }
-    }
-    .width('100%')
-    .height(44)
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+    .padding({ left: HarmonyDesign.SafePadding, right: HarmonyDesign.SafePadding })
     .backgroundColor(SemanticColors.Surface1)
   }
 
-  @Builder
-  buildTabItem(title: string, tab: PageTab, index: number) {
-    Column() {
-      Text(title)
-        .fontSize(FontSize.Sm)
-        .fontWeight(this.currentTab === tab ? FontWeight.Semibold : FontWeight.Normal)
-        .fontColor(this.currentTab === tab ? BrandColors.Brand500 : SemanticColors.Text3)
-        .padding({ top: SemanticSpacing.Sm, bottom: SemanticSpacing.Xs })
-
-      // 底部指示条
-      Row()
-        .width(this.currentTab === tab ? 24 : 0)
-        .height(2)
-        .backgroundColor(BrandColors.Brand500)
-        .borderRadius(SemanticRadius.Pill)
-        .animation({ duration: 200 })
-    }
-    .layoutWeight(1)
-    .alignItems(HorizontalAlign.Center)
-    .onClick(() => {
-      if (tab === 'result' && !this.analysisResult) return;
-      if (tab === 'compare' && this.offers.length < 2) return;
-      this.currentTab = tab;
-    })
-  }
-
   // ============================================
-  // 录入 Tab
+  // 场景选择页
   // ============================================
-
   @Builder
-  buildInputTab() {
+  ScenarioView() {
     Scroll() {
       Column() {
-        // Offer 切换器
-        if (this.offers.length > 1) {
-          this.buildOfferSwitcher();
-        }
+        // 标题区
+        Column() {
+          Text('选择你的求职场景')
+            .fontSize(FontSize.Xxl)
+            .fontColor(SemanticColors.Text1)
+            .fontWeight(FontWeight.Bold)
 
-        // 基本信息卡片
-        this.buildBasicInfoCard();
-
-        // 薪资信息卡片
-        this.buildSalaryCard();
-
-        // 工作条件卡片
-        this.buildWorkConditionCard();
-
-        // 福利保障卡片
-        this.buildBenefitCard();
-
-        // 备注卡片
-        this.buildNoteCard();
-
-        // 操作按钮
-        this.buildActionButtons();
-
-        // 底部间距
-        Row().height(SemanticSpacing.Xxl3)
-      }
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Md })
-    }
-    .scrollBar(BarState.Auto)
-    .layoutWeight(1)
-  }
-
-  /** Offer 切换器 */
-  @Builder
-  buildOfferSwitcher() {
-    Row() {
-      Text('当前 Offer')
-        .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text2)
-        .layoutWeight(1)
-
-      ForEach(this.offers, (offer: OfferInput, index: number) => {
-        Text(`${index + 1}`)
-          .fontSize(FontSize.Sm)
-          .fontColor(this.currentOfferIndex === index ? NeutralColors.Neutral0 : SemanticColors.Text2)
-          .backgroundColor(this.currentOfferIndex === index ? BrandColors.Brand500 : SemanticColors.Surface2)
-          .borderRadius(SemanticRadius.Pill)
-          .width(28)
-          .height(28)
-          .textAlign(TextAlign.Center)
-          .margin({ left: SemanticSpacing.Xs })
-          .onClick(() => {
-            this.saveCurrentOffer();
-            this.loadFormFromOffer(index);
-          })
-      }, (offer: OfferInput, index: number) => `${index}`)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Md)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 基本信息卡片 */
-  @Builder
-  buildBasicInfoCard() {
-    Column() {
-      Text('基本信息')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      // 公司名称
-      this.buildFormItem('公司名称', '', true, (value: string) => {
-        this.formCompany = value;
-      }, this.formCompany, '请输入公司名称', InputType.Normal)
-
-      // 职位名称
-      this.buildFormItem('职位名称', '', true, (value: string) => {
-        this.formPosition = value;
-      }, this.formPosition, '请输入职位名称', InputType.Normal)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 薪资信息卡片 */
-  @Builder
-  buildSalaryCard() {
-    Column() {
-      Text('薪资信息')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      // 月薪
-      this.buildFormItem('月薪（元）', '元', true, (value: string) => {
-        this.formSalary = value;
-      }, this.formSalary, '请输入月薪', InputType.Number)
-
-      // 年终奖
-      this.buildFormItem('年终奖（月数）', '个月', false, (value: string) => {
-        this.formBonus = value;
-      }, this.formBonus, '如：2', InputType.Number)
-
-      // 股权
-      this.buildFormItem('股权/期权', '', false, (value: string) => {
-        this.formEquity = value;
-      }, this.formEquity, '如：期权 10000 股', InputType.Normal)
-
-      // 五险一金比例
-      this.buildFormItem('五险一金比例', '', false, (value: string) => {
-        this.formInsurance = value;
-      }, this.formInsurance, '如：0.2（即 20%）', InputType.Number)
-
-      // 年包预估
-      if (this.formSalary && parseFloat(this.formSalary) > 0) {
-        Row() {
-          Text('预估年包')
+          Text('我们为你准备了常见场景模板，也可以自由录入')
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
-          Text(`${this.calcAnnualPackage().toLocaleString()} 元`)
-            .fontSize(FontSize.Base)
-            .fontWeight(FontWeight.Semibold)
-            .fontColor(BrandColors.Brand500)
-            .margin({ left: SemanticSpacing.Xs })
-        }
-        .width('100%')
-        .padding({ top: SemanticSpacing.Sm })
-        .justifyContent(FlexAlign.SpaceBetween)
-      }
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 工作条件卡片 */
-  @Builder
-  buildWorkConditionCard() {
-    Column() {
-      Text('工作条件')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      // 每周工作时长
-      this.buildFormItem('每周工时', '小时/周', false, (value: string) => {
-        this.formWorkHours = value;
-      }, this.formWorkHours, '如：40', InputType.Number)
-
-      // 加班频率
-      Row() {
-        Text('加班频率')
-          .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text2)
-          .width(80)
-
-        Text(OvertimeFrequencyLabels[this.formOvertime])
-          .fontSize(FontSize.Base)
-          .fontColor(SemanticColors.Text1)
-          .layoutWeight(1)
-          .textAlign(TextAlign.End)
-          .padding({ right: SemanticSpacing.Sm })
-
-        Text('>')
-          .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text3)
-      }
-      .width('100%')
-      .height(48)
-      .padding({ left: SemanticSpacing.Md, right: SemanticSpacing.Md })
-      .backgroundColor(SemanticColors.Surface3)
-      .borderRadius(SemanticRadius.Control)
-      .margin({ bottom: SemanticSpacing.Md })
-      .onClick(() => {
-        this.showOvertimePicker = true;
-      })
-
-      // 通勤时间
-      this.buildFormItem('通勤时间', '分钟', false, (value: string) => {
-        this.formCommute = value;
-      }, this.formCommute, '如：30', InputType.Number)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 福利保障卡片 */
-  @Builder
-  buildBenefitCard() {
-    Column() {
-      Row() {
-        Text('福利保障')
-          .fontSize(FontSize.Base)
-          .fontWeight(FontWeight.Semibold)
-          .fontColor(SemanticColors.Text1)
-          .layoutWeight(1)
-
-        Text(`已选 ${this.selectedBenefits.length} 项`)
-          .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text3)
-      }
-      .width('100%')
-      .margin({ bottom: SemanticSpacing.Md })
-
-      // 福利标签
-      Flex({ wrap: FlexWrap.Wrap }) {
-        ForEach(this.allBenefits, (type: BenefitType) => {
-          Text(BenefitTypeLabels[type])
-            .fontSize(FontSize.Xs)
-            .fontColor(this.selectedBenefits.includes(type) ? BrandColors.Brand500 : SemanticColors.Text2)
-            .backgroundColor(this.selectedBenefits.includes(type) ? BrandColors.Brand50 : SemanticColors.Surface2)
-            .borderRadius(SemanticRadius.Pill)
-            .padding({ left: SemanticSpacing.Md, right: SemanticSpacing.Md, top: SemanticSpacing.Sm, bottom: SemanticSpacing.Sm })
-            .margin({ right: SemanticSpacing.Sm, bottom: SemanticSpacing.Sm })
-            .border({
-              width: 1,
-              color: this.selectedBenefits.includes(type) ? BrandColors.Brand500 : SemanticColors.Border,
-              radius: SemanticRadius.Pill,
-            })
-            .onClick(() => {
-              this.toggleBenefit(type);
-            })
-        }, (type: BenefitType) => type)
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 备注卡片 */
-  @Builder
-  buildNoteCard() {
-    Column() {
-      Text('备注')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      TextArea({ text: this.formNote, placeholder: '其他需要记录的信息...' })
-        .width('100%')
-        .height(80)
-        .fontSize(FontSize.Base)
-        .fontColor(SemanticColors.Text1)
-        .placeholderColor(SemanticColors.Text4)
-        .backgroundColor(SemanticColors.Surface3)
-        .borderRadius(SemanticRadius.Control)
-        .padding(SemanticSpacing.Md)
-        .onChange((value: string) => {
-          this.formNote = value;
-        })
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 操作按钮 */
-  @Builder
-  buildActionButtons() {
-    Column() {
-      // 分析按钮
-      Button('分析当前 Offer')
-        .width('100%')
-        .height(ComponentSizes.Button.Lg.height)
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(NeutralColors.Neutral0)
-        .backgroundColor(BrandColors.Brand500)
-        .borderRadius(SemanticRadius.Control)
-        .margin({ bottom: SemanticSpacing.Md })
-        .onClick(() => {
-          this.startAnalysis();
-        })
-
-      // 对比按钮
-      if (this.offers.length >= 2) {
-        Button('对比所有 Offer')
-          .width('100%')
-          .height(ComponentSizes.Button.Lg.height)
-          .fontSize(FontSize.Base)
-          .fontWeight(FontWeight.Medium)
-          .fontColor(BrandColors.Brand500)
-          .backgroundColor(BrandColors.Brand50)
-          .borderRadius(SemanticRadius.Control)
-          .border({ width: 1, color: BrandColors.Brand500, radius: SemanticRadius.Control })
-          .onClick(() => {
-            this.startComparison();
-          })
-      }
-    }
-    .width('100%')
-    .margin({ top: SemanticSpacing.Sm })
-  }
-
-  /** 通用表单项 */
-  @Builder
-  buildFormItem(
-    label: string,
-    unit: string,
-    required: boolean,
-    onChange: (value: string) => void,
-    value: string,
-    placeholder: string,
-    inputType: InputType
-  ) {
-    Column() {
-      Row() {
-        Text(label)
-          .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text2)
-        if (required) {
-          Text(' *')
-            .fontSize(FontSize.Sm)
-            .fontColor(ErrorColors.Error500)
-        }
-        if (unit) {
-          Text(`（${unit}）`)
-            .fontSize(FontSize.Xs)
             .fontColor(SemanticColors.Text3)
+            .margin({ top: SemanticSpacing.Sm })
         }
-      }
-      .width('100%')
-      .margin({ bottom: SemanticSpacing.Xs })
-
-      TextInput({ text: value, placeholder: placeholder })
         .width('100%')
-        .height(ComponentSizes.Input.Md.height)
-        .fontSize(FontSize.Base)
-        .fontColor(SemanticColors.Text1)
-        .placeholderColor(SemanticColors.Text4)
-        .backgroundColor(SemanticColors.Surface3)
-        .borderRadius(SemanticRadius.Control)
-        .padding({ left: SemanticSpacing.Md, right: SemanticSpacing.Md })
-        .type(inputType)
-        .onChange(onChange)
+        .alignItems(HorizontalAlign.Start)
+        .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, top: SemanticSpacing.Xxl })
+
+        // 场景选择器
+        OfferScenarioPicker({
+          selectedId: this.selectedScenarioId,
+          onSelect: (template: ScenarioTemplate) => {
+            this.selectedScenarioId = template.id;
+            if (template.id === 'custom') {
+              this.offers = [createEmptyOfferInput()];
+            } else {
+              this.offers = template.presetOffers.map(preset => ({
+                ...createEmptyOfferInput(),
+                ...preset,
+                monthlySalary: preset.monthlySalary || 0,
+                annualBonus: preset.annualBonus || 0,
+                workHours: preset.workHours || 40,
+                commuteMinutes: preset.commuteMinutes || 30,
+                socialInsurance: preset.socialInsurance || 0.2,
+                overtimeFrequency: preset.overtimeFrequency || 'sometimes' as OvertimeFrequency,
+                benefits: preset.benefits || [],
+              }));
+            }
+            // 延迟跳转到录入页
+            setTimeout(() => {
+              this.phase = 'input';
+            }, 300);
+          }
+        })
+        .margin({ top: SemanticSpacing.Lg, left: SemanticSpacing.Xl, right: SemanticSpacing.Xl })
+      }
     }
     .width('100%')
-    .alignItems(HorizontalAlign.Start)
-    .margin({ bottom: SemanticSpacing.Md })
-  }
-
-  /** 计算预估年包 */
-  calcAnnualPackage(): number {
-    const salary = parseFloat(this.formSalary) || 0;
-    const bonus = parseFloat(this.formBonus) || 0;
-    return Math.round(salary * (12 + bonus));
+    .layoutWeight(1)
+    .scrollBar(BarState.Off)
   }
 
   // ============================================
-  // 分析结果 Tab
+  // 录入页
   // ============================================
-
   @Builder
-  buildResultTab() {
+  InputView() {
+    Column() {
+      // Offer 切换器
+      if (this.offers.length > 1) {
+        Scroll() {
+          Row() {
+            ForEach(this.offers, (offer: OfferInput, index: number) => {
+              Text(`Offer ${index + 1}`)
+                .fontSize(FontSize.Sm)
+                .fontColor(this.currentOfferIndex === index ? '#FFFFFF' : SemanticColors.Text2)
+                .backgroundColor(this.currentOfferIndex === index ? BrandColors.Brand500 : SemanticColors.Surface2)
+                .borderRadius(SemanticRadius.Pill)
+                .padding({ left: SemanticSpacing.Md, right: SemanticSpacing.Md, top: SemanticSpacing.Xs, bottom: SemanticSpacing.Xs })
+                .margin({ right: SemanticSpacing.Sm })
+                .onClick(() => { this.currentOfferIndex = index })
+            }, (_: OfferInput, index: number) => index.toString())
+          }
+          .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl })
+        }
+        .scrollable(ScrollDirection.Horizontal)
+        .scrollBar(BarState.Off)
+        .width('100%')
+        .padding({ top: SemanticSpacing.Sm, bottom: SemanticSpacing.Sm })
+      }
+
+      // 表单
+      if (this.offers.length > 0) {
+        Scroll() {
+          Column() {
+            OfferFormCard({ offer: this.offers[this.currentOfferIndex] })
+          }
+          .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, bottom: SemanticSpacing.Xxl })
+        }
+        .layoutWeight(1)
+        .scrollBar(BarState.Off)
+      }
+
+      // 底部操作栏
+      Row() {
+        if (this.offers.length < 5) {
+          Button('添加 Offer')
+            .height(ComponentSizes.Button.Md.height)
+            .fontSize(FontSize.Md)
+            .fontColor(SemanticColors.Text2)
+            .backgroundColor(SemanticColors.Surface2)
+            .borderRadius(SemanticRadius.Control)
+            .layoutWeight(1)
+            .onClick(() => {
+              this.offers.push(createEmptyOfferInput());
+              this.currentOfferIndex = this.offers.length - 1;
+            })
+        }
+
+        if (this.offers.length >= 2) {
+          Button('对比分析')
+            .height(ComponentSizes.Button.Md.height)
+            .fontSize(FontSize.Md)
+            .fontColor('#FFFFFF')
+            .backgroundColor(BrandColors.Brand500)
+            .borderRadius(SemanticRadius.Control)
+            .layoutWeight(1)
+            .margin({ left: SemanticSpacing.Sm })
+            .onClick(() => this.doCompare())
+        }
+
+        Button('分析当前')
+          .height(ComponentSizes.Button.Md.height)
+          .fontSize(FontSize.Md)
+          .fontColor('#FFFFFF')
+          .backgroundColor(BrandColors.Brand500)
+          .borderRadius(SemanticRadius.Control)
+          .layoutWeight(1)
+          .margin({ left: SemanticSpacing.Sm })
+          .onClick(() => this.doAnalyze())
+      }
+      .width('100%')
+      .padding({
+        left: SemanticSpacing.Xl, right: SemanticSpacing.Xl,
+        top: SemanticSpacing.Sm, bottom: HarmonyDesign.SafePadding
+      })
+      .backgroundColor(SemanticColors.Surface1)
+    }
+    .width('100%')
+    .height('100%')
+  }
+
+  // ============================================
+  // 分析结果页
+  // ============================================
+  @Builder
+  ResultView() {
     Scroll() {
       Column() {
         if (this.analysisResult) {
-          // 综合评分
-          this.buildOverallScore();
+          // 综合评分 + 雷达图
+          Row() {
+            // 左侧评分
+            Column() {
+              Text('综合评分')
+                .fontSize(FontSize.Sm)
+                .fontColor(SemanticColors.Text3)
 
-          // 雷达图
-          this.buildRadarChartSection();
+              Stack() {
+                Progress({ value: 0, total: 100, type: ProgressType.Ring })
+                  .width(120)
+                  .height(120)
+                  .color(SemanticColors.Surface2)
 
-          // 各维度评分
-          this.buildDimensionScores();
+                Progress({ value: this.analysisResult.overallScore, total: 100, type: ProgressType.Ring })
+                  .width(120)
+                  .height(120)
+                  .color(this.getScoreColor(this.analysisResult.overallScore))
+                  .style({ strokeWidth: 10 })
 
-          // 市场对比
-          this.buildMarketComparison();
+                Column() {
+                  Text(this.analysisResult.overallScore.toString())
+                    .fontSize(FontSize.Xxxl)
+                    .fontColor(SemanticColors.Text1)
+                    .fontWeight(FontWeight.Bold)
+
+                  Text(this.getScoreLabel(this.analysisResult.overallScore))
+                    .fontSize(FontSize.Xs)
+                    .fontColor(this.getScoreColor(this.analysisResult.overallScore))
+                }
+              }
+              .margin({ top: SemanticSpacing.Sm })
+            }
+            .width('40%')
+            .justifyContent(FlexAlign.Center)
+
+            // 右侧雷达图
+            Column() {
+              OfferRadarChart({
+                scores: [this.analysisResult.dimensions.map(d => d.score)],
+                labels: this.analysisResult.dimensions.map(d => d.name),
+              })
+            }
+            .width('60%')
+            .justifyContent(FlexAlign.Center)
+          }
+          .width('100%')
+          .padding(SemanticSpacing.Lg)
+          .margin({ top: SemanticSpacing.Md })
+
+          // 评分卡片
+          OfferScoreCard({ result: this.analysisResult })
+            .margin({ top: SemanticSpacing.Sm })
 
           // AI 建议
-          this.buildSuggestions();
+          this.SuggestionSection('💡 AI 分析建议', this.analysisResult.suggestions)
 
           // 谈判建议
-          this.buildNegotiationTips();
-        }
+          this.SuggestionSection('🎯 谈判建议', this.analysisResult.negotiationTips)
 
-        Row().height(SemanticSpacing.Xxl3)
+          // What-if 入口
+          Row() {
+            Column() {
+              Text('🔍 What-if 分析')
+                .fontSize(FontSize.Md)
+                .fontColor(SemanticColors.Text1)
+                .fontWeight(FontWeight.Medium)
+
+              Text('调整参数，实时查看评分变化')
+                .fontSize(FontSize.Xs)
+                .fontColor(SemanticColors.Text3)
+                .margin({ top: 2 })
+            }
+            .alignItems(HorizontalAlign.Start)
+            .layoutWeight(1)
+
+            Image($r('app.media.ic_arrow_right'))
+              .width(ComponentSizes.Icon.Md)
+              .height(ComponentSizes.Icon.Md)
+              .fillColor(SemanticColors.Text3)
+          }
+          .width('100%')
+          .padding(SemanticSpacing.Lg)
+          .margin({ top: SemanticSpacing.Md })
+          .backgroundColor(SemanticColors.Surface1)
+          .borderRadius(SemanticRadius.Container)
+          .onClick(() => { this.phase = 'whatif' })
+        }
       }
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Md })
+      .padding({ bottom: SemanticSpacing.Xxl })
     }
-    .scrollBar(BarState.Auto)
+    .width('100%')
     .layoutWeight(1)
-  }
-
-  /** 综合评分 */
-  @Builder
-  buildOverallScore() {
-    Column() {
-      Text('综合评分')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .margin({ bottom: SemanticSpacing.Lg })
-
-      Row() {
-        // 圆形评分
-        Stack() {
-          // 背景圆环
-          Circle({ width: 100, height: 100 })
-            .fill(Color.Transparent)
-            .stroke(SemanticColors.Surface2)
-            .strokeWidth(8)
-
-          // 进度圆环
-          Circle({ width: 100, height: 100 })
-            .fill(Color.Transparent)
-            .stroke(this.getProgressColor(this.analysisResult!.overallScore))
-            .strokeWidth(8)
-            .startAngle(90)
-            .sweepAngle(this.analysisResult!.overallScore / 100 * 360)
-
-          // 分数
-          Text(`${this.analysisResult!.overallScore}`)
-            .fontSize(FontSize.Xxxl)
-            .fontWeight(FontWeight.Bold)
-            .fontColor(this.getProgressColor(this.analysisResult!.overallScore))
-        }
-        .width(100)
-        .height(100)
-
-        Column() {
-          Text(this.getScoreLabel(this.analysisResult!.overallScore))
-            .fontSize(FontSize.Lg)
-            .fontWeight(FontWeight.Semibold)
-            .fontColor(SemanticColors.Text1)
-          Text(`${this.offers[this.currentOfferIndex]?.company || ''} - ${this.offers[this.currentOfferIndex]?.position || ''}`)
-            .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
-            .margin({ top: SemanticSpacing.Xs })
-        }
-        .alignItems(HorizontalAlign.Start)
-        .margin({ left: SemanticSpacing.Xxl })
-        .layoutWeight(1)
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.Start)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 雷达图区域 */
-  @Builder
-  buildRadarChartSection() {
-    Column() {
-      Text('能力雷达图')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      Canvas(this.radarContext)
-        .width(300)
-        .height(300)
-        .onReady(() => {
-          this.drawRadarChart();
-        })
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-    .alignItems(HorizontalAlign.Center)
-  }
-
-  /** 各维度评分 */
-  @Builder
-  buildDimensionScores() {
-    Column() {
-      Text('维度评分')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      ForEach(this.analysisResult!.dimensions, (dim: DimensionScore) => {
-        Column() {
-          Row() {
-            Text(dim.name)
-              .fontSize(FontSize.Sm)
-              .fontColor(SemanticColors.Text1)
-              .width(80)
-
-            Progress({ value: dim.score, total: 100, type: ProgressBarType.Linear })
-              .layoutWeight(1)
-              .height(8)
-              .color(this.getProgressColor(dim.score))
-              .backgroundColor(SemanticColors.Surface2)
-              .style({ strokeWidth: 8 })
-
-            Text(`${dim.score}`)
-              .fontSize(FontSize.Sm)
-              .fontWeight(FontWeight.Semibold)
-              .fontColor(this.getProgressColor(dim.score))
-              .width(30)
-              .textAlign(TextAlign.End)
-          }
-          .width('100%')
-          .margin({ bottom: SemanticSpacing.Xs })
-
-          Row() {
-            Text(dim.description)
-              .fontSize(FontSize.Xs)
-              .fontColor(SemanticColors.Text3)
-              .layoutWeight(1)
-            Text(dim.label)
-              .fontSize(FontSize.Xs)
-              .fontWeight(FontWeight.Medium)
-              .fontColor(this.getProgressColor(dim.score))
-              .padding({ left: SemanticSpacing.Sm, right: SemanticSpacing.Sm, top: 2, bottom: 2 })
-              .backgroundColor(this.getScoreBgColor(dim.score))
-              .borderRadius(SemanticRadius.Pill)
-          }
-          .width('100%')
-          .margin({ bottom: SemanticSpacing.Md })
-        }
-        .width('100%')
-        .alignItems(HorizontalAlign.Start)
-      }, (dim: DimensionScore) => dim.name)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 市场对比 */
-  @Builder
-  buildMarketComparison() {
-    if (!this.analysisResult?.marketComparison) return;
-    const mc = this.analysisResult.marketComparison;
-
-    Column() {
-      Text('市场对比')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      Text(mc.description)
-        .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text2)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      // 薪资范围条
-      Column() {
-        Row() {
-          Text(`低位 ${mc.salaryRange.low.toLocaleString()}`)
-            .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text3)
-          Text(`中位 ${mc.salaryRange.median.toLocaleString()}`)
-            .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text3)
-          Text(`高位 ${mc.salaryRange.high.toLocaleString()}`)
-            .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text3)
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-        .margin({ bottom: SemanticSpacing.Xs })
-
-        // 薪资范围进度条
-        Stack() {
-          Row()
-            .width('100%')
-            .height(8)
-            .backgroundColor(SemanticColors.Surface2)
-            .borderRadius(SemanticRadius.Pill)
-
-          Row()
-            .width(`${mc.salaryPercentile}%`)
-            .height(8)
-            .backgroundColor(BrandColors.Brand500)
-            .borderRadius(SemanticRadius.Pill)
-        }
-        .width('100%')
-        .alignContent(Alignment.Start)
-
-        Text(`超过市场 ${mc.salaryPercentile}% 的水平`)
-          .fontSize(FontSize.Xs)
-          .fontColor(BrandColors.Brand500)
-          .margin({ top: SemanticSpacing.Xs })
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** AI 建议 */
-  @Builder
-  buildSuggestions() {
-    Column() {
-      Row() {
-        Text('AI 分析建议')
-          .fontSize(FontSize.Base)
-          .fontWeight(FontWeight.Semibold)
-          .fontColor(SemanticColors.Text1)
-          .layoutWeight(1)
-        Text('AI')
-          .fontSize(FontSize.Xs)
-          .fontColor(NeutralColors.Neutral0)
-          .backgroundColor(BrandColors.Brand500)
-          .borderRadius(SemanticRadius.Pill)
-          .padding({ left: SemanticSpacing.Sm, right: SemanticSpacing.Sm, top: 2, bottom: 2 })
-      }
-      .width('100%')
-      .margin({ bottom: SemanticSpacing.Md })
-
-      ForEach(this.analysisResult!.suggestions, (suggestion: string, index: number) => {
-        Row() {
-          Text(`${index + 1}.`)
-            .fontSize(FontSize.Sm)
-            .fontColor(BrandColors.Brand500)
-            .margin({ right: SemanticSpacing.Sm })
-          Text(suggestion)
-            .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
-            .layoutWeight(1)
-            .lineHeight(22)
-        }
-        .width('100%')
-        .alignItems(VerticalAlign.Top)
-        .margin({ bottom: SemanticSpacing.Sm })
-      }, (suggestion: string, index: number) => `${index}`)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 谈判建议 */
-  @Builder
-  buildNegotiationTips() {
-    Column() {
-      Text('谈判建议')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      ForEach(this.analysisResult!.negotiationTips, (tip: string, index: number) => {
-        Row() {
-          Text(`💡`)
-            .fontSize(FontSize.Sm)
-            .margin({ right: SemanticSpacing.Sm })
-          Text(tip)
-            .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
-            .layoutWeight(1)
-            .lineHeight(22)
-        }
-        .width('100%')
-        .alignItems(VerticalAlign.Top)
-        .padding(SemanticSpacing.Md)
-        .margin({ bottom: SemanticSpacing.Sm })
-        .backgroundColor(WarningColors.Warning50)
-        .borderRadius(SemanticRadius.Element)
-      }, (tip: string, index: number) => `${index}`)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
+    .scrollBar(BarState.Off)
   }
 
   // ============================================
-  // 对比 Tab
+  // 对比页
   // ============================================
-
   @Builder
-  buildCompareTab() {
+  CompareView() {
     Scroll() {
       Column() {
         if (this.comparisonResult) {
-          // 对比雷达图
-          this.buildComparisonRadarSection();
-
-          // 对比总结
-          this.buildComparisonSummary();
-
-          // 各 Offer 概览
-          this.buildComparisonOffers();
-
-          // 维度对比详情
-          this.buildComparisonDimensions();
-        }
-
-        Row().height(SemanticSpacing.Xxl3)
-      }
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Md })
-    }
-    .scrollBar(BarState.Auto)
-    .layoutWeight(1)
-  }
-
-  /** 对比雷达图 */
-  @Builder
-  buildComparisonRadarSection() {
-    Column() {
-      Text('对比雷达图')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      // 图例
-      Row() {
-        ForEach(this.comparisonResult!.offers, (item: { company: string }, index: number) => {
+          // 推荐横幅
           Row() {
-            Row()
-              .width(12)
-              .height(12)
-              .borderRadius(SemanticRadius.Element)
-              .backgroundColor(this.getCompareColor(index))
-            Text(item.company)
-              .fontSize(FontSize.Xs)
-              .fontColor(SemanticColors.Text2)
-              .margin({ left: SemanticSpacing.Xs })
-          }
-          .margin({ right: SemanticSpacing.Lg })
-        }, (item: { company: string }, index: number) => `${index}`)
-      }
-      .width('100%')
-      .justifyContent(FlexAlign.Center)
-      .margin({ bottom: SemanticSpacing.Md })
-
-      Canvas(this.compareRadarContext)
-        .width(320)
-        .height(320)
-        .onReady(() => {
-          this.drawComparisonRadar();
-        })
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-    .alignItems(HorizontalAlign.Center)
-  }
-
-  /** 对比总结 */
-  @Builder
-  buildComparisonSummary() {
-    Column() {
-      Text('对比结论')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
-
-      Text(this.comparisonResult!.summary)
-        .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text2)
-        .lineHeight(22)
-    }
-    .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
-  }
-
-  /** 各 Offer 概览 */
-  @Builder
-  buildComparisonOffers() {
-    ForEach(this.comparisonResult!.offers, (item: { company: string; position: string; overallScore: number;
-      advantages: string[]; disadvantages: string[] }, index: number) => {
-      Column() {
-        Row() {
-          Row()
-            .width(4)
-            .height(40)
-            .borderRadius(SemanticRadius.Pill)
-            .backgroundColor(this.getCompareColor(index))
-
-          Column() {
-            Text(`${item.company} - ${item.position}`)
-              .fontSize(FontSize.Base)
-              .fontWeight(FontWeight.Semibold)
-              .fontColor(SemanticColors.Text1)
-            Text(`综合评分：${item.overallScore} 分`)
+            Text('🏆 推荐')
               .fontSize(FontSize.Sm)
-              .fontColor(this.getProgressColor(item.overallScore))
-              .margin({ top: 2 })
-          }
-          .alignItems(HorizontalAlign.Start)
-          .margin({ left: SemanticSpacing.Md })
-          .layoutWeight(1)
-
-          if (index === this.comparisonResult!.recommendedIndex) {
-            Text('推荐')
-              .fontSize(FontSize.Xs)
-              .fontColor(NeutralColors.Neutral0)
+              .fontColor('#FFFFFF')
               .backgroundColor(SuccessColors.Success500)
               .borderRadius(SemanticRadius.Pill)
               .padding({ left: SemanticSpacing.Sm, right: SemanticSpacing.Sm, top: 2, bottom: 2 })
-          }
-        }
-        .width('100%')
-        .alignItems(VerticalAlign.Center)
 
-        // 优势
-        if (item.advantages.length > 0) {
-          Column() {
-            Text('优势')
-              .fontSize(FontSize.Xs)
-              .fontColor(SuccessColors.Success500)
-              .fontWeight(FontWeight.Medium)
-            ForEach(item.advantages, (adv: string) => {
-              Text(`  ${adv}`)
-                .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text2)
-            }, (adv: string) => adv)
+            Text(this.comparisonResult.summary)
+              .fontSize(FontSize.Sm)
+              .fontColor(SemanticColors.Text1)
+              .margin({ left: SemanticSpacing.Sm })
+              .layoutWeight(1)
+              .maxLines(2)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
           }
-          .alignItems(HorizontalAlign.Start)
           .width('100%')
-          .margin({ top: SemanticSpacing.Sm })
-        }
+          .padding(SemanticSpacing.Lg)
+          .backgroundColor(SemanticColors.Surface1)
+          .borderRadius(SemanticRadius.Container)
+          .margin({ top: SemanticSpacing.Md })
 
-        // 劣势
-        if (item.disadvantages.length > 0) {
+          // 对比雷达图
           Column() {
-            Text('劣势')
-              .fontSize(FontSize.Xs)
-              .fontColor(WarningColors.Warning500)
-              .fontWeight(FontWeight.Medium)
-            ForEach(item.disadvantages, (dis: string) => {
-              Text(`  ${dis}`)
-                .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text2)
-            }, (dis: string) => dis)
+            OfferRadarChart({
+              scores: this.comparisonResult.dimensionComparison.map(d => d.scores),
+              labels: this.comparisonResult.dimensionComparison.map(d => d.name),
+            })
           }
-          .alignItems(HorizontalAlign.Start)
-          .width('100%')
-          .margin({ top: SemanticSpacing.Sm })
-        }
-      }
-      .width('100%')
-      .padding(SemanticSpacing.Xxl)
-      .margin({ bottom: SemanticSpacing.Md })
-      .backgroundColor(SemanticColors.Surface1)
-      .borderRadius(SemanticRadius.Component)
-      .alignItems(HorizontalAlign.Start)
-    }, (item: { company: string }, index: number) => `${index}`)
-  }
+          .padding(SemanticSpacing.Lg)
+          .margin({ top: SemanticSpacing.Md })
 
-  /** 维度对比详情 */
-  @Builder
-  buildComparisonDimensions() {
-    Column() {
-      Text('维度对比')
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(SemanticColors.Text1)
-        .width('100%')
-        .margin({ bottom: SemanticSpacing.Md })
+          // 各 Offer 概览
+          ForEach(this.comparisonResult.offers, (item, index: number) => {
+            Column() {
+              Row() {
+                Text(`${item.company} - ${item.position}`)
+                  .fontSize(FontSize.Md)
+                  .fontColor(SemanticColors.Text1)
+                  .fontWeight(FontWeight.Medium)
+                  .layoutWeight(1)
 
-      ForEach(this.comparisonResult!.dimensionComparison, (dimComp: { name: string; scores: number[];
-        description: string }) => {
-        Column() {
-          Text(dimComp.name)
-            .fontSize(FontSize.Sm)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(SemanticColors.Text1)
-            .width('100%')
-            .margin({ bottom: SemanticSpacing.Xs })
+                if (index === this.comparisonResult!.recommendedIndex) {
+                  Text('推荐')
+                    .fontSize(FontSize.Xs)
+                    .fontColor('#FFFFFF')
+                    .backgroundColor(SuccessColors.Success500)
+                    .borderRadius(SemanticRadius.Pill)
+                    .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+                }
 
-          ForEach(dimComp.scores, (score: number, sIdx: number) => {
-            Row() {
-              Text(this.comparisonResult!.offers[sIdx]?.company || `Offer ${sIdx + 1}`)
-                .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text3)
-                .width(80)
+                Text(`${item.overallScore}分`)
+                  .fontSize(FontSize.Md)
+                  .fontColor(BrandColors.Brand500)
+                  .fontWeight(FontWeight.Bold)
+                  .margin({ left: SemanticSpacing.Sm })
+              }
+              .width('100%')
 
-              Progress({ value: score, total: 100, type: ProgressBarType.Linear })
-                .layoutWeight(1)
-                .height(6)
-                .color(this.getCompareColor(sIdx))
-                .backgroundColor(SemanticColors.Surface2)
+              // 优势
+              if (item.advantages.length > 0) {
+                Flex({ wrap: FlexWrap.Wrap }) {
+                  ForEach(item.advantages, (adv: string) => {
+                    Text(adv)
+                      .fontSize(FontSize.Xs)
+                      .fontColor(SuccessColors.Success500)
+                      .backgroundColor(SuccessColors.Success50)
+                      .borderRadius(SemanticRadius.Element)
+                      .padding({ left: 6, right: 6, top: 3, bottom: 3 })
+                      .margin({ right: 4, top: 4 })
+                  })
+                }
+                .margin({ top: SemanticSpacing.Sm })
+              }
 
-              Text(`${score}`)
-                .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text2)
-                .width(30)
-                .textAlign(TextAlign.End)
+              // 劣势
+              if (item.disadvantages.length > 0) {
+                Flex({ wrap: FlexWrap.Wrap }) {
+                  ForEach(item.disadvantages, (dis: string) => {
+                    Text(dis)
+                      .fontSize(FontSize.Xs)
+                      .fontColor(WarningColors.Warning500)
+                      .backgroundColor(WarningColors.Warning50)
+                      .borderRadius(SemanticRadius.Element)
+                      .padding({ left: 6, right: 6, top: 3, bottom: 3 })
+                      .margin({ right: 4, top: 4 })
+                  })
+                }
+                .margin({ top: SemanticSpacing.Xs })
+              }
             }
             .width('100%')
-            .margin({ bottom: 2 })
-          }, (score: number, sIdx: number) => `${sIdx}`)
-
-          Text(dimComp.description)
-            .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text3)
-            .width('100%')
-            .margin({ top: SemanticSpacing.Xs, bottom: SemanticSpacing.Md })
+            .padding(SemanticSpacing.Lg)
+            .backgroundColor(SemanticColors.Surface1)
+            .borderRadius(SemanticRadius.Container)
+            .margin({ top: SemanticSpacing.Sm })
+          }, (_: any, index: number) => index.toString())
         }
-        .width('100%')
-        .alignItems(HorizontalAlign.Start)
-        .padding({ bottom: SemanticSpacing.Md })
-        .borderRadius(SemanticRadius.Element)
-      }, (dimComp: { name: string }) => dimComp.name)
+      }
+      .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, bottom: SemanticSpacing.Xxl })
     }
     .width('100%')
-    .padding(SemanticSpacing.Xxl)
-    .margin({ bottom: SemanticSpacing.Md })
-    .backgroundColor(SemanticColors.Surface1)
-    .borderRadius(SemanticRadius.Component)
+    .layoutWeight(1)
+    .scrollBar(BarState.Off)
   }
 
   // ============================================
-  // 加载与错误
+  // What-if 页
   // ============================================
-
   @Builder
-  buildLoadingView() {
+  WhatIfView() {
+    Column() {
+      if (this.offers.length > 0) {
+        OfferWhatIfPanel({
+          offer: this.offers[this.currentOfferIndex],
+          weights: this.weights,
+        })
+      }
+    }
+    .width('100%')
+    .layoutWeight(1)
+  }
+
+  // ============================================
+  // 加载/错误状态
+  // ============================================
+  @Builder
+  LoadingView() {
     Column() {
       LoadingProgress()
-        .width(40)
-        .height(40)
+        .width(48)
+        .height(48)
         .color(BrandColors.Brand500)
-      Text('正在分析中...')
+
+      Text('AI 正在分析中...')
         .fontSize(FontSize.Sm)
         .fontColor(SemanticColors.Text3)
         .margin({ top: SemanticSpacing.Md })
@@ -1599,146 +569,246 @@ struct OfferAnalysisPage {
     .width('100%')
     .layoutWeight(1)
     .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
   }
 
   @Builder
-  buildErrorToast() {
-    Row() {
+  ErrorView() {
+    Column() {
+      Text('分析失败')
+        .fontSize(FontSize.Lg)
+        .fontColor(SemanticColors.Text1)
+
       Text(this.errorMessage)
         .fontSize(FontSize.Sm)
-        .fontColor(ErrorColors.Error500)
-        .layoutWeight(1)
-      Text('关闭')
-        .fontSize(FontSize.Sm)
         .fontColor(SemanticColors.Text3)
+        .margin({ top: SemanticSpacing.Sm })
+        .textAlign(TextAlign.Center)
+        .padding({ left: SemanticSpacing.Xxl, right: SemanticSpacing.Xxl })
+
+      Button('重试')
+        .height(ComponentSizes.Button.Md.height)
+        .fontSize(FontSize.Md)
+        .fontColor('#FFFFFF')
+        .backgroundColor(BrandColors.Brand500)
+        .borderRadius(SemanticRadius.Control)
+        .margin({ top: SemanticSpacing.Xxl })
         .onClick(() => {
           this.errorMessage = '';
+          this.phase = 'input';
         })
     }
     .width('100%')
-    .padding(SemanticSpacing.Md)
-    .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-    .backgroundColor(ErrorColors.Error50)
-    .borderRadius(SemanticRadius.Control)
+    .layoutWeight(1)
+    .justifyContent(FlexAlign.Center)
   }
 
   // ============================================
-  // BindSheet - 新增 Offer 弹窗
+  // 建议列表
   // ============================================
-
   @Builder
-  buildAddSheetBuilder() {
+  SuggestionSection(title: string, items: string[]) {
     Column() {
-      // 弹窗标题
-      Row() {
-        Text('新增 Offer')
-          .fontSize(FontSize.Lg)
-          .fontWeight(FontWeight.Semibold)
-          .fontColor(SemanticColors.Text1)
-          .layoutWeight(1)
-        Text('取消')
-          .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text3)
-          .onClick(() => {
-            this.showAddSheet = false;
-          })
-      }
-      .width('100%')
-      .margin({ bottom: SemanticSpacing.Xxl })
-
-      Text('将添加一份新的空白 Offer 表单，当前 Offer 数据已自动保存。')
-        .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text2)
-        .lineHeight(22)
-        .margin({ bottom: SemanticSpacing.Xxl })
-
-      // 确认按钮
-      Button('确认添加')
+      Text(title)
+        .fontSize(FontSize.Md)
+        .fontColor(SemanticColors.Text1)
+        .fontWeight(FontWeight.Medium)
         .width('100%')
-        .height(ComponentSizes.Button.Lg.height)
-        .fontSize(FontSize.Base)
-        .fontWeight(FontWeight.Semibold)
-        .fontColor(NeutralColors.Neutral0)
-        .backgroundColor(BrandColors.Brand500)
-        .borderRadius(SemanticRadius.Control)
-        .onClick(() => {
-          this.addNewOffer();
-        })
-    }
-    .padding(SemanticSpacing.Xxl)
-    .backgroundColor(SemanticColors.Background)
-    .borderRadius({ topLeft: SemanticRadius.BottomSheet, topRight: SemanticRadius.BottomSheet })
-  }
 
-  // ============================================
-  // BindSheet - 加班频率选择弹窗
-  // ============================================
-
-  @Builder
-  buildOvertimeSheetBuilder() {
-    Column() {
-      Row() {
-        Text('选择加班频率')
-          .fontSize(FontSize.Lg)
-          .fontWeight(FontWeight.Semibold)
-          .fontColor(SemanticColors.Text1)
-          .layoutWeight(1)
-        Text('取消')
-          .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text3)
-          .onClick(() => {
-            this.showOvertimePicker = false;
-          })
-      }
-      .width('100%')
-      .margin({ bottom: SemanticSpacing.Lg })
-
-      ForEach(this.overtimeOptions, (freq: OvertimeFrequency) => {
+      ForEach(items, (item: string) => {
         Row() {
-          Text(OvertimeFrequencyLabels[freq])
-            .fontSize(FontSize.Base)
-            .fontColor(this.formOvertime === freq ? BrandColors.Brand500 : SemanticColors.Text1)
-            .layoutWeight(1)
+          Text('•')
+            .fontSize(FontSize.Sm)
+            .fontColor(BrandColors.Brand500)
 
-          if (this.formOvertime === freq) {
-            Text('✓')
-              .fontSize(FontSize.Base)
-              .fontColor(BrandColors.Brand500)
-          }
+          Text(item)
+            .fontSize(FontSize.Sm)
+            .fontColor(SemanticColors.Text2)
+            .margin({ left: SemanticSpacing.Xs })
+            .layoutWeight(1)
         }
         .width('100%')
-        .height(48)
-        .padding({ left: SemanticSpacing.Md, right: SemanticSpacing.Md })
-        .backgroundColor(this.formOvertime === freq ? BrandColors.Brand50 : Color.Transparent)
-        .borderRadius(SemanticRadius.Control)
-        .margin({ bottom: SemanticSpacing.Xs })
-        .onClick(() => {
-          this.formOvertime = freq;
-          this.showOvertimePicker = false;
-        })
-      }, (freq: OvertimeFrequency) => freq)
+        .alignItems(HorizontalAlign.Start)
+        .margin({ top: SemanticSpacing.Sm })
+      }, (item: string, index: number) => `${title}_${index}`)
     }
-    .padding(SemanticSpacing.Xxl)
-    .backgroundColor(SemanticColors.Background)
-    .borderRadius({ topLeft: SemanticRadius.BottomSheet, topRight: SemanticRadius.BottomSheet })
+    .width('100%')
+    .padding(SemanticSpacing.Lg)
+    .margin({ top: SemanticSpacing.Md })
+    .backgroundColor(SemanticColors.Surface1)
+    .borderRadius(SemanticRadius.Container)
+    .alignItems(HorizontalAlign.Start)
+  }
+
+  // ============================================
+  // 权重弹窗
+  // ============================================
+  @Builder
+  WeightSheet() {
+    Column() {
+      Text('自定义分析权重')
+        .fontSize(FontSize.Lg)
+        .fontColor(SemanticColors.Text1)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .padding({ left: SemanticSpacing.Xl, bottom: SemanticSpacing.Lg })
+
+      OfferWeightSlider({
+        weights: this.weights,
+        onWeightChange: (w: WeightConfig) => {
+          this.weights = w;
+        }
+      })
+
+      // 重新分析按钮
+      Button('使用新权重重新分析')
+        .width('90%')
+        .height(ComponentSizes.Button.Md.height)
+        .fontSize(FontSize.Md)
+        .fontColor('#FFFFFF')
+        .backgroundColor(BrandColors.Brand500)
+        .borderRadius(SemanticRadius.Control)
+        .margin({ top: SemanticSpacing.Xl, bottom: HarmonyDesign.SafePadding })
+        .onClick(async () => {
+          this.showWeightSheet = false;
+          await this.doAnalyze();
+        })
+    }
+    .width('100%')
+    .height('100%')
+  }
+
+  // ============================================
+  // 加班频率弹窗
+  // ============================================
+  @Builder
+  OvertimeSheet() {
+    Column() {
+      Text('选择加班频率')
+        .fontSize(FontSize.Lg)
+        .fontColor(SemanticColors.Text1)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .padding({ left: SemanticSpacing.Xl, bottom: SemanticSpacing.Lg })
+
+      List() {
+        ForEach(['never', 'rarely', 'sometimes', 'often', 'always'] as OvertimeFrequency[], (freq: OvertimeFrequency) => {
+          ListItem() {
+            Row() {
+              Text(this.getOvertimeLabel(freq))
+                .fontSize(FontSize.Md)
+                .fontColor(this.offers[this.currentOfferIndex]?.overtimeFrequency === freq ? BrandColors.Brand500 : SemanticColors.Text1)
+
+              Blank()
+
+              if (this.offers[this.currentOfferIndex]?.overtimeFrequency === freq) {
+                Image($r('app.media.ic_check'))
+                  .width(ComponentSizes.Icon.Md)
+                  .height(ComponentSizes.Icon.Md)
+                  .fillColor(BrandColors.Brand500)
+              }
+            }
+            .width('100%')
+            .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, top: SemanticSpacing.Md, bottom: SemanticSpacing.Md })
+            .onClick(() => {
+              if (this.offers.length > 0) {
+                this.offers[this.currentOfferIndex].overtimeFrequency = freq;
+              }
+              this.showOvertimePicker = false;
+            })
+          }
+        }, (freq: OvertimeFrequency) => freq)
+      }
+      .width('100%')
+      .layoutWeight(1)
+    }
+    .width('100%')
+    .height('100%')
+  }
+
+  // ============================================
+  // 业务方法
+  // ============================================
+  private async doAnalyze(): Promise<void> {
+    if (this.offers.length === 0 || this.currentOfferIndex >= this.offers.length) {
+      this.errorMessage = '请先填写 Offer 信息';
+      return;
+    }
+
+    const offer = this.offers[this.currentOfferIndex];
+    if (!offer.company || !offer.position) {
+      this.errorMessage = '请至少填写公司名称和职位';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      this.analysisResult = await this.offerService.analyzeWithWeights(offer, this.weights);
+      this.phase = 'result';
+    } catch (error) {
+      this.errorMessage = '分析失败，请检查网络后重试';
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private async doCompare(): Promise<void> {
+    if (this.offers.length < 2) {
+      this.errorMessage = '至少需要 2 个 Offer 才能对比';
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      this.comparisonResult = await this.offerService.compareOffers(this.offers);
+      this.phase = 'compare';
+    } catch (error) {
+      this.errorMessage = '对比失败，请检查网络后重试';
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   // ============================================
   // 辅助方法
   // ============================================
-
-  /** 获取对比颜色 */
-  getCompareColor(index: number): string {
-    const colors = [BrandColors.Brand500, InfoColors.Info500, WarningColors.Warning500];
-    return colors[index % colors.length];
+  private getPhaseTitle(): string {
+    switch (this.phase) {
+      case 'scenario': return 'Offer 分析';
+      case 'input': return '填写 Offer';
+      case 'result': return '分析结果';
+      case 'compare': return 'Offer 对比';
+      case 'whatif': return 'What-if 分析';
+      default: return 'Offer 分析';
+    }
   }
 
-  /** 获取评分背景色 */
-  getScoreBgColor(score: number): string {
-    if (score >= 85) return SuccessColors.Success50;
-    if (score >= 70) return InfoColors.Info50;
-    if (score >= 55) return WarningColors.Warning50;
-    return ErrorColors.Error50;
+  private getScoreLabel(score: number): string {
+    if (score >= 85) return '优秀';
+    if (score >= 70) return '良好';
+    if (score >= 55) return '一般';
+    if (score >= 40) return '较差';
+    return '很差';
+  }
+
+  private getScoreColor(score: number): string {
+    if (score >= 85) return SuccessColors.Success500;
+    if (score >= 70) return InfoColors.Info500;
+    if (score >= 55) return WarningColors.Warning500;
+    return ErrorColors.Error500;
+  }
+
+  private getOvertimeLabel(freq: OvertimeFrequency): string {
+    const labels: Record<OvertimeFrequency, string> = {
+      never: '几乎不加班',
+      rarely: '偶尔加班',
+      sometimes: '有时加班',
+      often: '经常加班',
+      always: '频繁加班',
+    };
+    return labels[freq] || freq;
   }
 }

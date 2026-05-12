@@ -14,6 +14,8 @@ import {
   MarketComparison,
   ComparisonOfferItem,
   DimensionComparison,
+  WeightConfig,
+  DEFAULT_WEIGHTS,
 } from '../models/OfferAnalysis';
 
 const OFFER_ANALYZE_URL = '/offer/analyze';
@@ -83,6 +85,48 @@ export class OfferAnalysisService {
     }
   }
 
+  /**
+   * 带自定义权重的分析
+   */
+  async analyzeWithWeights(input: OfferInput, weights: WeightConfig): Promise<OfferAnalysisResult> {
+    try {
+      const response = await this.apiService.post<OfferAnalysisResult>(
+        OFFER_ANALYZE_URL,
+        { ...input, weights } as unknown as Record<string, Object>
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+      return this.generateMockAnalysisResult(input, weights);
+    } catch (error) {
+      console.error('[OfferAnalysisService] analyzeWithWeights error:', error);
+      return this.generateMockAnalysisResult(input, weights);
+    }
+  }
+
+  /**
+   * What-if 分析：修改单个参数后的评分变化
+   */
+  whatIfAnalysis(
+    baseOffer: OfferInput,
+    field: keyof OfferInput,
+    newValue: number | string,
+    weights?: WeightConfig
+  ): { field: string; oldValue: number | string; newValue: number | string; scoreChange: number; newScore: number } {
+    const w = weights || DEFAULT_WEIGHTS;
+    const baseResult = this.generateMockAnalysisResult(baseOffer, w);
+    const modifiedOffer = { ...baseOffer, [field]: newValue };
+    const newResult = this.generateMockAnalysisResult(modifiedOffer, w);
+    
+    return {
+      field,
+      oldValue: baseOffer[field] as number | string,
+      newValue,
+      scoreChange: newResult.overallScore - baseResult.overallScore,
+      newScore: newResult.overallScore,
+    };
+  }
+
   // ============================================
   // 模拟数据生成
   // ============================================
@@ -90,7 +134,10 @@ export class OfferAnalysisService {
   /**
    * 生成模拟分析结果
    */
-  private generateMockAnalysisResult(input: OfferInput): OfferAnalysisResult {
+  private generateMockAnalysisResult(input: OfferInput, weights?: WeightConfig): OfferAnalysisResult {
+    const w = weights || DEFAULT_WEIGHTS;
+    const totalWeight = w.salary + w.balance + w.benefit + w.commute + w.growth;
+    
     const salaryScore = this.calcSalaryScore(input);
     const balanceScore = this.calcBalanceScore(input);
     const benefitScore = this.calcBenefitScore(input);
@@ -98,8 +145,8 @@ export class OfferAnalysisService {
     const growthScore = this.calcGrowthScore(input);
 
     const overallScore = Math.round(
-      salaryScore * 0.35 + balanceScore * 0.25 + benefitScore * 0.15 +
-      commuteScore * 0.10 + growthScore * 0.15
+      (salaryScore * w.salary + balanceScore * w.balance + benefitScore * w.benefit +
+       commuteScore * w.commute + growthScore * w.growth) / totalWeight
     );
 
     const dimensions: DimensionScore[] = [

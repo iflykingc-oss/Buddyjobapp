@@ -2,6 +2,7 @@
  * 求职看板卡片组件
  * Kanban 中每一张求职卡片
  */
+import router from '@ohos.router';
 import { JobCard, CardPriority, KanbanColumnStatus } from '../../models/Kanban';
 import { Colors } from '../../constants/colors';
 
@@ -9,6 +10,7 @@ import { Colors } from '../../constants/colors';
 export struct JobCardItem {
   @Prop card: JobCard = {} as JobCard;
   @Prop columnColor: string = '#8B5CF6';
+  @Prop columnStatus: KanbanColumnStatus = KanbanColumnStatus.WISH;
   onEdit?: (card: JobCard) => void;
   onDelete?: (cardId: string) => void;
   onMove?: (cardId: string) => void;
@@ -142,6 +144,32 @@ export struct JobCardItem {
             .padding(8)
             .backgroundColor(Colors.backgroundSecondary)
             .borderRadius(6)
+        }
+
+        // Offer 分析入口（仅已录用列显示）
+        if (this.columnStatus === KanbanColumnStatus.OFFER) {
+          Row() {
+            Text('📊 分析 Offer')
+              .fontSize(11)
+              .fontColor('#FFFFFF')
+              .backgroundColor('#8B5CF6')
+              .borderRadius(4)
+              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.End)
+          .margin({ top: 8 })
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/OfferAnalysis',
+              params: {
+                company: this.card.company,
+                position: this.card.position,
+                salary: this.card.salary,
+                location: this.card.location,
+              }
+            });
+          })
         }
       }
       .width('100%')
