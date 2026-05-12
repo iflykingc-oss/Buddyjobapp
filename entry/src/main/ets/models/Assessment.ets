@@ -4,12 +4,15 @@ export interface Assessment {
   title: string;
   description: string;
   type: AssessmentType;
-  questions: Question[];
+  icon: string;
   duration: number; // 分钟
+  category: string;
+  dimensions: string[]; // 维度名称列表
+  questions: Question[];
   status: AssessmentStatus;
 }
 
-export type AssessmentType = 'personality' | 'career' | 'skill' | 'value';
+export type AssessmentType = 'personality' | 'career' | 'skill' | 'value' | 'eq' | 'interview_readiness';
 
 export type AssessmentStatus = 'not_started' | 'in_progress' | 'completed';
 
@@ -25,6 +28,8 @@ export interface Option {
   id: string;
   text: string;
   score?: number;
+  dimension?: string;   // 所属维度
+  direction?: number;   // 方向得分 (1 或 -1)
 }
 
 export interface AssessmentResult {
@@ -33,10 +38,22 @@ export interface AssessmentResult {
   dimensionScores: DimensionScore[];
   suggestions: string[];
   reportUrl?: string;
+  dimensionDetails?: DimensionDetail[];  // 维度详细解读
+  nextActions?: string[];                // 推荐下一步行动
+  typeDescription?: string;              // 性格/兴趣类型描述
+  careerMatch?: string[];                // 匹配的职业方向
 }
 
 export interface DimensionScore {
   dimension: string;
   score: number;
   description: string;
+}
+
+export interface DimensionDetail {
+  dimension: string;
+  score: number;
+  level: string;        // 'high' | 'medium' | 'low'
+  interpretation: string;  // 维度解读
+  advice: string;          // 提升建议
 }

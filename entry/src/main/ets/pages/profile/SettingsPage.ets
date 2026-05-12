@@ -22,14 +22,115 @@ import {
 struct SettingsPage {
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
   @State isNotificationEnabled: boolean = true;
-  @State isSoundEnabled: boolean = true;
-  @State isVibrationEnabled: boolean = true;
+  @StorageLink('soundEnabled') isSoundEnabled: boolean = true;
+  @StorageLink('vibrationEnabled') isVibrationEnabled: boolean = true;
   @State fontSize: number = 16;
   @State cacheSize: string = '0 MB';
   @State appVersion: string = '1.0.0';
   @State isLoading: boolean = false;
+  @State isClearing: boolean = false;
 
   private authService: AuthService = AuthService.getInstance();
+
+  aboutToAppear() {
+    this.calculateCacheSize();
+  }
+
+  /**
+   * 计算缓存大小
+   */
+  private calculateCacheSize(): void {
+    try {
+      // 尝试获取AppStorage中的缓存大小记录
+      const savedCacheSize = AppStorage.get<number>('cacheSizeBytes');
+      if (savedCacheSize && savedCacheSize > 0) {
+        this.cacheSize = this.formatCacheSize(savedCacheSize);
+      } else {
+        // 模拟计算缓存大小（图片缓存、日志文件等）
+        // 实际项目中应遍历应用缓存目录计算
+        const estimatedSize = 12.8 * 1024 * 1024; // 约12.8MB
+        this.cacheSize = this.formatCacheSize(estimatedSize);
+      }
+    } catch (error) {
+      console.error('[SettingsPage] Calculate cache size failed:', error);
+      this.cacheSize = '0 MB';
+    }
+  }
+
+  /**
+   * 格式化缓存大小
+   */
+  private formatCacheSize(bytes: number): string {
+    if (bytes < 1024) {
+      return bytes + ' B';
+    } else if (bytes < 1024 * 1024) {
+      return (bytes / 1024).toFixed(1) + ' KB';
+    } else if (bytes < 1024 * 1024 * 1024) {
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+    return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+  }
+
+  /**
+   * 清除缓存
+   */
+  private clearCache(): void {
+    if (this.isClearing) {
+      return;
+    }
+
+    const oldSize = this.cacheSize;
+
+    AlertDialog.show({
+      title: '清除缓存',
+      message: `当前缓存大小为${oldSize}，确定要清除吗？`,
+      primaryButton: {
+        value: '取消',
+        action: () => {
+          console.info('[SettingsPage] User cancelled clear cache');
+        }
+      },
+      secondaryButton: {
+        value: '确定',
+        action: () => {
+          this.executeClearCache();
+        }
+      }
+    });
+  }
+
+  /**
+   * 执行缓存清理
+   */
+  private async executeClearCache(): Promise<void> {
+    this.isClearing = true;
+
+    try {
+      // 1. 清理收藏数据中的过期缓存
+      // 2. 清理本地临时文件记录
+      // 3. 清理搜索历史等非必要数据
+      const cacheKeys = ['searchHistory', 'tempData', 'imageCache'];
+      cacheKeys.forEach(key => {
+        AppStorage.delete(key);
+      });
+
+      // 模拟清理延迟（实际项目中是异步文件操作）
+      await new Promise<void>((resolve) => setTimeout(() => {
+        resolve();
+      }, 800));
+
+      // 更新缓存大小为0
+      AppStorage.setOrCreate('cacheSizeBytes', 0);
+      this.cacheSize = '0 MB';
+
+      promptAction.showToast({ message: '缓存已清除' });
+    } catch (error) {
+      console.error('[SettingsPage] Clear cache failed:', error);
+      promptAction.showToast({ message: '清除缓存失败，请重试' });
+    } finally {
+      this.isClearing = false;
+    }
+  }
 
   /**
    * 显示退出登录确认对话框
@@ -195,6 +296,9 @@ struct SettingsPage {
                 .selectedColor(BrandColors.Brand500)
                 .onChange((isOn: boolean) => {
                   this.isSoundEnabled = isOn;
+                  promptAction.showToast({
+                    message: isOn ? '已开启声音提示' : '已关闭声音提示'
+                  });
                 })
             }
             .width('100%')
@@ -216,6 +320,9 @@ struct SettingsPage {
                 .selectedColor(BrandColors.Brand500)
                 .onChange((isOn: boolean) => {
                   this.isVibrationEnabled = isOn;
+                  promptAction.showToast({
+                    message: isOn ? '已开启震动反馈' : '已关闭震动反馈'
+                  });
                 })
             }
             .width('100%')
@@ -248,10 +355,18 @@ struct SettingsPage {
                 .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .layoutWeight(1)
 
-              Text(this.cacheSize)
-                .fontSize(FontSize.Sm)
-                .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
-                .margin({ right: Spacing.Space3 })
+              if (this.isClearing) {
+                LoadingProgress()
+                  .width(16)
+                  .height(16)
+                  .color(BrandColors.Brand500)
+                  .margin({ right: Spacing.Space3 })
+              } else {
+                Text(this.cacheSize)
+                  .fontSize(FontSize.Sm)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
+                  .margin({ right: Spacing.Space3 })
+              }
 
               Image($r('app.media.ic_arrow_right'))
                 .width(16)
@@ -262,8 +377,7 @@ struct SettingsPage {
             .height(52)
             .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
             .onClick(() => {
-              this.cacheSize = '0 MB';
-              promptAction.showToast({ message: '缓存已清除' });
+              this.clearCache();
             })
           }
           .width('100%')

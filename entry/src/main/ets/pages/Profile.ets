@@ -36,6 +36,8 @@ export struct ProfilePage {
   // 弹窗控制
   @State showPurchaseSheet: boolean = false;
   @State showDetailSheet: boolean = false;
+  @State showEditProfileSheet: boolean = false;
+  @State editNickname: string = '';
   @State isLoading: boolean = false;
 
   private memberService: MemberService = MemberService.getInstance();
@@ -112,6 +114,11 @@ export struct ProfilePage {
             onDetailClick: () => {
               this.showDetailSheet = true;
             }
+          })
+          .onClick(() => {
+            // 点击用户信息区域打开编辑弹窗
+            this.editNickname = this.userInfo?.username || '';
+            this.showEditProfileSheet = true;
           })
 
           // 权益宫格展示
@@ -310,6 +317,11 @@ export struct ProfilePage {
           }
         })
       }
+
+      // 编辑个人资料弹窗
+      if (this.showEditProfileSheet) {
+        this.EditProfileSheet()
+      }
     }
     .width('100%')
     .height('100%')
@@ -383,6 +395,193 @@ export struct ProfilePage {
     // 刷新权益列表
     const benefits = await this.memberService.getBenefits();
     this.benefits = benefits;
+  }
+
+  /**
+   * 编辑个人资料弹窗
+   */
+  @Builder
+  EditProfileSheet() {
+    Column() {
+      // 弹窗标题栏
+      Row() {
+        Text('取消')
+          .fontSize(FontSize.Base)
+          .fontColor(SemanticColors.Text2)
+          .onClick(() => {
+            this.showEditProfileSheet = false;
+          })
+
+        Text('编辑资料')
+          .fontSize(FontSize.Base)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(SemanticColors.Text1)
+          .layoutWeight(1)
+          .textAlign(TextAlign.Center)
+
+        Text('保存')
+          .fontSize(FontSize.Base)
+          .fontColor(BrandColors.Brand500)
+          .fontWeight(FontWeight.Medium)
+          .onClick(() => {
+            this.saveNickname();
+          })
+      }
+      .width('100%')
+      .height(52)
+      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+
+      Divider()
+        .color(SemanticColors.Border)
+
+      // 编辑内容
+      Column() {
+        // 头像区域
+        Row() {
+          Text('头像')
+            .fontSize(FontSize.Base)
+            .fontColor(SemanticColors.Text1)
+            .layoutWeight(1)
+
+          Column() {
+            if (this.userInfo?.avatar) {
+              Image(this.userInfo.avatar)
+                .width(48)
+                .height(48)
+                .borderRadius(24)
+            } else {
+              Column() {
+                Text(this.getAvatarText())
+                  .fontSize(FontSize.Lg)
+                  .fontWeight(FontWeight.Bold)
+                  .fontColor(NeutralColors.Neutral0)
+              }
+              .width(48)
+              .height(48)
+              .borderRadius(24)
+              .linearGradient({
+                direction: GradientDirection.BottomRight,
+                colors: [
+                  [BrandColors.Brand400, 0],
+                  [BrandColors.Brand600, 1]
+                ]
+              })
+              .justifyContent(FlexAlign.Center)
+            }
+          }
+        }
+        .width('100%')
+        .height(64)
+        .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+        .alignItems(VerticalAlign.Center)
+
+        Divider()
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+          .color(SemanticColors.Border)
+
+        // 昵称编辑
+        Row() {
+          Text('昵称')
+            .fontSize(FontSize.Base)
+            .fontColor(SemanticColors.Text1)
+
+          TextInput({ text: this.editNickname, placeholder: '请输入昵称' })
+            .layoutWeight(1)
+            .height(40)
+            .textAlign(TextAlign.End)
+            .backgroundColor('transparent')
+            .placeholderColor(SemanticColors.Text4)
+            .fontSize(FontSize.Base)
+            .fontColor(SemanticColors.Text1)
+            .maxLength(20)
+            .onChange((value: string) => {
+              this.editNickname = value;
+            })
+        }
+        .width('100%')
+        .height(64)
+        .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+        .alignItems(VerticalAlign.Center)
+
+        Divider()
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+          .color(SemanticColors.Border)
+
+        // 手机号（只读）
+        Row() {
+          Text('手机号')
+            .fontSize(FontSize.Base)
+            .fontColor(SemanticColors.Text1)
+            .layoutWeight(1)
+
+          Text(this.userInfo?.phone || '未绑定')
+            .fontSize(FontSize.Base)
+            .fontColor(SemanticColors.Text3)
+        }
+        .width('100%')
+        .height(64)
+        .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+        .alignItems(VerticalAlign.Center)
+
+        // 提示文字
+        Text('昵称长度2-20个字符，修改后即时生效')
+          .fontSize(FontSize.Xs)
+          .fontColor(SemanticColors.Text4)
+          .width('100%')
+          .margin({ top: Spacing.Space4 })
+          .textAlign(TextAlign.Center)
+      }
+      .layoutWeight(1)
+      .padding({ top: SemanticSpacing.Lg })
+    }
+    .width('100%')
+    .height('50%')
+    .backgroundColor(NeutralColors.Neutral0)
+    .borderRadius({ topLeft: 24, topRight: 24 })
+    .shadow({
+      radius: 16,
+      color: 'rgba(0, 0, 0, 0.08)',
+      offsetY: -4
+    })
+    .position({ x: 0, y: '50%' })
+  }
+
+  /**
+   * 保存昵称
+   */
+  private saveNickname(): void {
+    const nickname = this.editNickname.trim();
+    if (!nickname || nickname.length < 2) {
+      promptAction.showToast({
+        message: '昵称至少2个字符'
+      });
+      return;
+    }
+
+    if (nickname.length > 20) {
+      promptAction.showToast({
+        message: '昵称最多20个字符'
+      });
+      return;
+    }
+
+    // 更新本地用户信息
+    if (this.userInfo) {
+      const updatedUser: User = {
+        ...this.userInfo,
+        username: nickname,
+        updatedAt: Date.now()
+      };
+      this.userInfo = updatedUser;
+
+      // 保存到 AppStorage
+      AppStorage.setOrCreate('userInfo', JSON.stringify(updatedUser));
+    }
+
+    this.showEditProfileSheet = false;
+    promptAction.showToast({
+      message: '资料已更新'
+    });
   }
 
   /**

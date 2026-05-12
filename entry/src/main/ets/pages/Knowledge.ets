@@ -1,6 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { KnowledgeService, KnowledgeArticle, ArticleListResponse } from '../services/KnowledgeService';
+import { FavoriteService, FavoriteType } from '../services/FavoriteService';
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
@@ -11,6 +12,7 @@ import {
   SemanticColors,
   DarkSemanticColors,
   ErrorColors,
+  WarningColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -109,9 +111,11 @@ export struct KnowledgePage {
   @State showError: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
   @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
+  @State favoriteIds: Set<string> = new Set();
 
-  private categories: string[] = ['全部', '简历技巧', '面试攻略', '职场法则', '行业动态'];
+  private categories: string[] = ['全部', '我的收藏', '简历技巧', '面试攻略', '薪资谈判', '职场法则', '行业动态', '职业规划', '求职心理'];
   private knowledgeService: KnowledgeService = KnowledgeService.getInstance();
+  private favoriteService: FavoriteService = FavoriteService.getInstance();
   private currentPage: number = 1;
   private readonly pageSize: number = 20;
   private searchTimeout: number = -1;
@@ -119,6 +123,7 @@ export struct KnowledgePage {
 
   aboutToAppear() {
     this.loadKnowledge();
+    this.loadFavoriteIds();
   }
 
   aboutToDisappear() {
@@ -126,6 +131,63 @@ export struct KnowledgePage {
     if (this.searchTimeout !== -1) {
       clearTimeout(this.searchTimeout);
     }
+  }
+
+  /**
+   * 加载收藏的文章ID列表
+   */
+  async loadFavoriteIds(): Promise<void> {
+    try {
+      const favorites = await this.favoriteService.getFavorites(FavoriteType.ARTICLE);
+      const ids = new Set<string>();
+      favorites.forEach(f => ids.add(f.sourceId));
+      this.favoriteIds = ids;
+    } catch (error) {
+      console.error('[KnowledgePage] Load favorite ids failed:', error);
+    }
+  }
+
+  /**
+   * 切换文章收藏状态
+   */
+  async toggleFavorite(item: KnowledgeItem): Promise<void> {
+    try {
+      const favoriteItem = {
+        type: FavoriteType.ARTICLE,
+        title: item.title,
+        subtitle: item.category,
+        sourceId: item.id,
+        extraData: JSON.stringify({
+          readCount: item.readCount,
+          updateTime: item.updateTime
+        })
+      };
+
+      const result = await this.favoriteService.toggleFavorite(favoriteItem);
+      if (result) {
+        this.favoriteIds.add(item.id);
+      } else {
+        this.favoriteIds.delete(item.id);
+      }
+      // 触发UI刷新
+      this.favoriteIds = new Set(this.favoriteIds);
+
+      promptAction.showToast({
+        message: result ? '已收藏' : '已取消收藏'
+      });
+    } catch (error) {
+      console.error('[KnowledgePage] Toggle favorite failed:', error);
+      promptAction.showToast({
+        message: '操作失败，请重试'
+      });
+    }
+  }
+
+  /**
+   * 检查文章是否已收藏
+   */
+  isFavorited(id: string): boolean {
+    return this.favoriteIds.has(id);
   }
 
   /**
@@ -297,7 +359,29 @@ export struct KnowledgePage {
   onCategoryChange(category: string): void {
     this.selectedCategory = category;
     this.searchText = '';
-    this.loadKnowledge(true);
+    if (category === '我的收藏') {
+      this.filterFavorites();
+    } else {
+      this.loadKnowledge(true);
+    }
+  }
+
+  /**
+   * 筛选收藏文章
+   */
+  filterFavorites(): void {
+    this.isLoading = true;
+    this.showError = false;
+    const allArticles = this.knowledgeService.getDefaultArticles();
+    const filteredList = allArticles.filter(item => this.favoriteIds.has(item.id));
+    this.knowledgeList = filteredList;
+    this.knowledgeDataSource.setData(filteredList);
+    this.hasMore = false;
+    this.isLoading = false;
+    if (filteredList.length === 0) {
+      this.showError = true;
+      this.errorMessage = '暂无收藏文章';
+    }
   }
 
   /**
@@ -500,6 +584,21 @@ export struct KnowledgePage {
                     .margin({ top: Spacing.Space4 })
                   }
                   .layoutWeight(1)
+
+                  // 收藏按钮
+                  Column() {
+                    Image($r('app.media.ic_favorite'))
+                      .width(22)
+                      .height(22)
+                      .fillColor(this.isFavorited(item.id) ? WarningColors.Warning500 : SemanticColors.Text4)
+                  }
+                  .width(40)
+                  .height(40)
+                  .justifyContent(FlexAlign.Center)
+                  .onClick((event: ClickEvent) => {
+                    event.stopPropagation();
+                    this.toggleFavorite(item);
+                  })
                 }
               }
               .width('100%')

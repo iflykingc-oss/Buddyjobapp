@@ -50,7 +50,7 @@ export struct InterviewPage {
   // 面试配置
   @State private jobPosition: string = '';
   @State private questionCount: number = 5;
-  @State private selectedCategories: string[] = ['behavioral', 'technical', 'situational'];
+  @State private selectedCategories: string[] = ['self_intro', 'behavioral', 'technical', 'situational', 'salary'];
 
   // 面试会话
   @State private session: InterviewSession | null = null;
@@ -403,9 +403,11 @@ export struct InterviewPage {
               .margin({ bottom: Spacing.Space3 })
 
             Column({ space: Spacing.Space3 }) {
+              this.CategoryItem('self_intro', '自我介绍', '考察基本素质和表达能力')
               this.CategoryItem('behavioral', '行为面试', '考察过往经历和软技能')
               this.CategoryItem('technical', '技术面试', '考察专业知识和技能')
               this.CategoryItem('situational', '情景面试', '考察问题解决能力')
+              this.CategoryItem('salary', '薪资谈判', '考察谈判技巧和职业认知')
             }
           }
           .width('100%')
@@ -1017,9 +1019,11 @@ export struct InterviewPage {
   // 辅助方法
   private getCategoryLabel(category: string): string {
     const labels: Record<string, string> = {
+      self_intro: '自我介绍',
       behavioral: '行为面试',
       technical: '技术面试',
-      situational: '情景面试'
+      situational: '情景面试',
+      salary: '薪资谈判'
     };
     return labels[category] || '面试题';
   }
