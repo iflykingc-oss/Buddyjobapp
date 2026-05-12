@@ -1,0 +1,12 @@
+{
+  "app": {
+    "bundleName": "com.buddyjob.app",
+    "vendor": "一职搭子",
+    "versionCode": 100001,
+    "versionName": "1.0.1",
+    "icon": "$media:app_icon",
+    "label": "$string:app_name",
+    "targetSdkVersion": 12,
+    "compatibleSdkVersion": 12
+  }
+}
