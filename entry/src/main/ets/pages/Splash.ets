@@ -258,7 +258,15 @@ struct Splash {
    */
   private navigateToMain(): void {
     setTimeout(() => {
-      router.replaceUrl({ url: 'pages/Index' });
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {},
+        transition: {
+          type: router.TransitionType.Push,
+          duration: 300,
+          curve: Curve.EaseInOut
+        }
+      });
     }, 500);
   }
 
@@ -267,7 +275,15 @@ struct Splash {
    */
   private navigateToLogin(): void {
     setTimeout(() => {
-      router.replaceUrl({ url: 'pages/Login' });
+      router.replaceUrl({
+        url: 'pages/Login',
+        params: {},
+        transition: {
+          type: router.TransitionType.Push,
+          duration: 300,
+          curve: Curve.EaseInOut
+        }
+      });
     }, 500);
   }
 

@@ -3,10 +3,12 @@ import ResumePage from './Resume';
 import AssessmentPage from './Assessment';
 import KnowledgePage from './Knowledge';
 import ProfilePage from './Profile';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -20,6 +22,7 @@ import {
 @Component
 struct Index {
   @State currentTabIndex: number = 0
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
   private tabController: TabsController = new TabsController()
 
   build() {
@@ -65,7 +68,7 @@ struct Index {
         .tabBar(this.tabBuilder(4, '我的', $r('app.media.ic_profile')))
       }
       .barHeight(60)
-      .barBackgroundColor(NeutralColors.Neutral0)
+      .barBackgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .onChange((index: number) => {
         this.currentTabIndex = index
       })
@@ -82,7 +85,7 @@ struct Index {
         Image(icon)
           .width(ComponentSizes.Icon.Lg)
           .height(ComponentSizes.Icon.Lg)
-          .fillColor(this.currentTabIndex === index ? BrandColors.Brand500 : SemanticColors.Text4)
+          .fillColor(this.currentTabIndex === index ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4))
       }
       .width(40)
       .height(28)
@@ -92,11 +95,11 @@ struct Index {
       Text(title)
         .fontSize(FontSize.Xs)
         .fontWeight(this.currentTabIndex === index ? FontWeight.Medium : FontWeight.Normal)
-        .fontColor(this.currentTabIndex === index ? BrandColors.Brand500 : SemanticColors.Text4)
+        .fontColor(this.currentTabIndex === index ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4))
     }
     .width('100%')
     .height(60)
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
   }
 }

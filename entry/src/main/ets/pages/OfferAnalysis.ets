@@ -19,6 +19,7 @@ import {
   createEmptyOfferInput,
 } from '../models/OfferAnalysis';
 import { OfferAnalysisService } from '../services/OfferAnalysisService';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import { OfferRadarChart } from '../components/offer/OfferRadarChart';
 import { OfferFormCard } from '../components/offer/OfferFormCard';
 import { OfferScoreCard } from '../components/offer/OfferScoreCard';
@@ -59,6 +60,7 @@ struct OfferAnalysisPage {
   @State showWeightSheet: boolean = false;
   @State showOvertimePicker: boolean = false;
   @State showAddConfirm: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   private offerService: OfferAnalysisService = OfferAnalysisService.getInstance();
 
@@ -113,16 +115,21 @@ struct OfferAnalysisPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(SemanticColors.Background)
+    .backgroundColor(this.isDarkMode ? '#141820' : SemanticColors.Background)
     .bindSheet($$this.showWeightSheet, this.WeightSheet(), {
       height: '60%',
       dragBar: true,
-      backgroundColor: SemanticColors.Surface1,
+      backgroundColor: this.isDarkMode ? '#1C2028' : SemanticColors.Surface1,
     })
     .bindSheet($$this.showOvertimePicker, this.OvertimeSheet(), {
       height: '35%',
       dragBar: true,
-      backgroundColor: SemanticColors.Surface1,
+      backgroundColor: this.isDarkMode ? '#1C2028' : SemanticColors.Surface1,
+    })
+    .bindSheet($$this.showAddConfirm, this.AddConfirmDialog(), {
+      height: '30%',
+      backgroundColor: this.isDarkMode ? '#1C2028' : SemanticColors.Surface1,
+      dragBar: true
     })
   }
 
@@ -135,12 +142,12 @@ struct OfferAnalysisPage {
       Image($r('app.media.ic_back'))
         .width(ComponentSizes.Icon.Lg)
         .height(ComponentSizes.Icon.Lg)
-        .fillColor(SemanticColors.Text1)
+        .fillColor(this.isDarkMode ? '#E3E5E8' : SemanticColors.Text1)
         .onClick(() => router.back())
 
       Text(this.getPhaseTitle())
         .fontSize(FontSize.Lg)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? '#E3E5E8' : SemanticColors.Text1)
         .fontWeight(FontWeight.Medium)
         .margin({ left: SemanticSpacing.Sm })
 
@@ -164,7 +171,7 @@ struct OfferAnalysisPage {
     .width('100%')
     .height(HarmonyDesign.NavBarHeight)
     .padding({ left: HarmonyDesign.SafePadding, right: HarmonyDesign.SafePadding })
-    .backgroundColor(SemanticColors.Surface1)
+    .backgroundColor(this.isDarkMode ? '#1C2028' : SemanticColors.Surface1)
   }
 
   // ============================================
@@ -190,7 +197,36 @@ struct OfferAnalysisPage {
         .alignItems(HorizontalAlign.Start)
         .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, top: SemanticSpacing.Xxl })
 
-        // 场景选择器
+        // 步骤指示器
+      Row() {
+        Text(`步骤 ${this.currentStep}/3`)
+          .fontSize(14)
+          .fontColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
+
+        Blank()
+
+        // 进度条
+        Stack() {
+          Row()
+            .width(100)
+            .height(4)
+            .backgroundColor(this.isDarkMode ? '#252A34' : Colors.border)
+            .borderRadius(2)
+
+          Row()
+            .width(100 * this.currentStep / 3)
+            .height(4)
+            .backgroundColor(Colors.primary)
+            .borderRadius(2)
+        }
+        .width(100)
+        .height(4)
+      }
+      .width('100%')
+      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .backgroundColor(this.isDarkMode ? '#1C2028' : Colors.white)
+
+      // 场景选择器
         OfferScenarioPicker({
           selectedId: this.selectedScenarioId,
           onSelect: (template: ScenarioTemplate) => {

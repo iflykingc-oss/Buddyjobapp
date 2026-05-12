@@ -2,10 +2,12 @@ import { Assessment, Question, AssessmentResult, DimensionScore } from '../model
 import { ApiService } from '../services/ApiService';
 import { HistoryService } from '../services/HistoryService';
 import { PageStateSync, AssessmentPageState } from '../utils/distributed';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   SuccessColors,
   WarningColors,
   ErrorColors,
@@ -29,6 +31,7 @@ export struct AssessmentPage {
   @State isSubmitting: boolean = false;
   @State isContinueRestore: boolean = false;
   @State showContinuePrompt: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
   private apiService: ApiService = ApiService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
   private pageStateSync: PageStateSync = new PageStateSync('pages/Assessment');
@@ -393,7 +396,7 @@ export struct AssessmentPage {
         Text('岗位测评')
           .fontSize(FontSize.Xl)
           .fontWeight(FontWeight.Bold)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
 
         if (this.currentAssessment) {
           Row() {
@@ -404,18 +407,18 @@ export struct AssessmentPage {
                   .width(14)
                   .height(14)
                   .fillColor(BrandColors.Brand500)
-                
+
                 Text('已同步')
                   .fontSize(FontSize.Xs)
                   .fontColor(BrandColors.Brand500)
                   .margin({ left: Spacing.Space1 })
               }
               .padding({ left: Spacing.Space2, right: Spacing.Space2, top: Spacing.Space1, bottom: Spacing.Space1 })
-              .backgroundColor(BrandColors.Brand50)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
               .borderRadius(SemanticRadius.Pill)
               .margin({ right: Spacing.Space3 })
             }
-            
+
             Button('返回')
               .fontSize(FontSize.Sm)
               .fontColor(BrandColors.Brand500)
@@ -427,11 +430,11 @@ export struct AssessmentPage {
       .width('100%')
       .height(56)
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .justifyContent(FlexAlign.SpaceBetween)
       .shadow({
         radius: 8,
-        color: 'rgba(0, 0, 0, 0.04)',
+        color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
         offsetY: 2
       })
 
@@ -445,11 +448,16 @@ export struct AssessmentPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
 
   @Builder
   buildListView() {
+    // 加载状态
+    if (this.isLoading) {
+      LoadingSpinner({ text: '加载中...' })
+        .layoutWeight(1)
+    } else {
     Column() {
       // 流转恢复提示
       if (this.showContinuePrompt) {
@@ -461,10 +469,10 @@ export struct AssessmentPage {
           
           Text('检测到未完成的测评，是否继续？')
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .margin({ left: Spacing.Space3 })
             .layoutWeight(1)
-          
+
           Button('继续')
             .fontSize(FontSize.Xs)
             .fontColor(NeutralColors.Neutral0)
@@ -475,10 +483,10 @@ export struct AssessmentPage {
             .onClick(() => {
               this.showContinuePrompt = false;
             })
-          
+
           Button('忽略')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .backgroundColor('transparent')
             .margin({ left: Spacing.Space2 })
             .onClick(() => {
@@ -488,7 +496,7 @@ export struct AssessmentPage {
         }
         .width('100%')
         .padding(SemanticSpacing.Lg)
-        .backgroundColor(BrandColors.Brand50)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
         .margin({ bottom: SemanticSpacing.Lg })
       }
       
@@ -501,11 +509,11 @@ export struct AssessmentPage {
                   Text(assessment.title)
                     .fontSize(FontSize.Base)
                     .fontWeight(FontWeight.Medium)
-                    .fontColor(SemanticColors.Text1)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
 
                   Text(assessment.description)
                     .fontSize(FontSize.Xs)
-                    .fontColor(SemanticColors.Text2)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
                     .margin({ top: Spacing.Space3 })
                     .maxLines(2)
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -514,7 +522,7 @@ export struct AssessmentPage {
 
                 Text(assessment.duration + '分钟')
                   .fontSize(FontSize.Xs)
-                  .fontColor(SemanticColors.Text3)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
                   .padding({ left: SemanticSpacing.Md })
               }
 
@@ -523,7 +531,7 @@ export struct AssessmentPage {
                   .fontSize(FontSize.Xs)
                   .fontColor(BrandColors.Brand500)
                   .padding({ left: Spacing.Space4, right: Spacing.Space4, top: Spacing.Space2, bottom: Spacing.Space2 })
-                  .backgroundColor(BrandColors.Brand50)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
                   .borderRadius(SemanticRadius.Pill)
 
                 Blank()
@@ -541,12 +549,12 @@ export struct AssessmentPage {
             }
             .width('100%')
             .padding(SemanticSpacing.Xl)
-            .backgroundColor(NeutralColors.Neutral0)
+            .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
             .borderRadius(SemanticRadius.Component)
             .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: Spacing.Space4 })
             .shadow({
               radius: 8,
-              color: 'rgba(0, 0, 0, 0.04)',
+              color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
               offsetY: 2
             })
           }
@@ -554,10 +562,11 @@ export struct AssessmentPage {
       }
       .layoutWeight(1)
       .padding({ top: SemanticSpacing.Lg })
-      .backgroundColor(NeutralColors.Neutral50)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
     }
     .width('100%')
     .layoutWeight(1)
+    }
   }
 
   @Builder
@@ -570,13 +579,13 @@ export struct AssessmentPage {
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
-          
+
           Text(`已从其他设备恢复，当前第 ${this.currentQuestionIndex + 1} 题`)
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .margin({ left: Spacing.Space3 })
             .layoutWeight(1)
-          
+
           Button('知道了')
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
@@ -587,10 +596,10 @@ export struct AssessmentPage {
         }
         .width('100%')
         .padding(SemanticSpacing.Lg)
-        .backgroundColor(BrandColors.Brand50)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
         .margin({ bottom: Spacing.Space4 })
       }
-      
+
       // 进度条
       Column() {
         Row() {
@@ -599,9 +608,9 @@ export struct AssessmentPage {
             Row()
               .width('100%')
               .height(4)
-              .backgroundColor(NeutralColors.Neutral200)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200)
               .borderRadius(2)
-            
+
             // 进度
             Row()
               .width(`${((this.currentQuestionIndex + 1) / this.currentAssessment!.questions.length) * 100}%`)
@@ -614,7 +623,7 @@ export struct AssessmentPage {
 
           Text((this.currentQuestionIndex + 1) + '/' + this.currentAssessment!.questions.length)
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .margin({ left: SemanticSpacing.Md })
         }
       }
@@ -625,7 +634,7 @@ export struct AssessmentPage {
         Column() {
           Text(this.currentAssessment!.questions[this.currentQuestionIndex].title)
             .fontSize(FontSize.Lg)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .fontWeight(FontWeight.Medium)
             .width('100%')
             .margin({ bottom: SemanticSpacing.Xl })
@@ -646,17 +655,17 @@ export struct AssessmentPage {
 
                 Text(option.text)
                   .fontSize(FontSize.Sm)
-                  .fontColor(SemanticColors.Text1)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                   .margin({ left: Spacing.Space4 })
                   .layoutWeight(1)
               }
               .width('100%')
               .padding(SemanticSpacing.Lg)
-              .backgroundColor(this.answers[this.currentAssessment!.questions[this.currentQuestionIndex].id] === option.id ? BrandColors.Brand50 : NeutralColors.Neutral0)
+              .backgroundColor(this.answers[this.currentAssessment!.questions[this.currentQuestionIndex].id] === option.id ? (this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50) : (this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1))
               .borderRadius(SemanticRadius.Control)
               .border({
                 width: 1,
-                color: this.answers[this.currentAssessment!.questions[this.currentQuestionIndex].id] === option.id ? BrandColors.Brand500 : NeutralColors.Neutral200
+                color: this.answers[this.currentAssessment!.questions[this.currentQuestionIndex].id] === option.id ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200)
               })
             }
             .width('100%')
@@ -672,8 +681,8 @@ export struct AssessmentPage {
         if (this.currentQuestionIndex > 0) {
           Button('上一题')
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
-            .backgroundColor(NeutralColors.Neutral100)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
+            .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
             .borderRadius(SemanticRadius.Pill)
             .height(44)
             .layoutWeight(1)
@@ -707,7 +716,7 @@ export struct AssessmentPage {
       }
       .width('100%')
       .padding(SemanticSpacing.Lg)
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     }
   }
 
@@ -724,11 +733,11 @@ export struct AssessmentPage {
               .fillColor(BrandColors.Brand500)
             
             Text('已从其他设备恢复测评结果')
-              .fontSize(FontSize.Sm)
-              .fontColor(SemanticColors.Text1)
-              .margin({ left: Spacing.Space3 })
-              .layoutWeight(1)
-            
+            .fontSize(FontSize.Sm)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+            .margin({ left: Spacing.Space3 })
+            .layoutWeight(1)
+
             Button('知道了')
               .fontSize(FontSize.Xs)
               .fontColor(BrandColors.Brand500)
@@ -739,7 +748,7 @@ export struct AssessmentPage {
           }
           .width('100%')
           .padding(SemanticSpacing.Lg)
-          .backgroundColor(BrandColors.Brand50)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
           .borderRadius(SemanticRadius.Component)
           .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: SemanticSpacing.Lg })
         }
@@ -748,7 +757,7 @@ export struct AssessmentPage {
         Column() {
           Text('您的测评得分')
             .fontSize(FontSize.Base)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
 
           Text(this.result!.score.toString())
             .fontSize(48)
@@ -762,12 +771,12 @@ export struct AssessmentPage {
         }
         .width('100%')
         .padding(SemanticSpacing.Xl)
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
         .borderRadius(SemanticRadius.Component)
         .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: SemanticSpacing.Lg })
         .shadow({
           radius: 8,
-          color: 'rgba(0, 0, 0, 0.04)',
+          color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
           offsetY: 2
         })
 
@@ -776,7 +785,7 @@ export struct AssessmentPage {
           Text('维度分析')
             .fontSize(FontSize.Base)
             .fontWeight(FontWeight.Bold)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .width('100%')
             .margin({ bottom: SemanticSpacing.Lg })
 
@@ -784,16 +793,16 @@ export struct AssessmentPage {
             Row() {
               Text(dim.dimension)
                 .fontSize(FontSize.Sm)
-                .fontColor(SemanticColors.Text1)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .width(80)
 
               Stack() {
                 Row()
                   .width('100%')
                   .height(8)
-                  .backgroundColor(NeutralColors.Neutral200)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200)
                   .borderRadius(4)
-                
+
                 Row()
                   .width(`${dim.score}%`)
                   .height(8)
@@ -817,12 +826,12 @@ export struct AssessmentPage {
         }
         .width('100%')
         .padding(SemanticSpacing.Xl)
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
         .borderRadius(SemanticRadius.Component)
         .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: SemanticSpacing.Lg })
         .shadow({
           radius: 8,
-          color: 'rgba(0, 0, 0, 0.04)',
+          color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
           offsetY: 2
         })
 
@@ -831,7 +840,7 @@ export struct AssessmentPage {
           Text('发展建议')
             .fontSize(FontSize.Base)
             .fontWeight(FontWeight.Bold)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .width('100%')
             .margin({ bottom: SemanticSpacing.Lg })
 
@@ -848,7 +857,7 @@ export struct AssessmentPage {
 
               Text(suggestion)
                 .fontSize(FontSize.Sm)
-                .fontColor(SemanticColors.Text1)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .margin({ left: Spacing.Space4 })
                 .layoutWeight(1)
             }
@@ -858,12 +867,12 @@ export struct AssessmentPage {
         }
         .width('100%')
         .padding(SemanticSpacing.Xl)
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
         .borderRadius(SemanticRadius.Component)
         .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: SemanticSpacing.Lg })
         .shadow({
           radius: 8,
-          color: 'rgba(0, 0, 0, 0.04)',
+          color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
           offsetY: 2
         })
 
@@ -871,7 +880,7 @@ export struct AssessmentPage {
         Button('重新测评')
           .fontSize(FontSize.Sm)
           .fontColor(BrandColors.Brand500)
-          .backgroundColor(NeutralColors.Neutral0)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
           .borderRadius(SemanticRadius.Pill)
           .border({ width: 1, color: BrandColors.Brand500 })
           .width('calc(100% - 32px)')

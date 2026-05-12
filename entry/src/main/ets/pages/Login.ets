@@ -1,9 +1,11 @@
 import router from '@ohos.router';
 import { AuthService } from '../services/AuthService';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -23,6 +25,7 @@ struct Login {
   @State errorMessage: string = '';
   @State agreeTerms: boolean = false;
   @State headerOpacity: number = 0;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
   private authService: AuthService = AuthService.getInstance();
   private countdownTimer: number = -1;
 
@@ -88,38 +91,38 @@ struct Login {
         Column() {
           Text('手机号')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .width('100%')
             .margin({ bottom: Spacing.Space3 })
 
           Row() {
             Text('+86')
               .fontSize(FontSize.Base)
-              .fontColor(SemanticColors.Text1)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
               .margin({ right: SemanticSpacing.Md })
 
             TextInput({ placeholder: '请输入手机号', text: this.phone })
               .layoutWeight(1)
               .height(ComponentSizes.Input.Lg.height)
-              .backgroundColor(NeutralColors.Neutral100)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
               .borderRadius(SemanticRadius.Control)
               .padding({ left: SemanticSpacing.Md })
               .type(InputType.PhoneNumber)
               .maxLength(11)
-              .placeholderColor(SemanticColors.Text4)
+              .placeholderColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
               .placeholderFont({ size: FontSize.Base })
-              .fontColor(SemanticColors.Text1)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
               .onChange((value: string) => {
                 this.phone = value;
               })
           }
           .width('100%')
           .padding(SemanticSpacing.Md)
-          .backgroundColor(NeutralColors.Neutral50)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral50)
           .borderRadius(SemanticRadius.Control)
           .border({
             width: 1,
-            color: NeutralColors.Neutral200
+            color: this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200
           })
         }
         .width('100%')
@@ -129,7 +132,7 @@ struct Login {
         Column() {
           Text('验证码')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .width('100%')
             .margin({ bottom: Spacing.Space3 })
 
@@ -137,22 +140,22 @@ struct Login {
             TextInput({ placeholder: '请输入验证码', text: this.code })
               .layoutWeight(1)
               .height(ComponentSizes.Input.Lg.height)
-              .backgroundColor(NeutralColors.Neutral100)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
               .borderRadius(SemanticRadius.Control)
               .padding({ left: SemanticSpacing.Md })
               .type(InputType.Number)
               .maxLength(6)
-              .placeholderColor(SemanticColors.Text4)
+              .placeholderColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
               .placeholderFont({ size: FontSize.Base })
-              .fontColor(SemanticColors.Text1)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
               .onChange((value: string) => {
                 this.code = value;
               })
 
             Button(this.countdown > 0 ? `${this.countdown}s` : '获取验证码')
               .fontSize(FontSize.Sm)
-              .fontColor(this.countdown > 0 ? SemanticColors.Text4 : BrandColors.Brand500)
-              .backgroundColor(this.countdown > 0 ? NeutralColors.Neutral100 : BrandColors.Brand50)
+              .fontColor(this.countdown > 0 ? (this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4) : BrandColors.Brand500)
+              .backgroundColor(this.countdown > 0 ? (this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100) : BrandColors.Brand50)
               .borderRadius(SemanticRadius.Control)
               .width(110)
               .height(ComponentSizes.Input.Lg.height)
@@ -164,11 +167,11 @@ struct Login {
           }
           .width('100%')
           .padding(SemanticSpacing.Md)
-          .backgroundColor(NeutralColors.Neutral50)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral50)
           .borderRadius(SemanticRadius.Control)
           .border({
             width: 1,
-            color: NeutralColors.Neutral200
+            color: this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200
           })
         }
         .width('100%')
@@ -188,25 +191,41 @@ struct Login {
 
           Text('我已阅读并同意')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .margin({ left: Spacing.Space3 })
 
           Text('《用户协议》')
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
             .onClick(() => {
-              router.pushUrl({ url: 'pages/profile/UserAgreement' });
+              router.pushUrl({
+                url: 'pages/profile/UserAgreement',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             })
 
           Text('和')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
 
           Text('《隐私政策》')
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
             .onClick(() => {
-              router.pushUrl({ url: 'pages/profile/PrivacyPolicy' });
+              router.pushUrl({
+                url: 'pages/profile/PrivacyPolicy',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             })
         }
         .width('100%')
@@ -220,13 +239,13 @@ struct Login {
               .fontColor(NeutralColors.Neutral0)
               .width(16)
               .height(16)
-              .backgroundColor(SemanticColors.Error)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Error : SemanticColors.Error)
               .borderRadius(8)
               .textAlign(TextAlign.Center)
 
             Text(this.errorMessage)
               .fontSize(FontSize.Xs)
-              .fontColor(SemanticColors.Error)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Error : SemanticColors.Error)
               .margin({ left: Spacing.Space3 })
           }
           .width('100%')
@@ -256,7 +275,7 @@ struct Login {
       }
       .width('100%')
       .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, top: Spacing.Space9 })
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .borderRadius({ topLeft: SemanticRadius.Container, topRight: SemanticRadius.Container })
       .margin({ top: -SemanticSpacing.Xl })
       .layoutWeight(1)
@@ -265,7 +284,7 @@ struct Login {
       Column() {
         Text('一职搭子 出品')
           .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text4)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
       }
       .width('100%')
       .padding({ bottom: Spacing.Space9 })
@@ -273,7 +292,7 @@ struct Login {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
 
   canLogin(): boolean {
@@ -320,7 +339,15 @@ struct Login {
       // 登录成功，跳转到主页
       hilog.info(0x0001, 'Login', 'Login success');
       setTimeout(() => {
-        router.replaceUrl({ url: 'pages/Index' });
+        router.replaceUrl({
+          url: 'pages/Index',
+          params: {},
+          transition: {
+            type: router.TransitionType.Push,
+            duration: 300,
+            curve: Curve.EaseInOut
+          }
+        });
       }, 500);
     } catch (error) {
       this.errorMessage = '验证码错误或已过期';

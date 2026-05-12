@@ -1,11 +1,12 @@
 import router from '@ohos.router';
 import { HistoryService, HistoryItem, HistoryType } from '../../services/HistoryService';
 import { promptAction } from '@kit.ArkUI';
+import { ThemeManager, ThemeMode } from '../../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
-  ErrorColors,
+  DarkSemanticColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -15,6 +16,64 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
+/**
+ * 历史记录数据源 - 用于LazyForEach
+ */
+class HistoryDataSource implements IDataSource {
+  private historyList: HistoryItem[] = [];
+  private listeners: DataChangeListener[] = [];
+
+  totalCount(): number {
+    return this.historyList.length;
+  }
+
+  getData(index: number): HistoryItem {
+    return this.historyList[index];
+  }
+
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      this.listeners.push(listener);
+    }
+  }
+
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    });
+  }
+
+  notifyDataAdd(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataAdd(index);
+    });
+  }
+
+  notifyDataDelete(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataDelete(index);
+    });
+  }
+
+  notifyDataChange(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataChange(index);
+    });
+  }
+
+  setData(list: HistoryItem[]): void {
+    this.historyList = list;
+    this.notifyDataReload();
+  }
+}
+
 @Component
 export struct HistoryPage {
   @State historyList: HistoryItem[] = [];
@@ -23,9 +82,11 @@ export struct HistoryPage {
   @State showClearDialog: boolean = false;
   @State selectedItemId: string = '';
   @State showDeleteDialog: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   private historyService: HistoryService = HistoryService.getInstance();
   private tabs: HistoryType[] = ['all', 'resume', 'assessment', 'chat', 'interview'];
+  private historyDataSource: HistoryDataSource = new HistoryDataSource();
 
   aboutToAppear() {
     this.loadHistory();
@@ -35,6 +96,7 @@ export struct HistoryPage {
     this.isLoading = true;
     try {
       this.historyList = await this.historyService.getHistory(this.currentTab);
+      this.historyDataSource.setData(this.historyList);
     } catch (error) {
       console.error('[HistoryPage] Load history failed:', error);
     } finally {
@@ -99,7 +161,7 @@ export struct HistoryPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
 
   @Builder
@@ -110,7 +172,7 @@ export struct HistoryPage {
         Image($r('app.media.ic_arrow_left'))
           .width(24)
           .height(24)
-          .fillColor(SemanticColors.Text1)
+          .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
       }
       .width(40)
       .height(40)
@@ -122,7 +184,7 @@ export struct HistoryPage {
       Text('历史记录')
         .fontSize(FontSize.Lg)
         .fontWeight(FontWeight.Medium)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         .layoutWeight(1)
         .textAlign(TextAlign.Center)
 
@@ -133,10 +195,10 @@ export struct HistoryPage {
     .width('100%')
     .height(56)
     .padding({ left: Spacing.Space4, right: Spacing.Space4 })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral0)
     .shadow({
       radius: 8,
-      color: 'rgba(0, 0, 0, 0.04)',
+      color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
       offsetY: 2
     })
   }
@@ -150,14 +212,14 @@ export struct HistoryPage {
             Text(HistoryService.getTypeLabel(tab))
               .fontSize(FontSize.Sm)
               .fontWeight(this.currentTab === tab ? FontWeight.Medium : FontWeight.Normal)
-              .fontColor(this.currentTab === tab ? BrandColors.Brand500 : SemanticColors.Text2)
+              .fontColor(this.currentTab === tab ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2))
           }
           .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space3, bottom: Spacing.Space3 })
-          .backgroundColor(this.currentTab === tab ? BrandColors.Brand50 : NeutralColors.Neutral0)
+          .backgroundColor(this.currentTab === tab ? (this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50) : (this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral0))
           .borderRadius(SemanticRadius.Pill)
           .border({
             width: 1,
-            color: this.currentTab === tab ? BrandColors.Brand500 : NeutralColors.Neutral200
+            color: this.currentTab === tab ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Border1 : NeutralColors.Neutral200)
           })
           .onClick(() => {
             this.onTabChange(tab);
@@ -181,7 +243,7 @@ export struct HistoryPage {
 
         Text('加载中...')
           .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text2)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
           .margin({ top: SemanticSpacing.Md })
       }
       .width('100%')
@@ -189,27 +251,27 @@ export struct HistoryPage {
       .justifyContent(FlexAlign.Center)
     } else if (this.historyList.length === 0) {
       Column() {
-        // 空状态图标
-        Column() {
-          Image($r('app.media.ic_history'))
-            .width(64)
-            .height(64)
-            .fillColor(BrandColors.Brand300)
-        }
-        .width(100)
-        .height(100)
-        .backgroundColor(BrandColors.Brand50)
-        .borderRadius(50)
-        .justifyContent(FlexAlign.Center)
+          // 空状态图标
+          Column() {
+            Image($r('app.media.ic_history'))
+              .width(64)
+              .height(64)
+              .fillColor(BrandColors.Brand300)
+          }
+          .width(100)
+          .height(100)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+          .borderRadius(50)
+          .justifyContent(FlexAlign.Center)
 
         Text('暂无历史记录')
           .fontSize(FontSize.Base)
-          .fontColor(SemanticColors.Text3)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
           .margin({ top: SemanticSpacing.Lg })
 
         Text('使用功能后会自动保存记录')
           .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text4)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
           .margin({ top: Spacing.Space3 })
       }
       .width('100%')
@@ -217,7 +279,7 @@ export struct HistoryPage {
       .justifyContent(FlexAlign.Center)
     } else {
       List() {
-        ForEach(this.historyList, (item: HistoryItem) => {
+        LazyForEach(this.historyDataSource, (item: HistoryItem) => {
           ListItem() {
             this.buildHistoryItem(item)
           }
@@ -232,8 +294,8 @@ export struct HistoryPage {
       }
       .layoutWeight(1)
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-      .backgroundColor(NeutralColors.Neutral50)
-      .divider({ strokeWidth: 1, color: NeutralColors.Neutral100 })
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
+      .divider({ strokeWidth: 1, color: this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral100 })
     }
   }
 
@@ -249,7 +311,7 @@ export struct HistoryPage {
       }
       .width(44)
       .height(44)
-      .backgroundColor(BrandColors.Brand50)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
       .borderRadius(22)
       .justifyContent(FlexAlign.Center)
       .margin({ right: SemanticSpacing.Md })
@@ -260,20 +322,20 @@ export struct HistoryPage {
           Text(item.title)
             .fontSize(FontSize.Sm)
             .fontWeight(FontWeight.Medium)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
             .layoutWeight(1)
 
           Text(HistoryService.formatTimestamp(item.timestamp))
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text4)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
         }
         .width('100%')
 
         Text(item.content)
           .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text2)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
           .maxLines(2)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
           .margin({ top: Spacing.Space2 })
@@ -284,7 +346,7 @@ export struct HistoryPage {
     }
     .width('100%')
     .padding({ top: SemanticSpacing.Md, bottom: SemanticSpacing.Md })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .onClick(() => {
       this.navigateToDetail(item);
     })
@@ -324,8 +386,8 @@ export struct HistoryPage {
 
         Row() {
           Button('取消')
-            .backgroundColor(NeutralColors.Neutral100)
-            .fontColor(NeutralColors.Neutral500)
+            .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : NeutralColors.Neutral500)
             .onClick(() => {
               this.showClearDialog = false;
             })
@@ -339,7 +401,7 @@ export struct HistoryPage {
             })
         }
       }
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral0)
       .borderRadius(16)
       .padding(Spacing.Space6)
       .width('80%')
@@ -369,8 +431,8 @@ export struct HistoryPage {
 
         Row() {
           Button('取消')
-            .backgroundColor(NeutralColors.Neutral100)
-            .fontColor(NeutralColors.Neutral500)
+            .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : NeutralColors.Neutral500)
             .onClick(() => {
               this.showDeleteDialog = false;
               this.selectedItemId = '';
@@ -389,7 +451,7 @@ export struct HistoryPage {
             })
         }
       }
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral0)
       .borderRadius(16)
       .padding(Spacing.Space6)
       .width('80%')
@@ -410,15 +472,32 @@ export struct HistoryPage {
 
   navigateToDetail(item: HistoryItem) {
     // 根据类型跳转到对应页面
+    const transitionOptions = {
+      params: {},
+      transition: {
+        type: router.TransitionType.Push,
+        duration: 300,
+        curve: Curve.EaseInOut
+      }
+    };
     switch (item.type) {
       case 'resume':
-        router.pushUrl({ url: 'pages/Resume' });
+        router.pushUrl({
+          url: 'pages/Resume',
+          ...transitionOptions
+        });
         break;
       case 'assessment':
-        router.pushUrl({ url: 'pages/Assessment' });
+        router.pushUrl({
+          url: 'pages/Assessment',
+          ...transitionOptions
+        });
         break;
       case 'chat':
-        router.pushUrl({ url: 'pages/Chat' });
+        router.pushUrl({
+          url: 'pages/Chat',
+          ...transitionOptions
+        });
         break;
       case 'interview':
         // 面试页面暂未实现

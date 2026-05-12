@@ -17,10 +17,12 @@ import { ResumeService, AnalysisStage, StageTextMap } from '../services/ResumeSe
 import { HistoryService } from '../services/HistoryService';
 import { ResumeResultSwiper } from '../components/resume/ResumeResultSwiper';
 import { PageStateSync, ResumePageState } from '../utils/distributed';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   SuccessColors,
   WarningColors,
   ErrorColors,
@@ -64,37 +66,40 @@ enum PageState {
 export struct ResumePage {
   // 页面状态
   @State private pageState: PageState = PageState.IDLE;
-  
+
   // 分析结果
   @State private analysisResult: ResumeAnalysisResult | null = null;
-  
+
   // 文件信息
   @State private selectedFileName: string = '';
   @State private selectedFileUri: string = '';
-  
+
   // 进度状态
   @State private progress: number = 0;
   @State private progressStage: AnalysisStage = AnalysisStage.UPLOADING;
   @State private progressText: string = '正在上传...';
-  
+
   // 错误状态
   @State private hasError: boolean = false;
   @State private errorInfo: AnalysisError | null = null;
-  
+
   // 取消状态
   @State private isCancelling: boolean = false;
-  
+
   // 跨设备流转状态
   @State private isContinueRestore: boolean = false;
-  
+
+  // 暗黑模式
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
+
   // 服务实例
   private resumeService: ResumeService = ResumeService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
   private pageStateSync: PageStateSync = new PageStateSync('pages/Resume');
-  
+
   // 当前选中的文件
   private currentFile: picker.DocumentPickerResult | null = null;
-  
+
   // 超时定时器
   private timeoutTimer: number = -1;
   private readonly ANALYSIS_TIMEOUT = 90000; // 90秒超时
@@ -221,7 +226,7 @@ export struct ResumePage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
 
   /**
@@ -236,7 +241,7 @@ export struct ResumePage {
           Image($r('app.media.ic_back'))
             .width(24)
             .height(24)
-            .fillColor(SemanticColors.Text1)
+            .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         }
         .backgroundColor('transparent')
         .width(40)
@@ -249,7 +254,7 @@ export struct ResumePage {
       Text('简历分析')
         .fontSize(FontSize.Xl)
         .fontWeight(FontWeight.Bold)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         .layoutWeight(1)
         .textAlign(TextAlign.Center)
 
@@ -267,7 +272,7 @@ export struct ResumePage {
             .margin({ left: Spacing.Space2 })
         }
         .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space2, bottom: Spacing.Space2 })
-        .backgroundColor(BrandColors.Brand50)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
         .borderRadius(SemanticRadius.Pill)
       } else {
         // 占位，保持标题居中
@@ -277,10 +282,10 @@ export struct ResumePage {
     .width('100%')
     .height(56)
     .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .shadow({
       radius: 8,
-      color: 'rgba(0, 0, 0, 0.04)',
+      color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
       offsetY: 2
     })
   }
@@ -309,12 +314,12 @@ export struct ResumePage {
         Text('点击上传简历')
           .fontSize(FontSize.Lg)
           .fontWeight(FontWeight.Medium)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
           .margin({ top: SemanticSpacing.Xl })
 
         Text('支持 PDF、Word 格式，最大 10MB')
           .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text3)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
           .margin({ top: Spacing.Space3 })
 
         // 文件来源提示
@@ -327,11 +332,11 @@ export struct ResumePage {
       }
       .width('85%')
       .padding(SemanticSpacing.Xxl3)
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .borderRadius(SemanticRadius.Component)
       .border({
         width: 2,
-        color: BrandColors.Brand200,
+        color: this.isDarkMode ? DarkSemanticColors.Accent : BrandColors.Brand200,
         style: BorderStyle.Dashed
       })
       .justifyContent(FlexAlign.Center)
@@ -344,11 +349,11 @@ export struct ResumePage {
         Text('AI 简历分析功能')
           .fontSize(FontSize.Base)
           .fontWeight(FontWeight.Medium)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
 
         Text('上传简历后，AI 将从多个维度分析您的简历质量，并提供专业的优化建议')
           .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text3)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
           .margin({ top: Spacing.Space3 })
           .textAlign(TextAlign.Center)
           .lineHeight(20)
@@ -368,20 +373,20 @@ export struct ResumePage {
   @Builder
   buildSourceTag(text: string) {
     Row() {
-      Image($r('app.media.ic_file'))
-        .width(12)
-        .height(12)
-        .fillColor(SemanticColors.Text3)
+        Image($r('app.media.ic_file'))
+          .width(12)
+          .height(12)
+          .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
 
-      Text(text)
-        .fontSize(FontSize.Xs)
-        .fontColor(SemanticColors.Text3)
-        .margin({ left: Spacing.Space1 })
-    }
-    .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space2, bottom: Spacing.Space2 })
-    .backgroundColor(NeutralColors.Neutral100)
-    .borderRadius(SemanticRadius.Pill)
-    .margin({ left: Spacing.Space2, right: Spacing.Space2 })
+        Text(text)
+          .fontSize(FontSize.Xs)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
+          .margin({ left: Spacing.Space1 })
+      }
+      .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space2, bottom: Spacing.Space2 })
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface2 : NeutralColors.Neutral100)
+      .borderRadius(SemanticRadius.Pill)
+      .margin({ left: Spacing.Space2, right: Spacing.Space2 })
   }
 
   /**
@@ -413,7 +418,7 @@ export struct ResumePage {
               .width(120)
               .height(120)
               .fill('transparent')
-              .stroke(NeutralColors.Neutral200)
+              .stroke(this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200)
               .strokeWidth(8)
 
             // 进度圆环
@@ -450,7 +455,7 @@ export struct ResumePage {
         Text(this.progressText)
           .fontSize(FontSize.Lg)
           .fontWeight(FontWeight.Medium)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
 
         // 文件名
         if (this.selectedFileName) {
@@ -458,11 +463,11 @@ export struct ResumePage {
             Image($r('app.media.ic_file'))
               .width(16)
               .height(16)
-              .fillColor(SemanticColors.Text3)
+              .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
 
             Text(this.selectedFileName)
               .fontSize(FontSize.Sm)
-              .fontColor(SemanticColors.Text3)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
               .margin({ left: Spacing.Space2 })
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
@@ -511,7 +516,7 @@ export struct ResumePage {
     }
     .width('100%')
     .layoutWeight(1)
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
   }
 
   /**
@@ -520,24 +525,24 @@ export struct ResumePage {
   @Builder
   buildStageIndicator() {
     Row() {
-      this.buildStageDot('上传', this.progressStage === AnalysisStage.UPLOADING || 
+      this.buildStageDot('上传', this.progressStage === AnalysisStage.UPLOADING ||
         [AnalysisStage.PARSING, AnalysisStage.ANALYZING, AnalysisStage.GENERATING, AnalysisStage.COMPLETED]
           .includes(this.progressStage));
-      
+
       this.buildStageLine([AnalysisStage.PARSING, AnalysisStage.ANALYZING, AnalysisStage.GENERATING, AnalysisStage.COMPLETED]
         .includes(this.progressStage));
-      
+
       this.buildStageDot('解析', [AnalysisStage.PARSING, AnalysisStage.ANALYZING, AnalysisStage.GENERATING, AnalysisStage.COMPLETED]
         .includes(this.progressStage));
-      
+
       this.buildStageLine([AnalysisStage.ANALYZING, AnalysisStage.GENERATING, AnalysisStage.COMPLETED]
         .includes(this.progressStage));
-      
+
       this.buildStageDot('分析', [AnalysisStage.ANALYZING, AnalysisStage.GENERATING, AnalysisStage.COMPLETED]
         .includes(this.progressStage));
-      
+
       this.buildStageLine([AnalysisStage.GENERATING, AnalysisStage.COMPLETED].includes(this.progressStage));
-      
+
       this.buildStageDot('完成', this.progressStage === AnalysisStage.COMPLETED);
     }
     .margin({ top: SemanticSpacing.Xl })
@@ -552,12 +557,12 @@ export struct ResumePage {
       Column()
         .width(isActive ? 12 : 8)
         .height(isActive ? 12 : 8)
-        .backgroundColor(isActive ? BrandColors.Brand500 : NeutralColors.Neutral300)
+        .backgroundColor(isActive ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Text4 : NeutralColors.Neutral300))
         .borderRadius(isActive ? 6 : 4)
 
       Text(label)
         .fontSize(FontSize.Xs)
-        .fontColor(isActive ? BrandColors.Brand500 : SemanticColors.Text3)
+        .fontColor(isActive ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3))
         .margin({ top: Spacing.Space2 })
     }
     .alignItems(HorizontalAlign.Center)
@@ -571,7 +576,7 @@ export struct ResumePage {
     Column()
       .width(24)
       .height(2)
-      .backgroundColor(isActive ? BrandColors.Brand500 : NeutralColors.Neutral200)
+      .backgroundColor(isActive ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200))
       .margin({ bottom: 16 })
   }
 
@@ -597,14 +602,14 @@ export struct ResumePage {
       Text('分析失败')
         .fontSize(FontSize.Xxl)
         .fontWeight(FontWeight.Bold)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         .margin({ top: SemanticSpacing.Xl })
 
       // 错误详情
       if (this.errorInfo) {
         Text(this.errorInfo.message)
           .fontSize(FontSize.Base)
-          .fontColor(SemanticColors.Text2)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
           .margin({ top: Spacing.Space4 })
           .textAlign(TextAlign.Center)
           .width('80%')
@@ -626,13 +631,13 @@ export struct ResumePage {
 
           Text(this.errorInfo.suggestion)
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text2)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .margin({ top: Spacing.Space3 })
             .lineHeight(20)
         }
         .width('85%')
         .padding(SemanticSpacing.Lg)
-        .backgroundColor(BrandColors.Brand50)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
         .borderRadius(SemanticRadius.Component)
         .margin({ top: SemanticSpacing.Xl })
       }
@@ -653,7 +658,7 @@ export struct ResumePage {
         Button('重新上传')
           .fontSize(FontSize.Sm)
           .fontColor(BrandColors.Brand500)
-          .backgroundColor(NeutralColors.Neutral0)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
           .borderRadius(SemanticRadius.Pill)
           .border({ width: 1, color: BrandColors.Brand500 })
           .width(120)
@@ -686,7 +691,7 @@ export struct ResumePage {
 
           Text('已从其他设备恢复简历数据')
             .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text1)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .margin({ left: Spacing.Space3 })
             .layoutWeight(1)
 
@@ -700,7 +705,7 @@ export struct ResumePage {
         }
         .width('100%')
         .padding(SemanticSpacing.Lg)
-        .backgroundColor(BrandColors.Brand50)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
         .borderRadius(SemanticRadius.Component)
         .margin({ top: Spacing.Space4, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
       }

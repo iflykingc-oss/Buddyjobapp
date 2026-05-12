@@ -18,10 +18,12 @@ import {
 import { VoiceInputButton } from '../components/interview/VoiceInputButton';
 import { FeedbackSheet } from '../components/interview/FeedbackSheet';
 import { StarGuide } from '../components/interview/StarGuide';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   SuccessColors,
   WarningColors,
   ErrorColors,
@@ -43,6 +45,7 @@ export struct InterviewPage {
   // 页面状态
   @State private pageState: PageState = 'config';
   @State private isLoading: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   // 面试配置
   @State private jobPosition: string = '';
@@ -953,11 +956,11 @@ export struct InterviewPage {
         Text('确认退出')
           .fontSize(FontSize.Lg)
           .fontWeight(FontWeight.Bold)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
 
         Text('面试尚未完成，退出后当前进度将不会保存')
           .fontSize(FontSize.Sm)
-          .fontColor(SemanticColors.Text2)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
           .margin({ top: Spacing.Space4 })
           .textAlign(TextAlign.Center)
 
@@ -986,7 +989,7 @@ export struct InterviewPage {
       }
       .width('80%')
       .padding(SemanticSpacing.Xl)
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .borderRadius(SemanticRadius.Component)
     }
     .width('100%')

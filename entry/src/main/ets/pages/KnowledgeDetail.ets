@@ -2,10 +2,12 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { KnowledgeService, ArticleDetail } from '../services/KnowledgeService';
 import { FavoriteService, FavoriteType } from '../services/FavoriteService';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -24,6 +26,7 @@ struct KnowledgeDetail {
   @State isLoading: boolean = false;
   @State errorMessage: string = '';
   @State showError: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   private knowledgeService: KnowledgeService = KnowledgeService.getInstance();
   private favoriteService: FavoriteService = FavoriteService.getInstance();
@@ -146,7 +149,7 @@ struct KnowledgeDetail {
           Image($r('app.media.ic_arrow_right'))
             .width(20)
             .height(20)
-            .fillColor(SemanticColors.Text1)
+            .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
             .rotate({ angle: 180 })
         }
         .width(40)
@@ -159,7 +162,7 @@ struct KnowledgeDetail {
         Text('文章详情')
           .fontSize(FontSize.Xl)
           .fontWeight(FontWeight.Bold)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
 
@@ -171,10 +174,10 @@ struct KnowledgeDetail {
       .width('100%')
       .height(56)
       .padding({ left: Spacing.Space2, right: SemanticSpacing.Lg })
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .shadow({
         radius: 8,
-        color: 'rgba(0, 0, 0, 0.04)',
+        color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
         offsetY: 2
       })
 
@@ -207,7 +210,7 @@ struct KnowledgeDetail {
             Text(this.article.title)
               .fontSize(FontSize.Xxl)
               .fontWeight(FontWeight.Bold)
-              .fontColor(SemanticColors.Text1)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
               .width('100%')
               .margin({ top: SemanticSpacing.Lg, bottom: SemanticSpacing.Lg })
 
@@ -217,19 +220,19 @@ struct KnowledgeDetail {
                 .fontSize(FontSize.Xs)
                 .fontColor(BrandColors.Brand500)
                 .padding({ left: Spacing.Space4, right: Spacing.Space4, top: Spacing.Space2, bottom: Spacing.Space2 })
-                .backgroundColor(BrandColors.Brand50)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
                 .borderRadius(SemanticRadius.Pill)
 
               Text(this.article.author)
                 .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text3)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
                 .margin({ left: Spacing.Space4 })
 
               Blank()
 
               Text('阅读 ' + this.formatReadCount(this.article.readCount))
                 .fontSize(FontSize.Xs)
-                .fontColor(SemanticColors.Text4)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
             }
             .width('100%')
             .margin({ bottom: Spacing.Space4 })
@@ -369,8 +372,8 @@ struct KnowledgeDetail {
       }
     }
     .width('100%')
-    .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+      .height('100%')
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
 }
 

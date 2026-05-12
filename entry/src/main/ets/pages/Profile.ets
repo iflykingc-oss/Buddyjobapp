@@ -5,10 +5,12 @@ import { MemberCard } from '../components/profile/MemberCard';
 import { BenefitGrid } from '../components/profile/BenefitGrid';
 import { PurchaseSheet } from '../components/profile/PurchaseSheet';
 import { MemberDetailSheet } from '../components/profile/MemberDetailSheet';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   SuccessColors,
   WarningColors,
   Spacing,
@@ -26,11 +28,12 @@ export struct ProfilePage {
   @State isVip: boolean = false;
   @State memberStatus: MemberStatus | null = null;
   @State benefits: Benefit[] = [];
-  
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
+
   // 弹窗控制
   @State showPurchaseSheet: boolean = false;
   @State showDetailSheet: boolean = false;
-  
+
   private memberService: MemberService = MemberService.getInstance();
 
   aboutToAppear() {
@@ -53,15 +56,20 @@ export struct ProfilePage {
   }
 
   loadMemberStatus() {
+    this.isLoading = true;
+
     // 异步加载会员状态
     this.memberService.getMemberStatus().then((status) => {
       this.memberStatus = status;
       this.isVip = status.isMember;
     });
-    
+
     // 加载权益列表
     this.memberService.getBenefits().then((benefits) => {
       this.benefits = benefits;
+      this.isLoading = false;
+    }).catch(() => {
+      this.isLoading = false;
     });
   }
 
@@ -81,127 +89,184 @@ export struct ProfilePage {
   build() {
     Stack() {
       Column() {
-        // 会员状态卡片 - 替换原有的用户信息卡片
-        MemberCard({
-          userInfo: this.userInfo,
-          memberStatus: this.memberStatus,
-          isVip: this.isVip,
-          onUpgradeClick: () => {
-            this.showPurchaseSheet = true;
-          },
-          onDetailClick: () => {
-            this.showDetailSheet = true;
-          }
-        })
-
-        // 权益宫格展示
-        BenefitGrid({
-          benefits: this.benefits,
-          isMember: this.isVip,
-          columns: 3,
-          onBenefitClick: (benefit: Benefit) => {
-            // 点击权益项
-            if (this.isVip) {
-              // 已是会员，显示详情
-              this.showDetailSheet = true;
-            } else {
-              // 非会员，引导开通
+        if (this.isLoading) {
+          // 骨架屏加载状态
+          this.buildSkeletonView()
+        } else {
+          // 会员状态卡片 - 替换原有的用户信息卡片
+          MemberCard({
+            userInfo: this.userInfo,
+            memberStatus: this.memberStatus,
+            isVip: this.isVip,
+            onUpgradeClick: () => {
               this.showPurchaseSheet = true;
+            },
+            onDetailClick: () => {
+              this.showDetailSheet = true;
             }
-          }
-        })
-        .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+          })
 
-        // 功能菜单
-        Column() {
-          this.MenuItem({
+          // 权益宫格展示
+          BenefitGrid({
+            benefits: this.benefits,
+            isMember: this.isVip,
+            columns: 3,
+            onBenefitClick: (benefit: Benefit) => {
+              // 点击权益项
+              if (this.isVip) {
+                // 已是会员，显示详情
+                this.showDetailSheet = true;
+              } else {
+                // 非会员，引导开通
+                this.showPurchaseSheet = true;
+              }
+            }
+          })
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+
+          // 功能菜单
+          Column() {
+            this.MenuItem({
             icon: $r('app.media.ic_order'),
             title: '订单记录',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/OrderHistory' });
+              router.pushUrl({
+                url: 'pages/profile/OrderHistory',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
 
-          Divider()
-            .margin({ left: 56 })
+            Divider()
+              .margin({ left: 56 })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
-          this.MenuItem({
+            this.MenuItem({
             icon: $r('app.media.ic_favorite'),
             title: '我的收藏',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/Favorites' });
+              router.pushUrl({
+                url: 'pages/profile/Favorites',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
 
-          Divider()
-            .margin({ left: 56 })
+            Divider()
+              .margin({ left: 56 })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
-          this.MenuItem({
+            this.MenuItem({
             icon: $r('app.media.ic_history'),
             title: '历史记录',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/History' });
+              router.pushUrl({
+                url: 'pages/profile/History',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
 
-          Divider()
-            .margin({ left: 56 })
+            Divider()
+              .margin({ left: 56 })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
-          this.MenuItem({
+            this.MenuItem({
             icon: $r('app.media.ic_help'),
             title: '帮助与反馈',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/HelpFeedback' });
+              router.pushUrl({
+                url: 'pages/profile/HelpFeedback',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
 
-          Divider()
-            .margin({ left: 56 })
+            Divider()
+              .margin({ left: 56 })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
-          this.MenuItem({
+            this.MenuItem({
             icon: $r('app.media.ic_settings'),
             title: '设置',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/SettingsPage' });
+              router.pushUrl({
+                url: 'pages/profile/SettingsPage',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
 
-          Divider()
-            .margin({ left: 56 })
+            Divider()
+              .margin({ left: 56 })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
-          this.MenuItem({
+            this.MenuItem({
             icon: $r('app.media.ic_about'),
             title: '关于我们',
             showBadge: false,
             onClick: () => {
-              router.pushUrl({ url: 'pages/profile/AboutPage' });
+              router.pushUrl({
+                url: 'pages/profile/AboutPage',
+                params: {},
+                transition: {
+                  type: router.TransitionType.Push,
+                  duration: 300,
+                  curve: Curve.EaseInOut
+                }
+              });
             }
           })
-        }
-        .layoutWeight(1)
-        .backgroundColor(NeutralColors.Neutral0)
-        .borderRadius(SemanticRadius.Component)
-        .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
-        .shadow({
-          radius: 8,
-          color: 'rgba(0, 0, 0, 0.04)',
-          offsetY: 2
-        })
+          }
+          .layoutWeight(1)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+          .borderRadius(SemanticRadius.Component)
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+          .shadow({
+            radius: 8,
+            color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
+            offsetY: 2
+          })
 
-        // 版本信息
+          // 版本信息
         Text('一职搭子 v' + (AppStorage.get('appVersion') as string || '1.0.1'))
           .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text4)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
           .margin({ top: SemanticSpacing.Lg, bottom: Spacing.Space9 })
       }
       .width('100%')
       .height('100%')
-      .backgroundColor(NeutralColors.Neutral50)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
 
       // 购买面板
       if (this.showPurchaseSheet) {
@@ -241,7 +306,7 @@ export struct ProfilePage {
         Image(params.icon)
           .width(ComponentSizes.Icon.Lg)
           .height(ComponentSizes.Icon.Lg)
-          .fillColor(SemanticColors.Text3)
+          .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
       }
       .width(40)
       .height(40)
@@ -249,7 +314,7 @@ export struct ProfilePage {
 
       Text(params.title)
         .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         .margin({ left: Spacing.Space4 })
 
       Blank()
@@ -265,12 +330,12 @@ export struct ProfilePage {
       Image($r('app.media.ic_arrow_right'))
         .width(16)
         .height(16)
-        .fillColor(SemanticColors.Text4)
+        .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
     }
     .width('100%')
     .height(52)
     .padding({ left: Spacing.Space4, right: SemanticSpacing.Lg })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .onClick(() => {
       if (params.onClick) {
         params.onClick();
@@ -298,9 +363,154 @@ export struct ProfilePage {
     const status = await this.memberService.refreshStatus();
     this.memberStatus = status;
     this.isVip = status.isMember;
-    
+
     // 刷新权益列表
     const benefits = await this.memberService.getBenefits();
     this.benefits = benefits;
+  }
+
+  /**
+   * 骨架屏视图
+   */
+  @Builder
+  buildSkeletonView() {
+    Column() {
+      // 会员卡片骨架
+      Column() {
+        // 头像和用户名区域骨架
+        Row() {
+          // 头像骨架
+          Column()
+            .width(64)
+            .height(64)
+            .borderRadius(32)
+            .backgroundColor(NeutralColors.Neutral200)
+
+          Column() {
+            // 用户名骨架
+            Row()
+              .width(120)
+              .height(20)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+
+            // 手机号骨架
+            Row()
+              .width(100)
+              .height(16)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+              .margin({ top: Spacing.Space3 })
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Start)
+          .margin({ left: SemanticSpacing.Lg })
+        }
+        .width('100%')
+
+        // 会员状态骨架
+        Row() {
+          Row()
+            .width(80)
+            .height(24)
+            .borderRadius(12)
+            .backgroundColor(NeutralColors.Neutral200)
+        }
+        .width('100%')
+        .margin({ top: SemanticSpacing.Lg })
+      }
+      .width('100%')
+      .padding(SemanticSpacing.Xl)
+      .backgroundColor(NeutralColors.Neutral0)
+      .borderRadius(SemanticRadius.Component)
+      .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+      .shadow({
+        radius: 8,
+        color: 'rgba(0, 0, 0, 0.04)',
+        offsetY: 2
+      })
+
+      // 权益宫格骨架
+      Row() {
+        ForEach([1, 2, 3], (item: number) => {
+          Column() {
+            Column()
+              .width(48)
+              .height(48)
+              .borderRadius(24)
+              .backgroundColor(NeutralColors.Neutral200)
+
+            Row()
+              .width(60)
+              .height(16)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+              .margin({ top: Spacing.Space3 })
+          }
+          .layoutWeight(1)
+          .alignItems(HorizontalAlign.Center)
+        })
+      }
+      .width('100%')
+      .padding(SemanticSpacing.Lg)
+      .backgroundColor(NeutralColors.Neutral0)
+      .borderRadius(SemanticRadius.Component)
+      .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+      .shadow({
+        radius: 8,
+        color: 'rgba(0, 0, 0, 0.04)',
+        offsetY: 2
+      })
+
+      // 功能菜单骨架
+      Column() {
+        ForEach([1, 2, 3, 4, 5, 6], (item: number) => {
+          Row() {
+            // 图标骨架
+            Column()
+              .width(24)
+              .height(24)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+
+            // 标题骨架
+            Row()
+              .width(80)
+              .height(16)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+              .margin({ left: Spacing.Space4 })
+
+            Blank()
+
+            // 箭头骨架
+            Column()
+              .width(16)
+              .height(16)
+              .borderRadius(4)
+              .backgroundColor(NeutralColors.Neutral200)
+          }
+          .width('100%')
+          .height(52)
+          .padding({ left: Spacing.Space4, right: SemanticSpacing.Lg })
+
+          if (item < 6) {
+            Divider()
+              .margin({ left: 56 })
+          }
+        })
+      }
+      .layoutWeight(1)
+      .backgroundColor(NeutralColors.Neutral0)
+      .borderRadius(SemanticRadius.Component)
+      .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+      .shadow({
+        radius: 8,
+        color: 'rgba(0, 0, 0, 0.04)',
+        offsetY: 2
+      })
+    }
+    .width('100%')
+    .height('100%')
   }
 }

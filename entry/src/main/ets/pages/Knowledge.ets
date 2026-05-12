@@ -1,10 +1,14 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { KnowledgeService, KnowledgeArticle, ArticleListResponse } from '../services/KnowledgeService';
+import { EmptyState } from '../components/EmptyState';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  DarkSemanticColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,
@@ -23,6 +27,72 @@ interface KnowledgeItem {
   updateTime: string;
 }
 
+/**
+ * 知识列表数据源 - 用于LazyForEach
+ */
+class KnowledgeDataSource implements IDataSource {
+  private knowledgeList: KnowledgeItem[] = [];
+  private listeners: DataChangeListener[] = [];
+
+  totalCount(): number {
+    return this.knowledgeList.length;
+  }
+
+  getData(index: number): KnowledgeItem {
+    return this.knowledgeList[index];
+  }
+
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      this.listeners.push(listener);
+    }
+  }
+
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    });
+  }
+
+  notifyDataAdd(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataAdd(index);
+    });
+  }
+
+  notifyDataDelete(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataDelete(index);
+    });
+  }
+
+  notifyDataChange(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataChange(index);
+    });
+  }
+
+  setData(list: KnowledgeItem[]): void {
+    this.knowledgeList = list;
+    this.notifyDataReload();
+  }
+
+  addData(list: KnowledgeItem[]): void {
+    const startIndex = this.knowledgeList.length;
+    this.knowledgeList = [...this.knowledgeList, ...list];
+    for (let i = 0; i < list.length; i++) {
+      this.notifyDataAdd(startIndex + i);
+    }
+  }
+}
+
 @Component
 export struct KnowledgePage {
   @State knowledgeList: KnowledgeItem[] = [];
@@ -35,12 +105,14 @@ export struct KnowledgePage {
   @State hasMore: boolean = true;
   @State errorMessage: string = '';
   @State showError: boolean = false;
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   private categories: string[] = ['全部', '简历技巧', '面试攻略', '职场法则', '行业动态'];
   private knowledgeService: KnowledgeService = KnowledgeService.getInstance();
   private currentPage: number = 1;
   private readonly pageSize: number = 20;
   private searchTimeout: number = -1;
+  private knowledgeDataSource: KnowledgeDataSource = new KnowledgeDataSource();
 
   aboutToAppear() {
     this.loadKnowledge();
@@ -78,14 +150,18 @@ export struct KnowledgePage {
         const data = response.data;
         if (isRefresh || this.currentPage === 1) {
           this.knowledgeList = data.list;
+          this.knowledgeDataSource.setData(data.list);
         } else {
           this.knowledgeList = [...this.knowledgeList, ...data.list];
+          this.knowledgeDataSource.addData(data.list);
         }
         this.hasMore = data.hasMore;
       } else {
         // API失败时使用默认数据
         if (isRefresh || this.currentPage === 1) {
-          this.knowledgeList = this.knowledgeService.getDefaultArticles();
+          const defaultList = this.knowledgeService.getDefaultArticles();
+          this.knowledgeList = defaultList;
+          this.knowledgeDataSource.setData(defaultList);
           this.showError = true;
           this.errorMessage = response.error || '获取数据失败，显示默认内容';
         }
@@ -127,6 +203,7 @@ export struct KnowledgePage {
 
       if (response.success && response.data) {
         this.knowledgeList = response.data.list;
+        this.knowledgeDataSource.setData(response.data.list);
         this.hasMore = response.data.hasMore;
         this.currentPage = 1;
       } else {
@@ -151,10 +228,12 @@ export struct KnowledgePage {
   localSearch(): void {
     const defaultList = this.knowledgeService.getDefaultArticles();
     const keyword = this.searchText.toLowerCase();
-    this.knowledgeList = defaultList.filter(item =>
+    const filteredList = defaultList.filter(item =>
       item.title.toLowerCase().includes(keyword) ||
       item.summary.toLowerCase().includes(keyword)
     );
+    this.knowledgeList = filteredList;
+    this.knowledgeDataSource.setData(filteredList);
     this.hasMore = false;
   }
 
@@ -179,6 +258,7 @@ export struct KnowledgePage {
       if (response.success && response.data) {
         const data = response.data;
         this.knowledgeList = [...this.knowledgeList, ...data.list];
+        this.knowledgeDataSource.addData(data.list);
         this.hasMore = data.hasMore;
       } else {
         this.hasMore = false;
@@ -239,15 +319,26 @@ export struct KnowledgePage {
         Text('知识库')
           .fontSize(FontSize.Xl)
           .fontWeight(FontWeight.Bold)
-          .fontColor(SemanticColors.Text1)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+
+        Blank()
+
+        // 搜索按钮
+        Image($r('app.media.ic_search'))
+          .width(24)
+          .height(24)
+          .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
+          .onClick(() => {
+            // TODO: 打开搜索页面
+          })
       }
       .width('100%')
       .height(56)
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-      .backgroundColor(NeutralColors.Neutral0)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .shadow({
         radius: 8,
-        color: 'rgba(0, 0, 0, 0.04)',
+        color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
         offsetY: 2
       })
 
@@ -346,7 +437,7 @@ export struct KnowledgePage {
       // 内容列表
       Refresh({ refreshing: this.isRefreshing }) {
         List() {
-          ForEach(this.getFilteredList(), (item: KnowledgeItem) => {
+          LazyForEach(this.knowledgeDataSource, (item: KnowledgeItem) => {
             ListItem() {
               Column() {
                 Row() {
@@ -406,7 +497,12 @@ export struct KnowledgePage {
               .onClick(() => {
                 router.pushUrl({
                   url: 'pages/KnowledgeDetail',
-                  params: { id: item.id }
+                  params: { id: item.id },
+                  transition: {
+                    type: router.TransitionType.Push,
+                    duration: 300,
+                    curve: Curve.EaseInOut
+                  }
                 });
               })
             }
@@ -457,55 +553,31 @@ export struct KnowledgePage {
 
       // 加载中提示
       if (this.isLoading && !this.isRefreshing) {
-        Column() {
-          LoadingProgress()
-            .width(40)
-            .height(40)
-            .color(BrandColors.Brand500)
-
-          Text('加载中...')
-            .fontSize(FontSize.Sm)
-            .fontColor(SemanticColors.Text3)
-            .margin({ top: Spacing.Space3 })
-        }
-        .width('100%')
-        .height('100%')
-        .position({ x: 0, y: 0 })
-        .backgroundColor('rgba(255, 255, 255, 0.8)')
-        .justifyContent(FlexAlign.Center)
+        LoadingSpinner({ text: '加载中...' })
+          .width('100%')
+          .height('100%')
+          .position({ x: 0, y: 0 })
+          .backgroundColor('rgba(255, 255, 255, 0.8)')
       }
 
       // 空数据提示
       if (this.knowledgeList.length === 0 && !this.isLoading) {
-        Column() {
-          Image($r('app.media.ic_empty'))
-            .width(80)
-            .height(80)
-            .fillColor(SemanticColors.Text4)
-
-          Text('暂无内容')
-            .fontSize(FontSize.Base)
-            .fontColor(SemanticColors.Text3)
-            .margin({ top: Spacing.Space4 })
-
-          Button('刷新试试')
-            .fontSize(FontSize.Sm)
-            .fontColor(BrandColors.Brand500)
-            .backgroundColor(BrandColors.Brand50)
-            .margin({ top: Spacing.Space4 })
-            .onClick(() => {
-              this.retryLoad();
-            })
-        }
-        .width('100%')
+        EmptyState({
+          icon: $r('app.media.ic_empty'),
+          title: '暂无内容',
+          buttonText: '刷新试试',
+          onButtonClick: () => {
+            this.retryLoad();
+          }
+        })
         .layoutWeight(1)
-        .justifyContent(FlexAlign.Center)
       }
     }
     .width('100%')
-    .height('100%')
-    .backgroundColor(NeutralColors.Neutral50)
+      .height('100%')
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
   }
+}
 
   formatReadCount(count: number): string {
     if (count >= 10000) {

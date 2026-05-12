@@ -33,6 +33,69 @@ import { promptAction } from '@kit.ArkUI';
 const WARNING_STORAGE_KEY = 'chat_warning_dismissed';
 const WARNING_MESSAGE = '当前对话记录仅保存在本地，关闭页面后自动清除';
 
+/**
+ * 消息列表数据源 - 用于LazyForEach
+ */
+class MessageDataSource implements IDataSource {
+  private messages: Message[] = [];
+  private listeners: DataChangeListener[] = [];
+
+  totalCount(): number {
+    return this.messages.length;
+  }
+
+  getData(index: number): Message {
+    return this.messages[index];
+  }
+
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      this.listeners.push(listener);
+    }
+  }
+
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    });
+  }
+
+  notifyDataAdd(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataAdd(index);
+    });
+  }
+
+  notifyDataDelete(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataDelete(index);
+    });
+  }
+
+  notifyDataChange(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataChange(index);
+    });
+  }
+
+  setData(messages: Message[]): void {
+    this.messages = messages;
+    this.notifyDataReload();
+  }
+
+  addMessage(message: Message): void {
+    this.messages.push(message);
+    this.notifyDataAdd(this.messages.length - 1);
+  }
+}
+
 @Component
 export struct ChatPage {
   @State messageList: Message[] = [];
@@ -40,23 +103,25 @@ export struct ChatPage {
   @State isLoading: boolean = false;
   @State currentSessionId: string = '';
   @State showWarningBanner: boolean = false;
-  
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
+
   // 流式消息相关
   @State streamingContent: string = '';
   @State isStreaming: boolean = false;
   @State streamingMessageId: string = '';
-  
+
   // 新消息提示相关
   @State showNewMessageToast: boolean = false;
   @State newMessageCount: number = 0;
   @State isAtBottom: boolean = true;
   @State unreadCount: number = 0;
-  
+
   // 滚动相关
   private scroller: Scroller = new Scroller();
   private chatService: ChatService = ChatService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
   private cancelStream: (() => void) | null = null;
+  private messageDataSource: MessageDataSource = new MessageDataSource();
 
   aboutToAppear() {
     this.loadHistory();
@@ -113,6 +178,7 @@ export struct ChatPage {
     if (historyStr) {
       try {
         this.messageList = JSON.parse(historyStr);
+        this.messageDataSource.setData(this.messageList);
         if (this.messageList.length > 0) {
           this.currentSessionId = this.messageList[0].id;
         }
@@ -139,6 +205,7 @@ export struct ChatPage {
     };
 
     this.messageList.push(userMessage);
+    this.messageDataSource.addMessage(userMessage);
     const originalText = this.inputText;
     this.inputText = '';
     this.isLoading = true;
@@ -214,6 +281,7 @@ export struct ChatPage {
     };
 
     this.messageList.push(assistantMessage);
+    this.messageDataSource.addMessage(assistantMessage);
     this.saveHistory();
 
     // 保存对话到历史记录
@@ -310,7 +378,7 @@ export struct ChatPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor(NeutralColors.Neutral50)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
 
       // 新消息提示 Toast
       if (this.showNewMessageToast) {
@@ -365,16 +433,16 @@ export struct ChatPage {
       Text('一职搭子')
         .fontSize(FontSize.Lg)
         .fontWeight(FontWeight.Medium)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
     }
     .width('100%')
     .height(56)
     .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .justifyContent(FlexAlign.Center)
     .shadow({
       radius: 8,
-      color: 'rgba(0, 0, 0, 0.04)',
+      color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
       offsetY: 2
     })
   }
@@ -400,7 +468,7 @@ export struct ChatPage {
 
       Text('向我提问，获取求职建议')
         .fontSize(FontSize.Base)
-        .fontColor(SemanticColors.Text3)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
         .margin({ top: SemanticSpacing.Lg })
 
       // 快捷问题建议
@@ -439,7 +507,7 @@ export struct ChatPage {
   @Builder
   MessageList() {
     List({ scroller: this.scroller }) {
-      ForEach(this.messageList, (msg: Message, index: number) => {
+      LazyForEach(this.messageDataSource, (msg: Message) => {
         ListItem() {
           ChatBubble({
             message: msg,
@@ -469,7 +537,7 @@ export struct ChatPage {
       top: SemanticSpacing.Md,
       bottom: SemanticSpacing.Md
     })
-    .backgroundColor(NeutralColors.Neutral50)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
     .edgeEffect(EdgeEffect.Spring)
     .onScroll(() => {
       // 滚动时更新位置状态
@@ -496,16 +564,16 @@ export struct ChatPage {
 
       Text('AI 正在思考...')
         .fontSize(FontSize.Sm)
-        .fontColor(SemanticColors.Text2)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
         .margin({ left: Spacing.Space3 })
     }
     .padding(SemanticSpacing.Md)
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .borderRadius(SemanticRadius.Control)
     .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: Spacing.Space3 })
     .shadow({
       radius: 8,
-      color: 'rgba(0, 0, 0, 0.04)',
+      color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
       offsetY: 2
     })
   }
@@ -519,19 +587,19 @@ export struct ChatPage {
       TextInput({ placeholder: '输入你的问题...', text: this.inputText })
         .layoutWeight(1)
         .height(44)
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
         .borderRadius(SemanticRadius.Pill)
         .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
-        .placeholderColor(SemanticColors.Text4)
+        .placeholderColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
         .placeholderFont({ size: FontSize.Sm })
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
         .fontSize(FontSize.Sm)
         .onChange((value: string) => {
           this.inputText = value;
         })
         .border({
           width: 1,
-          color: NeutralColors.Neutral200
+          color: this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200
         })
         .enabled(!this.isStreaming)
 
@@ -575,10 +643,10 @@ export struct ChatPage {
     }
     .width('100%')
     .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: Spacing.Space4 })
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .shadow({
       radius: 16,
-      color: 'rgba(0, 0, 0, 0.04)',
+      color: this.isDarkMode ? 'rgba(0, 0, 0, 0.20)' : 'rgba(0, 0, 0, 0.04)',
       offsetY: -2
     })
   }

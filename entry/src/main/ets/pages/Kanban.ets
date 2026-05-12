@@ -10,6 +10,7 @@ import {
   CardPriority, DEFAULT_COLUMNS
 } from '../models/Kanban';
 import { Colors } from '../constants/colors';
+import { ThemeManager, ThemeMode } from '../utils/Theme';
 
 @Entry
 @Component
@@ -23,6 +24,7 @@ struct KanbanPage {
   @State showSearch: boolean = false;
   @State searchKeyword: string = '';
   @State filteredCards: JobCard[] = [];
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
 
   async aboutToAppear() {
     this.kanbanData = await KanbanStorageService.initialize();
@@ -37,21 +39,40 @@ struct KanbanPage {
       // 搜索栏
       if (this.showSearch) {
         Row() {
-          TextInput({ placeholder: '搜索公司、职位、城市...' })
-            .width('100%')
-            .height(36)
+          Image($r('app.media.ic_search'))
+            .width(18)
+            .height(18)
+            .fillColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
+
+          TextInput({ placeholder: '搜索公司或职位...', text: $$this.searchKeyword })
+            .placeholderColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
+            .fontColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
             .fontSize(14)
-            .backgroundColor(Colors.backgroundSecondary)
-            .borderRadius(18)
-            .padding({ left: 16, right: 16 })
-            .onChange((v) => {
-              this.searchKeyword = v;
-              this.doSearch();
+            .layoutWeight(1)
+            .margin({ left: 8 })
+            .backgroundColor('transparent')
+            .onChange((value: string) => {
+              this.searchKeyword = value;
+              this.filterCards();
             })
+
+          if (this.searchKeyword.length > 0) {
+            Image($r('app.media.ic_close'))
+              .width(18)
+              .height(18)
+              .fillColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
+              .onClick(() => {
+                this.searchKeyword = '';
+                this.filterCards();
+              })
+          }
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 4, bottom: 8 })
-        .animation({ duration: 200 })
+        .height(44)
+        .padding({ left: 12, right: 12 })
+        .backgroundColor(this.isDarkMode ? '#252A34' : Colors.background)
+        .borderRadius(8)
+        .margin({ left: 16, right: 16, top: 12 })
       }
 
       // 统计概览
@@ -78,11 +99,11 @@ struct KanbanPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(Colors.background)
+    .backgroundColor(this.isDarkMode ? '#141820' : Colors.background)
     .bindSheet($$this.showAddSheet, this.AddSheetContent(), {
       height: '85%',
       dragBar: true,
-      backgroundColor: Colors.white,
+      backgroundColor: this.isDarkMode ? '#1C2028' : Colors.white,
       onDisappear: () => {
         this.refreshData();
       }
@@ -90,7 +111,7 @@ struct KanbanPage {
     .bindSheet($$this.showEditSheet, this.EditSheetContent(), {
       height: '85%',
       dragBar: true,
-      backgroundColor: Colors.white,
+      backgroundColor: this.isDarkMode ? '#1C2028' : Colors.white,
       onDisappear: () => {
         this.refreshData();
       }
@@ -100,56 +121,56 @@ struct KanbanPage {
   @Builder
   TopBar() {
     Row() {
-      Image($r('app.media.ic_back'))
-        .width(24)
-        .height(24)
-        .fillColor(Colors.textPrimary)
+        Image($r('app.media.ic_back'))
+          .width(24)
+          .height(24)
+          .fillColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
+          .onClick(() => {
+            // 返回
+          })
+
+        Text('求职看板')
+          .fontSize(18)
+          .fontColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
+          .fontWeight(FontWeight.Medium)
+          .margin({ left: 12 })
+
+        Blank()
+
+        // 搜索按钮
+        Image($r('app.media.ic_search'))
+          .width(22)
+          .height(22)
+          .fillColor(this.showSearch ? Colors.primary : (this.isDarkMode ? '#99A0A6' : Colors.textSecondary))
+          .margin({ right: 16 })
+          .onClick(() => {
+            this.showSearch = !this.showSearch;
+            if (!this.showSearch) {
+              this.searchKeyword = '';
+            }
+          })
+
+        // 新增按钮
+        Row() {
+          Image($r('app.media.ic_add'))
+            .width(18)
+            .height(18)
+            .fillColor('#FFFFFF')
+        }
+        .width(32)
+        .height(32)
+        .backgroundColor(Colors.primary)
+        .borderRadius(16)
+        .justifyContent(FlexAlign.Center)
         .onClick(() => {
-          // 返回
+          this.addColumn = KanbanColumnStatus.WISH;
+          this.showAddSheet = true;
         })
-
-      Text('求职看板')
-        .fontSize(18)
-        .fontColor(Colors.textPrimary)
-        .fontWeight(FontWeight.Medium)
-        .margin({ left: 12 })
-
-      Blank()
-
-      // 搜索按钮
-      Image($r('app.media.ic_search'))
-        .width(22)
-        .height(22)
-        .fillColor(this.showSearch ? Colors.primary : Colors.textSecondary)
-        .margin({ right: 16 })
-        .onClick(() => {
-          this.showSearch = !this.showSearch;
-          if (!this.showSearch) {
-            this.searchKeyword = '';
-          }
-        })
-
-      // 新增按钮
-      Row() {
-        Image($r('app.media.ic_add'))
-          .width(18)
-          .height(18)
-          .fillColor('#FFFFFF')
       }
-      .width(32)
-      .height(32)
-      .backgroundColor(Colors.primary)
-      .borderRadius(16)
-      .justifyContent(FlexAlign.Center)
-      .onClick(() => {
-        this.addColumn = KanbanColumnStatus.WISH;
-        this.showAddSheet = true;
-      })
-    }
-    .width('100%')
-    .height(56)
-    .padding({ left: 16, right: 16 })
-    .backgroundColor(Colors.white)
+      .width('100%')
+      .height(56)
+      .padding({ left: 16, right: 16 })
+      .backgroundColor(this.isDarkMode ? '#1C2028' : Colors.white)
   }
 
   @Builder
@@ -289,6 +310,7 @@ struct KanbanPage {
     CardEditSheet({
       isEdit: false,
       defaultColumn: this.addColumn,
+      isDarkMode: this.isDarkMode,
       onSave: async (data) => {
         await KanbanStorageService.addCard({
           company: data.company,
@@ -312,6 +334,7 @@ struct KanbanPage {
     CardEditSheet({
       isEdit: true,
       editCard: this.editingCard,
+      isDarkMode: this.isDarkMode,
       onSave: async (data) => {
         if (this.editingCard) {
           await KanbanStorageService.updateCard(this.editingCard.id, {
