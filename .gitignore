@@ -1,7 +1,7 @@
 # HarmonyOS
 node_modules/
 oh_modules/
-.local/
+.hvigor/
 .idea/
 *.iml
 .DS_Store
@@ -11,6 +11,8 @@ build/
 dist/
 *.har
 *.hap
+entry/build/
+entry/.preview/
 
 # IDE
 .vscode/
