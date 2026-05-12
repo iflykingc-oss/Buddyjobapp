@@ -1,5 +1,6 @@
 import { Assessment, Question, AssessmentResult, DimensionScore } from '../models/Assessment';
 import { ApiService } from '../services/ApiService';
+import { HistoryService } from '../services/HistoryService';
 import { PageStateSync, AssessmentPageState } from '../utils/distributed';
 import {
   BrandColors,
@@ -29,6 +30,7 @@ export struct AssessmentPage {
   @State isContinueRestore: boolean = false;
   @State showContinuePrompt: boolean = false;
   private apiService: ApiService = ApiService.getInstance();
+  private historyService: HistoryService = HistoryService.getInstance();
   private pageStateSync: PageStateSync = new PageStateSync('pages/Assessment');
 
   aboutToAppear() {
@@ -313,17 +315,42 @@ export struct AssessmentPage {
         // 使用模拟结果作为 fallback
         this.result = this.generateMockResult();
       }
-      
+
+      // 保存到历史记录
+      this.saveToHistory();
+
       // 更新全局页面状态
       this.updateGlobalPageState();
     } catch (error) {
       // 使用模拟结果作为 fallback
       this.result = this.generateMockResult();
-      
+
+      // 保存到历史记录
+      this.saveToHistory();
+
       // 更新全局页面状态
       this.updateGlobalPageState();
     } finally {
       this.isSubmitting = false;
+    }
+  }
+
+  /**
+   * 保存测评结果到历史记录
+   */
+  private async saveToHistory(): Promise<void> {
+    if (this.result && this.currentAssessment) {
+      await this.historyService.addHistory({
+        type: 'assessment',
+        title: `测评完成 - ${this.currentAssessment.title}`,
+        content: `得分: ${this.result.score}分，${this.result.suggestions[0] || ''}`,
+        metadata: {
+          assessmentId: this.currentAssessment.id,
+          assessmentTitle: this.currentAssessment.title,
+          score: this.result.score,
+          dimensionScores: this.result.dimensionScores
+        }
+      });
     }
   }
 

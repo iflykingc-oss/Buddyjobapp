@@ -1,5 +1,6 @@
 import { Message, ChatSession } from '../models/Message';
 import { ChatService } from '../services/ChatService';
+import { HistoryService } from '../services/HistoryService';
 import { ChatBubble } from '../components/ChatBubble';
 import { ChatInput } from '../components/ChatInput';
 import { ChatMarkdownRenderer } from '../components/MarkdownRenderer';
@@ -29,6 +30,7 @@ export struct ChatPage {
   @State showWarningBanner: boolean = false;
   private scroller: Scroller = new Scroller();
   private chatService: ChatService = ChatService.getInstance();
+  private historyService: HistoryService = HistoryService.getInstance();
 
   aboutToAppear() {
     this.loadHistory();
@@ -129,6 +131,9 @@ export struct ChatPage {
 
       this.messageList.push(assistantMessage);
       this.saveHistory();
+
+      // 保存对话到历史记录
+      this.saveToHistory(userMessage.content, assistantMessage.content);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 9),
@@ -139,8 +144,29 @@ export struct ChatPage {
       };
       this.messageList.push(errorMessage);
       this.saveHistory();
+
+      // 保存对话到历史记录
+      this.saveToHistory(userMessage.content, errorMessage.content);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  /**
+   * 保存对话到历史记录
+   */
+  private async saveToHistory(userContent: string, assistantContent: string): Promise<void> {
+    // 只保存第一轮对话，避免重复保存
+    if (this.messageList.length <= 2) {
+      await this.historyService.addHistory({
+        type: 'chat',
+        title: `AI对话 - ${userContent.substring(0, 20)}${userContent.length > 20 ? '...' : ''}`,
+        content: assistantContent.substring(0, 50) + (assistantContent.length > 50 ? '...' : ''),
+        metadata: {
+          userQuestion: userContent,
+          messageCount: this.messageList.length
+        }
+      });
     }
   }
 

@@ -10,6 +10,8 @@
     "pages/Profile",
     "pages/profile/OrderHistory",
     "pages/profile/SettingsPage",
-    "pages/profile/AboutPage"
+    "pages/profile/AboutPage",
+    "pages/profile/History",
+    "pages/profile/HelpFeedback"
   ]
 }

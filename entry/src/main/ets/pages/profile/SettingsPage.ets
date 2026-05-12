@@ -1,5 +1,7 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import { AuthService } from '../../services/AuthService';
+import { Storage } from '../../utils/storage';
 import {
   BrandColors,
   NeutralColors,
@@ -20,6 +22,57 @@ struct SettingsPage {
   @State isNotificationEnabled: boolean = true;
   @State isMessagePushEnabled: boolean = true;
   @State cacheSize: string = '12.5 MB';
+  private authService: AuthService = AuthService.getInstance();
+  private storage: Storage = Storage.getInstance();
+
+  /**
+   * 显示退出登录确认对话框
+   */
+  private showLogoutConfirmDialog(): void {
+    AlertDialog.show({
+      title: '确认退出',
+      message: '确定要退出登录吗？',
+      primaryButton: {
+        value: '取消',
+        action: () => {
+          console.info('[SettingsPage] User cancelled logout');
+        }
+      },
+      secondaryButton: {
+        value: '确定',
+        action: () => {
+          this.handleLogout();
+        }
+      }
+    });
+  }
+
+  /**
+   * 处理退出登录
+   */
+  private async handleLogout(): Promise<void> {
+    try {
+      // 1. 调用 AuthService.logout() 清除 HMS 登录态
+      await this.authService.logout();
+
+      // 2. 清除 AppStorage 中的用户信息
+      AppStorage.delete('userInfo');
+      AppStorage.delete('huaweiAccountInfo');
+      AppStorage.delete('token');
+
+      // 3. 清除 LocalStorage 中的 token
+      this.storage.deleteSync('token');
+
+      // 4. 显示退出成功提示
+      promptAction.showToast({ message: '已退出登录' });
+
+      // 5. 跳转到登录页
+      router.replaceUrl({ url: 'pages/Login' });
+    } catch (error) {
+      console.error('[SettingsPage] Logout failed:', error);
+      promptAction.showToast({ message: '退出登录失败，请重试' });
+    }
+  }
 
   build() {
     Column() {
@@ -294,7 +347,7 @@ struct SettingsPage {
             .height(48)
             .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Xxl, bottom: Spacing.Space9 })
             .onClick(() => {
-              promptAction.showToast({ message: '已退出登录' });
+              this.showLogoutConfirmDialog();
             })
         }
       }

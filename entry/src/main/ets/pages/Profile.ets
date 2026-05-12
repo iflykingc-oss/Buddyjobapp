@@ -214,7 +214,7 @@ export struct ProfilePage {
           title: '我的收藏',
           showBadge: false,
           onClick: () => {
-            console.info('Navigate to favorites');
+            router.pushUrl({ url: 'pages/profile/Favorites' });
           }
         })
 
@@ -226,7 +226,7 @@ export struct ProfilePage {
           title: '历史记录',
           showBadge: false,
           onClick: () => {
-            console.info('Navigate to history');
+            router.pushUrl({ url: 'pages/profile/History' });
           }
         })
 
@@ -238,7 +238,7 @@ export struct ProfilePage {
           title: '帮助与反馈',
           showBadge: false,
           onClick: () => {
-            console.info('Navigate to help');
+            router.pushUrl({ url: 'pages/profile/HelpFeedback' });
           }
         })
 

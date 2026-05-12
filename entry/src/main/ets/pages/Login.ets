@@ -193,8 +193,7 @@ struct Login {
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
             .onClick(() => {
-              // TODO: 打开用户协议页面
-              console.info('Open user agreement');
+              router.pushUrl({ url: 'pages/profile/UserAgreement' });
             })
 
           Text('和')
@@ -205,8 +204,7 @@ struct Login {
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
             .onClick(() => {
-              // TODO: 打开隐私政策页面
-              console.info('Open privacy policy');
+              router.pushUrl({ url: 'pages/profile/PrivacyPolicy' });
             })
         }
         .width('100%')
