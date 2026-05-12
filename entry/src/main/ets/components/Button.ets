@@ -1,3 +1,5 @@
+import { BrandColors, NeutralColors, SemanticColors, FontSize, ComponentSizes, Spacing } from '../constants/design-tokens';
+
 /**
  * BuddyButton - 自定义按钮组件
  */
@@ -11,65 +13,65 @@ export struct BuddyButton {
   @Prop icon: Resource | null = null;
   onClick: () => void = () => {};
 
-  private getBackgroundColor(): string {
+  private getBackgroundColor(): ResourceColor {
     if (this.disabled) {
-      return '#CCCCCC';
+      return NeutralColors.Neutral300;
     }
     switch (this.type) {
       case 'primary':
-        return '#8B5CF6';
+        return BrandColors.Brand500;
       case 'secondary':
-        return '#F5F5F5';
+        return NeutralColors.Neutral100;
       case 'outline':
         return 'transparent';
       case 'text':
         return 'transparent';
       default:
-        return '#8B5CF6';
+        return BrandColors.Brand500;
     }
   }
 
-  private getTextColor(): string {
+  private getTextColor(): ResourceColor {
     if (this.disabled) {
-      return '#FFFFFF';
+      return NeutralColors.Neutral0;
     }
     switch (this.type) {
       case 'primary':
-        return '#FFFFFF';
+        return NeutralColors.Neutral0;
       case 'secondary':
-        return '#333333';
+        return NeutralColors.Neutral900;
       case 'outline':
-        return '#8B5CF6';
+        return BrandColors.Brand500;
       case 'text':
-        return '#8B5CF6';
+        return BrandColors.Brand500;
       default:
-        return '#FFFFFF';
+        return NeutralColors.Neutral0;
     }
   }
 
   private getHeight(): number {
     switch (this.size) {
       case 'small':
-        return 32;
+        return ComponentSizes.Button.Sm.height;
       case 'medium':
-        return 44;
+        return ComponentSizes.Button.Md.height;
       case 'large':
-        return 52;
+        return ComponentSizes.Button.Lg.height;
       default:
-        return 44;
+        return ComponentSizes.Button.Md.height;
     }
   }
 
   private getFontSize(): number {
     switch (this.size) {
       case 'small':
-        return 12;
+        return FontSize.Xs;
       case 'medium':
-        return 14;
+        return FontSize.Sm;
       case 'large':
-        return 16;
+        return FontSize.Base;
       default:
-        return 14;
+        return FontSize.Sm;
     }
   }
 
@@ -81,13 +83,13 @@ export struct BuddyButton {
             .width(this.getFontSize())
             .height(this.getFontSize())
             .color(this.getTextColor())
-            .margin({ right: 8 })
+            .margin({ right: Spacing.Space2 })
         } else if (this.icon) {
           Image(this.icon)
             .width(this.getFontSize())
             .height(this.getFontSize())
             .fillColor(this.getTextColor())
-            .margin({ right: 8 })
+            .margin({ right: Spacing.Space2 })
         }
 
         Text(this.text)
@@ -101,7 +103,7 @@ export struct BuddyButton {
     .borderRadius(this.getHeight() / 2)
     .border({
       width: this.type === 'outline' ? 1 : 0,
-      color: this.type === 'outline' ? '#8B5CF6' : 'transparent'
+      color: this.type === 'outline' ? BrandColors.Brand500 : 'transparent'
     })
     .enabled(!this.disabled && !this.loading)
     .onClick(() => {

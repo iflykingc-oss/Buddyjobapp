@@ -1,3 +1,5 @@
+import { BrandColors, NeutralColors, SemanticColors, Spacing, BorderRadius, FontSize } from '../constants/design-tokens';
+
 @Component
 export struct EmptyState {
   @Prop icon: Resource;
@@ -14,28 +16,28 @@ export struct EmptyState {
         .opacity(0.4)
 
       Text(this.title)
-        .fontSize(16)
-        .fontColor('#1A1A2E')
+        .fontSize(FontSize.Base)
+        .fontColor(SemanticColors.Text1)
         .fontWeight(FontWeight.Medium)
-        .margin({ top: 16 })
+        .margin({ top: Spacing.Space4 })
 
       if (this.description) {
         Text(this.description)
-          .fontSize(14)
-          .fontColor('#64748B')
-          .margin({ top: 8 })
+          .fontSize(FontSize.Sm)
+          .fontColor(SemanticColors.Text2)
+          .margin({ top: Spacing.Space2 })
           .textAlign(TextAlign.Center)
       }
 
       if (this.buttonText) {
         Button(this.buttonText)
-          .fontSize(14)
-          .fontColor('#FFFFFF')
-          .backgroundColor('#8B5CF6')
-          .borderRadius(20)
+          .fontSize(FontSize.Sm)
+          .fontColor(NeutralColors.Neutral0)
+          .backgroundColor(BrandColors.Brand500)
+          .borderRadius(BorderRadius.RadiusXl)
           .height(40)
-          .padding({ left: 32, right: 32 })
-          .margin({ top: 24 })
+          .padding({ left: Spacing.Space8, right: Spacing.Space8 })
+          .margin({ top: Spacing.Space6 })
           .onClick(() => {
             this.onButtonClick();
           })
@@ -45,6 +47,6 @@ export struct EmptyState {
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .alignItems(HorizontalAlign.Center)
-    .padding({ left: 32, right: 32 })
+    .padding({ left: Spacing.Space8, right: Spacing.Space8 })
   }
 }

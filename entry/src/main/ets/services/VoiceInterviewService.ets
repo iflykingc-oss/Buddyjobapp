@@ -409,7 +409,7 @@ export class VoiceInterviewService {
     difficulty: string
   ): Promise<InterviewQuestion[]> {
     try {
-      const response = await ApiService.post('/api/interview/generate-questions', {
+      const response = await ApiService.getInstance().post('/api/interview/generate-questions', {
         position,
         difficulty,
         count: 5
@@ -434,7 +434,7 @@ export class VoiceInterviewService {
     answer: string
   ): Promise<AnswerEvaluation> {
     try {
-      const response = await ApiService.post('/api/interview/evaluate-answer', {
+      const response = await ApiService.getInstance().post('/api/interview/evaluate-answer', {
         question,
         answer
       });

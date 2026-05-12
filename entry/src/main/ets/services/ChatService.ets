@@ -63,6 +63,8 @@ export class ChatService {
   private accumulatedContent: string = '';
   private currentCallbacks: StreamCallbacks | null = null;
   private currentConfig: SSEConfig | null = null;
+  private lastRequestBody: Record<string, any> = {};
+  private streamTimer: number = -1;
 
   private constructor() {
     this.apiService = ApiService.getInstance();
@@ -159,6 +161,9 @@ export class ChatService {
    * 连接 SSE
    */
   private async connectSSE(body: object): Promise<void> {
+    // 保存请求体，用于断线重连
+    this.lastRequestBody = { ...body };
+
     if (!this.currentConfig) {
       return;
     }
@@ -317,7 +322,7 @@ export class ChatService {
       
       this.reconnectTimer = setTimeout(() => {
         if (this.currentConfig) {
-          this.connectSSE({});
+          this.connectSSE(this.lastRequestBody);
         }
       }, delay);
     } else {
@@ -335,6 +340,12 @@ export class ChatService {
     if (this.reconnectTimer !== -1) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = -1;
+    }
+
+    // 清除模拟流式输出定时器
+    if (this.streamTimer !== -1) {
+      clearInterval(this.streamTimer);
+      this.streamTimer = -1;
     }
     
     // 销毁 HTTP 请求
@@ -466,13 +477,14 @@ export class ChatService {
     this.updateConnectionState('connected');
     
     return new Promise<void>((resolve) => {
-      const timer = setInterval(() => {
+      this.streamTimer = setInterval(() => {
         if (currentIndex < fullResponse.length) {
           currentIndex++;
           const partialContent = fullResponse.substring(0, currentIndex);
           callbacks.onMessage?.(partialContent, false);
         } else {
-          clearInterval(timer);
+          clearInterval(this.streamTimer);
+          this.streamTimer = -1;
           callbacks.onMessage?.(fullResponse, true);
           callbacks.onComplete?.(fullResponse);
           this.updateConnectionState('disconnected');

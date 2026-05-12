@@ -57,16 +57,13 @@ export struct ChatPage {
   private chatService: ChatService = ChatService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
   private cancelStream: (() => void) | null = null;
-  private scrollCheckTimer: number = -1;
 
   aboutToAppear() {
     this.loadHistory();
     this.checkAndShowWarning();
-    this.startScrollCheck();
   }
 
   aboutToDisappear() {
-    this.stopScrollCheck();
     if (this.cancelStream) {
       this.cancelStream();
     }
@@ -78,26 +75,6 @@ export struct ChatPage {
         message: '对话记录将在关闭后自动清除',
         duration: 2000
       });
-    }
-  }
-
-  /**
-   * 开始滚动位置检测
-   */
-  private startScrollCheck() {
-    this.scrollCheckTimer = setInterval(() => {
-      // 检测是否在底部
-      // 注意：实际项目中需要使用 onScroll 回调来更新 isAtBottom
-    }, 500);
-  }
-
-  /**
-   * 停止滚动位置检测
-   */
-  private stopScrollCheck() {
-    if (this.scrollCheckTimer !== -1) {
-      clearInterval(this.scrollCheckTimer);
-      this.scrollCheckTimer = -1;
     }
   }
 

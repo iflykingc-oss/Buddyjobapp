@@ -1,4 +1,5 @@
 import dataPreferences from '@ohos.data.preferences';
+import { common } from '@kit.AbilityKit';
 
 /**
  * 本地存储工具
@@ -6,7 +7,7 @@ import dataPreferences from '@ohos.data.preferences';
 export class Storage {
   private static instance: Storage;
   private preferences: dataPreferences.Preferences | null = null;
-  private context: any = null;
+  private context: common.UIAbilityContext | null = null;
   // 内存缓存，用于支持同步读取
   private cache: Map<string, string> = new Map();
 
@@ -22,12 +23,24 @@ export class Storage {
   /**
    * 初始化存储
    */
-  async init(context: any): Promise<void> {
+  async init(context: common.UIAbilityContext): Promise<void> {
     try {
       this.context = context;
       this.preferences = await dataPreferences.Preferences.getPreferences(context, {
         name: 'buddyjob_preferences'
       });
+      // 将preferences数据预加载到cache
+      if (this.preferences) {
+        const allEntries = await this.preferences.getAll();
+        if (allEntries) {
+          Object.keys(allEntries).forEach((key) => {
+            const value = allEntries[key];
+            if (typeof value === 'string') {
+              this.cache.set(key, value);
+            }
+          });
+        }
+      }
     } catch (error) {
       console.error('[Storage] Init failed:', error);
     }
@@ -173,4 +186,24 @@ export class Storage {
     }
     return null;
   }
+
+  /**
+   * 获取所有key（异步）
+   */
+  async getAllKeys(): Promise<string[]> {
+    try {
+      if (this.preferences) {
+        const allEntries = await this.preferences.getAll();
+        if (allEntries) {
+          return Object.keys(allEntries);
+        }
+      }
+      return Array.from(this.cache.keys());
+    } catch (error) {
+      console.error('[Storage] getAllKeys failed:', error);
+      return Array.from(this.cache.keys());
+    }
+  }
 }
+
+export const storage = Storage.getInstance();

@@ -203,11 +203,12 @@ export class SecureStorageService {
 
   /**
    * 加密数据
+   * 返回包含IV和密文的对象
    */
-  async encryptData(plainText: string): Promise<Uint8Array | null> {
+  async encryptData(plainText: string): Promise<{ iv: Uint8Array; cipherData: Uint8Array } | null> {
     try {
       const iv = this.generateIV();
-      
+
       const properties: huks.HuksParam[] = [
         {
           tag: huks.HuksTag.HUKS_TAG_ALGORITHM,
@@ -246,7 +247,7 @@ export class SecureStorageService {
 
       // 完成加密
       const finishResult = await huks.finishSession(handle, options);
-      return finishResult.outData as Uint8Array;
+      return { iv, cipherData: finishResult.outData as Uint8Array };
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Encrypt data failed: ${JSON.stringify(error)}`);
       return null;
@@ -255,11 +256,10 @@ export class SecureStorageService {
 
   /**
    * 解密数据
+   * 接收加密数据和对应的IV
    */
-  async decryptData(encryptedData: Uint8Array): Promise<string | null> {
+  async decryptData(encryptedData: Uint8Array, iv: Uint8Array): Promise<string | null> {
     try {
-      const iv = this.generateIV();
-
       const properties: huks.HuksParam[] = [
         {
           tag: huks.HuksTag.HUKS_TAG_ALGORITHM,
@@ -334,7 +334,8 @@ export class SecureStorageService {
         if (!encrypted) {
           return false;
         }
-        dataToStore = this.uint8ArrayToBase64(encrypted);
+        // 将IV和密文一起存储，格式: base64(iv) + ":" + base64(cipherData)
+        dataToStore = this.uint8ArrayToBase64(encrypted.iv) + ':' + this.uint8ArrayToBase64(encrypted.cipherData);
       } else {
         dataToStore = data;
       }
@@ -382,8 +383,17 @@ export class SecureStorageService {
 
       // 解密数据
       if (config.needEncryption) {
-        const encrypted = this.base64ToUint8Array(data);
-        return await this.decryptData(encrypted);
+        // 从存储中分离IV和密文，格式: base64(iv) + ":" + base64(cipherData)
+        const separatorIndex = data.indexOf(':');
+        if (separatorIndex === -1) {
+          hilog.error(DOMAIN, TAG, 'Invalid encrypted data format: missing IV separator');
+          return null;
+        }
+        const ivBase64 = data.substring(0, separatorIndex);
+        const cipherDataBase64 = data.substring(separatorIndex + 1);
+        const iv = this.base64ToUint8Array(ivBase64);
+        const encrypted = this.base64ToUint8Array(cipherDataBase64);
+        return await this.decryptData(encrypted, iv);
       }
 
       return data;
@@ -460,9 +470,14 @@ export class SecureStorageService {
 
   /**
    * Uint8Array转字符串
+   * 使用循环拼接避免展开运算符可能导致的栈溢出
    */
   private uint8ArrayToString(arr: Uint8Array): string {
-    return String.fromCharCode(...arr);
+    let str = '';
+    for (let i = 0; i < arr.length; i++) {
+      str += String.fromCharCode(arr[i]);
+    }
+    return str;
   }
 
   /**

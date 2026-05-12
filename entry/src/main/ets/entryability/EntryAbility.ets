@@ -52,9 +52,13 @@ export default class EntryAbility extends UIAbility {
     this.cleanupHMS();
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage) {
+  async onWindowStageCreate(windowStage: window.WindowStage) {
     // 加载主页面
     hilog.info(DOMAIN, TAG, 'Ability onWindowStageCreate');
+
+    // 设置窗口背景色，防止白屏闪烁
+    const mainWindow = await windowStage.getMainWindow();
+    mainWindow.setWindowBackgroundColor('#8B5CF6');
 
     windowStage.loadContent('pages/Splash', (err, data) => {
       if (err.code) {

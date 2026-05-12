@@ -354,7 +354,7 @@ export class XiaoyiIntentService {
    */
   private static async getUserResumeSummary(userId: string): Promise<any> {
     try {
-      const response = await ApiService.get(`/api/resume/summary?userId=${userId}`);
+      const response = await ApiService.getInstance().get(`/api/resume/summary?userId=${userId}`);
       return response.data;
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Get resume summary failed: ${error}`);
@@ -367,7 +367,7 @@ export class XiaoyiIntentService {
    */
   private static async getLatestResumeAnalysis(userId: string): Promise<any> {
     try {
-      const response = await ApiService.get(`/api/resume/analysis/latest?userId=${userId}`);
+      const response = await ApiService.getInstance().get(`/api/resume/analysis/latest?userId=${userId}`);
       return response.data;
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Get resume analysis failed: ${error}`);

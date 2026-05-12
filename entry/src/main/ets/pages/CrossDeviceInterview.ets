@@ -3,8 +3,9 @@
  * 支持多设备协同准备面试
  */
 import { CrossDeviceInterviewService, DeviceInfo, InterviewPrepData, DeviceType } from '../services/CrossDeviceInterviewService';
+import router from '@ohos.router';
 import { colors } from '../constants/colors';
-import { designTokens } from '../constants/design-tokens';
+import { SemanticRadius } from '../constants/design-tokens';
 
 @Entry
 @Component
@@ -48,12 +49,12 @@ struct CrossDeviceInterviewPage {
           .width(24)
           .height(24)
           .onClick(() => {
-            // 返回上一页
+            router.back();
           })
 
         Text('跨设备面试准备')
           .fontSize(18)
-          .fontColor(colors.textPrimary)
+          .fontColor(Colors.textPrimary)
           .fontWeight(FontWeight.Medium)
           .margin({ left: 12 })
 
@@ -81,11 +82,11 @@ struct CrossDeviceInterviewPage {
           LoadingProgress()
             .width(48)
             .height(48)
-            .color(colors.primary)
+            .color(Colors.primary)
 
           Text('加载中...')
             .fontSize(14)
-            .fontColor(colors.textSecondary)
+            .fontColor(Colors.textSecondary)
             .margin({ top: 12 })
         }
         .layoutWeight(1)
@@ -102,9 +103,9 @@ struct CrossDeviceInterviewPage {
           .width('100%')
           .height(48)
           .fontSize(16)
-          .fontColor(colors.surface)
-          .backgroundColor(colors.primary)
-          .borderRadius(designTokens.radius.lg)
+          .fontColor(Colors.surface)
+          .backgroundColor(Colors.primary)
+          .borderRadius(SemanticRadius.lg)
           .onClick(() => {
             this.showCreateSheet = true;
           })
@@ -114,16 +115,16 @@ struct CrossDeviceInterviewPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(colors.background)
+    .backgroundColor(Colors.background)
     .bindSheet($$this.showDeviceSheet, this.DeviceSheet(), {
       height: '50%',
       dragBar: true,
-      backgroundColor: colors.surface
+      backgroundColor: Colors.surface
     })
     .bindSheet($$this.showCreateSheet, this.CreatePrepSheet(), {
       height: '60%',
       dragBar: true,
-      backgroundColor: colors.surface
+      backgroundColor: Colors.surface
     })
   }
 
@@ -133,18 +134,18 @@ struct CrossDeviceInterviewPage {
       Image($r('app.media.ic_sync'))
         .width(16)
         .height(16)
-        .fontColor(colors.textSecondary)
+        .fontColor(Colors.textSecondary)
 
       Text(`已连接 ${this.devices.length} 台设备`)
         .fontSize(12)
-        .fontColor(colors.textSecondary)
+        .fontColor(Colors.textSecondary)
         .margin({ left: 6 })
 
       Blank()
 
       Text('点击同步')
         .fontSize(12)
-        .fontColor(colors.primary)
+        .fontColor(Colors.primary)
         .onClick(async () => {
           // 手动同步
           for (const device of this.devices) {
@@ -154,7 +155,7 @@ struct CrossDeviceInterviewPage {
     }
     .width('100%')
     .padding({ left: 16, right: 16, top: 8, bottom: 8 })
-    .backgroundColor(colors.surfaceSecondary)
+    .backgroundColor(Colors.surfaceSecondary)
   }
 
   @Builder
@@ -166,12 +167,12 @@ struct CrossDeviceInterviewPage {
 
       Text('暂无面试准备')
         .fontSize(16)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .margin({ top: 16 })
 
       Text('创建面试准备，在多设备间同步')
         .fontSize(14)
-        .fontColor(colors.textSecondary)
+        .fontColor(Colors.textSecondary)
         .margin({ top: 8 })
     }
     .layoutWeight(1)
@@ -201,12 +202,12 @@ struct CrossDeviceInterviewPage {
         Column() {
           Text(prep.company)
             .fontSize(16)
-            .fontColor(colors.textPrimary)
+            .fontColor(Colors.textPrimary)
             .fontWeight(FontWeight.Medium)
 
           Text(prep.position)
             .fontSize(14)
-            .fontColor(colors.textSecondary)
+            .fontColor(Colors.textSecondary)
             .margin({ top: 4 })
         }
         .alignItems(HorizontalAlign.Start)
@@ -217,7 +218,7 @@ struct CrossDeviceInterviewPage {
         Image($r('app.media.ic_synced'))
           .width(20)
           .height(20)
-          .fontColor(colors.success)
+          .fontColor(Colors.success)
       }
       .width('100%')
 
@@ -226,11 +227,11 @@ struct CrossDeviceInterviewPage {
         Image($r('app.media.ic_time'))
           .width(16)
           .height(16)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
 
         Text(prep.interviewTime)
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .margin({ left: 6 })
       }
       .margin({ top: 12 })
@@ -239,13 +240,13 @@ struct CrossDeviceInterviewPage {
       Row() {
         Text('准备进度')
           .fontSize(12)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
 
         Blank()
 
         Text(`${this.getCompletedCount(prep)}/${prep.checklist.length}`)
           .fontSize(12)
-          .fontColor(colors.primary)
+          .fontColor(Colors.primary)
       }
       .width('100%')
       .margin({ top: 12 })
@@ -257,13 +258,13 @@ struct CrossDeviceInterviewPage {
         type: ProgressType.Linear
       })
         .width('100%')
-        .color(colors.primary)
+        .color(Colors.primary)
         .margin({ top: 4 })
     }
     .width('100%')
     .padding(16)
-    .backgroundColor(colors.surface)
-    .borderRadius(designTokens.radius.md)
+    .backgroundColor(Colors.surface)
+    .borderRadius(SemanticRadius.md)
     .onClick(() => {
       this.selectedPrep = prep;
       // 跳转到详情页
@@ -275,7 +276,7 @@ struct CrossDeviceInterviewPage {
     Column() {
       Text('已连接设备')
         .fontSize(18)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .width('100%')
         .padding({ left: 16, bottom: 16 })
@@ -284,11 +285,11 @@ struct CrossDeviceInterviewPage {
         Column() {
           Text('暂无其他设备连接')
             .fontSize(14)
-            .fontColor(colors.textSecondary)
+            .fontColor(Colors.textSecondary)
 
           Text('请确保其他设备已登录同一华为账号')
             .fontSize(12)
-            .fontColor(colors.textTertiary)
+            .fontColor(Colors.textTertiary)
             .margin({ top: 8 })
         }
         .width('100%')
@@ -317,16 +318,16 @@ struct CrossDeviceInterviewPage {
       Image(this.getDeviceIcon(device.deviceType))
         .width(40)
         .height(40)
-        .fontColor(colors.textSecondary)
+        .fontColor(Colors.textSecondary)
 
       Column() {
         Text(device.deviceName)
           .fontSize(14)
-          .fontColor(colors.textPrimary)
+          .fontColor(Colors.textPrimary)
 
         Text(this.getDeviceTypeLabel(device.deviceType))
           .fontSize(12)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .margin({ top: 2 })
       }
       .alignItems(HorizontalAlign.Start)
@@ -338,7 +339,7 @@ struct CrossDeviceInterviewPage {
       Circle()
         .width(8)
         .height(8)
-        .fill(device.isOnline ? colors.success : colors.textTertiary)
+        .fill(device.isOnline ? Colors.success : Colors.textTertiary)
     }
     .width('100%')
     .padding({ top: 12, bottom: 12 })
@@ -349,7 +350,7 @@ struct CrossDeviceInterviewPage {
     Column() {
       Text('新建面试准备')
         .fontSize(18)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .width('100%')
         .padding({ left: 16, bottom: 16 })
@@ -358,7 +359,7 @@ struct CrossDeviceInterviewPage {
       Column() {
         Text('公司名称')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         TextInput({ placeholder: '请输入公司名称' })
@@ -376,7 +377,7 @@ struct CrossDeviceInterviewPage {
       Column() {
         Text('应聘职位')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         TextInput({ placeholder: '请输入应聘职位' })
@@ -394,7 +395,7 @@ struct CrossDeviceInterviewPage {
       Column() {
         Text('面试时间')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         TextInput({ placeholder: '请选择面试时间' })
@@ -415,9 +416,9 @@ struct CrossDeviceInterviewPage {
         .width('90%')
         .height(48)
         .fontSize(16)
-        .fontColor(colors.surface)
-        .backgroundColor(colors.primary)
-        .borderRadius(designTokens.radius.lg)
+        .fontColor(Colors.surface)
+        .backgroundColor(Colors.primary)
+        .borderRadius(SemanticRadius.lg)
         .enabled(this.newCompany.length > 0 && this.newPosition.length > 0)
         .onClick(async () => {
           const prep = await CrossDeviceInterviewService.createInterviewPrep({

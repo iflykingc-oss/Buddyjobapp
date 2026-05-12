@@ -154,26 +154,28 @@ export class ResumeService {
         onProgress?.(progress, AnalysisStage.UPLOADING);
       });
 
-      // 调用上传 API
-      const response = await this.apiService.post<UploadResponse>(API_ENDPOINTS.RESUME_UPLOAD, {
-        fileName: file.name,
-        fileSize: file.size,
-        fileType: validation.fileType,
-        content: fileContent
-      });
+      try {
+        // 调用上传 API
+        const response = await this.apiService.post<UploadResponse>(API_ENDPOINTS.RESUME_UPLOAD, {
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: validation.fileType,
+          content: fileContent
+        });
 
-      // 清除进度模拟
-      clearInterval(uploadProgress);
+        if (!response.success || !response.data) {
+          throw new Error(response.error || '文件上传失败');
+        }
 
-      if (!response.success || !response.data) {
-        throw new Error(response.error || '文件上传失败');
+        return {
+          fileId: response.data.fileId,
+          fileName: response.data.fileName,
+          fileSize: response.data.fileSize
+        };
+      } finally {
+        // 确保清除进度模拟定时器
+        clearInterval(uploadProgress);
       }
-
-      return {
-        fileId: response.data.fileId,
-        fileName: response.data.fileName,
-        fileSize: response.data.fileSize
-      };
     } catch (error) {
       console.error('[ResumeService] Upload failed:', error);
       throw error;

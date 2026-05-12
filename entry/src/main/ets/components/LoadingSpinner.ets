@@ -1,7 +1,9 @@
+import { BrandColors, SemanticColors, FontSize, Spacing } from '../constants/design-tokens';
+
 @Component
 export struct LoadingSpinner {
   @Prop size: number = 32;
-  @Prop color: string = '#8B5CF6';
+  @Prop color: ResourceColor = BrandColors.Brand500;
   @Prop text: string = '';
 
   build() {
@@ -13,9 +15,9 @@ export struct LoadingSpinner {
 
       if (this.text) {
         Text(this.text)
-          .fontSize(14)
-          .fontColor('#64748B')
-          .margin({ top: 12 })
+          .fontSize(FontSize.Sm)
+          .fontColor(SemanticColors.Text2)
+          .margin({ top: Spacing.Space3 })
       }
     }
     .width('100%')

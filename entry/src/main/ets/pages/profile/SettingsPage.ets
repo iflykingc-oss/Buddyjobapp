@@ -301,7 +301,7 @@ struct SettingsPage {
             .height(52)
             .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
             .onClick(() => {
-              promptAction.showToast({ message: '用户协议页面开发中' });
+              router.pushUrl({ url: 'pages/profile/UserAgreement' });
             })
 
             Divider()
@@ -323,7 +323,7 @@ struct SettingsPage {
             .height(52)
             .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
             .onClick(() => {
-              promptAction.showToast({ message: '隐私政策页面开发中' });
+              router.pushUrl({ url: 'pages/profile/PrivacyPolicy' });
             })
           }
           .width('100%')

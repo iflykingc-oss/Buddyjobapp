@@ -57,18 +57,6 @@
         "reason": "$string:permission_network_info_reason"
       },
       {
-        "name": "ohos.permission.SET_NETWORK_INFO",
-        "reason": "$string:permission_set_network_reason"
-      },
-      {
-        "name": "ohos.permission.ACCESS_WIFI_STATE",
-        "reason": "$string:permission_wifi_state_reason"
-      },
-      {
-        "name": "ohos.permission.GET_WIFI_INFO",
-        "reason": "$string:permission_wifi_info_reason"
-      },
-      {
         "name": "ohos.permission.PUSH_TOKEN",
         "reason": "$string:permission_push_token_reason"
       },
@@ -79,14 +67,6 @@
       {
         "name": "ohos.permission.ACCESS_BIOMETRIC",
         "reason": "$string:permission_biometric_reason"
-      },
-      {
-        "name": "ohos.permission.READ_MEDIA",
-        "reason": "$string:permission_read_media_reason"
-      },
-      {
-        "name": "ohos.permission.WRITE_MEDIA",
-        "reason": "$string:permission_write_media_reason"
       },
       {
         "name": "ohos.permission.READ_IMAGEVIDEO",

@@ -1,5 +1,6 @@
 import distributedDataObject from '@ohos.data.distributedDataObject';
 import hilog from '@ohos.hilog';
+import { common } from '@kit.AbilityKit';
 
 const TAG = 'DistributedDataManager';
 const DOMAIN = 0x0001;
@@ -62,7 +63,7 @@ interface DistributedContinueData {
  */
 export class DistributedDataManager {
   private static instance: DistributedDataManager;
-  private context: any = null;
+  private context: common.UIAbilityContext = null;
   private distributedObject: distributedDataObject.DataObject | null = null;
   private sessionId: string = 'buddyjob_distributed_session';
   private deviceId: string = '';
@@ -79,7 +80,7 @@ export class DistributedDataManager {
   /**
    * 初始化分布式数据管理器
    */
-  async init(context: any): Promise<void> {
+  async init(context: common.UIAbilityContext): Promise<void> {
     this.context = context;
     
     try {

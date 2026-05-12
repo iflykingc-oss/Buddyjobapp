@@ -1,5 +1,6 @@
 {
   "src": [
+    "pages/Splash",
     "pages/Index",
     "pages/Login",
     "pages/Chat",
@@ -13,10 +14,13 @@
     "pages/Knowledge",
     "pages/KnowledgeDetail",
     "pages/Profile",
+    "pages/profile/Favorites",
     "pages/profile/OrderHistory",
     "pages/profile/SettingsPage",
     "pages/profile/AboutPage",
     "pages/profile/History",
-    "pages/profile/HelpFeedback"
+    "pages/profile/HelpFeedback",
+    "pages/profile/PrivacyPolicy",
+    "pages/profile/UserAgreement"
   ]
 }

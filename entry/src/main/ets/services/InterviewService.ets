@@ -6,15 +6,6 @@
  */
 import { ApiService } from './ApiService';
 import { HistoryService } from './HistoryService';
-import {
-  BrandColors,
-  NeutralColors,
-  SemanticColors,
-  Spacing,
-  SemanticSpacing,
-  FontSize,
-  FontWeight
-} from '../constants/design-tokens';
 
 // 面试问题类型
 export interface InterviewQuestion {
@@ -369,7 +360,7 @@ export class InterviewService {
    */
   async completeInterview(session: InterviewSession): Promise<InterviewSession> {
     // 计算总分
-    const totalScore = session.feedbacks.reduce((sum, f) => sum + f.score, 0) / session.feedbacks.length;
+    const totalScore = session.feedbacks.length === 0 ? 0 : session.feedbacks.reduce((sum, f) => sum + f.score, 0) / session.feedbacks.length;
 
     const completedSession: InterviewSession = {
       ...session,

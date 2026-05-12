@@ -312,36 +312,36 @@ export struct HistoryPage {
     Column() {
       Column() {
         Text('确认清空')
-          .fontSize(18)
+          .fontSize(FontSize.Lg)
           .fontWeight(FontWeight.Bold)
-          .margin({ bottom: 12 })
+          .margin({ bottom: Spacing.Space3 })
 
         Text(this.currentTab === 'all' ? '确定要清空所有历史记录吗？此操作不可恢复。' : `确定要清空所有${HistoryService.getTypeLabel(this.currentTab)}记录吗？`)
-          .fontSize(14)
-          .fontColor('#64748B')
-          .margin({ bottom: 24 })
+          .fontSize(FontSize.Sm)
+          .fontColor(NeutralColors.Neutral500)
+          .margin({ bottom: Spacing.Space6 })
           .textAlign(TextAlign.Center)
 
         Row() {
           Button('取消')
-            .backgroundColor('#F1F5F9')
-            .fontColor('#64748B')
+            .backgroundColor(NeutralColors.Neutral100)
+            .fontColor(NeutralColors.Neutral500)
             .onClick(() => {
               this.showClearDialog = false;
             })
 
           Button('确定')
             .backgroundColor(ErrorColors.Error500)
-            .fontColor(Color.White)
-            .margin({ left: 12 })
+            .fontColor(NeutralColors.Neutral0)
+            .margin({ left: Spacing.Space3 })
             .onClick(() => {
               this.clearAll();
             })
         }
       }
-      .backgroundColor(Color.White)
+      .backgroundColor(NeutralColors.Neutral0)
       .borderRadius(16)
-      .padding(24)
+      .padding(Spacing.Space6)
       .width('80%')
     }
     .width('100%')
@@ -358,19 +358,19 @@ export struct HistoryPage {
     Column() {
       Column() {
         Text('确认删除')
-          .fontSize(18)
+          .fontSize(FontSize.Lg)
           .fontWeight(FontWeight.Bold)
-          .margin({ bottom: 12 })
+          .margin({ bottom: Spacing.Space3 })
 
         Text('确定要删除这条记录吗？')
-          .fontSize(14)
-          .fontColor('#64748B')
-          .margin({ bottom: 24 })
+          .fontSize(FontSize.Sm)
+          .fontColor(NeutralColors.Neutral500)
+          .margin({ bottom: Spacing.Space6 })
 
         Row() {
           Button('取消')
-            .backgroundColor('#F1F5F9')
-            .fontColor('#64748B')
+            .backgroundColor(NeutralColors.Neutral100)
+            .fontColor(NeutralColors.Neutral500)
             .onClick(() => {
               this.showDeleteDialog = false;
               this.selectedItemId = '';
@@ -378,8 +378,8 @@ export struct HistoryPage {
 
           Button('删除')
             .backgroundColor(ErrorColors.Error500)
-            .fontColor(Color.White)
-            .margin({ left: 12 })
+            .fontColor(NeutralColors.Neutral0)
+            .margin({ left: Spacing.Space3 })
             .onClick(() => {
               if (this.selectedItemId) {
                 this.deleteItem(this.selectedItemId);
@@ -389,9 +389,9 @@ export struct HistoryPage {
             })
         }
       }
-      .backgroundColor(Color.White)
+      .backgroundColor(NeutralColors.Neutral0)
       .borderRadius(16)
-      .padding(24)
+      .padding(Spacing.Space6)
       .width('80%')
     }
     .width('100%')

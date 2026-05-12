@@ -212,7 +212,7 @@ export class ResumeOptimizationService {
       }
 
       // 调用API应用优化
-      const response = await ApiService.post('/api/resume/apply-optimization', {
+      const response = await ApiService.getInstance().post('/api/resume/apply-optimization', {
         resumeId,
         section: suggestion.section,
         content: suggestion.optimized
@@ -272,7 +272,7 @@ export class ResumeOptimizationService {
    */
   private static async getResumeContent(resumeId: string): Promise<string | null> {
     try {
-      const response = await ApiService.get(`/api/resume/${resumeId}/content`);
+      const response = await ApiService.getInstance().get(`/api/resume/${resumeId}/content`);
       return response.data?.content || null;
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Get resume content failed: ${error}`);
@@ -288,7 +288,7 @@ export class ResumeOptimizationService {
     targetPosition?: TargetPosition
   ): Promise<any> {
     try {
-      const response = await ApiService.post('/api/resume/analyze', {
+      const response = await ApiService.getInstance().post('/api/resume/analyze', {
         content,
         targetPosition
       });
@@ -317,7 +317,7 @@ export class ResumeOptimizationService {
     config: OptimizationConfig
   ): Promise<OptimizationSuggestion[]> {
     try {
-      const response = await ApiService.post('/api/resume/generate-suggestions', {
+      const response = await ApiService.getInstance().post('/api/resume/generate-suggestions', {
         content,
         analysis,
         config

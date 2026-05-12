@@ -10,5 +10,9 @@
   "description": "一职搭子 - HarmonyOS求职助手应用",
   "main": "",
   "version": "1.0.0",
-  "dependencies": {}
+  "dependencies": {
+    "@hw-agconnect/core": "^1.3.0",
+    "@hw-agconnect/auth": "^1.3.0",
+    "@hw-agconnect/credential": "^1.3.0"
+  }
 }

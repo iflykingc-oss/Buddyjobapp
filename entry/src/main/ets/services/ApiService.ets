@@ -1,5 +1,4 @@
 import request from '@ohos.request';
-import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 import { API_ENDPOINTS, Config } from '../constants/config';
 
@@ -28,6 +27,10 @@ export class ApiService {
   clearToken() {
     this.token = null;
     AppStorage.delete('token');
+  }
+
+  hasToken(): boolean {
+    return !!this.token && this.token.length > 0;
   }
 
   async request<T>(config: RequestConfig): Promise<ApiResponse<T>> {
@@ -66,8 +69,8 @@ export class ApiService {
       // 处理 401 未授权 - 清除 token 并跳转登录页
       if (response.code === 401) {
         // 清除本地 token
-        AppStorage.setOrCreate('token', '');
-        AppStorage.setOrCreate('userInfo', null);
+        AppStorage.delete('token');
+        AppStorage.delete('userInfo');
         // 跳转到登录页
         router.replaceUrl({ url: 'pages/Login' });
         return { success: false, data: null as T, error: '登录已过期，请重新登录' };
@@ -141,6 +144,7 @@ export class ApiService {
 
   private buildQuery(params: object): string {
     return Object.entries(params)
+      .filter(([, v]) => v !== null && v !== undefined)
       .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join('&');
   }
@@ -157,5 +161,5 @@ interface ApiResponse<T> {
   success: boolean;
   data?: T;
   message?: string;
-  error?: any;
+  error?: string;
 }

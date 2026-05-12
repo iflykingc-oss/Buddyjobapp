@@ -5,5 +5,9 @@
   "main": "",
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "@hw-agconnect/core": "^1.3.0",
+    "@hw-agconnect/auth": "^1.3.0",
+    "@hw-agconnect/credential": "^1.3.0"
+  }
 }

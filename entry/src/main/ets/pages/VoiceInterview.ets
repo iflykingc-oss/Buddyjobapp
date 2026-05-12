@@ -9,8 +9,9 @@ import {
   AnswerEvaluation,
   VoiceInterviewSession
 } from '../services/VoiceInterviewService';
+import router from '@ohos.router';
 import { colors } from '../constants/colors';
-import { designTokens } from '../constants/design-tokens';
+import { SemanticRadius } from '../constants/design-tokens';
 
 @Entry
 @Component
@@ -49,16 +50,16 @@ struct VoiceInterviewPage {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(colors.background)
+    .backgroundColor(Colors.background)
     .bindSheet($$this.showSetupSheet, this.SetupSheet(), {
       height: '70%',
       dragBar: true,
-      backgroundColor: colors.surface
+      backgroundColor: Colors.surface
     })
     .bindSheet($$this.showResultSheet, this.ResultSheet(), {
       height: '80%',
       dragBar: true,
-      backgroundColor: colors.surface
+      backgroundColor: Colors.surface
     })
   }
 
@@ -73,12 +74,12 @@ struct VoiceInterviewPage {
           if (this.session) {
             await VoiceInterviewService.endSession();
           }
-          // 返回上一页
+          router.back();
         })
 
       Text('语音面试助手')
         .fontSize(18)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .margin({ left: 12 })
 
@@ -93,13 +94,13 @@ struct VoiceInterviewPage {
 
         Text(this.getStateLabel())
           .fontSize(12)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .margin({ left: 6 })
       }
     }
     .width('100%')
     .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-    .backgroundColor(colors.surface)
+    .backgroundColor(Colors.surface)
   }
 
   @Builder
@@ -113,22 +114,22 @@ struct VoiceInterviewPage {
 
         Text('语音面试助手')
           .fontSize(20)
-          .fontColor(colors.textPrimary)
+          .fontColor(Colors.textPrimary)
           .fontWeight(FontWeight.Medium)
           .margin({ top: 24 })
 
         Text('全程语音交互，真实模拟面试场景')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .margin({ top: 8 })
 
         Button('开始面试')
           .width(200)
           .height(48)
           .fontSize(16)
-          .fontColor(colors.surface)
-          .backgroundColor(colors.primary)
-          .borderRadius(designTokens.radius.lg)
+          .fontColor(Colors.surface)
+          .backgroundColor(Colors.primary)
+          .borderRadius(SemanticRadius.lg)
           .margin({ top: 32 })
           .onClick(() => {
             this.showSetupSheet = true;
@@ -148,13 +149,13 @@ struct VoiceInterviewPage {
       Row() {
         Text(`问题 ${this.session?.currentQuestionIndex ?? 0 + 1}/${this.session?.questions.length ?? 0}`)
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
 
         Blank()
 
         Text(this.session?.company ?? '')
           .fontSize(14)
-          .fontColor(colors.textPrimary)
+          .fontColor(Colors.textPrimary)
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 16 })
@@ -166,7 +167,7 @@ struct VoiceInterviewPage {
         type: ProgressType.Linear
       })
         .width('100%')
-        .color(colors.primary)
+        .color(Colors.primary)
         .padding({ left: 16, right: 16 })
 
       // 当前问题卡片
@@ -182,14 +183,14 @@ struct VoiceInterviewPage {
         Column() {
           Text(this.recognitionText)
             .fontSize(16)
-            .fontColor(colors.textPrimary)
+            .fontColor(Colors.textPrimary)
             .maxLines(5)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
         }
         .width('90%')
         .padding(16)
-        .backgroundColor(colors.surfaceSecondary)
-        .borderRadius(designTokens.radius.md)
+        .backgroundColor(Colors.surfaceSecondary)
+        .borderRadius(SemanticRadius.md)
         .margin({ top: 16 })
       }
 
@@ -208,10 +209,10 @@ struct VoiceInterviewPage {
       Row() {
         Text(this.getQuestionTypeLabel(this.currentQuestion!.type))
           .fontSize(12)
-          .fontColor(colors.primary)
+          .fontColor(Colors.primary)
           .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-          .backgroundColor(colors.primaryLight)
-          .borderRadius(designTokens.radius.sm)
+          .backgroundColor(Colors.primaryLight)
+          .borderRadius(SemanticRadius.sm)
 
         Blank()
 
@@ -220,11 +221,11 @@ struct VoiceInterviewPage {
             Image($r('app.media.ic_tip'))
               .width(16)
               .height(16)
-              .fontColor(colors.textSecondary)
+              .fontColor(Colors.textSecondary)
 
             Text('提示')
               .fontSize(12)
-              .fontColor(colors.textSecondary)
+              .fontColor(Colors.textSecondary)
               .margin({ left: 4 })
           }
         }
@@ -233,7 +234,7 @@ struct VoiceInterviewPage {
 
       Text(this.currentQuestion!.content)
         .fontSize(18)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .margin({ top: 12 })
 
@@ -244,11 +245,11 @@ struct VoiceInterviewPage {
             Row() {
               Text('•')
                 .fontSize(14)
-                .fontColor(colors.textSecondary)
+                .fontColor(Colors.textSecondary)
 
               Text(tip)
                 .fontSize(14)
-                .fontColor(colors.textSecondary)
+                .fontColor(Colors.textSecondary)
                 .margin({ left: 8 })
             }
             .width('100%')
@@ -258,14 +259,14 @@ struct VoiceInterviewPage {
         .width('100%')
         .margin({ top: 12 })
         .padding(12)
-        .backgroundColor(colors.surfaceSecondary)
-        .borderRadius(designTokens.radius.sm)
+        .backgroundColor(Colors.surfaceSecondary)
+        .borderRadius(SemanticRadius.sm)
       }
     }
     .width('90%')
     .padding(16)
-    .backgroundColor(colors.surface)
-    .borderRadius(designTokens.radius.md)
+    .backgroundColor(Colors.surface)
+    .borderRadius(SemanticRadius.md)
     .margin({ top: 24 })
     .alignItems(HorizontalAlign.Start)
   }
@@ -281,7 +282,7 @@ struct VoiceInterviewPage {
               Column()
                 .width(4)
                 .height(this.getWaveHeight(i))
-                .backgroundColor(colors.primary)
+                .backgroundColor(Colors.primary)
                 .borderRadius(2)
                 .margin({ left: 4, right: 4 })
                 .animation({
@@ -297,7 +298,7 @@ struct VoiceInterviewPage {
           Image($r('app.media.ic_mic'))
             .width(48)
             .height(48)
-            .fontColor(this.state === RecognitionState.SPEAKING ? colors.primary : colors.textSecondary)
+            .fontColor(this.state === RecognitionState.SPEAKING ? Colors.primary : Colors.textSecondary)
         }
       }
       .width(120)
@@ -306,7 +307,7 @@ struct VoiceInterviewPage {
 
       Text(this.getStateDescription())
         .fontSize(14)
-        .fontColor(colors.textSecondary)
+        .fontColor(Colors.textSecondary)
         .margin({ top: 8 })
     }
     .width('100%')
@@ -321,9 +322,9 @@ struct VoiceInterviewPage {
         .width(100)
         .height(44)
         .fontSize(14)
-        .fontColor(colors.textSecondary)
-        .backgroundColor(colors.surfaceSecondary)
-        .borderRadius(designTokens.radius.md)
+        .fontColor(Colors.textSecondary)
+        .backgroundColor(Colors.surfaceSecondary)
+        .borderRadius(SemanticRadius.md)
         .onClick(async () => {
           await VoiceInterviewService.skipQuestion();
         })
@@ -335,9 +336,9 @@ struct VoiceInterviewPage {
         .width(120)
         .height(56)
         .fontSize(16)
-        .fontColor(colors.surface)
+        .fontColor(Colors.surface)
         .backgroundColor(this.getMainButtonColor())
-        .borderRadius(designTokens.radius.full)
+        .borderRadius(SemanticRadius.full)
         .enabled(this.state !== RecognitionState.PROCESSING && this.state !== RecognitionState.SPEAKING)
         .onClick(async () => {
           await this.handleMainButton();
@@ -350,9 +351,9 @@ struct VoiceInterviewPage {
         .width(100)
         .height(44)
         .fontSize(14)
-        .fontColor(colors.error)
-        .backgroundColor(colors.surfaceSecondary)
-        .borderRadius(designTokens.radius.md)
+        .fontColor(Colors.error)
+        .backgroundColor(Colors.surfaceSecondary)
+        .borderRadius(SemanticRadius.md)
         .onClick(async () => {
           this.session = await VoiceInterviewService.endSession();
           if (this.session) {
@@ -369,7 +370,7 @@ struct VoiceInterviewPage {
     Column() {
       Text('设置面试')
         .fontSize(20)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .width('100%')
         .padding({ left: 16, bottom: 24 })
@@ -378,7 +379,7 @@ struct VoiceInterviewPage {
       Column() {
         Text('公司名称')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         TextInput({ placeholder: '请输入公司名称' })
@@ -396,7 +397,7 @@ struct VoiceInterviewPage {
       Column() {
         Text('应聘职位')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         TextInput({ placeholder: '请输入应聘职位' })
@@ -414,7 +415,7 @@ struct VoiceInterviewPage {
       Column() {
         Text('面试难度')
           .fontSize(14)
-          .fontColor(colors.textSecondary)
+          .fontColor(Colors.textSecondary)
           .width('100%')
 
         Row() {
@@ -423,9 +424,9 @@ struct VoiceInterviewPage {
               .width(90)
               .height(36)
               .fontSize(14)
-              .fontColor(this.difficulty === level ? colors.surface : colors.textPrimary)
-              .backgroundColor(this.difficulty === level ? colors.primary : colors.surfaceSecondary)
-              .borderRadius(designTokens.radius.md)
+              .fontColor(this.difficulty === level ? Colors.surface : Colors.textPrimary)
+              .backgroundColor(this.difficulty === level ? Colors.primary : Colors.surfaceSecondary)
+              .borderRadius(SemanticRadius.md)
               .onClick(() => {
                 this.difficulty = level;
               })
@@ -445,9 +446,9 @@ struct VoiceInterviewPage {
         .width('90%')
         .height(52)
         .fontSize(16)
-        .fontColor(colors.surface)
-        .backgroundColor(colors.primary)
-        .borderRadius(designTokens.radius.lg)
+        .fontColor(Colors.surface)
+        .backgroundColor(Colors.primary)
+        .borderRadius(SemanticRadius.lg)
         .enabled(this.company.length > 0 && this.position.length > 0)
         .onClick(async () => {
           this.showSetupSheet = false;
@@ -482,7 +483,7 @@ struct VoiceInterviewPage {
     Column() {
       Text('面试结果')
         .fontSize(20)
-        .fontColor(colors.textPrimary)
+        .fontColor(Colors.textPrimary)
         .fontWeight(FontWeight.Medium)
         .width('100%')
         .padding({ left: 16, bottom: 24 })
@@ -492,25 +493,25 @@ struct VoiceInterviewPage {
         Column() {
           Text('总体表现')
             .fontSize(14)
-            .fontColor(colors.textSecondary)
+            .fontColor(Colors.textSecondary)
 
           Row() {
             Text(this.calculateAverageScore().toString())
               .fontSize(48)
-              .fontColor(colors.primary)
+              .fontColor(Colors.primary)
               .fontWeight(FontWeight.Bold)
 
             Text('分')
               .fontSize(20)
-              .fontColor(colors.textSecondary)
+              .fontColor(Colors.textSecondary)
               .margin({ left: 4 })
           }
           .margin({ top: 8 })
         }
         .width('100%')
         .padding(24)
-        .backgroundColor(colors.surfaceSecondary)
-        .borderRadius(designTokens.radius.md)
+        .backgroundColor(Colors.surfaceSecondary)
+        .borderRadius(SemanticRadius.md)
 
         // 各问题评分
         List() {
@@ -519,7 +520,7 @@ struct VoiceInterviewPage {
               Row() {
                 Text(`问题 ${index + 1}`)
                   .fontSize(14)
-                  .fontColor(colors.textPrimary)
+                  .fontColor(Colors.textPrimary)
 
                 Blank()
 
@@ -542,9 +543,9 @@ struct VoiceInterviewPage {
           .width('90%')
           .height(48)
           .fontSize(16)
-          .fontColor(colors.surface)
-          .backgroundColor(colors.primary)
-          .borderRadius(designTokens.radius.lg)
+          .fontColor(Colors.surface)
+          .backgroundColor(Colors.primary)
+          .borderRadius(SemanticRadius.lg)
           .onClick(() => {
             this.showResultSheet = false;
             this.session = null;
@@ -576,13 +577,13 @@ struct VoiceInterviewPage {
   private getStateColor(): ResourceColor {
     switch (this.state) {
       case RecognitionState.LISTENING:
-        return colors.success;
+        return Colors.success;
       case RecognitionState.SPEAKING:
-        return colors.info;
+        return Colors.info;
       case RecognitionState.PROCESSING:
-        return colors.warning;
+        return Colors.warning;
       default:
-        return colors.textTertiary;
+        return Colors.textTertiary;
     }
   }
 
@@ -624,9 +625,9 @@ struct VoiceInterviewPage {
   private getMainButtonColor(): ResourceColor {
     switch (this.state) {
       case RecognitionState.LISTENING:
-        return colors.success;
+        return Colors.success;
       default:
-        return colors.primary;
+        return Colors.primary;
     }
   }
 
@@ -676,8 +677,8 @@ struct VoiceInterviewPage {
   }
 
   private getScoreColor(score: number): ResourceColor {
-    if (score >= 80) return colors.success;
-    if (score >= 60) return colors.warning;
-    return colors.error;
+    if (score >= 80) return Colors.success;
+    if (score >= 60) return Colors.warning;
+    return Colors.error;
   }
 }
