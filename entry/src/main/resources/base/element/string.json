@@ -353,6 +353,18 @@
       "value": "用于跨设备数据同步"
     },
     {
+      "name": "permission_softbus_reason",
+      "value": "用于分布式软总线设备发现与连接"
+    },
+    {
+      "name": "permission_camera_reason",
+      "value": "用于拍摄简历或头像照片"
+    },
+    {
+      "name": "permission_microphone_reason",
+      "value": "用于语音面试练习和语音输入"
+    },
+    {
       "name": "hms_app_id",
       "value": ""
     },

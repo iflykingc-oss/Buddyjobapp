@@ -9,7 +9,8 @@
     "mainElement": "EntryAbility",
     "deviceTypes": [
       "phone",
-      "tablet"
+      "tablet",
+      "2in1"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -33,6 +34,7 @@
         "startWindowIcon": "$media:icon",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
+        "continuable": true,
         "skills": [
           {
             "entities": [
@@ -105,6 +107,18 @@
       {
         "name": "ohos.permission.DISTRIBUTED_DATASYNC",
         "reason": "$string:permission_distributed_reason"
+      },
+      {
+        "name": "ohos.permission.DISTRIBUTED_SOFTBUS_CENTER",
+        "reason": "$string:permission_softbus_reason"
+      },
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:permission_camera_reason"
+      },
+      {
+        "name": "ohos.permission.MICROPHONE",
+        "reason": "$string:permission_microphone_reason"
       }
     ],
     "metadata": [
@@ -197,6 +211,10 @@
             {
               "name": "resumeId",
               "type": "string"
+            },
+            {
+              "name": "targetPosition",
+              "type": "string"
             }
           ]
         }
@@ -212,6 +230,10 @@
             },
             {
               "name": "difficulty",
+              "type": "string"
+            },
+            {
+              "name": "company",
               "type": "string"
             }
           ]
@@ -256,6 +278,82 @@
             },
             {
               "name": "interviewId",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.analyze_offer",
+          "action": "analyze_offer",
+          "entities": [
+            {
+              "name": "offerId",
+              "type": "string"
+            },
+            {
+              "name": "company",
+              "type": "string"
+            },
+            {
+              "name": "position",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.career_advice",
+          "action": "career_advice",
+          "entities": [
+            {
+              "name": "industry",
+              "type": "string"
+            },
+            {
+              "name": "experience",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.job_suggestion",
+          "action": "job_suggestion",
+          "entities": [
+            {
+              "name": "location",
+              "type": "string"
+            },
+            {
+              "name": "industry",
+              "type": "string"
+            },
+            {
+              "name": "query",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      {
+        "intent": {
+          "name": "buddyjob.interview_reminder",
+          "action": "interview_reminder",
+          "entities": [
+            {
+              "name": "interviewId",
+              "type": "string"
+            },
+            {
+              "name": "company",
+              "type": "string"
+            },
+            {
+              "name": "time",
               "type": "string"
             }
           ]
