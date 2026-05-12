@@ -4,6 +4,7 @@ import AssessmentPage from './Assessment';
 import KnowledgePage from './Knowledge';
 import ProfilePage from './Profile';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -23,7 +24,16 @@ import {
 struct Index {
   @State currentTabIndex: number = 0
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
   private tabController: TabsController = new TabsController()
+
+  aboutToAppear() {
+    // 初始化 WindowUtil（如果尚未初始化）
+    if (!this.windowUtil) {
+      const wu = new WindowUtil();
+      wu.init();
+    }
+  }
 
   build() {
     Stack() {
@@ -67,7 +77,8 @@ struct Index {
         }
         .tabBar(this.tabBuilder(4, '我的', $r('app.media.ic_profile')))
       }
-      .barHeight(60)
+      .barHeight(this.windowUtil?.isWideScreen() ? 64 : 60)
+      .barWidth(this.windowUtil?.isWideScreen() ? '60%' : '100%')
       .barBackgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .onChange((index: number) => {
         this.currentTabIndex = index

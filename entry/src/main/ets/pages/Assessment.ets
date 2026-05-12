@@ -3,6 +3,7 @@ import { ApiService } from '../services/ApiService';
 import { HistoryService } from '../services/HistoryService';
 import { PageStateSync, AssessmentPageState } from '../utils/distributed';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -32,6 +33,7 @@ export struct AssessmentPage {
   @State isContinueRestore: boolean = false;
   @State showContinuePrompt: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
   private apiService: ApiService = ApiService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
   private pageStateSync: PageStateSync = new PageStateSync('pages/Assessment');
@@ -668,7 +670,7 @@ export struct AssessmentPage {
                 color: this.answers[this.currentAssessment!.questions[this.currentQuestionIndex].id] === option.id ? BrandColors.Brand500 : (this.isDarkMode ? DarkSemanticColors.Border : NeutralColors.Neutral200)
               })
             }
-            .width('100%')
+            .width(this.windowUtil?.isWideScreen() ? '48%' : '100%')
             .margin({ bottom: Spacing.Space4 })
           })
         }
@@ -733,10 +735,10 @@ export struct AssessmentPage {
               .fillColor(BrandColors.Brand500)
             
             Text('已从其他设备恢复测评结果')
-            .fontSize(FontSize.Sm)
-            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
-            .margin({ left: Spacing.Space3 })
-            .layoutWeight(1)
+              .fontSize(FontSize.Sm)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+              .margin({ left: Spacing.Space3 })
+              .layoutWeight(1)
 
             Button('知道了')
               .fontSize(FontSize.Xs)
@@ -889,6 +891,8 @@ export struct AssessmentPage {
           .onClick(() => this.resetAssessment())
       }
       .padding({ top: SemanticSpacing.Lg })
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
+      .width('100%')
     }
     .layoutWeight(1)
   }

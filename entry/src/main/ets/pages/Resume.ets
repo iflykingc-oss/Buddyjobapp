@@ -18,6 +18,7 @@ import { HistoryService } from '../services/HistoryService';
 import { ResumeResultSwiper } from '../components/resume/ResumeResultSwiper';
 import { PageStateSync, ResumePageState } from '../utils/distributed';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -91,6 +92,7 @@ export struct ResumePage {
 
   // 暗黑模式
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   // 服务实例
   private resumeService: ResumeService = ResumeService.getInstance();
@@ -207,22 +209,28 @@ export struct ResumePage {
   build() {
     Column() {
       // 标题栏
-      this.buildTitleBar();
+      this.buildTitleBar()
 
-      // 根据状态显示不同内容
-      if (this.pageState === PageState.IDLE) {
-        // 上传区域
-        this.buildUploadArea();
-      } else if (this.pageState === PageState.UPLOADING || this.pageState === PageState.ANALYZING) {
-        // 全屏沉浸式分析动画
-        this.buildFullScreenAnalysis();
-      } else if (this.pageState === PageState.ERROR) {
-        // 错误状态
-        this.buildErrorView();
-      } else if (this.pageState === PageState.RESULT) {
-        // Swiper 卡片式结果展示
-        this.buildResultView();
+      // 根据状态显示不同内容（宽屏限制最大宽度）
+      Column() {
+        if (this.pageState === PageState.IDLE) {
+          // 上传区域
+          this.buildUploadArea();
+        } else if (this.pageState === PageState.UPLOADING || this.pageState === PageState.ANALYZING) {
+          // 全屏沉浸式分析动画
+          this.buildFullScreenAnalysis();
+        } else if (this.pageState === PageState.ERROR) {
+          // 错误状态
+          this.buildErrorView();
+        } else if (this.pageState === PageState.RESULT) {
+          // Swiper 卡片式结果展示
+          this.buildResultView();
+        }
       }
+      .layoutWeight(1)
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
     }
     .width('100%')
     .height('100%')

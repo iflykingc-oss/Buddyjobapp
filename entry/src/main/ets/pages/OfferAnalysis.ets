@@ -20,6 +20,7 @@ import {
 } from '../models/OfferAnalysis';
 import { OfferAnalysisService } from '../services/OfferAnalysisService';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import { OfferRadarChart } from '../components/offer/OfferRadarChart';
 import { OfferFormCard } from '../components/offer/OfferFormCard';
 import { OfferScoreCard } from '../components/offer/OfferScoreCard';
@@ -61,6 +62,7 @@ struct OfferAnalysisPage {
   @State showOvertimePicker: boolean = false;
   @State showAddConfirm: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   private offerService: OfferAnalysisService = OfferAnalysisService.getInstance();
 
@@ -391,7 +393,7 @@ struct OfferAnalysisPage {
               }
               .margin({ top: SemanticSpacing.Sm })
             }
-            .width('40%')
+            .width(this.windowUtil?.isWideScreen() ? '35%' : '40%')
             .justifyContent(FlexAlign.Center)
 
             // 右侧雷达图
@@ -401,7 +403,7 @@ struct OfferAnalysisPage {
                 labels: this.analysisResult.dimensions.map(d => d.name),
               })
             }
-            .width('60%')
+            .width(this.windowUtil?.isWideScreen() ? '65%' : '60%')
             .justifyContent(FlexAlign.Center)
           }
           .width('100%')
@@ -448,6 +450,8 @@ struct OfferAnalysisPage {
         }
       }
       .padding({ bottom: SemanticSpacing.Xxl })
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
+      .width('100%')
     }
     .width('100%')
     .layoutWeight(1)
@@ -563,6 +567,8 @@ struct OfferAnalysisPage {
         }
       }
       .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl, bottom: SemanticSpacing.Xxl })
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
+      .width('100%')
     }
     .width('100%')
     .layoutWeight(1)

@@ -6,6 +6,7 @@ import { BenefitGrid } from '../components/profile/BenefitGrid';
 import { PurchaseSheet } from '../components/profile/PurchaseSheet';
 import { MemberDetailSheet } from '../components/profile/MemberDetailSheet';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -29,6 +30,7 @@ export struct ProfilePage {
   @State memberStatus: MemberStatus | null = null;
   @State benefits: Benefit[] = [];
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   // 弹窗控制
   @State showPurchaseSheet: boolean = false;
@@ -249,6 +251,7 @@ export struct ProfilePage {
           })
           }
           .layoutWeight(1)
+          .constraintSize({ maxWidth: this.windowUtil?.isWideScreen() ? 600 : undefined })
           .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
           .borderRadius(SemanticRadius.Component)
           .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })

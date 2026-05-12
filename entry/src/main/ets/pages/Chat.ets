@@ -14,6 +14,7 @@ import { HistoryService } from '../services/HistoryService';
 import { ChatMarkdownRenderer } from '../components/MarkdownRenderer';
 import { ChatBubble, StreamingChatBubble } from '../components/chat/ChatBubble';
 import { SimpleNewMessageToast, ScrollToBottomButton } from '../components/chat/NewMessageToast';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -104,6 +105,7 @@ export struct ChatPage {
   @State currentSessionId: string = '';
   @State showWarningBanner: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   // 流式消息相关
   @State streamingContent: string = '';
@@ -361,20 +363,27 @@ export struct ChatPage {
         // 标题栏
         this.TitleBar()
 
-        // 消息列表
-        if (this.messageList.length === 0 && !this.isStreaming) {
-          this.EmptyState()
-        } else {
-          this.MessageList()
-        }
+        // 消息列表和输入区域（宽屏最大宽度限制）
+        Column() {
+          // 消息列表
+          if (this.messageList.length === 0 && !this.isStreaming) {
+            this.EmptyState()
+          } else {
+            this.MessageList()
+          }
 
-        // 加载指示器（非流式时显示）
-        if (this.isLoading && !this.isStreaming) {
-          this.LoadingIndicator()
-        }
+          // 加载指示器（非流式时显示）
+          if (this.isLoading && !this.isStreaming) {
+            this.LoadingIndicator()
+          }
 
-        // 输入区域
-        this.InputArea()
+          // 输入区域
+          this.InputArea()
+        }
+        .layoutWeight(1)
+        .constraintSize({ maxWidth: 800 })
+        .width('100%')
+        .justifyContent(FlexAlign.Center)
       }
       .width('100%')
       .height('100%')

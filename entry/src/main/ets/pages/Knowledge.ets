@@ -4,6 +4,7 @@ import { KnowledgeService, KnowledgeArticle, ArticleListResponse } from '../serv
 import { EmptyState } from '../components/EmptyState';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 import {
   BrandColors,
   NeutralColors,
@@ -106,6 +107,7 @@ export struct KnowledgePage {
   @State errorMessage: string = '';
   @State showError: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   private categories: string[] = ['全部', '简历技巧', '面试攻略', '职场法则', '行业动态'];
   private knowledgeService: KnowledgeService = KnowledgeService.getInstance();
@@ -333,6 +335,7 @@ export struct KnowledgePage {
           })
       }
       .width('100%')
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
       .height(56)
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
       .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
@@ -383,6 +386,7 @@ export struct KnowledgePage {
         }
       }
       .width('100%')
+      .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
       .padding({ left: Spacing.Space4, right: Spacing.Space4 })
       .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: Spacing.Space4 })
       .backgroundColor(NeutralColors.Neutral100)
@@ -541,6 +545,7 @@ export struct KnowledgePage {
           }
         }
         .layoutWeight(1)
+        .lanes(this.windowUtil?.isWideScreen() ? 2 : 1)
         .padding({ top: Spacing.Space4 })
         .backgroundColor(NeutralColors.Neutral50)
         .onReachEnd(() => {

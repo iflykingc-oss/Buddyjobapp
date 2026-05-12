@@ -11,6 +11,7 @@ import {
 } from '../models/Kanban';
 import { Colors } from '../constants/colors';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { WindowUtil } from '../utils/WindowUtil';
 
 @Entry
 @Component
@@ -25,6 +26,7 @@ struct KanbanPage {
   @State searchKeyword: string = '';
   @State filteredCards: JobCard[] = [];
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
+  @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
 
   async aboutToAppear() {
     this.kanbanData = await KanbanStorageService.initialize();
@@ -227,6 +229,7 @@ struct KanbanPage {
               this.moveCardToNextColumn(cardId);
             }
           })
+          .constraintSize({ minWidth: this.windowUtil?.isWideScreen() ? 280 : 240 })
           .margin({ left: 8, right: 8 })
         }, (col) => col.status)
       }
