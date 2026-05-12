@@ -419,10 +419,11 @@ export class VoiceInterviewService {
         return response.data as InterviewQuestion[];
       }
 
-      return this.getMockQuestions();
+      // API 返回失败，抛出错误而非使用模拟数据
+      throw new Error('面试问题生成失败，请检查网络后重试');
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Generate questions failed: ${error}`);
-      return this.getMockQuestions();
+      throw new Error('面试问题生成失败，请检查网络后重试');
     }
   }
 
@@ -443,10 +444,11 @@ export class VoiceInterviewService {
         return response.data as AnswerEvaluation;
       }
 
-      return this.getMockEvaluation();
+      // API 返回失败，抛出错误而非使用模拟数据
+      throw new Error('回答评估失败，请检查网络后重试');
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Evaluate answer failed: ${error}`);
-      return this.getMockEvaluation();
+      throw new Error('回答评估失败，请检查网络后重试');
     }
   }
 
@@ -467,7 +469,9 @@ export class VoiceInterviewService {
 
   /**
    * 获取模拟问题
+   * [仅用于开发调试] @deprecated 审核期间禁用
    */
+  /*
   private static getMockQuestions(): InterviewQuestion[] {
     return [
       {
@@ -510,7 +514,9 @@ export class VoiceInterviewService {
 
   /**
    * 获取模拟评估
+   * [仅用于开发调试] @deprecated 审核期间禁用
    */
+  /*
   private static getMockEvaluation(): AnswerEvaluation {
     return {
       score: 70,
@@ -523,6 +529,7 @@ export class VoiceInterviewService {
       suggestion: '建议使用具体的数据和案例来支撑您的回答'
     };
   }
+  */
 
   /**
    * 销毁服务

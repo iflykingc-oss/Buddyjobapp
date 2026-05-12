@@ -1,3 +1,4 @@
+import promptAction from '@ohos.promptAction';
 import { Assessment, Question, AssessmentResult, DimensionScore } from '../models/Assessment';
 import { ApiService } from '../services/ApiService';
 import { HistoryService } from '../services/HistoryService';
@@ -32,6 +33,8 @@ export struct AssessmentPage {
   @State isSubmitting: boolean = false;
   @State isContinueRestore: boolean = false;
   @State showContinuePrompt: boolean = false;
+  @State showBackConfirm: boolean = false;
+  @State isCompleted: boolean = false;
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
   @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
   private apiService: ApiService = ApiService.getInstance();
@@ -65,6 +68,17 @@ export struct AssessmentPage {
     // 移除事件监听
     const eventHub = getContext(this).eventHub;
     eventHub.off('onContinueRestore');
+  }
+
+  /**
+   * 系统返回拦截：测评进行中时弹出确认
+   */
+  onBackPress(): boolean {
+    if (this.currentAssessment && this.currentQuestionIndex > 0 && !this.isCompleted) {
+      this.showBackConfirm = true;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -317,8 +331,12 @@ export struct AssessmentPage {
       if (response.success && response.data) {
         this.result = response.data;
       } else {
-        // 使用模拟结果作为 fallback
-        this.result = this.generateMockResult();
+        // API返回失败，显示错误提示而非模拟数据
+        promptAction.showToast({
+          message: '测评提交失败，请检查网络后重试',
+          duration: 2000
+        });
+        return;
       }
 
       // 保存到历史记录
@@ -327,14 +345,12 @@ export struct AssessmentPage {
       // 更新全局页面状态
       this.updateGlobalPageState();
     } catch (error) {
-      // 使用模拟结果作为 fallback
-      this.result = this.generateMockResult();
-
-      // 保存到历史记录
-      this.saveToHistory();
-
-      // 更新全局页面状态
-      this.updateGlobalPageState();
+      // 网络异常，显示错误提示而非模拟数据
+      promptAction.showToast({
+        message: '测评提交失败，请检查网络后重试',
+        duration: 2000
+      });
+      return;
     } finally {
       this.isSubmitting = false;
     }
@@ -359,7 +375,9 @@ export struct AssessmentPage {
     }
   }
 
-  // 添加模拟结果生成方法
+  // [仅用于开发调试] 生成模拟结果
+  // @deprecated 审核期间禁用，API 失败时应显示错误提示而非模拟分数
+  /*
   private generateMockResult(): AssessmentResult {
     const totalScore = Math.floor(Math.random() * 30) + 70; // 70-100
     return {
@@ -378,6 +396,7 @@ export struct AssessmentPage {
       ]
     };
   }
+  */
 
   resetAssessment() {
     this.currentAssessment = null;
@@ -431,7 +450,7 @@ export struct AssessmentPage {
       }
       .width('100%')
       .height(56)
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+      .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
       .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .justifyContent(FlexAlign.SpaceBetween)
       .shadow({
@@ -451,6 +470,56 @@ export struct AssessmentPage {
     .width('100%')
     .height('100%')
     .backgroundColor(this.isDarkMode ? DarkSemanticColors.Background : SemanticColors.Background)
+    .bindSheet($$this.showBackConfirm, this.BackConfirmSheet(), {
+      height: '30%',
+      dragBar: true,
+      backgroundColor: this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1,
+    })
+  }
+
+  @Builder
+  BackConfirmSheet() {
+    Column() {
+      Text('确认退出测评？')
+        .fontSize(FontSize.Lg)
+        .fontWeight(FontWeight.Bold)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+        .width('100%')
+        .margin({ bottom: Spacing.Space4 })
+
+      Text('退出后当前答题进度将不会保存')
+        .fontSize(FontSize.Sm)
+        .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
+        .width('100%')
+        .margin({ bottom: SemanticSpacing.Xl })
+
+      Row() {
+        Button('继续答题')
+          .fontSize(FontSize.Sm)
+          .fontColor(BrandColors.Brand500)
+          .backgroundColor('transparent')
+          .borderRadius(SemanticRadius.Pill)
+          .layoutWeight(1)
+          .onClick(() => {
+            this.showBackConfirm = false;
+          })
+
+        Button('确认退出')
+          .fontSize(FontSize.Sm)
+          .fontColor(NeutralColors.Neutral0)
+          .backgroundColor(ErrorColors.Error500)
+          .borderRadius(SemanticRadius.Pill)
+          .layoutWeight(1)
+          .margin({ left: SemanticSpacing.Md })
+          .onClick(() => {
+            this.showBackConfirm = false;
+            this.resetAssessment();
+          })
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .padding(SemanticSpacing.Xl)
   }
 
   @Builder
@@ -480,7 +549,7 @@ export struct AssessmentPage {
             .fontColor(NeutralColors.Neutral0)
             .backgroundColor(BrandColors.Brand500)
             .borderRadius(SemanticRadius.Pill)
-            .height(28)
+            .height(40)
             .padding({ left: Spacing.Space4, right: Spacing.Space4 })
             .onClick(() => {
               this.showContinuePrompt = false;
@@ -490,6 +559,7 @@ export struct AssessmentPage {
             .fontSize(FontSize.Xs)
             .fontColor(this.isDarkMode ? DarkSemanticColors.Text2 : SemanticColors.Text2)
             .backgroundColor('transparent')
+            .height(40)
             .margin({ left: Spacing.Space2 })
             .onClick(() => {
               this.showContinuePrompt = false;
@@ -543,7 +613,7 @@ export struct AssessmentPage {
                   .fontColor(NeutralColors.Neutral0)
                   .backgroundColor(BrandColors.Brand500)
                   .borderRadius(SemanticRadius.Pill)
-                  .height(32)
+                  .height(44)
                   .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
                   .onClick(() => this.startAssessment(assessment))
               }
@@ -592,6 +662,7 @@ export struct AssessmentPage {
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
             .backgroundColor('transparent')
+            .height(40)
             .onClick(() => {
               this.showContinuePrompt = false;
             })
@@ -887,7 +958,7 @@ export struct AssessmentPage {
           .border({ width: 1, color: BrandColors.Brand500 })
           .width('calc(100% - 32px)')
           .height(44)
-          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: Spacing.Space9 })
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: (AppStorage.get<number>('bottomSafeArea') || 0) + Spacing.Space9 })
           .onClick(() => this.resetAssessment())
       }
       .padding({ top: SemanticSpacing.Lg })

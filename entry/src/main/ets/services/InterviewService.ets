@@ -271,13 +271,15 @@ export class InterviewService {
       console.error('[InterviewService] Submit answer failed:', error);
     }
 
-    // 生成模拟点评
-    return this.generateMockFeedback(answer);
+    // API 失败，抛出错误而非返回模拟点评
+    throw new Error('AI点评服务暂时不可用，请检查网络后重试');
   }
 
   /**
    * 生成模拟AI点评
+   * [仅用于开发调试] @deprecated 审核期间禁用，API 失败时应抛出错误
    */
+  /*
   private generateMockFeedback(answer: InterviewAnswer): InterviewFeedback {
     const content = answer.content;
     const wordCount = content.length;
@@ -354,6 +356,7 @@ export class InterviewService {
       }
     };
   }
+  */
 
   /**
    * 完成面试会话

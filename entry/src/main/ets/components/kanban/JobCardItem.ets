@@ -2,7 +2,7 @@
  * 求职看板卡片组件
  * Kanban 中每一张求职卡片
  */
-import router from '@ohos.router';
+import { Router } from '../../utils/Router';
 import { JobCard, CardPriority, KanbanColumnStatus } from '../../models/Kanban';
 import { Colors } from '../../constants/colors';
 
@@ -160,14 +160,11 @@ export struct JobCardItem {
           .justifyContent(FlexAlign.End)
           .margin({ top: 8 })
           .onClick(() => {
-            router.pushUrl({
-              url: 'pages/OfferAnalysis',
-              params: {
-                company: this.card.company,
-                position: this.card.position,
-                salary: this.card.salary,
-                location: this.card.location,
-              }
+            Router.push('pages/OfferAnalysis', {
+              company: this.card.company,
+              position: this.card.position,
+              salary: this.card.salary,
+              location: this.card.location,
             });
           })
         }

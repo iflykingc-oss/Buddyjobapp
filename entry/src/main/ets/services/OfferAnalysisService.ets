@@ -2,7 +2,7 @@
  * Offer 分析服务
  *
  * 负责调用后端 API 进行 Offer 分析和对比，
- * 包含网络请求失败时的模拟数据 fallback。
+ * API 请求失败时返回明确的错误提示。
  */
 
 import { ApiService } from './ApiService';
@@ -50,12 +50,12 @@ export class OfferAnalysisService {
         return response.data;
       }
 
-      // 后端返回失败，使用模拟数据
-      console.warn('[OfferAnalysisService] API failed, using mock data:', response.error);
-      return this.generateMockAnalysisResult(input);
+      // API 返回失败，抛出错误而非使用模拟数据
+      console.error('[OfferAnalysisService] API failed:', response.error);
+      throw new Error('分析服务暂时不可用，请稍后重试');
     } catch (error) {
       console.error('[OfferAnalysisService] analyzeOffer error:', error);
-      return this.generateMockAnalysisResult(input);
+      throw new Error('分析服务暂时不可用，请稍后重试');
     }
   }
 
@@ -77,11 +77,12 @@ export class OfferAnalysisService {
         return response.data;
       }
 
-      console.warn('[OfferAnalysisService] Compare API failed, using mock data:', response.error);
-      return this.generateMockComparisonResult(offers);
+      // API 返回失败，抛出错误而非使用模拟数据
+      console.error('[OfferAnalysisService] Compare API failed:', response.error);
+      throw new Error('对比服务暂时不可用，请稍后重试');
     } catch (error) {
       console.error('[OfferAnalysisService] compareOffers error:', error);
-      return this.generateMockComparisonResult(offers);
+      throw new Error('对比服务暂时不可用，请稍后重试');
     }
   }
 
@@ -97,15 +98,17 @@ export class OfferAnalysisService {
       if (response.success && response.data) {
         return response.data;
       }
-      return this.generateMockAnalysisResult(input, weights);
+      // API 返回失败，抛出错误而非使用模拟数据
+      throw new Error('分析服务暂时不可用，请稍后重试');
     } catch (error) {
       console.error('[OfferAnalysisService] analyzeWithWeights error:', error);
-      return this.generateMockAnalysisResult(input, weights);
+      throw new Error('分析服务暂时不可用，请稍后重试');
     }
   }
 
   /**
    * What-if 分析：修改单个参数后的评分变化
+   * @deprecated 审核期间禁用，依赖后端 API 实现
    */
   whatIfAnalysis(
     baseOffer: OfferInput,
@@ -128,9 +131,11 @@ export class OfferAnalysisService {
   }
 
   // ============================================
-  // 模拟数据生成
+  // 模拟数据生成 [仅用于开发调试]
+  // @deprecated 审核期间禁用，API 失败时应抛出错误
   // ============================================
 
+  /*
   /**
    * 生成模拟分析结果
    */
@@ -360,4 +365,5 @@ export class OfferAnalysisService {
       dimensionComparison,
     };
   }
+  */
 }

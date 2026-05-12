@@ -45,12 +45,17 @@ struct CrossDeviceInterviewPage {
     Column() {
       // 顶部导航
       Row() {
-        Image($r('app.media.ic_back'))
-          .width(24)
-          .height(24)
-          .onClick(() => {
-            router.back();
-          })
+        Column() {
+          Image($r('app.media.ic_back'))
+            .width(24)
+            .height(24)
+            .onClick(() => {
+              router.back();
+            })
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
 
         Text('跨设备面试准备')
           .fontSize(18)
@@ -71,7 +76,12 @@ struct CrossDeviceInterviewPage {
         }
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .padding({
+        top: (AppStorage.get<number>('topSafeArea') || 0) + 12,
+        left: 16,
+        right: 16,
+        bottom: 12
+      })
 
       // 同步状态
       this.SyncStatusBar()
@@ -111,7 +121,7 @@ struct CrossDeviceInterviewPage {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, bottom: 16 })
+      .padding({ left: 16, right: 16, bottom: (AppStorage.get<number>('bottomSafeArea') || 0) + 16 })
     }
     .width('100%')
     .height('100%')

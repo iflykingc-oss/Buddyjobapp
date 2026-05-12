@@ -289,7 +289,7 @@ export struct ResumePage {
     }
     .width('100%')
     .height(56)
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+    .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
     .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .shadow({
       radius: 8,

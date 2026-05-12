@@ -61,6 +61,29 @@ export default class EntryAbility extends UIAbility {
     const mainWindow = await windowStage.getMainWindow();
     mainWindow.setWindowBackgroundColor('#8B5CF6');
 
+    // 设置状态栏样式
+    const systemBarProperties: window.SystemBarProperties = {
+      statusBarContentColor: '#FFFFFF',
+      statusBarColor: '#00000000', // 透明
+      navigationBarContentColor: '#FFFFFF',
+      navigationBarColor: '#00000000'
+    };
+    await mainWindow.setWindowSystemBarProperties(systemBarProperties);
+
+    // 获取安全区域并存入AppStorage
+    const avoidArea = await mainWindow.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM);
+    AppStorage.setOrCreate('topSafeArea', avoidArea.top.height);
+    AppStorage.setOrCreate('bottomSafeArea', avoidArea.bottom.height);
+
+    // 监听安全区域变化
+    mainWindow.on('avoidAreaChange', async (data) => {
+      const type = data.type as window.AvoidAreaType;
+      if (type === window.AvoidAreaType.TYPE_SYSTEM) {
+        AppStorage.setOrCreate('topSafeArea', data.area.top.height);
+        AppStorage.setOrCreate('bottomSafeArea', data.area.bottom.height);
+      }
+    });
+
     // 初始化 WindowUtil 并设置主窗口
     const windowUtil = WindowUtil.getInstance();
     windowUtil.setMainWindow(mainWindow);

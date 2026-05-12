@@ -446,7 +446,7 @@ export struct ChatPage {
     }
     .width('100%')
     .height(56)
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+    .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
     .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .justifyContent(FlexAlign.Center)
     .shadow({
@@ -498,6 +498,7 @@ export struct ChatPage {
             })
             .backgroundColor(BrandColors.Brand50)
             .borderRadius(SemanticRadius.Pill)
+            .constraintSize({ minHeight: 40 })
             .onClick(() => {
               this.inputText = question;
             })
@@ -651,7 +652,7 @@ export struct ChatPage {
       .enabled(this.isStreaming || (!this.isLoading && this.inputText.trim().length > 0))
     }
     .width('100%')
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: Spacing.Space4 })
+    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: (AppStorage.get<number>('bottomSafeArea') || 0) + Spacing.Space4 })
     .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
     .shadow({
       radius: 16,

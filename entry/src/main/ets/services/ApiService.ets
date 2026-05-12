@@ -1,5 +1,5 @@
 import request from '@ohos.request';
-import router from '@ohos.router';
+import { Router } from '../utils/Router';
 import { API_ENDPOINTS, Config } from '../constants/config';
 
 export class ApiService {
@@ -72,7 +72,7 @@ export class ApiService {
         AppStorage.delete('token');
         AppStorage.delete('userInfo');
         // 跳转到登录页
-        router.replaceUrl({ url: 'pages/Login' });
+        Router.replace('pages/Login');
         return { success: false, data: null as T, error: '登录已过期，请重新登录' };
       }
 

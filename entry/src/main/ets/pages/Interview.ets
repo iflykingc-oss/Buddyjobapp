@@ -86,6 +86,17 @@ export struct InterviewPage {
     this.clearTimers();
   }
 
+  /**
+   * 系统返回拦截：面试进行中时弹出确认
+   */
+  onBackPress(): boolean {
+    if (this.session && this.session.status === 'in_progress') {
+      this.showExitConfirm = true;
+      return true;
+    }
+    return false;
+  }
+
   private clearTimers(): void {
     if (this.durationTimer !== -1) {
       clearInterval(this.durationTimer);
@@ -559,7 +570,12 @@ export struct InterviewPage {
         })
       }
       .width('100%')
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: Spacing.Space4 })
+      .padding({
+        top: (AppStorage.get<number>('topSafeArea') || 0) + Spacing.Space4,
+        left: SemanticSpacing.Lg,
+        right: SemanticSpacing.Lg,
+        bottom: Spacing.Space4
+      })
 
       // 进度条
       if (this.session) {
@@ -704,7 +720,7 @@ export struct InterviewPage {
             }
           }
           .width('100%')
-          .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: Spacing.Space4 })
+          .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: (AppStorage.get<number>('bottomSafeArea') || 0) + Spacing.Space4 })
         }
         .width('100%')
         .height('100%')
@@ -908,7 +924,7 @@ export struct InterviewPage {
     }
     .width('100%')
     .height(56)
-    .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+    .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
   }
 
   /**

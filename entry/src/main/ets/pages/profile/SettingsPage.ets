@@ -1,6 +1,7 @@
 import router from '@ohos.router';
 import { AuthService } from '../../services/AuthService';
 import { UserService } from '../../services/UserService';
+import { AppReviewService } from '../../services/AppReviewService';
 import { promptAction } from '@kit.ArkUI';
 import { ThemeManager, ThemeMode } from '../../utils/Theme';
 import {
@@ -285,6 +286,29 @@ struct SettingsPage {
               .fontColor(SemanticColors.Text3)
               .width('100%')
               .margin({ bottom: Spacing.Space3 })
+
+            // 给我们评分
+            Row() {
+              Text('给我们评分')
+                .fontSize(FontSize.Base)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                .layoutWeight(1)
+
+              Image($r('app.media.ic_arrow_right'))
+                .width(16)
+                .height(16)
+                .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
+            }
+            .width('100%')
+            .height(52)
+            .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+            .onClick(() => {
+              AppReviewService.getInstance().openComment();
+            })
+
+            Divider()
+              .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+              .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             // 关于我们
             Row() {

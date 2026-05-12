@@ -1,3 +1,4 @@
+import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 import { User } from '../models/User';
 import { MemberService, MemberStatus, Benefit } from '../services/MemberService';
@@ -101,7 +102,11 @@ export struct ProfilePage {
             memberStatus: this.memberStatus,
             isVip: this.isVip,
             onUpgradeClick: () => {
-              this.showPurchaseSheet = true;
+              // 审核期间隐藏支付入口，显示即将上线提示
+              promptAction.showToast({
+                message: '支付功能即将上线，敬请期待',
+                duration: 2000
+              });
             },
             onDetailClick: () => {
               this.showDetailSheet = true;
@@ -119,8 +124,11 @@ export struct ProfilePage {
                 // 已是会员，显示详情
                 this.showDetailSheet = true;
               } else {
-                // 非会员，引导开通
-                this.showPurchaseSheet = true;
+                // 审核期间隐藏支付入口，显示即将上线提示
+                promptAction.showToast({
+                  message: '支付功能即将上线，敬请期待',
+                  duration: 2000
+                });
               }
             }
           })
@@ -293,7 +301,11 @@ export struct ProfilePage {
           },
           onRenewClick: () => {
             this.showDetailSheet = false;
-            this.showPurchaseSheet = true;
+            // 审核期间隐藏支付入口，显示即将上线提示
+            promptAction.showToast({
+              message: '支付功能即将上线，敬请期待',
+              duration: 2000
+            });
           }
         })
       }

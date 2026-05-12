@@ -1,8 +1,8 @@
 import { ApiService } from './ApiService';
 import { HMSUtils, HMSErrorCode, HMSServiceType, HMSPushUtils } from '../utils/hms';
 import { API_ENDPOINTS } from '../constants/config';
+import { Router } from '../utils/Router';
 import promptAction from '@ohos.promptAction';
-import { router } from '@kit.ArkUI';
 import { hmsPush } from '@hw-agconnect/push';
 
 /**
@@ -266,35 +266,26 @@ export class PushService {
       case PushMessageType.CHAT:
         // 跳转到聊天页面
         if (message.payload?.sessionId) {
-          router.pushUrl({
-            url: 'pages/Chat',
-            params: { sessionId: message.payload.sessionId }
-          });
+          Router.push('pages/Chat', { sessionId: message.payload.sessionId });
         }
         break;
 
       case PushMessageType.SYSTEM:
         // 跳转到系统通知详情
         if (message.payload?.noticeId) {
-          router.pushUrl({
-            url: 'pages/NotificationDetail',
-            params: { noticeId: message.payload.noticeId }
-          });
+          Router.push('pages/NotificationDetail', { noticeId: message.payload.noticeId });
         }
         break;
 
       case PushMessageType.VIP_EXPIRE:
         // 跳转到会员页面
-        router.pushUrl({ url: 'pages/Vip' });
+        Router.push('pages/Vip');
         break;
 
       case PushMessageType.ORDER:
         // 跳转到订单详情
         if (message.payload?.orderId) {
-          router.pushUrl({
-            url: 'pages/OrderDetail',
-            params: { orderId: message.payload.orderId }
-          });
+          Router.push('pages/OrderDetail', { orderId: message.payload.orderId });
         }
         break;
 

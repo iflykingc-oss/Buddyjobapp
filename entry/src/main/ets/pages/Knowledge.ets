@@ -326,18 +326,23 @@ export struct KnowledgePage {
         Blank()
 
         // 搜索按钮
-        Image($r('app.media.ic_search'))
-          .width(24)
-          .height(24)
-          .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
-          .onClick(() => {
-            // TODO: 打开搜索页面
-          })
+        Column() {
+          Image($r('app.media.ic_search'))
+            .width(24)
+            .height(24)
+            .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
+            .onClick(() => {
+              // TODO: 打开搜索页面
+            })
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
       }
       .width('100%')
       .constraintSize({ maxWidth: this.windowUtil?.getContentMaxWidth() })
       .height(56)
-      .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+      .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
       .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .shadow({
         radius: 8,
@@ -376,8 +381,8 @@ export struct KnowledgePage {
               .height(16)
               .fillColor(SemanticColors.Text4)
           }
-          .width(32)
-          .height(32)
+          .width(40)
+          .height(40)
           .justifyContent(FlexAlign.Center)
           .onClick(() => {
             this.searchText = '';
@@ -404,6 +409,7 @@ export struct KnowledgePage {
               .backgroundColor(this.selectedCategory === category ? BrandColors.Brand500 : NeutralColors.Neutral100)
               .borderRadius(SemanticRadius.Pill)
               .margin({ right: Spacing.Space3 })
+              .constraintSize({ minHeight: 40 })
               .onClick(() => {
                 this.onCategoryChange(category);
               })

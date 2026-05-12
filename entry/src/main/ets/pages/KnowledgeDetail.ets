@@ -2,6 +2,7 @@ import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { KnowledgeService, ArticleDetail } from '../services/KnowledgeService';
 import { FavoriteService, FavoriteType } from '../services/FavoriteService';
+import { ShareService } from '../services/ShareService';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
 import {
   BrandColors,
@@ -173,7 +174,7 @@ struct KnowledgeDetail {
       }
       .width('100%')
       .height(56)
-      .padding({ left: Spacing.Space2, right: SemanticSpacing.Lg })
+      .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: Spacing.Space2, right: SemanticSpacing.Lg })
       .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
       .shadow({
         radius: 8,
@@ -309,7 +310,7 @@ struct KnowledgeDetail {
           .height(52)
           .justifyContent(FlexAlign.Center)
           .onClick(() => {
-            promptAction.showToast({ message: '分享链接已复制' });
+            ShareService.getInstance().shareArticle(this.article!.title, this.article!.url || '');
           })
         }
         .width('100%')

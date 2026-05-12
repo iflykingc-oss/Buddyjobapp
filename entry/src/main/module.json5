@@ -35,6 +35,13 @@
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "continuable": true,
+        "preload": "lazy",
+        "supportModes": [
+          "portrait",
+          "landscape",
+          "portrait-inactive",
+          "landscape-inactive"
+        ],
         "skills": [
           {
             "entities": [
@@ -180,6 +187,11 @@
             ]
           }
         ]
+      },
+      {
+        "name": "BackupExtension",
+        "srcEntry": "./ets/extensionability/BackupExtension.ets",
+        "type": "backupExtension"
       }
     ],
     "intents": [

@@ -27,6 +27,8 @@ struct VoiceInterviewPage {
   @State lastEvaluation: AnswerEvaluation | null = null;
   @State showSetupSheet: boolean = true;
   @State showResultSheet: boolean = false;
+  @State showExitDialog: boolean = false;
+  @State isInterviewing: boolean = false;
 
   async aboutToAppear() {
     this.isInitialized = await VoiceInterviewService.initialize();
@@ -34,6 +36,17 @@ struct VoiceInterviewPage {
 
   aboutToDisappear() {
     VoiceInterviewService.destroy();
+  }
+
+  /**
+   * 系统返回拦截：面试进行中时弹出确认
+   */
+  onBackPress(): boolean {
+    if (this.isInterviewing || this.state === RecognitionState.LISTENING || this.state === RecognitionState.SPEAKING) {
+      this.showExitDialog = true;
+      return true;
+    }
+    return false;
   }
 
   build() {
@@ -61,21 +74,32 @@ struct VoiceInterviewPage {
       dragBar: true,
       backgroundColor: Colors.surface
     })
+    .bindSheet($$this.showExitDialog, this.ExitConfirmSheet(), {
+      height: '30%',
+      dragBar: true,
+      backgroundColor: Colors.surface
+    })
   }
 
   @Builder
   StatusBar() {
     Row() {
       // 返回按钮
-      Image($r('app.media.ic_back'))
-        .width(24)
-        .height(24)
-        .onClick(async () => {
-          if (this.session) {
-            await VoiceInterviewService.endSession();
-          }
-          router.back();
-        })
+      Column() {
+        Image($r('app.media.ic_back'))
+          .width(24)
+          .height(24)
+          .onClick(async () => {
+            if (this.session) {
+              this.showExitDialog = true;
+            } else {
+              router.back();
+            }
+          })
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
 
       Text('语音面试助手')
         .fontSize(18)
@@ -99,7 +123,12 @@ struct VoiceInterviewPage {
       }
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .padding({
+      top: (AppStorage.get<number>('topSafeArea') || 0) + 12,
+      left: 16,
+      right: 16,
+      bottom: 12
+    })
     .backgroundColor(Colors.surface)
   }
 
@@ -362,7 +391,7 @@ struct VoiceInterviewPage {
         })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, bottom: 24 })
+    .padding({ left: 16, right: 16, bottom: (AppStorage.get<number>('bottomSafeArea') || 0) + 24 })
   }
 
   @Builder
@@ -452,6 +481,7 @@ struct VoiceInterviewPage {
         .enabled(this.company.length > 0 && this.position.length > 0)
         .onClick(async () => {
           this.showSetupSheet = false;
+          this.isInterviewing = true;
           this.session = await VoiceInterviewService.startSession(
             this.company,
             this.position,
@@ -549,6 +579,7 @@ struct VoiceInterviewPage {
           .onClick(() => {
             this.showResultSheet = false;
             this.session = null;
+            this.isInterviewing = false;
           })
       }
     }
@@ -680,5 +711,54 @@ struct VoiceInterviewPage {
     if (score >= 80) return Colors.success;
     if (score >= 60) return Colors.warning;
     return Colors.error;
+  }
+
+  @Builder
+  ExitConfirmSheet() {
+    Column() {
+      Text('确认退出面试？')
+        .fontSize(20)
+        .fontColor(Colors.textPrimary)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .margin({ bottom: 16 })
+
+      Text('退出后当前面试进度将不会保存')
+        .fontSize(14)
+        .fontColor(Colors.textSecondary)
+        .width('100%')
+        .margin({ bottom: 24 })
+
+      Row() {
+        Button('继续面试')
+          .fontSize(14)
+          .fontColor(Colors.primary)
+          .backgroundColor(Colors.surfaceSecondary)
+          .borderRadius(SemanticRadius.md)
+          .layoutWeight(1)
+          .onClick(() => {
+            this.showExitDialog = false;
+          })
+
+        Button('确认退出')
+          .fontSize(14)
+          .fontColor(Colors.surface)
+          .backgroundColor(Colors.error)
+          .borderRadius(SemanticRadius.md)
+          .layoutWeight(1)
+          .margin({ left: 12 })
+          .onClick(async () => {
+            this.showExitDialog = false;
+            this.isInterviewing = false;
+            if (this.session) {
+              await VoiceInterviewService.endSession();
+            }
+            router.back();
+          })
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .padding(24)
   }
 }

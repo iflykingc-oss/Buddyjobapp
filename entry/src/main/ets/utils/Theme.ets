@@ -1,4 +1,5 @@
 import { AppStorage } from '@kit.ArkUI';
+import uiAppearance from '@ohos.uiAppearance';
 
 // 主题模式
 export enum ThemeMode {
@@ -24,6 +25,7 @@ export class ThemeManager {
     const savedMode = AppStorage.get<string>('themeMode') || ThemeMode.SYSTEM;
     AppStorage.setOrCreate('themeMode', savedMode);
     this.applyTheme(savedMode);
+    this.onSystemThemeChange();
   }
 
   // 设置主题模式
@@ -38,10 +40,29 @@ export class ThemeManager {
     if (mode === ThemeMode.DARK) {
       isDark = true;
     } else if (mode === ThemeMode.SYSTEM) {
-      // 跟随系统主题
-      isDark = false; // 默认浅色，实际应读取系统设置
+      try {
+        const colorMode = uiAppearance.getColorMode();
+        isDark = colorMode === uiAppearance.ColorMode.DARK;
+      } catch (e) {
+        isDark = false;
+      }
     }
     AppStorage.setOrCreate('isDarkMode', isDark);
+  }
+
+  // 监听系统主题变化
+  onSystemThemeChange(): void {
+    try {
+      uiAppearance.on('colorModeChange', (colorMode: uiAppearance.ColorMode) => {
+        const currentMode = AppStorage.get<string>('themeMode');
+        if (currentMode === ThemeMode.SYSTEM) {
+          const isDark = colorMode === uiAppearance.ColorMode.DARK;
+          AppStorage.setOrCreate('isDarkMode', isDark);
+        }
+      });
+    } catch (e) {
+      console.error('[ThemeManager] Failed to register color mode change listener');
+    }
   }
 
   // 获取当前是否暗黑模式

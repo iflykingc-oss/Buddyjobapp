@@ -2,6 +2,7 @@
  * 求职看板页面
  * 横向滚动看板视图，支持新增/编辑/删除/移动卡片
  */
+import router from '@ohos.router';
 import { KanbanStorageService } from '../services/KanbanStorageService';
 import { KanbanColumnItem } from '../components/kanban/KanbanColumnItem';
 import { CardEditSheet } from '../components/kanban/CardEditSheet';
@@ -123,13 +124,18 @@ struct KanbanPage {
   @Builder
   TopBar() {
     Row() {
-        Image($r('app.media.ic_back'))
-          .width(24)
-          .height(24)
-          .fillColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
-          .onClick(() => {
-            // 返回
-          })
+        Column() {
+          Image($r('app.media.ic_back'))
+            .width(24)
+            .height(24)
+            .fillColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
+            .onClick(() => {
+              router.back();
+            })
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
 
         Text('求职看板')
           .fontSize(18)
@@ -140,17 +146,22 @@ struct KanbanPage {
         Blank()
 
         // 搜索按钮
-        Image($r('app.media.ic_search'))
-          .width(22)
-          .height(22)
-          .fillColor(this.showSearch ? Colors.primary : (this.isDarkMode ? '#99A0A6' : Colors.textSecondary))
-          .margin({ right: 16 })
-          .onClick(() => {
-            this.showSearch = !this.showSearch;
-            if (!this.showSearch) {
-              this.searchKeyword = '';
-            }
-          })
+        Column() {
+          Image($r('app.media.ic_search'))
+            .width(22)
+            .height(22)
+            .fillColor(this.showSearch ? Colors.primary : (this.isDarkMode ? '#99A0A6' : Colors.textSecondary))
+        }
+        .width(40)
+        .height(40)
+        .justifyContent(FlexAlign.Center)
+        .margin({ right: 16 })
+        .onClick(() => {
+          this.showSearch = !this.showSearch;
+          if (!this.showSearch) {
+            this.searchKeyword = '';
+          }
+        })
 
         // 新增按钮
         Row() {
@@ -159,10 +170,10 @@ struct KanbanPage {
             .height(18)
             .fillColor('#FFFFFF')
         }
-        .width(32)
-        .height(32)
+        .width(40)
+        .height(40)
         .backgroundColor(Colors.primary)
-        .borderRadius(16)
+        .borderRadius(20)
         .justifyContent(FlexAlign.Center)
         .onClick(() => {
           this.addColumn = KanbanColumnStatus.WISH;
@@ -171,7 +182,7 @@ struct KanbanPage {
       }
       .width('100%')
       .height(56)
-      .padding({ left: 16, right: 16 })
+      .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: 16, right: 16 })
       .backgroundColor(this.isDarkMode ? '#1C2028' : Colors.white)
   }
 

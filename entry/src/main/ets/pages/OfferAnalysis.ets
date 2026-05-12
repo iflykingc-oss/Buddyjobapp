@@ -141,11 +141,16 @@ struct OfferAnalysisPage {
   @Builder
   TopBar() {
     Row() {
-      Image($r('app.media.ic_back'))
-        .width(ComponentSizes.Icon.Lg)
-        .height(ComponentSizes.Icon.Lg)
-        .fillColor(this.isDarkMode ? '#E3E5E8' : SemanticColors.Text1)
-        .onClick(() => router.back())
+      Column() {
+        Image($r('app.media.ic_back'))
+          .width(ComponentSizes.Icon.Lg)
+          .height(ComponentSizes.Icon.Lg)
+          .fillColor(this.isDarkMode ? '#E3E5E8' : SemanticColors.Text1)
+          .onClick(() => router.back())
+      }
+      .width(40)
+      .height(40)
+      .justifyContent(FlexAlign.Center)
 
       Text(this.getPhaseTitle())
         .fontSize(FontSize.Lg)
@@ -172,7 +177,7 @@ struct OfferAnalysisPage {
     }
     .width('100%')
     .height(HarmonyDesign.NavBarHeight)
-    .padding({ left: HarmonyDesign.SafePadding, right: HarmonyDesign.SafePadding })
+    .padding({ top: AppStorage.get<number>('topSafeArea') || 0, left: HarmonyDesign.SafePadding, right: HarmonyDesign.SafePadding })
     .backgroundColor(this.isDarkMode ? '#1C2028' : SemanticColors.Surface1)
   }
 

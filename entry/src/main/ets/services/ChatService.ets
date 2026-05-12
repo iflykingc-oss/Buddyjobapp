@@ -106,7 +106,7 @@ export class ChatService {
     } catch (error) {
       console.error('[ChatService] Send message failed:', error);
       return {
-        content: '网络连接失败，请检查网络后重试。',
+        content: 'AI助手暂时无法回复，请检查网络后重试。',
         sessionId: AppStorage.get<string>('currentConversationId') || ''
       };
     }
@@ -326,8 +326,8 @@ export class ChatService {
         }
       }, delay);
     } else {
-      // 超过最大重试次数
-      this.currentCallbacks?.onError?.(`连接失败，请稍后重试: ${error}`);
+      // 超过最大重试次数，返回明确的错误提示而非模拟数据
+      this.currentCallbacks?.onError?.('AI助手暂时无法回复，请检查网络后重试');
       this.updateConnectionState('disconnected');
     }
   }
@@ -433,7 +433,9 @@ export class ChatService {
   }
 
   /**
-   * 生成模拟回复（备用/演示用）
+   * 生成模拟回复
+   * [仅用于开发调试] 生产环境中 API 请求失败时应返回明确的错误提示，不应使用模拟数据
+   * @deprecated 审核期间禁用，API 失败时请直接返回错误提示
    */
   generateMockReply(content: string): string {
     const tips = [
@@ -460,7 +462,9 @@ export class ChatService {
   }
 
   /**
-   * 模拟流式输出（用于演示/测试）
+   * 模拟流式输出
+   * [仅用于开发调试] 生产环境中 API 请求失败时应返回明确的错误提示，不应使用模拟数据
+   * @deprecated 审核期间禁用，API 失败时请直接返回错误提示
    * @param content 用户消息
    * @param callbacks 流式回调
    * @param charDelay 字符延迟（毫秒）

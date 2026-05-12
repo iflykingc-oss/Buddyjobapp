@@ -434,8 +434,18 @@ export struct PurchaseSheet {
 
   /**
    * 处理购买
+   * 审核期间禁用 mock 支付流程，点击时显示即将上线提示
    */
   private async handlePurchase() {
+    // 审核期间隐藏支付入口，显示即将上线提示
+    promptAction.showToast({
+      message: '支付功能即将上线，敬请期待',
+      duration: 2000
+    });
+    return;
+
+    // 以下为原支付流程，审核通过后恢复
+    /*
     if (this.isPurchasing) return;
     
     this.isPurchasing = true;
@@ -471,5 +481,6 @@ export struct PurchaseSheet {
         duration: 2000
       });
     }
+    */
   }
 }
