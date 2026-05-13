@@ -536,10 +536,14 @@ export class DataConverter {
 
       if (typeof scoreObj === 'object' && scoreObj !== null) {
         // v2格式: score 是对象 { "E": 1, "I": 2 }
-        const keys = Object.keys(scoreObj);
-        if (keys.length > 0) {
-          dimension = item.dimension || keys[0];
-          score = typeof scoreObj[keys[0]] === 'number' ? scoreObj[keys[0]] : undefined;
+        let firstKey: string | undefined = undefined;
+        for (const k in scoreObj) {
+          firstKey = k;
+          break;
+        }
+        if (firstKey !== undefined) {
+          dimension = item.dimension || firstKey;
+          score = typeof scoreObj[firstKey] === 'number' ? scoreObj[firstKey] : undefined;
         }
       } else if (typeof scoreObj === 'number') {
         score = scoreObj;

@@ -126,7 +126,8 @@ function parseList(lines: string[], isOrdered: boolean): string {
   let currentItem: string[] = [];
   let indentLevel = 0;
 
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const match = line.match(/^(\s*)([-*+]|\d+\.)\s+(.*)$/);
     if (match) {
       if (currentItem.length > 0) {

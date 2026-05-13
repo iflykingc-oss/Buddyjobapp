@@ -959,7 +959,8 @@ export class XiaoyiIntentService {
   private static extractSuggestionTitle(suggestion: string): string {
     // 尝试从建议中提取关键词作为标题
     const keywords = ['量化', '数据', '技能', '经验', '项目', '优化', '添加', '完善', '突出', '简化'];
-    for (const keyword of keywords) {
+    for (let i = 0; i < keywords.length; i++) {
+      const keyword = keywords[i];
       if (suggestion.includes(keyword)) {
         return `建议${keyword === '量化' ? '添加量化数据' : keyword === '数据' ? '补充数据指标' : `完善${keyword}`}`;
       }

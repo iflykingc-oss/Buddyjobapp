@@ -240,7 +240,8 @@ export class AssessmentService {
     const dimensionMap: Record<string, number[]> = {};
 
     // 统计各维度得分
-    for (const question of assessment.questions) {
+    for (let i = 0; i < assessment.questions.length; i++) {
+      const question = assessment.questions[i];
       const selectedOptionId = answers[question.id] as string;
       if (!selectedOptionId) continue;
 
@@ -258,7 +259,8 @@ export class AssessmentService {
     const dimensionDetails: DimensionDetail[] = [];
     let totalScore = 0;
 
-    for (const dim of assessment.dimensions) {
+    for (let i = 0; i < assessment.dimensions.length; i++) {
+      const dim = assessment.dimensions[i];
       const dimKey = dim.split(' ')[0]; // 取维度代码
       const scores = dimensionMap[dimKey] || [];
       const positiveCount = scores.filter(s => s > 0).length;

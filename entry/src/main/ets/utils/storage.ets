@@ -33,12 +33,12 @@ export class Storage {
       if (this.preferences) {
         const allEntries = await this.preferences.getAll();
         if (allEntries) {
-          Object.keys(allEntries).forEach((key) => {
+          for (const key in allEntries) {
             const value = allEntries[key];
             if (typeof value === 'string') {
               this.cache.set(key, value);
             }
-          });
+          }
         }
       }
     } catch (error) {
@@ -195,7 +195,11 @@ export class Storage {
       if (this.preferences) {
         const allEntries = await this.preferences.getAll();
         if (allEntries) {
-          return Object.keys(allEntries);
+          const keys: string[] = [];
+          for (const k in allEntries) {
+            keys.push(k);
+          }
+          return keys;
         }
       }
       return Array.from(this.cache.keys());

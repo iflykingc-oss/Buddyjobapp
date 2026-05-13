@@ -232,7 +232,11 @@ export class ChatService {
    * @returns 所有场景配置数组
    */
   getAllSceneConfigs(): SceneConfig[] {
-    return Object.values(SCENE_CONFIGS);
+    const configs: SceneConfig[] = [];
+    for (const key in SCENE_CONFIGS) {
+      configs.push(SCENE_CONFIGS[key]);
+    }
+    return configs;
   }
 
   // ==================== 上下文记忆相关方法 ====================
@@ -482,7 +486,8 @@ export class ChatService {
     const lines = responseText.split('\n');
     let currentEvent: SSEEvent = { event: '', data: '' };
 
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
       if (line.startsWith('event:')) {
         currentEvent.event = line.substring(6).trim();
       } else if (line.startsWith('data:')) {

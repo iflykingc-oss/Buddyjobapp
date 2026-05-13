@@ -263,7 +263,8 @@ export class PermissionManager {
   async checkPermissions(permissions: PermissionType[]): Promise<Map<PermissionType, PermissionStatus>> {
     const results = new Map<PermissionType, PermissionStatus>();
 
-    for (const permission of permissions) {
+    for (let i = 0; i < permissions.length; i++) {
+      const permission = permissions[i];
       const status = await this.checkPermission(permission);
       results.set(permission, status);
     }
@@ -359,16 +360,16 @@ export class PermissionManager {
     const statusMap = await this.checkPermissions(requiredPermissions);
 
     let allGranted = true;
-    for (const [permission, status] of statusMap) {
+    statusMap.forEach((status, permission) => {
       if (!status.granted && status.canRequest) {
-        const granted = await this.requestPermission(permission);
+        const granted = this.requestPermissionSync(permission);
         if (!granted) {
           allGranted = false;
         }
       } else if (!status.granted) {
         allGranted = false;
       }
-    }
+    });
 
     return allGranted;
   }

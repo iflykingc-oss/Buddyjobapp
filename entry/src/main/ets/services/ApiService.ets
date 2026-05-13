@@ -386,7 +386,8 @@ export class ApiService {
   private async executeRequestInterceptors(config: RequestConfig): Promise<RequestConfig> {
     let processedConfig = { ...config };
 
-    for (const interceptor of this.requestInterceptors) {
+    for (let i = 0; i < this.requestInterceptors.length; i++) {
+      const interceptor = this.requestInterceptors[i];
       processedConfig = await interceptor(processedConfig);
     }
 
@@ -401,7 +402,8 @@ export class ApiService {
   private async executeResponseInterceptors(response: ApiResponse<any>): Promise<ApiResponse<any>> {
     let processedResponse = { ...response };
 
-    for (const interceptor of this.responseInterceptors) {
+    for (let i = 0; i < this.responseInterceptors.length; i++) {
+      const interceptor = this.responseInterceptors[i];
       processedResponse = await interceptor(processedResponse);
     }
 
@@ -436,7 +438,14 @@ export class ApiService {
 
     // 构建URL
     let url = processedConfig.url;
-    if (processedConfig.params && Object.keys(processedConfig.params).length > 0) {
+    let hasParams = false;
+    for (const key in processedConfig.params) {
+      if (processedConfig.params[key] !== undefined) {
+        hasParams = true;
+        break;
+      }
+    }
+    if (processedConfig.params && hasParams) {
       const queryString = this.buildQuery(processedConfig.params);
       url = url.includes('?') ? `${url}&${queryString}` : `${url}?${queryString}`;
     }
@@ -730,10 +739,14 @@ export class ApiService {
    * @returns URL编码的查询参数字符串
    */
   private buildQuery(params: Record<string, any>): string {
-    return Object.entries(params)
-      .filter(([, v]) => v !== null && v !== undefined)
-      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
-      .join('&');
+    const parts: string[] = [];
+    for (const key in params) {
+      const value = params[key];
+      if (value !== null && value !== undefined) {
+        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+      }
+    }
+    return parts.join('&');
   }
 }
 

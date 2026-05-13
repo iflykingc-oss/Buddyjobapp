@@ -468,7 +468,8 @@ export class PaymentService {
       
       const pendingOrders = await this.queryPendingOrders();
       
-      for (const order of pendingOrders) {
+      for (let i = 0; i < pendingOrders.length; i++) {
+        const order = pendingOrders[i];
         console.info(`[PaymentService] Processing pending order: ${order.orderId}`);
         
         // 发送到服务器验证
@@ -552,7 +553,8 @@ export class PaymentService {
       );
 
       if (response.success && response.data) {
-        for (const subscription of response.data) {
+        for (let i = 0; i < response.data.length; i++) {
+          const subscription = response.data[i];
           if (subscription.isActive) {
             // 更新本地 VIP 状态
             await this.updateUserVipStatus(subscription.productId, subscription.expirationDate);
@@ -647,9 +649,9 @@ export class PaymentService {
    * 判断是否为订阅商品
    */
   private isSubscriptionProduct(productId: string): boolean {
-    return Object.values(MEMBERSHIP_PRODUCTS).some(
-      product => product.productId === productId
-    );
+    return productId === MEMBERSHIP_PRODUCTS.VIP_MONTHLY.productId ||
+           productId === MEMBERSHIP_PRODUCTS.VIP_YEARLY.productId ||
+           productId === MEMBERSHIP_PRODUCTS.VIP_QUARTERLY.productId;
   }
 
   /**

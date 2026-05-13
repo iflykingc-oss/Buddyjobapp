@@ -12,7 +12,7 @@
  */
 
 import { Message, ChatSession } from '../models/Message';
-import { ChatService, StreamCallbacks, SSEConnectionState, ChatScene, SCENE_CONFIGS } from '../services/ChatService';
+import { ChatService, StreamCallbacks, SSEConnectionState, ChatScene, SCENE_CONFIGS, SceneConfig } from '../services/ChatService';
 import { HistoryService } from '../services/HistoryService';
 import { ChatMarkdownRenderer } from '../components/MarkdownRenderer';
 import { ChatBubble, StreamingChatBubble } from '../components/chat/ChatBubble';
@@ -164,13 +164,15 @@ export struct ChatPage {
   private messageDataSource: MessageDataSource = new MessageDataSource();
 
   // 所有场景配置
-  private sceneConfigs = Object.values(SCENE_CONFIGS);
+  private sceneConfigs: SceneConfig[] = [];
 
   aboutToAppear() {
     this.loadHistory();
     this.checkAndShowWarning();
     // 初始化场景
     this.currentScene = this.chatService.getScene();
+    // 初始化场景配置列表（避免Object.values）
+    this.sceneConfigs = this.chatService.getAllSceneConfigs();
   }
 
   aboutToDisappear() {

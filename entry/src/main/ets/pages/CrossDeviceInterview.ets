@@ -158,8 +158,8 @@ struct CrossDeviceInterviewPage {
         .fontColor(Colors.primary)
         .onClick(async () => {
           // 手动同步
-          for (const device of this.devices) {
-            await CrossDeviceInterviewService.requestSyncFromDevice(device.deviceId);
+          for (let i = 0; i < this.devices.length; i++) {
+            await CrossDeviceInterviewService.requestSyncFromDevice(this.devices[i].deviceId);
           }
         })
     }

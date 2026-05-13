@@ -211,7 +211,8 @@ export class CrossDeviceInterviewService {
       const prepKeys = keys.filter(key => key.startsWith('prep_'));
 
       const preps: InterviewPrepData[] = [];
-      for (const key of prepKeys) {
+      for (let i = 0; i < prepKeys.length; i++) {
+        const key = prepKeys[i];
         const data = await storage.get(key, null);
         if (data) {
           preps.push(JSON.parse(data) as InterviewPrepData);
@@ -262,8 +263,8 @@ export class CrossDeviceInterviewService {
     try {
       const devices = await this.getAvailableDevices();
 
-      for (const device of devices) {
-        await this.syncToDevice(device.deviceId, prepData);
+      for (let i = 0; i < devices.length; i++) {
+        await this.syncToDevice(devices[i].deviceId, prepData);
       }
 
       hilog.info(DOMAIN, TAG, `Synced to ${devices.length} devices`);
@@ -411,8 +412,8 @@ export class CrossDeviceInterviewService {
     try {
       const preps = await this.getAllInterviewPreps();
 
-      for (const prep of preps) {
-        await this.syncToDevice(deviceId, prep);
+      for (let i = 0; i < preps.length; i++) {
+        await this.syncToDevice(deviceId, preps[i]);
       }
 
       hilog.info(DOMAIN, TAG, `Synced all data to device: ${deviceId}`);

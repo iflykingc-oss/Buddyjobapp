@@ -168,7 +168,8 @@ export class HMSUtils {
    */
   async checkMultipleServices(serviceTypes: HMSServiceType[]): Promise<Map<HMSServiceType, boolean>> {
     const results = new Map<HMSServiceType, boolean>();
-    for (const type of serviceTypes) {
+    for (let i = 0; i < serviceTypes.length; i++) {
+      const type = serviceTypes[i];
       const available = await this.checkServiceAvailability(type);
       results.set(type, available);
     }
@@ -240,7 +241,8 @@ export class HMSUtils {
       const atManager = abilityAccessCtrl.createAtManager();
       const tokenId = getContext(this).applicationInfo.accessTokenId;
 
-      for (const permission of permissions) {
+      for (let i = 0; i < permissions.length; i++) {
+        const permission = permissions[i];
         const authStatus = await atManager.checkAccessToken(tokenId, permission);
         if (authStatus !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
           return false;

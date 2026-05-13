@@ -333,7 +333,11 @@ export struct HelpFeedbackPage {
           .margin({ bottom: Spacing.Space3 })
 
         Row() {
-          ForEach(Object.values(FeedbackType), (type: FeedbackType) => {
+          ForEach([
+            FeedbackType.ISSUE,
+            FeedbackType.SUGGESTION,
+            FeedbackType.OTHER
+          ] as FeedbackType[], (type: FeedbackType) => {
             Text(FeedbackTypeLabels[type])
               .fontSize(FontSize.Sm)
               .fontColor(this.feedbackType === type ? BrandColors.Brand500 : SemanticColors.Text2)

@@ -199,7 +199,8 @@ export class KanbanStorageService {
     const data = await this.loadOrCreate();
     const stats: Record<string, number> = {};
 
-    for (const col of data.columns) {
+    for (let i = 0; i < data.columns.length; i++) {
+      const col = data.columns[i];
       stats[col.status] = data.cards.filter(c => c.columnStatus === col.status).length;
     }
 

@@ -354,14 +354,15 @@ export class DataLoadService {
         if (filters.keyword && filters.keyword.length > 0) {
           const keyword = filters.keyword.toLowerCase();
           filtered = filtered.filter((item: T) => {
-            const keys = Object.keys(item);
-            for (let i = 0; i < keys.length; i++) {
-              const val = item[keys[i]];
+            let found = false;
+            for (const key in item) {
+              const val = (item as Record<string, any>)[key];
               if (typeof val === 'string' && val.toLowerCase().includes(keyword)) {
-                return true;
+                found = true;
+                break;
               }
             }
-            return false;
+            return found;
           });
         }
 

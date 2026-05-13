@@ -253,7 +253,8 @@ export class ResumeOptimizationService {
         return true;
       });
 
-      for (const suggestion of toApply) {
+      for (let i = 0; i < toApply.length; i++) {
+        const suggestion = toApply[i];
         const success = await this.applySuggestion(resumeId, suggestion.id);
         if (success) {
           appliedCount++;
@@ -344,7 +345,8 @@ export class ResumeOptimizationService {
   ): Promise<string> {
     let optimized = content;
 
-    for (const suggestion of suggestions) {
+    for (let i = 0; i < suggestions.length; i++) {
+      const suggestion = suggestions[i];
       optimized = optimized.replace(suggestion.original, suggestion.optimized);
     }
 
