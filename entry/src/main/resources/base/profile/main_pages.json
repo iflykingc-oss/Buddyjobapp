@@ -5,6 +5,8 @@
     "pages/Login",
     "pages/Chat",
     "pages/Resume",
+    "pages/ResumeGuide",
+    "pages/ResumeTemplates",
     "pages/Assessment",
     "pages/Interview",
     "pages/Kanban",

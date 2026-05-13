@@ -2,7 +2,6 @@
   "module": {
     "name": "entry",
     "type": "entry",
-    "srcPath": "./entry",
     "launchType": "standard",
     "label": "$string:entry_label",
     "description": "$string:entry_label",
