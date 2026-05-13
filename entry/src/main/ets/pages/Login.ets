@@ -298,7 +298,7 @@ struct Login {
 
   canLogin(): boolean {
     return this.phone.length === 11 &&
-           this.code.length === 4 &&
+           this.code.length === 6 &&
            this.agreeTerms;
   }
 

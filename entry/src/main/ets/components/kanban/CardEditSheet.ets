@@ -360,9 +360,9 @@ export struct CardEditSheet {
   private toggleTag(tag: string): void {
     const index = this.selectedTags.indexOf(tag);
     if (index >= 0) {
-      this.selectedTags.splice(index, 1);
+      this.selectedTags = this.selectedTags.filter((_, i) => i !== index);
     } else {
-      this.selectedTags.push(tag);
+      this.selectedTags = [...this.selectedTags, tag];
     }
   }
 }

@@ -32,6 +32,7 @@ import {
   SuccessColors, WarningColors, ErrorColors, InfoColors,
   SemanticSpacing, SemanticRadius, FontSize, FontWeight,
   ComponentSizes, Duration, Easing, Shadows, HarmonyDesign,
+  Colors,
 } from '../constants/design-tokens';
 
 // 页面阶段

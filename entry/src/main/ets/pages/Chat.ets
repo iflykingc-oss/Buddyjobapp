@@ -34,6 +34,7 @@ import {
   DarkSemanticColors
 } from '../constants/design-tokens';
 import { promptAction, messageManager } from '@kit.ArkUI';
+import { pasteboard } from '@kit.ArkData';
 
 const WARNING_STORAGE_KEY = 'chat_warning_dismissed';
 const WARNING_MESSAGE = '当前对话记录仅保存在本地，关闭页面后自动清除';
@@ -505,9 +506,10 @@ export struct ChatPage {
   /**
    * 复制消息
    */
-  private copyMessage(content: string) {
-    // 使用剪贴板复制
+  private async copyMessage(content: string): Promise<void> {
     try {
+      const pasteboardData = pasteboard.getSystemPasteboard();
+      pasteboardData.setData(pasteboard.createPlainTextData(content));
       promptAction.showToast({
         message: '已复制到剪贴板',
         duration: 1500

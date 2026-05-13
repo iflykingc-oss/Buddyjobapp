@@ -142,7 +142,7 @@ export const DEFAULT_COLUMNS: KanbanColumn[] = [
  * 常用标签模板
  */
 export const DEFAULT_TAGS: string[] = [
-  '远程', ' onsite', '外企', '国企', '创业公司',
+  '远程', 'onsite', '外企', '国企', '创业公司',
   '大厂', '急招', '内推', '校招', '社招',
   'Java', '前端', '后端', '产品', '设计',
   '数据分析', 'AI', '运维', '测试'
