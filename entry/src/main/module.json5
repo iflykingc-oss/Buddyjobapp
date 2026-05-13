@@ -14,8 +14,8 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "targetSdkVersion": 4,
-    "compatibleSdkVersion": 4,
+    "targetSdkVersion": "5.0.0",
+    "compatibleSdkVersion": "5.0.0",
     "querySchemes": [
       "plugs",
       "share",
