@@ -119,15 +119,15 @@ export struct AgentButton {
   private getAgentIcon(): Resource {
     switch (this.agentType) {
       case AgentType.RESUME:
-        return $r('app.media.ic_agent_resume');
+        return $r('app.media.media_ic_agent_resume');
       case AgentType.INTERVIEW:
-        return $r('app.media.ic_agent_interview');
+        return $r('app.media.media_ic_agent_interview');
       case AgentType.CAREER:
-        return $r('app.media.ic_agent_career');
+        return $r('app.media.media_ic_agent_career');
       case AgentType.OFFER:
-        return $r('app.media.ic_agent_offer');
+        return $r('app.media.media_ic_agent_offer');
       default:
-        return $r('app.media.ic_agent');
+        return $r('app.media.media_ic_agent');
     }
   }
 
@@ -236,7 +236,7 @@ export struct AgentCard {
 
         Blank();
 
-        Image($r('app.media.ic_expand'))
+        Image($r('app.media.media_ic_expand'))
           .width(20)
           .height(20)
           .fillColor(NeutralColors.Neutral400)
@@ -254,7 +254,7 @@ export struct AgentCard {
           // 功能列表
           ForEach(this.getAgentFeatures(), (feature: string, index: number) => {
             Row() {
-              Image($r('app.media.ic_check'))
+              Image($r('app.media.media_ic_check'))
                 .width(16)
                 .height(16)
                 .fillColor(SemanticColors.Success.Success500);
@@ -361,15 +361,15 @@ export struct AgentCard {
   private getAgentIcon(): Resource {
     switch (this.agentType) {
       case AgentType.RESUME:
-        return $r('app.media.ic_agent_resume');
+        return $r('app.media.media_ic_agent_resume');
       case AgentType.INTERVIEW:
-        return $r('app.media.ic_agent_interview');
+        return $r('app.media.media_ic_agent_interview');
       case AgentType.CAREER:
-        return $r('app.media.ic_agent_career');
+        return $r('app.media.media_ic_agent_career');
       case AgentType.OFFER:
-        return $r('app.media.ic_agent_offer');
+        return $r('app.media.media_ic_agent_offer');
       default:
-        return $r('app.media.ic_agent');
+        return $r('app.media.media_ic_agent');
     }
   }
 }

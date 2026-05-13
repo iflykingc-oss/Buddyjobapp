@@ -761,7 +761,7 @@ export struct ChatPage {
     Column() {
       // 空状态图标
       Column() {
-        Image($r('app.media.ic_chat'))
+        Image($r('app.media.media_ic_chat'))
           .width(64)
           .height(64)
           .fillColor(BrandColors.Brand300)
@@ -925,12 +925,12 @@ export struct ChatPage {
       Column() {
         if (this.isStreaming) {
           // 流式输出时显示停止按钮
-          Image($r('app.media.ic_stop'))
+          Image($r('app.media.media_ic_stop'))
             .width(20)
             .height(20)
             .fillColor(NeutralColors.Neutral0)
         } else {
-          Image($r('app.media.ic_send'))
+          Image($r('app.media.media_ic_send'))
             .width(20)
             .height(20)
             .fillColor(NeutralColors.Neutral0)

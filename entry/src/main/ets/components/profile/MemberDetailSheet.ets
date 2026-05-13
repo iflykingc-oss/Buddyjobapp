@@ -161,7 +161,7 @@ export struct MemberDetailSheet {
         Blank()
         
         Column() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text3)
@@ -388,7 +388,7 @@ export struct MemberDetailSheet {
       Column() {
         if (this.usageRecords.length === 0) {
           Column() {
-            Image($r('app.media.ic_history'))
+            Image($r('app.media.media_ic_history'))
               .width(48)
               .height(48)
               .fillColor(SemanticColors.Text3)
@@ -594,19 +594,19 @@ export struct MemberDetailSheet {
   private getBenefitIcon(iconName: string): Resource {
     switch (iconName) {
       case 'ic_resume':
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
       case 'ic_assessment':
-        return $r('app.media.ic_assessment');
+        return $r('app.media.media_ic_assessment');
       case 'ic_chat':
-        return $r('app.media.ic_chat');
+        return $r('app.media.media_ic_chat');
       case 'ic_knowledge':
-        return $r('app.media.ic_knowledge');
+        return $r('app.media.media_ic_knowledge');
       case 'ic_favorite':
-        return $r('app.media.ic_favorite');
+        return $r('app.media.media_ic_favorite');
       case 'ic_help':
-        return $r('app.media.ic_help');
+        return $r('app.media.media_ic_help');
       default:
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
     }
   }
 

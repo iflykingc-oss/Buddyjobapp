@@ -305,7 +305,7 @@ export struct ResumeGuide {
     Row() {
       // 返回按钮
       Button() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.media_ic_back'))
           .width(24)
           .height(24)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -369,7 +369,7 @@ export struct ResumeGuide {
 
             // 数字或完成图标
             if (index < this.currentStep) {
-              Image($r('app.media.ic_check'))
+              Image($r('app.media.media_ic_check'))
                 .width(18)
                 .height(18)
                 .fillColor(NeutralColors.Neutral0)
@@ -455,7 +455,7 @@ export struct ResumeGuide {
     Column() {
       // 示例标题行
       Row() {
-        Image($r('app.media.ic_tip'))
+        Image($r('app.media.media_ic_tip'))
           .width(16)
           .height(16)
           .fillColor(BrandColors.Brand500)
@@ -469,7 +469,7 @@ export struct ResumeGuide {
         Blank()
 
         // 展开/收起按钮
-        Image(this.showExample ? $r('app.media.ic_arrow_up') : $r('app.media.ic_arrow_down'))
+        Image(this.showExample ? $r('app.media.media_ic_arrow_up') : $r('app.media.media_ic_arrow_down'))
           .width(16)
           .height(16)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -661,7 +661,7 @@ export struct ResumeGuide {
           if (index === this.draft.education.length - 1) {
             Button() {
               Row() {
-                Image($r('app.media.ic_add'))
+                Image($r('app.media.media_ic_add'))
                   .width(16)
                   .height(16)
                   .fillColor(BrandColors.Brand500)
@@ -778,7 +778,7 @@ export struct ResumeGuide {
           if (index === this.draft.workExperience.length - 1) {
             Button() {
               Row() {
-                Image($r('app.media.ic_add'))
+                Image($r('app.media.media_ic_add'))
                   .width(16)
                   .height(16)
                   .fillColor(BrandColors.Brand500)
@@ -866,7 +866,7 @@ export struct ResumeGuide {
           if (index === this.draft.projects.length - 1) {
             Button() {
               Row() {
-                Image($r('app.media.ic_add'))
+                Image($r('app.media.media_ic_add'))
                   .width(16)
                   .height(16)
                   .fillColor(BrandColors.Brand500)
@@ -928,7 +928,7 @@ export struct ResumeGuide {
                 .fontSize(FontSize.Sm)
                 .fontColor(NeutralColors.Neutral0)
 
-              Image($r('app.media.ic_close'))
+              Image($r('app.media.media_ic_close'))
                 .width(12)
                 .height(12)
                 .fillColor(NeutralColors.Neutral0)
@@ -974,7 +974,7 @@ export struct ResumeGuide {
                 .fontSize(FontSize.Sm)
                 .fontColor(NeutralColors.Neutral0)
 
-              Image($r('app.media.ic_close'))
+              Image($r('app.media.media_ic_close'))
                 .width(12)
                 .height(12)
                 .fillColor(NeutralColors.Neutral0)
@@ -1112,7 +1112,7 @@ export struct ResumeGuide {
         if (this.currentStep > 0) {
           Button() {
             Row() {
-              Image($r('app.media.ic_arrow_left'))
+              Image($r('app.media.media_ic_arrow_left'))
                 .width(16)
                 .height(16)
                 .fillColor(BrandColors.Brand500)
@@ -1143,7 +1143,7 @@ export struct ResumeGuide {
               Text('下一步')
                 .fontSize(FontSize.Base)
                 .fontColor(NeutralColors.Neutral0)
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(NeutralColors.Neutral0)
@@ -1163,7 +1163,7 @@ export struct ResumeGuide {
               Text('完成创建')
                 .fontSize(FontSize.Base)
                 .fontColor(NeutralColors.Neutral0)
-              Image($r('app.media.ic_check'))
+              Image($r('app.media.media_ic_check'))
                 .width(16)
                 .height(16)
                 .fillColor(NeutralColors.Neutral0)

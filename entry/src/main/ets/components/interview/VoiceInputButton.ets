@@ -280,12 +280,12 @@ export struct VoiceInputButton {
   ModeSwitchButton() {
     Column() {
       if (this.inputMode === 'voice') {
-        Image($r('app.media.ic_keyboard'))
+        Image($r('app.media.media_ic_keyboard'))
           .width(24)
           .height(24)
           .fillColor(SemanticColors.Text2)
       } else {
-        Image($r('app.media.ic_microphone'))
+        Image($r('app.media.media_ic_microphone'))
           .width(24)
           .height(24)
           .fillColor(this.speechAvailable ? SemanticColors.Text2 : SemanticColors.Text4)
@@ -311,7 +311,7 @@ export struct VoiceInputButton {
   @Builder
   SettingsButton() {
     Column() {
-      Image($r('app.media.ic_settings'))
+      Image($r('app.media.media_ic_settings'))
         .width(20)
         .height(20)
         .fillColor(SemanticColors.Text2)
@@ -363,7 +363,7 @@ export struct VoiceInputButton {
       // 可用性提示
       if (!this.speechAvailable) {
         Row() {
-          Image($r('app.media.ic_warning'))
+          Image($r('app.media.media_ic_warning'))
             .width(16)
             .height(16)
             .fillColor(ErrorColors.Error500)
@@ -426,7 +426,7 @@ export struct VoiceInputButton {
 
         // 停止按钮
         Column() {
-          Image($r('app.media.ic_stop'))
+          Image($r('app.media.media_ic_stop'))
             .width(20)
             .height(20)
             .fillColor(ErrorColors.Error500)
@@ -501,7 +501,7 @@ export struct VoiceInputButton {
 
         // 停止按钮
         Column() {
-          Image($r('app.media.ic_stop'))
+          Image($r('app.media.media_ic_stop'))
             .width(20)
             .height(20)
             .fillColor(NeutralColors.Neutral0)
@@ -521,7 +521,7 @@ export struct VoiceInputButton {
         // 待聆听状态 - 点击开始语音识别
         Column() {
           Row() {
-            Image($r('app.media.ic_microphone'))
+            Image($r('app.media.media_ic_microphone'))
               .width(20)
               .height(20)
               .fillColor(this.speechAvailable ? NeutralColors.Neutral0 : SemanticColors.Text3)

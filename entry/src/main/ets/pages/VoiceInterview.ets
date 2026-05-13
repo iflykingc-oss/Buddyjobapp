@@ -86,7 +86,7 @@ struct VoiceInterviewPage {
     Row() {
       // 返回按钮
       Column() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.media_ic_back'))
           .width(24)
           .height(24)
           .onClick(async () => {
@@ -137,7 +137,7 @@ struct VoiceInterviewPage {
     Column() {
       // 空状态
       Column() {
-        Image($r('app.media.ic_voice_interview'))
+        Image($r('app.media.media_ic_voice_interview'))
           .width(120)
           .height(120)
 
@@ -247,7 +247,7 @@ struct VoiceInterviewPage {
 
         if (this.currentQuestion!.tips && this.currentQuestion!.tips.length > 0) {
           Row() {
-            Image($r('app.media.ic_tip'))
+            Image($r('app.media.media_ic_tip'))
               .width(16)
               .height(16)
               .fontColor(Colors.textSecondary)
@@ -324,7 +324,7 @@ struct VoiceInterviewPage {
           .justifyContent(FlexAlign.Center)
         } else {
           // 静态麦克风图标
-          Image($r('app.media.ic_mic'))
+          Image($r('app.media.media_ic_mic'))
             .width(48)
             .height(48)
             .fontColor(this.state === RecognitionState.SPEAKING ? Colors.primary : Colors.textSecondary)

@@ -142,7 +142,7 @@ struct OfferAnalysisPage {
   TopBar() {
     Row() {
       Column() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.media_ic_back'))
           .width(ComponentSizes.Icon.Lg)
           .height(ComponentSizes.Icon.Lg)
           .fillColor(this.isDarkMode ? '#E3E5E8' : SemanticColors.Text1)
@@ -441,7 +441,7 @@ struct OfferAnalysisPage {
             .alignItems(HorizontalAlign.Start)
             .layoutWeight(1)
 
-            Image($r('app.media.ic_arrow_right'))
+            Image($r('app.media.media_ic_arrow_right'))
               .width(ComponentSizes.Icon.Md)
               .height(ComponentSizes.Icon.Md)
               .fillColor(SemanticColors.Text3)
@@ -748,7 +748,7 @@ struct OfferAnalysisPage {
               Blank()
 
               if (this.offers[this.currentOfferIndex]?.overtimeFrequency === freq) {
-                Image($r('app.media.ic_check'))
+                Image($r('app.media.media_ic_check'))
                   .width(ComponentSizes.Icon.Md)
                   .height(ComponentSizes.Icon.Md)
                   .fillColor(BrandColors.Brand500)

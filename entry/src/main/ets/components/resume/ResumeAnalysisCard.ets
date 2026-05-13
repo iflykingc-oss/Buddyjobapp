@@ -266,7 +266,7 @@ export struct ResumeAnalysisCard {
 
       // 建议标题
       Row() {
-        Image($r('app.media.ic_tip'))
+        Image($r('app.media.media_ic_tip'))
           .width(16)
           .height(16)
           .fillColor(BrandColors.Brand500)

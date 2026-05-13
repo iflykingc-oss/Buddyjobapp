@@ -111,7 +111,7 @@ struct FavoritesPage {
       // 标题栏
       Row() {
         Column() {
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text1)
@@ -178,7 +178,7 @@ struct FavoritesPage {
       if (this.favoriteList.length === 0 && !this.isLoading) {
         // 空状态
         Column() {
-          Image($r('app.media.ic_favorite'))
+          Image($r('app.media.media_ic_favorite'))
             .width(80)
             .height(80)
             .fillColor(SemanticColors.Text4)
@@ -227,7 +227,7 @@ struct FavoritesPage {
                       .objectFit(ImageFit.Cover)
                   } else {
                     Column() {
-                      Image($r('app.media.ic_favorite'))
+                      Image($r('app.media.media_ic_favorite'))
                         .width(32)
                         .height(32)
                         .fillColor(BrandColors.Brand500)
@@ -285,7 +285,7 @@ struct FavoritesPage {
 
                   // 右侧取消收藏按钮
                   Column() {
-                    Image($r('app.media.ic_close'))
+                    Image($r('app.media.media_ic_close'))
                       .width(20)
                       .height(20)
                       .fillColor(SemanticColors.Text4)

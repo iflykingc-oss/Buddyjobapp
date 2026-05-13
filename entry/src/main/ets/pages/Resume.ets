@@ -293,7 +293,7 @@ export struct ResumePage {
       // 返回按钮（分析中显示）
       if (this.pageState === PageState.UPLOADING || this.pageState === PageState.ANALYZING) {
         Button() {
-          Image($r('app.media.ic_back'))
+          Image($r('app.media.media_ic_back'))
             .width(24)
             .height(24)
             .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -316,7 +316,7 @@ export struct ResumePage {
       // 模板下载按钮
       if (this.pageState === PageState.IDLE) {
         Button() {
-          Image($r('app.media.ic_download'))
+          Image($r('app.media.media_ic_download'))
             .width(20)
             .height(20)
             .fillColor(BrandColors.Brand500)
@@ -400,7 +400,7 @@ export struct ResumePage {
           Row() {
             // 文件图标
             Column() {
-              Image($r('app.media.ic_file'))
+              Image($r('app.media.media_ic_file'))
                 .width(24)
                 .height(24)
                 .fillColor(BrandColors.Brand500)
@@ -519,7 +519,7 @@ export struct ResumePage {
       Row() {
         // 加号图标
         Column() {
-          Image($r('app.media.ic_add'))
+          Image($r('app.media.media_ic_add'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -547,7 +547,7 @@ export struct ResumePage {
         .layoutWeight(1)
 
         // 箭头
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(20)
           .height(20)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -577,7 +577,7 @@ export struct ResumePage {
     Column() {
       // 上传图标
       Column() {
-        Image($r('app.media.ic_upload'))
+        Image($r('app.media.media_ic_upload'))
           .width(48)
           .height(48)
           .fillColor(BrandColors.Brand400)
@@ -648,7 +648,7 @@ export struct ResumePage {
     Column() {
       Row() {
         Column() {
-          Image($r('app.media.ic_edit'))
+          Image($r('app.media.media_ic_edit'))
             .width(32)
             .height(32)
             .fillColor(BrandColors.Brand500)
@@ -674,7 +674,7 @@ export struct ResumePage {
         .margin({ left: SemanticSpacing.Md })
         .layoutWeight(1)
 
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(20)
           .height(20)
           .fillColor(BrandColors.Brand500)
@@ -697,7 +697,7 @@ export struct ResumePage {
   @Builder
   buildSourceTag(text: string) {
     Row() {
-        Image($r('app.media.ic_file'))
+        Image($r('app.media.media_ic_file'))
           .width(12)
           .height(12)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -784,7 +784,7 @@ export struct ResumePage {
         // 文件名
         if (this.selectedFileName) {
           Row() {
-            Image($r('app.media.ic_file'))
+            Image($r('app.media.media_ic_file'))
               .width(16)
               .height(16)
               .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -815,7 +815,7 @@ export struct ResumePage {
               .height(16)
               .color(ErrorColors.Error500)
           } else {
-            Image($r('app.media.ic_close'))
+            Image($r('app.media.media_ic_close'))
               .width(16)
               .height(16)
               .fillColor(ErrorColors.Error500)
@@ -912,7 +912,7 @@ export struct ResumePage {
     Column() {
       // 错误图标
       Column() {
-        Image($r('app.media.ic_error'))
+        Image($r('app.media.media_ic_error'))
           .width(48)
           .height(48)
           .fillColor(ErrorColors.Error500)
@@ -941,7 +941,7 @@ export struct ResumePage {
         // 解决建议
         Column() {
           Row() {
-            Image($r('app.media.ic_tip'))
+            Image($r('app.media.media_ic_tip'))
               .width(16)
               .height(16)
               .fillColor(BrandColors.Brand500)
@@ -1008,7 +1008,7 @@ export struct ResumePage {
       // 流转提示
       if (this.isContinueRestore) {
         Row() {
-          Image($r('app.media.ic_info'))
+          Image($r('app.media.media_ic_info'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
@@ -1057,7 +1057,7 @@ export struct ResumePage {
     Column() {
       // 标题栏
       Row() {
-        Image($r('app.media.ic_analysis'))
+        Image($r('app.media.media_ic_analysis'))
           .width(20)
           .height(20)
           .fillColor(BrandColors.Brand500)
@@ -1070,7 +1070,7 @@ export struct ResumePage {
 
         Blank()
 
-        Image(this.isATSExpanded ? $r('app.media.ic_arrow_up') : $r('app.media.ic_arrow_down'))
+        Image(this.isATSExpanded ? $r('app.media.media_ic_arrow_up') : $r('app.media.media_ic_arrow_down'))
           .width(16)
           .height(16)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -1101,7 +1101,7 @@ export struct ResumePage {
 
           // 优化建议
           Row() {
-            Image($r('app.media.ic_tip'))
+            Image($r('app.media.media_ic_tip'))
               .width(14)
               .height(14)
               .fillColor(WarningColors.Warning500)
@@ -1185,7 +1185,7 @@ export struct ResumePage {
     Column() {
       // 标题栏
       Row() {
-        Image($r('app.media.ic_tip'))
+        Image($r('app.media.media_ic_tip'))
           .width(20)
           .height(20)
           .fillColor(BrandColors.Brand500)
@@ -1215,7 +1215,7 @@ export struct ResumePage {
           }
         }
 
-        Image(this.isSuggestionsExpanded ? $r('app.media.ic_arrow_up') : $r('app.media.ic_arrow_down'))
+        Image(this.isSuggestionsExpanded ? $r('app.media.media_ic_arrow_up') : $r('app.media.media_ic_arrow_down'))
           .width(16)
           .height(16)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)

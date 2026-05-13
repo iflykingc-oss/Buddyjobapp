@@ -468,7 +468,7 @@ export struct InterviewPage {
       // 选中状态
       Column() {
         if (this.selectedCategories.includes(key)) {
-          Image($r('app.media.ic_check'))
+          Image($r('app.media.media_ic_check'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
@@ -533,7 +533,7 @@ export struct InterviewPage {
       Row() {
         // 返回按钮
         Column() {
-          Image($r('app.media.ic_back'))
+          Image($r('app.media.media_ic_back'))
             .width(24)
             .height(24)
             .fillColor(NeutralColors.Neutral0)
@@ -607,7 +607,7 @@ export struct InterviewPage {
           Column() {
             // AI头像
             Column() {
-              Image($r('app.media.ic_ai'))
+              Image($r('app.media.media_ic_ai'))
                 .width(48)
                 .height(48)
                 .fillColor(NeutralColors.Neutral0)
@@ -649,7 +649,7 @@ export struct InterviewPage {
               // 回答提示
               if (this.currentQuestion?.tips) {
                 Row() {
-                  Image($r('app.media.ic_lightbulb'))
+                  Image($r('app.media.media_ic_lightbulb'))
                     .width(16)
                     .height(16)
                     .fillColor(WarningColors.Warning500)
@@ -707,7 +707,7 @@ export struct InterviewPage {
                     .fontWeight(FontWeight.Medium)
                     .fontColor(BrandColors.Brand500)
 
-                  Image($r('app.media.ic_send'))
+                  Image($r('app.media.media_ic_send'))
                     .width(16)
                     .height(16)
                     .fillColor(BrandColors.Brand500)
@@ -758,7 +758,7 @@ export struct InterviewPage {
         Column() {
           // 完成图标
           Column() {
-            Image($r('app.media.ic_check'))
+            Image($r('app.media.media_ic_check'))
               .width(48)
               .height(48)
               .fillColor(SuccessColors.Success500)
@@ -899,7 +899,7 @@ export struct InterviewPage {
             // 查看面试技巧
             Row() {
               Column() {
-                Image($r('app.media.ic_knowledge'))
+                Image($r('app.media.media_ic_knowledge'))
                   .width(20)
                   .height(20)
                   .fillColor(NeutralColors.Neutral0)
@@ -916,7 +916,7 @@ export struct InterviewPage {
                 .margin({ left: Spacing.Space3 })
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor('rgba(255, 255, 255, 0.5)')
@@ -934,7 +934,7 @@ export struct InterviewPage {
             // 再做一次测评
             Row() {
               Column() {
-                Image($r('app.media.ic_assessment'))
+                Image($r('app.media.media_ic_assessment'))
                   .width(20)
                   .height(20)
                   .fillColor(NeutralColors.Neutral0)
@@ -951,7 +951,7 @@ export struct InterviewPage {
                 .margin({ left: Spacing.Space3 })
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor('rgba(255, 255, 255, 0.5)')
@@ -970,7 +970,7 @@ export struct InterviewPage {
             // 分析Offer
             Row() {
               Column() {
-                Image($r('app.media.ic_order'))
+                Image($r('app.media.media_ic_order'))
                   .width(20)
                   .height(20)
                   .fillColor(NeutralColors.Neutral0)
@@ -987,7 +987,7 @@ export struct InterviewPage {
                 .margin({ left: Spacing.Space3 })
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor('rgba(255, 255, 255, 0.5)')
@@ -1005,7 +1005,7 @@ export struct InterviewPage {
             // 记录到看板
             Row() {
               Column() {
-                Image($r('app.media.ic_history'))
+                Image($r('app.media.media_ic_history'))
                   .width(20)
                   .height(20)
                   .fillColor(NeutralColors.Neutral0)
@@ -1022,7 +1022,7 @@ export struct InterviewPage {
                 .margin({ left: Spacing.Space3 })
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor('rgba(255, 255, 255, 0.5)')
@@ -1058,7 +1058,7 @@ export struct InterviewPage {
   TopBar(title: string) {
     Row() {
       Column() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.media_ic_back'))
           .width(24)
           .height(24)
           .fillColor(NeutralColors.Neutral0)

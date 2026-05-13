@@ -29,7 +29,7 @@ export struct PermissionGuideDialog {
   @Prop permissions: PermissionType[] = [];
   @Prop title: string = '需要权限';
   @Prop description: string = '';
-  @Prop icon: Resource = $r('app.media.ic_permission');
+  @Prop icon: Resource = $r('app.media.media_ic_permission');
   @Prop onComplete?: (allGranted: boolean) => void;
 
   @State permissionStatuses: Map<PermissionType, PermissionStatus> = new Map();
@@ -133,7 +133,7 @@ export struct PermissionGuideDialog {
 
       // 状态图标
       if (this.permissionStatuses.get(permission)?.granted) {
-        Image($r('app.media.ic_check_circle'))
+        Image($r('app.media.media_ic_check_circle'))
           .width(24)
           .height(24)
           .fillColor(SemanticColors.Success.Success500);
@@ -143,7 +143,7 @@ export struct PermissionGuideDialog {
           .height(24)
           .color(BrandColors.Brand500);
       } else {
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(24)
           .height(24)
           .fillColor(NeutralColors.Neutral400);
@@ -264,19 +264,19 @@ export struct PermissionStatusCard {
     const config = this.permissionManager.getPermissionConfig(this.permission);
     switch (config?.group) {
       case PermissionGroup.NETWORK:
-        return $r('app.media.ic_permission_network');
+        return $r('app.media.media_ic_permission_network');
       case PermissionGroup.STORAGE:
-        return $r('app.media.ic_permission_storage');
+        return $r('app.media.media_ic_permission_storage');
       case PermissionGroup.MEDIA:
-        return $r('app.media.ic_permission_media');
+        return $r('app.media.media_ic_permission_media');
       case PermissionGroup.BIOMETRIC:
-        return $r('app.media.ic_permission_biometric');
+        return $r('app.media.media_ic_permission_biometric');
       case PermissionGroup.LOCATION:
-        return $r('app.media.ic_permission_location');
+        return $r('app.media.media_ic_permission_location');
       case PermissionGroup.DISTRIBUTED:
-        return $r('app.media.ic_permission_distributed');
+        return $r('app.media.media_ic_permission_distributed');
       default:
-        return $r('app.media.ic_permission');
+        return $r('app.media.media_ic_permission');
     }
   }
 }

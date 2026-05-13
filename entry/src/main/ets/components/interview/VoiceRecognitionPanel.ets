@@ -190,12 +190,12 @@ export struct VoiceRecognitionPanel {
               .height(40)
               .color(BrandColors.Brand500)
           } else if (this.isListening) {
-            Image($r('app.media.ic_microphone'))
+            Image($r('app.media.media_ic_microphone'))
               .width(40)
               .height(40)
               .fillColor(BrandColors.Brand500)
           } else {
-            Image($r('app.media.ic_microphone'))
+            Image($r('app.media.media_ic_microphone'))
               .width(40)
               .height(40)
               .fillColor(NeutralColors.Neutral500)

@@ -42,7 +42,7 @@ struct KanbanPage {
       // 搜索栏
       if (this.showSearch) {
         Row() {
-          Image($r('app.media.ic_search'))
+          Image($r('app.media.media_ic_search'))
             .width(18)
             .height(18)
             .fillColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
@@ -60,7 +60,7 @@ struct KanbanPage {
             })
 
           if (this.searchKeyword.length > 0) {
-            Image($r('app.media.ic_close'))
+            Image($r('app.media.media_ic_close'))
               .width(18)
               .height(18)
               .fillColor(this.isDarkMode ? '#99A0A6' : Colors.textSecondary)
@@ -125,7 +125,7 @@ struct KanbanPage {
   TopBar() {
     Row() {
         Column() {
-          Image($r('app.media.ic_back'))
+          Image($r('app.media.media_ic_back'))
             .width(24)
             .height(24)
             .fillColor(this.isDarkMode ? '#E3E5E8' : Colors.textPrimary)
@@ -147,7 +147,7 @@ struct KanbanPage {
 
         // 搜索按钮
         Column() {
-          Image($r('app.media.ic_search'))
+          Image($r('app.media.media_ic_search'))
             .width(22)
             .height(22)
             .fillColor(this.showSearch ? Colors.primary : (this.isDarkMode ? '#99A0A6' : Colors.textSecondary))
@@ -165,7 +165,7 @@ struct KanbanPage {
 
         // 新增按钮
         Row() {
-          Image($r('app.media.ic_add'))
+          Image($r('app.media.media_ic_add'))
             .width(18)
             .height(18)
             .fillColor('#FFFFFF')

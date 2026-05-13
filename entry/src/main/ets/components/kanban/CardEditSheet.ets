@@ -115,7 +115,7 @@ export struct CardEditSheet {
                 .fontColor(this.source ? Colors.textPrimary : Colors.textPlaceholder)
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(Colors.textMuted)
@@ -335,7 +335,7 @@ export struct CardEditSheet {
               Blank()
 
               if (this.source === src) {
-                Image($r('app.media.ic_check'))
+                Image($r('app.media.media_ic_check'))
                   .width(20)
                   .height(20)
                   .fillColor(Colors.primary)

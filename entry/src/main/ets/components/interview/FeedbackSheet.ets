@@ -71,7 +71,7 @@ export struct FeedbackSheet {
 
         // 关闭按钮
         Column() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text2)
@@ -199,7 +199,7 @@ export struct FeedbackSheet {
   StrengthsSection() {
     Column() {
       Row() {
-        Image($r('app.media.ic_check'))
+        Image($r('app.media.media_ic_check'))
           .width(16)
           .height(16)
           .fillColor(SuccessColors.Success500)
@@ -244,7 +244,7 @@ export struct FeedbackSheet {
   ImprovementsSection() {
     Column() {
       Row() {
-        Image($r('app.media.ic_info'))
+        Image($r('app.media.media_ic_info'))
           .width(16)
           .height(16)
           .fillColor(WarningColors.Warning500)
@@ -302,7 +302,7 @@ export struct FeedbackSheet {
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
 
-          Image($r('app.media.ic_arrow_down'))
+          Image($r('app.media.media_ic_arrow_down'))
             .width(12)
             .height(12)
             .fillColor(BrandColors.Brand500)
@@ -398,7 +398,7 @@ export struct FeedbackSheet {
             .fontSize(FontSize.Xs)
             .fontColor(BrandColors.Brand500)
 
-          Image($r('app.media.ic_arrow_down'))
+          Image($r('app.media.media_ic_arrow_down'))
             .width(12)
             .height(12)
             .fillColor(BrandColors.Brand500)
@@ -480,7 +480,7 @@ export struct FeedbackSheet {
       // 重新回答按钮
       Button() {
         Row() {
-          Image($r('app.media.ic_refresh'))
+          Image($r('app.media.media_ic_refresh'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
@@ -505,7 +505,7 @@ export struct FeedbackSheet {
             .fontSize(FontSize.Sm)
             .fontColor(NeutralColors.Neutral0)
 
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(16)
             .height(16)
             .fillColor(NeutralColors.Neutral0)

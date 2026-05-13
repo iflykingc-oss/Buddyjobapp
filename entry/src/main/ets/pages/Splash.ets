@@ -54,25 +54,25 @@ struct Splash {
     {
       title: 'AI 求职助手',
       desc: '智能简历优化、面试辅导、职业规划，让求职更轻松',
-      icon: $r('app.media.ic_guide_ai'),
+      icon: $r('app.media.media_ic_guide_ai'),
       color: BrandColors.Brand500
     },
     {
       title: '实时聊天咨询',
       desc: '7x24小时在线，随时解答你的求职疑惑',
-      icon: $r('app.media.ic_guide_chat'),
+      icon: $r('app.media.media_ic_guide_chat'),
       color: BrandColors.Brand400
     },
     {
       title: '专业测评分析',
       desc: '职业能力测评、性格测试，发现更适合你的职业方向',
-      icon: $r('app.media.ic_guide_assessment'),
+      icon: $r('app.media.media_ic_guide_assessment'),
       color: BrandColors.Brand600
     },
     {
       title: 'VIP 专属权益',
       desc: '解锁无限对话、高级简历模板、专属职业顾问',
-      icon: $r('app.media.ic_guide_vip'),
+      icon: $r('app.media.media_ic_guide_vip'),
       color: BrandColors.Brand700
     }
   ];
@@ -349,7 +349,7 @@ struct Splash {
       Column() {
         // Logo 外圈光晕
         Column() {
-          Image($r('app.media.icon'))
+          Image($r('app.media.media_icon'))
             .width(100)
             .height(100)
             .borderRadius(SemanticRadius.Component)

@@ -194,7 +194,7 @@ struct SettingsPage {
       // 标题栏
       Row() {
         Column() {
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(20)
             .height(20)
             .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -368,7 +368,7 @@ struct SettingsPage {
                   .margin({ right: Spacing.Space3 })
               }
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -406,7 +406,7 @@ struct SettingsPage {
                 .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -429,7 +429,7 @@ struct SettingsPage {
                 .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -460,7 +460,7 @@ struct SettingsPage {
                 .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -491,7 +491,7 @@ struct SettingsPage {
                 .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
                 .layoutWeight(1)
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -580,7 +580,7 @@ struct SettingsPage {
       if (params.customRight) {
         params.customRight()
       } else if (params.showArrow !== false) {
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(16)
           .height(16)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)

@@ -203,7 +203,7 @@ export struct AssessmentPage {
           Row() {
             if (this.isContinueRestore) {
               Row() {
-                Image($r('app.media.ic_sync'))
+                Image($r('app.media.media_ic_sync'))
                   .width(14)
                   .height(14)
                   .fillColor(BrandColors.Brand500)
@@ -322,7 +322,7 @@ export struct AssessmentPage {
         // 流转恢复提示
         if (this.showContinuePrompt) {
           Row() {
-            Image($r('app.media.ic_info'))
+            Image($r('app.media.media_ic_info'))
               .width(16)
               .height(16)
               .fillColor(BrandColors.Brand500)
@@ -364,7 +364,7 @@ export struct AssessmentPage {
         // 搜索栏
         Row() {
           Row() {
-            Image($r('app.media.ic_search'))
+            Image($r('app.media.media_ic_search'))
               .width(16)
               .height(16)
               .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -382,7 +382,7 @@ export struct AssessmentPage {
               })
 
             if (this.searchKeyword) {
-              Image($r('app.media.ic_close'))
+              Image($r('app.media.media_ic_close'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -558,7 +558,7 @@ export struct AssessmentPage {
       // 流转提示
       if (this.isContinueRestore && this.showContinuePrompt) {
         Row() {
-          Image($r('app.media.ic_info'))
+          Image($r('app.media.media_ic_info'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
@@ -709,7 +709,7 @@ export struct AssessmentPage {
         // 流转提示
         if (this.isContinueRestore) {
           Row() {
-            Image($r('app.media.ic_info'))
+            Image($r('app.media.media_ic_info'))
               .width(16)
               .height(16)
               .fillColor(BrandColors.Brand500)
@@ -882,7 +882,7 @@ export struct AssessmentPage {
 
                 if (detail.level === 'low') {
                   Row() {
-                    Image($r('app.media.ic_info'))
+                    Image($r('app.media.media_ic_info'))
                       .width(12)
                       .height(12)
                       .fillColor(WarningColors.Warning500)
@@ -970,7 +970,7 @@ export struct AssessmentPage {
 
             ForEach(this.result!.nextActions, (action: string) => {
               Row() {
-                Image($r('app.media.ic_check'))
+                Image($r('app.media.media_ic_check'))
                   .width(16)
                   .height(16)
                   .fillColor(SuccessColors.Success500)
@@ -1010,7 +1010,7 @@ export struct AssessmentPage {
           if (this.result!.score < 60) {
             Row() {
               Column() {
-                Image($r('app.media.ic_knowledge'))
+                Image($r('app.media.media_ic_knowledge'))
                   .width(20)
                   .height(20)
                   .fillColor(WarningColors.Warning500)
@@ -1036,7 +1036,7 @@ export struct AssessmentPage {
               .alignItems(HorizontalAlign.Start)
               .margin({ left: Spacing.Space3 })
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -1053,7 +1053,7 @@ export struct AssessmentPage {
           } else if (this.result!.score <= 80) {
             Row() {
               Column() {
-                Image($r('app.media.ic_chat'))
+                Image($r('app.media.media_ic_chat'))
                   .width(20)
                   .height(20)
                   .fillColor(BrandColors.Brand500)
@@ -1079,7 +1079,7 @@ export struct AssessmentPage {
               .alignItems(HorizontalAlign.Start)
               .margin({ left: Spacing.Space3 })
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -1095,7 +1095,7 @@ export struct AssessmentPage {
           } else {
             Row() {
               Column() {
-                Image($r('app.media.ic_order'))
+                Image($r('app.media.media_ic_order'))
                   .width(20)
                   .height(20)
                   .fillColor(SuccessColors.Success500)
@@ -1121,7 +1121,7 @@ export struct AssessmentPage {
               .alignItems(HorizontalAlign.Start)
               .margin({ left: Spacing.Space3 })
 
-              Image($r('app.media.ic_arrow_right'))
+              Image($r('app.media.media_ic_arrow_right'))
                 .width(16)
                 .height(16)
                 .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
@@ -1139,7 +1139,7 @@ export struct AssessmentPage {
           // 始终显示：查看求职看板
           Row() {
             Column() {
-              Image($r('app.media.ic_history'))
+              Image($r('app.media.media_ic_history'))
                 .width(20)
                 .height(20)
                 .fillColor(BrandColors.Brand500)
@@ -1165,7 +1165,7 @@ export struct AssessmentPage {
             .alignItems(HorizontalAlign.Start)
             .margin({ left: Spacing.Space3 })
 
-            Image($r('app.media.ic_arrow_right'))
+            Image($r('app.media.media_ic_arrow_right'))
               .width(16)
               .height(16)
               .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)

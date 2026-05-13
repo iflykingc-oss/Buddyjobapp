@@ -419,7 +419,7 @@ export struct KnowledgePage {
 
         // 搜索按钮 - 点击打开搜索页面
         Column() {
-          Image($r('app.media.ic_search'))
+          Image($r('app.media.media_ic_search'))
             .width(24)
             .height(24)
             .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
@@ -447,7 +447,7 @@ export struct KnowledgePage {
       // 搜索栏
       Row() {
         Column() {
-          Image($r('app.media.ic_search'))
+          Image($r('app.media.media_ic_search'))
             .width(18)
             .height(18)
             .fillColor(SemanticColors.Text4)
@@ -470,7 +470,7 @@ export struct KnowledgePage {
 
         if (this.searchText.length > 0) {
           Column() {
-            Image($r('app.media.ic_close'))
+            Image($r('app.media.media_ic_close'))
               .width(16)
               .height(16)
               .fillColor(SemanticColors.Text4)
@@ -589,7 +589,7 @@ export struct KnowledgePage {
 
                   // 收藏按钮
                   Column() {
-                    Image($r('app.media.ic_favorite'))
+                    Image($r('app.media.media_ic_favorite'))
                       .width(22)
                       .height(22)
                       .fillColor(this.isFavorited(item.id) ? WarningColors.Warning500 : SemanticColors.Text4)
@@ -683,7 +683,7 @@ export struct KnowledgePage {
       // 空数据提示
       if (this.knowledgeList.length === 0 && !this.isLoading) {
         EmptyState({
-          icon: $r('app.media.ic_empty'),
+          icon: $r('app.media.media_ic_empty'),
           title: '暂无内容',
           buttonText: '刷新试试',
           onButtonClick: () => {

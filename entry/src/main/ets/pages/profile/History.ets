@@ -169,7 +169,7 @@ export struct HistoryPage {
     Row() {
       // 返回按钮
       Row() {
-        Image($r('app.media.ic_arrow_left'))
+        Image($r('app.media.media_ic_arrow_left'))
           .width(24)
           .height(24)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -253,7 +253,7 @@ export struct HistoryPage {
       Column() {
           // 空状态图标
           Column() {
-            Image($r('app.media.ic_history'))
+            Image($r('app.media.media_ic_history'))
               .width(64)
               .height(64)
               .fillColor(BrandColors.Brand300)

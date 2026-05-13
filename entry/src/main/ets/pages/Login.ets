@@ -45,7 +45,7 @@ struct Login {
         Column() {
           // Logo
           Column() {
-            Image($r('app.media.ic_logo'))
+            Image($r('app.media.media_ic_logo'))
               .width(64)
               .height(64)
               .objectFit(ImageFit.Contain)

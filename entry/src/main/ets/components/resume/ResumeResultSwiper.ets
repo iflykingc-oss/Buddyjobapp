@@ -222,7 +222,7 @@ export struct ResumeResultSwiper {
     Column() {
       // 标题
       Row() {
-        Image($r('app.media.ic_tip'))
+        Image($r('app.media.media_ic_tip'))
           .width(20)
           .height(20)
           .fillColor(BrandColors.Brand500)
@@ -351,7 +351,7 @@ export struct ResumeResultSwiper {
       // 导出 PDF
       Button() {
         Row() {
-          Image($r('app.media.ic_download'))
+          Image($r('app.media.media_ic_download'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)
@@ -375,7 +375,7 @@ export struct ResumeResultSwiper {
       // 重新分析
       Button() {
         Row() {
-          Image($r('app.media.ic_refresh'))
+          Image($r('app.media.media_ic_refresh'))
             .width(16)
             .height(16)
             .fillColor(NeutralColors.Neutral0)
@@ -399,7 +399,7 @@ export struct ResumeResultSwiper {
       // 优化建议
       Button() {
         Row() {
-          Image($r('app.media.ic_optimize'))
+          Image($r('app.media.media_ic_optimize'))
             .width(16)
             .height(16)
             .fillColor(BrandColors.Brand500)

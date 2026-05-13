@@ -23,7 +23,7 @@ struct AboutPage {
       // 标题栏
       Row() {
         Column() {
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text1)

@@ -178,7 +178,7 @@ export struct SkeletonList {
 @Component
 export struct EmptyStateView {
   /** 图标资源 */
-  @Prop icon: Resource = $r('app.media.icon');
+  @Prop icon: Resource = $r('app.media.media_icon');
   /** 标题 */
   @Prop title: string = '暂无数据';
   /** 描述文字 */

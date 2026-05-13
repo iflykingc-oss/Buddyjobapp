@@ -116,7 +116,7 @@ export struct MemberCard {
         
         // 查看详情箭头
         Column() {
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(16)
             .height(16)
             .fillColor(SemanticColors.Text3)
@@ -144,7 +144,7 @@ export struct MemberCard {
             .fontSize(FontSize.Sm)
             .fontColor(BrandColors.Brand500)
           
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(14)
             .height(14)
             .fillColor(BrandColors.Brand500)
@@ -306,7 +306,7 @@ export struct MemberCard {
       // 会员角标
       if (this.isVip) {
         Row() {
-          Image($r('app.media.ic_vip_crown'))
+          Image($r('app.media.media_ic_vip_crown'))
             .width(12)
             .height(12)
             .fillColor(WarningColors.Warning500)

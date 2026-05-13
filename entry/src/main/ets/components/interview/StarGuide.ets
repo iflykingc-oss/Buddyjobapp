@@ -63,7 +63,7 @@ export struct StarGuide {
         Blank()
 
         // 展开/收起按钮
-        Image($r('app.media.ic_arrow_down'))
+        Image($r('app.media.media_ic_arrow_down'))
           .width(12)
           .height(12)
           .fillColor(BrandColors.Brand400)
@@ -132,7 +132,7 @@ export struct StarGuide {
         Blank()
 
         // 展开/收起按钮
-        Image($r('app.media.ic_arrow_down'))
+        Image($r('app.media.media_ic_arrow_down'))
           .width(12)
           .height(12)
           .fillColor(BrandColors.Brand400)

@@ -209,7 +209,7 @@ export struct XiaoyiCircleSelection {
         if (this.isSelecting) {
           Row() {
             Row() {
-              Image($r('app.media.ic_xiaoyi'))
+              Image($r('app.media.media_ic_xiaoyi'))
                 .width(20)
                 .height(20)
                 .fillColor(BrandColors.Brand500)
@@ -318,7 +318,7 @@ export struct XiaoyiCircleSelection {
         Column() {
           Button() {
             Row() {
-              Image($r('app.media.ic_xiaoyi'))
+              Image($r('app.media.media_ic_xiaoyi'))
                 .width(20)
                 .height(20)
                 .fillColor(NeutralColors.Neutral0)
@@ -654,7 +654,7 @@ export struct XiaoyiCircleSelection {
       // 面板头部
       Row() {
         Row() {
-          Image($r('app.media.ic_xiaoyi'))
+          Image($r('app.media.media_ic_xiaoyi'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -669,7 +669,7 @@ export struct XiaoyiCircleSelection {
         Blank()
 
         Button() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text3)
@@ -763,7 +763,7 @@ export struct XiaoyiCircleSelection {
 
               ForEach(this.extractedContent.education, (edu: string) => {
                 Row() {
-                  Image($r('app.media.ic_education'))
+                  Image($r('app.media.media_ic_education'))
                     .width(16)
                     .height(16)
                     .fillColor(BrandColors.Brand500)
@@ -974,7 +974,7 @@ export struct XiaoyiCircleSelection {
       // 面板头部
       Row() {
         Row() {
-          Image($r('app.media.ic_xiaoyi'))
+          Image($r('app.media.media_ic_xiaoyi'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -1000,7 +1000,7 @@ export struct XiaoyiCircleSelection {
         Blank()
 
         Button() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text3)

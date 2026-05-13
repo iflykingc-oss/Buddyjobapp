@@ -1,50 +1,50 @@
 {
-  "primary": {
+  "color_primary": {
     "value": "#8B5CF6"
   },
-  "primary_light": {
+  "color_primary_light": {
     "value": "#A78BFA"
   },
-  "primary_dark": {
+  "color_primary_dark": {
     "value": "#7C3AED"
   },
-  "secondary": {
+  "color_secondary": {
     "value": "#6366F1"
   },
-  "success": {
+  "color_success": {
     "value": "#64BB5C"
   },
-  "warning": {
+  "color_warning": {
     "value": "#FF9800"
   },
-  "error": {
+  "color_error": {
     "value": "#E84026"
   },
-  "info": {
+  "color_info": {
     "value": "#007DFF"
   },
-  "text_primary": {
+  "color_text_primary": {
     "value": "#0C0E14"
   },
-  "text_secondary": {
+  "color_text_secondary": {
     "value": "#3D4654"
   },
-  "text_hint": {
+  "color_text_hint": {
     "value": "#66707A"
   },
-  "text_disabled": {
+  "color_text_disabled": {
     "value": "#99A0A6"
   },
-  "background": {
+  "color_background": {
     "value": "#F1F3F5"
   },
-  "surface": {
+  "color_surface": {
     "value": "#FFFFFF"
   },
-  "border": {
+  "color_border": {
     "value": "#C4C7CC"
   },
-  "divider": {
+  "color_divider": {
     "value": "#E3E5E8"
   },
   "start_window_background": {

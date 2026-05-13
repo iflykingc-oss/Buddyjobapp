@@ -149,7 +149,7 @@ struct KnowledgeDetail {
       // 标题栏
       Row() {
         Column() {
-          Image($r('app.media.ic_arrow_right'))
+          Image($r('app.media.media_ic_arrow_right'))
             .width(20)
             .height(20)
             .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -270,7 +270,7 @@ struct KnowledgeDetail {
               Row({ space: Spacing.Space3 }) {
                 Column() {
                   Column() {
-                    Image($r('app.media.ic_resume'))
+                    Image($r('app.media.media_ic_resume'))
                       .width(24)
                       .height(24)
                       .fillColor(BrandColors.Brand500)
@@ -299,7 +299,7 @@ struct KnowledgeDetail {
 
                 Column() {
                   Column() {
-                    Image($r('app.media.ic_assessment'))
+                    Image($r('app.media.media_ic_assessment'))
                       .width(24)
                       .height(24)
                       .fillColor(BrandColors.Brand500)
@@ -332,7 +332,7 @@ struct KnowledgeDetail {
               Row({ space: Spacing.Space3 }) {
                 Column() {
                   Column() {
-                    Image($r('app.media.ic_chat'))
+                    Image($r('app.media.media_ic_chat'))
                       .width(24)
                       .height(24)
                       .fillColor(BrandColors.Brand500)
@@ -360,7 +360,7 @@ struct KnowledgeDetail {
 
                 Column() {
                   Column() {
-                    Image($r('app.media.ic_order'))
+                    Image($r('app.media.media_ic_order'))
                       .width(24)
                       .height(24)
                       .fillColor(BrandColors.Brand500)
@@ -405,7 +405,7 @@ struct KnowledgeDetail {
           // 收藏按钮
           Row() {
             Column() {
-              Image($r('app.media.ic_favorite'))
+              Image($r('app.media.media_ic_favorite'))
                 .width(ComponentSizes.Icon.Lg)
                 .height(ComponentSizes.Icon.Lg)
                 .fillColor(this.isFavorited ? WarningColors.Warning500 : SemanticColors.Text3)
@@ -433,7 +433,7 @@ struct KnowledgeDetail {
           // 分享按钮
           Row() {
             Column() {
-              Image($r('app.media.ic_share'))
+              Image($r('app.media.media_ic_share'))
                 .width(ComponentSizes.Icon.Lg)
                 .height(ComponentSizes.Icon.Lg)
                 .fillColor(SemanticColors.Text3)
@@ -482,7 +482,7 @@ struct KnowledgeDetail {
       // 加载失败且无数据
       if (!this.article && !this.isLoading && this.showError) {
         Column() {
-          Image($r('app.media.ic_error'))
+          Image($r('app.media.media_ic_error'))
             .width(80)
             .height(80)
             .fillColor(SemanticColors.Text4)

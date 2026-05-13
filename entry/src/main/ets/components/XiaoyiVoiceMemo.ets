@@ -108,7 +108,7 @@ export struct XiaoyiVoiceMemo {
         // 标题栏
         Row() {
           Row() {
-            Image($r('app.media.ic_xiaoyi'))
+            Image($r('app.media.media_ic_xiaoyi'))
               .width(24)
               .height(24)
               .fillColor(BrandColors.Brand500)
@@ -199,7 +199,7 @@ export struct XiaoyiVoiceMemo {
     Column() {
       // 录音按钮
       Column() {
-        Image($r('app.media.ic_microphone'))
+        Image($r('app.media.media_ic_microphone'))
           .width(48)
           .height(48)
           .fillColor(this.isDarkMode() ? NeutralColors.Neutral0 : NeutralColors.Neutral900)
@@ -266,7 +266,7 @@ export struct XiaoyiVoiceMemo {
 
         // 录音按钮
         Column() {
-          Image($r('app.media.ic_stop'))
+          Image($r('app.media.media_ic_stop'))
             .width(40)
             .height(40)
             .fillColor(NeutralColors.Neutral0)
@@ -307,7 +307,7 @@ export struct XiaoyiVoiceMemo {
     Column() {
       // 音频波形预览
       Column() {
-        Image($r('app.media.ic_audio_wave'))
+        Image($r('app.media.media_ic_audio_wave'))
           .width('80%')
           .height(80)
           .fillColor(BrandColors.Brand500)
@@ -344,7 +344,7 @@ export struct XiaoyiVoiceMemo {
       if (this.recordingState === 'recording') {
         // 暂停/继续按钮
         Button() {
-          Image($r('app.media.ic_pause'))
+          Image($r('app.media.media_ic_pause'))
             .width(24)
             .height(24)
             .fillColor(this.isDarkMode() ? NeutralColors.Neutral0 : SemanticColors.Text2)
@@ -360,7 +360,7 @@ export struct XiaoyiVoiceMemo {
 
         // 停止按钮
         Button() {
-          Image($r('app.media.ic_stop'))
+          Image($r('app.media.media_ic_stop'))
             .width(24)
             .height(24)
             .fillColor(NeutralColors.Neutral0)
@@ -400,7 +400,7 @@ export struct XiaoyiVoiceMemo {
         // 底部快捷操作栏
         Row() {
           Button() {
-            Image($r('app.media.ic_refresh'))
+            Image($r('app.media.media_ic_refresh'))
               .width(20)
               .height(20)
               .fillColor(SemanticColors.Text2)
@@ -463,7 +463,7 @@ export struct XiaoyiVoiceMemo {
       // 面板头部
       Row() {
         Row() {
-          Image($r('app.media.ic_xiaoyi'))
+          Image($r('app.media.media_ic_xiaoyi'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -476,7 +476,7 @@ export struct XiaoyiVoiceMemo {
         }
 
         Button() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text3)
@@ -499,7 +499,7 @@ export struct XiaoyiVoiceMemo {
           // AI摘要卡片
           Column() {
             Row() {
-              Image($r('app.media.ic_summary'))
+              Image($r('app.media.media_ic_summary'))
                 .width(20)
                 .height(20)
                 .fillColor(BrandColors.Brand500)

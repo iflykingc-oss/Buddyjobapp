@@ -56,11 +56,11 @@ struct Index {
 
   // 导航项列表
   private navItems: NavItem[] = [
-    { title: '聊天', icon: $r('app.media.ic_chat'), builder: () => {} },
-    { title: '简历', icon: $r('app.media.ic_resume'), builder: () => {} },
-    { title: '测评', icon: $r('app.media.ic_assessment'), builder: () => {} },
-    { title: '知识库', icon: $r('app.media.ic_knowledge'), builder: () => {} },
-    { title: '我的', icon: $r('app.media.ic_profile'), builder: () => {} },
+    { title: '聊天', icon: $r('app.media.media_ic_chat'), builder: () => {} },
+    { title: '简历', icon: $r('app.media.media_ic_resume'), builder: () => {} },
+    { title: '测评', icon: $r('app.media.media_ic_assessment'), builder: () => {} },
+    { title: '知识库', icon: $r('app.media.media_ic_knowledge'), builder: () => {} },
+    { title: '我的', icon: $r('app.media.media_ic_profile'), builder: () => {} },
   ]
 
   aboutToAppear() {
@@ -132,27 +132,27 @@ struct Index {
             TabContent() {
               ChatPage()
             }
-            .tabBar(this.tabBuilder(0, '聊天', $r('app.media.ic_chat')))
+            .tabBar(this.tabBuilder(0, '聊天', $r('app.media.media_ic_chat')))
 
             TabContent() {
               ResumePage()
             }
-            .tabBar(this.tabBuilder(1, '简历', $r('app.media.ic_resume')))
+            .tabBar(this.tabBuilder(1, '简历', $r('app.media.media_ic_resume')))
 
             TabContent() {
               AssessmentPage()
             }
-            .tabBar(this.tabBuilder(2, '测评', $r('app.media.ic_assessment')))
+            .tabBar(this.tabBuilder(2, '测评', $r('app.media.media_ic_assessment')))
 
             TabContent() {
               KnowledgePage()
             }
-            .tabBar(this.tabBuilder(3, '知识库', $r('app.media.ic_knowledge')))
+            .tabBar(this.tabBuilder(3, '知识库', $r('app.media.media_ic_knowledge')))
 
             TabContent() {
               ProfilePage()
             }
-            .tabBar(this.tabBuilder(4, '我的', $r('app.media.ic_profile')))
+            .tabBar(this.tabBuilder(4, '我的', $r('app.media.media_ic_profile')))
           }
           .barHeight(64)
           .barWidth('100%')
@@ -194,7 +194,7 @@ struct Index {
       // 顶部：应用Logo和名称
       Row({ space: Spacing.Space3 }) {
         Column() {
-          Image($r('app.media.app_icon'))
+          Image($r('app.media.media_app_icon'))
             .width(36)
             .height(36)
             .borderRadius(SemanticRadius.Md)

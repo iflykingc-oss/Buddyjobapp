@@ -175,7 +175,7 @@ export struct NetworkStatusBanner {
     if (!this.isOnline) {
       Row() {
         // 警告图标
-        Image($r('app.media.ic_network_off'))
+        Image($r('app.media.media_ic_network_off'))
           .width(20)
           .height(20)
           .fillColor(this.getIconColor())
@@ -235,7 +235,7 @@ export struct SimpleNetworkBanner {
     if (!this.isOnline) {
       Column() {
         Row() {
-          Image($r('app.media.ic_network_off'))
+          Image($r('app.media.media_ic_network_off'))
             .width(18)
             .height(18)
             .fillColor(this.isDarkMode ? DarkWarningColors.Warning500 : WarningColors.Warning500)

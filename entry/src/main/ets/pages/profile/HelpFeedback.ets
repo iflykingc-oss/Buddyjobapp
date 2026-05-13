@@ -145,7 +145,7 @@ export struct HelpFeedbackPage {
     Row() {
       // 返回按钮
       Row() {
-        Image($r('app.media.ic_arrow_left'))
+        Image($r('app.media.media_ic_arrow_left'))
           .width(24)
           .height(24)
           .fillColor(SemanticColors.Text1)
@@ -268,7 +268,7 @@ export struct HelpFeedbackPage {
           .maxLines(this.expandedFAQId === faq.id ? undefined : 1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        Image(this.expandedFAQId === faq.id ? $r('app.media.ic_arrow_up') : $r('app.media.ic_arrow_down'))
+        Image(this.expandedFAQId === faq.id ? $r('app.media.media_ic_arrow_up') : $r('app.media.media_ic_arrow_down'))
           .width(16)
           .height(16)
           .fillColor(SemanticColors.Text3)
@@ -465,7 +465,7 @@ export struct HelpFeedbackPage {
       // 客服电话
       Row() {
         Column() {
-          Image($r('app.media.ic_phone'))
+          Image($r('app.media.media_ic_phone'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -491,7 +491,7 @@ export struct HelpFeedbackPage {
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(16)
           .height(16)
           .fillColor(SemanticColors.Text4)
@@ -505,7 +505,7 @@ export struct HelpFeedbackPage {
       // 客服邮箱
       Row() {
         Column() {
-          Image($r('app.media.ic_email'))
+          Image($r('app.media.media_ic_email'))
             .width(24)
             .height(24)
             .fillColor(BrandColors.Brand500)
@@ -531,7 +531,7 @@ export struct HelpFeedbackPage {
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
-        Image($r('app.media.ic_arrow_right'))
+        Image($r('app.media.media_ic_arrow_right'))
           .width(16)
           .height(16)
           .fillColor(SemanticColors.Text4)
@@ -545,7 +545,7 @@ export struct HelpFeedbackPage {
       // 工作时间
       Row() {
         Column() {
-          Image($r('app.media.ic_time'))
+          Image($r('app.media.media_ic_time'))
             .width(24)
             .height(24)
             .fillColor(SuccessColors.Success500)

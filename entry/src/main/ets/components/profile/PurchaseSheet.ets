@@ -146,7 +146,7 @@ export struct PurchaseSheet {
         
         // 关闭按钮
         Column() {
-          Image($r('app.media.ic_close'))
+          Image($r('app.media.media_ic_close'))
             .width(20)
             .height(20)
             .fillColor(SemanticColors.Text3)

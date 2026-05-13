@@ -117,7 +117,7 @@ export struct ContinuationPanel {
 
       Blank();
 
-      Image($r('app.media.ic_close'))
+      Image($r('app.media.media_ic_close'))
         .width(24)
         .height(24)
         .onClick(() => {
@@ -193,7 +193,7 @@ export struct ContinuationPanel {
   @Builder
   EmptyState() {
     Column() {
-      Image($r('app.media.ic_no_devices'))
+      Image($r('app.media.media_ic_no_devices'))
         .width(80)
         .height(80)
         .fillColor(NeutralColors.Neutral300);
@@ -311,7 +311,7 @@ export struct ContinuationPanel {
           .fontColor(BrandColors.Brand500)
           .margin({ left: 8 });
       } else if (this.continuationState === ContinuationState.COMPLETED) {
-        Image($r('app.media.ic_success'))
+        Image($r('app.media.media_ic_success'))
           .width(16)
           .height(16)
           .fillColor(SemanticColors.Success.Success500);
@@ -320,7 +320,7 @@ export struct ContinuationPanel {
           .fontColor(SemanticColors.Success.Success500)
           .margin({ left: 8 });
       } else if (this.continuationState === ContinuationState.FAILED) {
-        Image($r('app.media.ic_error'))
+        Image($r('app.media.media_ic_error'))
           .width(16)
           .height(16)
           .fillColor(SemanticColors.Error.Error500);
@@ -377,17 +377,17 @@ export struct ContinuationPanel {
   private getDeviceIcon(type: DeviceType): Resource {
     switch (type) {
       case DeviceType.PHONE:
-        return $r('app.media.ic_phone');
+        return $r('app.media.media_ic_phone');
       case DeviceType.TABLET:
-        return $r('app.media.ic_tablet');
+        return $r('app.media.media_ic_tablet');
       case DeviceType.WATCH:
-        return $r('app.media.ic_watch');
+        return $r('app.media.media_ic_watch');
       case DeviceType.TV:
-        return $r('app.media.ic_tv');
+        return $r('app.media.media_ic_tv');
       case DeviceType.PC:
-        return $r('app.media.ic_pc');
+        return $r('app.media.media_ic_pc');
       default:
-        return $r('app.media.ic_device');
+        return $r('app.media.media_ic_device');
     }
   }
 

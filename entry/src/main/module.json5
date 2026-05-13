@@ -14,8 +14,8 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "targetSdkVersion": 20,
-    "compatibleSdkVersion": 12,
+    "targetSdkVersion": 4,
+    "compatibleSdkVersion": 4,
     "querySchemes": [
       "plugs",
       "share",
@@ -147,14 +147,14 @@
         "srcEntry": "./ets/services/XiaoyiAgentExtension.ets",
         "type": "intelligentAgent",
         "description": "小艺智能体扩展能力",
-        "visible": true
+        "exported": true
       },
       {
         "name": "SelectionExtensionAbility",
         "srcEntry": "./ets/services/SelectionExtensionAbility.ets",
         "type": "selection",
         "description": "小艺圈选分析扩展能力",
-        "visible": true,
+        "exported": true,
         "skills": [
           {
             "entities": [

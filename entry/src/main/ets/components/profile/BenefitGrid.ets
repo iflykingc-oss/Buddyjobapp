@@ -161,19 +161,19 @@ export struct BenefitGrid {
   private getBenefitIcon(iconName: string): Resource {
     switch (iconName) {
       case 'ic_resume':
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
       case 'ic_assessment':
-        return $r('app.media.ic_assessment');
+        return $r('app.media.media_ic_assessment');
       case 'ic_chat':
-        return $r('app.media.ic_chat');
+        return $r('app.media.media_ic_chat');
       case 'ic_knowledge':
-        return $r('app.media.ic_knowledge');
+        return $r('app.media.media_ic_knowledge');
       case 'ic_favorite':
-        return $r('app.media.ic_favorite');
+        return $r('app.media.media_ic_favorite');
       case 'ic_help':
-        return $r('app.media.ic_help');
+        return $r('app.media.media_ic_help');
       default:
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
     }
   }
 
@@ -273,19 +273,19 @@ export struct CompactBenefitGrid {
   private getBenefitIcon(iconName: string): Resource {
     switch (iconName) {
       case 'ic_resume':
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
       case 'ic_assessment':
-        return $r('app.media.ic_assessment');
+        return $r('app.media.media_ic_assessment');
       case 'ic_chat':
-        return $r('app.media.ic_chat');
+        return $r('app.media.media_ic_chat');
       case 'ic_knowledge':
-        return $r('app.media.ic_knowledge');
+        return $r('app.media.media_ic_knowledge');
       case 'ic_favorite':
-        return $r('app.media.ic_favorite');
+        return $r('app.media.media_ic_favorite');
       case 'ic_help':
-        return $r('app.media.ic_help');
+        return $r('app.media.media_ic_help');
       default:
-        return $r('app.media.ic_resume');
+        return $r('app.media.media_ic_resume');
     }
   }
 }

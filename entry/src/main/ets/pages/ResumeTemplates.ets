@@ -210,7 +210,7 @@ export struct ResumeTemplates {
     Row() {
       // 返回按钮
       Button() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.media_ic_back'))
           .width(24)
           .height(24)
           .fillColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
@@ -367,7 +367,7 @@ export struct ResumeTemplates {
         // 选中状态
         if (this.selectedTemplate?.id === template.id) {
           Column() {
-            Image($r('app.media.ic_check'))
+            Image($r('app.media.media_ic_check'))
               .width(24)
               .height(24)
               .fillColor(NeutralColors.Neutral0)
@@ -426,7 +426,7 @@ export struct ResumeTemplates {
       Row() {
         Button() {
           Row() {
-            Image($r('app.media.ic_edit'))
+            Image($r('app.media.media_ic_edit'))
               .width(14)
               .height(14)
               .fillColor(NeutralColors.Neutral0)

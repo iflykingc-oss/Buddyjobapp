@@ -200,10 +200,10 @@ export class HistoryService {
    */
   static getTypeIcon(type: Exclude<HistoryType, 'all'>): Resource {
     const icons: Record<Exclude<HistoryType, 'all'>, Resource> = {
-      resume: $r('app.media.ic_resume'),
-      assessment: $r('app.media.ic_assessment'),
-      chat: $r('app.media.ic_chat'),
-      interview: $r('app.media.ic_interview')
+      resume: $r('app.media.media_ic_resume'),
+      assessment: $r('app.media.media_ic_assessment'),
+      chat: $r('app.media.media_ic_chat'),
+      interview: $r('app.media.media_ic_interview')
     };
     return icons[type];
   }

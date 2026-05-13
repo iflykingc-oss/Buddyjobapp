@@ -46,7 +46,7 @@ struct CrossDeviceInterviewPage {
       // 顶部导航
       Row() {
         Column() {
-          Image($r('app.media.ic_back'))
+          Image($r('app.media.media_ic_back'))
             .width(24)
             .height(24)
             .onClick(() => {
@@ -67,7 +67,7 @@ struct CrossDeviceInterviewPage {
 
         // 设备列表按钮
         Badge({ count: this.devices.length, position: BadgePosition.RightTop }) {
-          Image($r('app.media.ic_devices'))
+          Image($r('app.media.media_ic_devices'))
             .width(24)
             .height(24)
             .onClick(() => {
@@ -141,7 +141,7 @@ struct CrossDeviceInterviewPage {
   @Builder
   SyncStatusBar() {
     Row() {
-      Image($r('app.media.ic_sync'))
+      Image($r('app.media.media_ic_sync'))
         .width(16)
         .height(16)
         .fontColor(Colors.textSecondary)
@@ -171,7 +171,7 @@ struct CrossDeviceInterviewPage {
   @Builder
   EmptyState() {
     Column() {
-      Image($r('app.media.ic_empty_interview'))
+      Image($r('app.media.media_ic_empty_interview'))
         .width(120)
         .height(120)
 
@@ -225,7 +225,7 @@ struct CrossDeviceInterviewPage {
         Blank()
 
         // 同步状态图标
-        Image($r('app.media.ic_synced'))
+        Image($r('app.media.media_ic_synced'))
           .width(20)
           .height(20)
           .fontColor(Colors.success)
@@ -234,7 +234,7 @@ struct CrossDeviceInterviewPage {
 
       // 面试时间
       Row() {
-        Image($r('app.media.ic_time'))
+        Image($r('app.media.media_ic_time'))
           .width(16)
           .height(16)
           .fontColor(Colors.textSecondary)
@@ -470,13 +470,13 @@ struct CrossDeviceInterviewPage {
   private getDeviceIcon(type: DeviceType): Resource {
     switch (type) {
       case DeviceType.PHONE:
-        return $r('app.media.ic_phone');
+        return $r('app.media.media_ic_phone');
       case DeviceType.TABLET:
-        return $r('app.media.ic_tablet');
+        return $r('app.media.media_ic_tablet');
       case DeviceType.WATCH:
-        return $r('app.media.ic_watch');
+        return $r('app.media.media_ic_watch');
       default:
-        return $r('app.media.ic_device');
+        return $r('app.media.media_ic_device');
     }
   }
 

@@ -156,7 +156,7 @@ export struct ProfilePage {
               // AI聊天
               Column() {
                 Column() {
-                  Image($r('app.media.ic_chat'))
+                  Image($r('app.media.media_ic_chat'))
                     .width(24)
                     .height(24)
                     .fillColor(BrandColors.Brand500)
@@ -185,7 +185,7 @@ export struct ProfilePage {
               // 简历分析
               Column() {
                 Column() {
-                  Image($r('app.media.ic_resume'))
+                  Image($r('app.media.media_ic_resume'))
                     .width(24)
                     .height(24)
                     .fillColor(BrandColors.Brand500)
@@ -214,7 +214,7 @@ export struct ProfilePage {
               // 职业测评
               Column() {
                 Column() {
-                  Image($r('app.media.ic_assessment'))
+                  Image($r('app.media.media_ic_assessment'))
                     .width(24)
                     .height(24)
                     .fillColor(BrandColors.Brand500)
@@ -243,7 +243,7 @@ export struct ProfilePage {
               // 模拟面试
               Column() {
                 Column() {
-                  Image($r('app.media.ic_chat'))
+                  Image($r('app.media.media_ic_chat'))
                     .width(24)
                     .height(24)
                     .fillColor(BrandColors.Brand500)
@@ -285,7 +285,7 @@ export struct ProfilePage {
           // 功能菜单
           Column() {
             this.MenuItem({
-            icon: $r('app.media.ic_order'),
+            icon: $r('app.media.media_ic_order'),
             title: '订单记录',
             showBadge: false,
             onClick: () => {
@@ -306,7 +306,7 @@ export struct ProfilePage {
               .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             this.MenuItem({
-            icon: $r('app.media.ic_favorite'),
+            icon: $r('app.media.media_ic_favorite'),
             title: '我的收藏',
             showBadge: false,
             onClick: () => {
@@ -327,7 +327,7 @@ export struct ProfilePage {
               .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             this.MenuItem({
-            icon: $r('app.media.ic_history'),
+            icon: $r('app.media.media_ic_history'),
             title: '历史记录',
             showBadge: false,
             onClick: () => {
@@ -348,7 +348,7 @@ export struct ProfilePage {
               .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             this.MenuItem({
-            icon: $r('app.media.ic_help'),
+            icon: $r('app.media.media_ic_help'),
             title: '帮助与反馈',
             showBadge: false,
             onClick: () => {
@@ -369,7 +369,7 @@ export struct ProfilePage {
               .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             this.MenuItem({
-            icon: $r('app.media.ic_settings'),
+            icon: $r('app.media.media_ic_settings'),
             title: '设置',
             showBadge: false,
             onClick: () => {
@@ -390,7 +390,7 @@ export struct ProfilePage {
               .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
 
             this.MenuItem({
-            icon: $r('app.media.ic_about'),
+            icon: $r('app.media.media_ic_about'),
             title: '关于我们',
             showBadge: false,
             onClick: () => {
@@ -495,7 +495,7 @@ export struct ProfilePage {
           .margin({ right: Spacing.Space3 })
       }
 
-      Image($r('app.media.ic_arrow_right'))
+      Image($r('app.media.media_ic_arrow_right'))
         .width(16)
         .height(16)
         .fillColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)

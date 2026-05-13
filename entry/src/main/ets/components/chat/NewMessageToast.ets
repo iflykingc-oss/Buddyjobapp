@@ -115,7 +115,7 @@ export struct NewMessageToast {
     if (this.isVisible) {
       Row() {
         // 新消息图标
-        Image($r('app.media.ic_chat'))
+        Image($r('app.media.media_ic_chat'))
           .width(16)
           .height(16)
           .fillColor(BrandColors.Brand500)
@@ -302,7 +302,7 @@ export struct SimpleNewMessageToast {
   build() {
     if (this.isVisible) {
       Row() {
-        Image($r('app.media.ic_chat'))
+        Image($r('app.media.media_ic_chat'))
           .width(16)
           .height(16)
           .fillColor(BrandColors.Brand500)
