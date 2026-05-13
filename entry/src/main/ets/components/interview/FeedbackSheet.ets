@@ -38,6 +38,19 @@ export struct FeedbackSheet {
   @State private showStarAnalysis: boolean = false;
 
   build() {
+    if (!this.feedback) {
+      Column() {
+        Text('暂无点评数据')
+          .fontSize(FontSize.Md)
+          .fontColor(SemanticColors.Text3)
+          .padding(40)
+      }
+      .width('100%')
+      .height('100%')
+      .backgroundColor(NeutralColors.Neutral0)
+      return;
+    }
+
     Column() {
       // 拖拽指示器
       Row()

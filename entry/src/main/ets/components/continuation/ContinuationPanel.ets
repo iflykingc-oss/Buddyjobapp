@@ -130,14 +130,17 @@ export struct ContinuationPanel {
 
   @Builder
   LocalDeviceInfo() {
+    if (!this.localDevice) {
+      return;
+    }
     Row() {
-      Image(this.getDeviceIcon(this.localDevice!.deviceType))
+      Image(this.getDeviceIcon(this.localDevice.deviceType))
         .width(40)
         .height(40)
         .fillColor(BrandColors.Brand500);
 
       Column() {
-        Text(this.localDevice!.deviceName || '本机')
+        Text(this.localDevice.deviceName || '本机')
           .fontSize(FontSize.Size14)
           .fontWeight(FontWeight.Medium)
           .fontColor(NeutralColors.Neutral900);
