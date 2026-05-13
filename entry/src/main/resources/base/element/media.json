@@ -1,122 +1,74 @@
 {
-  "media": [
-    {
-      "name": "app_icon",
-      "value": "media/app_icon.png"
-    },
-    {
-      "name": "icon",
-      "value": "media/ic_launcher.png"
-    },
-    {
-      "name": "ic_chat",
-      "value": "media/ic_chat.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_resume",
-      "value": "media/ic_resume.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_assessment",
-      "value": "media/ic_assessment.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_knowledge",
-      "value": "media/ic_knowledge.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_profile",
-      "value": "media/ic_profile.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_upload",
-      "value": "media/ic_upload.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_search",
-      "value": "media/ic_search.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_order",
-      "value": "media/ic_order.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_favorite",
-      "value": "media/ic_favorite.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_history",
-      "value": "media/ic_history.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_help",
-      "value": "media/ic_help.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_settings",
-      "value": "media/ic_settings.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_about",
-      "value": "media/ic_about.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_arrow_right",
-      "value": "media/ic_arrow_right.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_logo",
-      "value": "media/ic_logo.png",
-      "comment": "App logo, brand asset"
-    },
-    {
-      "name": "ic_arrow_left",
-      "value": "media/ic_arrow_left.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_close",
-      "value": "media/ic_close.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_check",
-      "value": "media/ic_check.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_warning",
-      "value": "media/ic_warning.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_error",
-      "value": "media/ic_error.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_info",
-      "value": "media/ic_info.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    },
-    {
-      "name": "ic_success",
-      "value": "media/ic_success.png",
-      "comment": "HarmonyOS Symbol style: rounded line caps, uniform 1.5px stroke, 24x24dp grid"
-    }
-  ]
+  "app_icon": {
+    "value": "media/app_icon.png"
+  },
+  "icon": {
+    "value": "media/ic_launcher.png"
+  },
+  "ic_chat": {
+    "value": "media/ic_chat.png"
+  },
+  "ic_resume": {
+    "value": "media/ic_resume.png"
+  },
+  "ic_assessment": {
+    "value": "media/ic_assessment.png"
+  },
+  "ic_knowledge": {
+    "value": "media/ic_knowledge.png"
+  },
+  "ic_profile": {
+    "value": "media/ic_profile.png"
+  },
+  "ic_upload": {
+    "value": "media/ic_upload.png"
+  },
+  "ic_search": {
+    "value": "media/ic_search.png"
+  },
+  "ic_order": {
+    "value": "media/ic_order.png"
+  },
+  "ic_favorite": {
+    "value": "media/ic_favorite.png"
+  },
+  "ic_history": {
+    "value": "media/ic_history.png"
+  },
+  "ic_help": {
+    "value": "media/ic_help.png"
+  },
+  "ic_settings": {
+    "value": "media/ic_settings.png"
+  },
+  "ic_about": {
+    "value": "media/ic_about.png"
+  },
+  "ic_arrow_right": {
+    "value": "media/ic_arrow_right.png"
+  },
+  "ic_logo": {
+    "value": "media/ic_logo.png"
+  },
+  "ic_arrow_left": {
+    "value": "media/ic_arrow_left.png"
+  },
+  "ic_close": {
+    "value": "media/ic_close.png"
+  },
+  "ic_check": {
+    "value": "media/ic_check.png"
+  },
+  "ic_warning": {
+    "value": "media/ic_warning.png"
+  },
+  "ic_error": {
+    "value": "media/ic_error.png"
+  },
+  "ic_info": {
+    "value": "media/ic_info.png"
+  },
+  "ic_success": {
+    "value": "media/ic_success.png"
+  }
 }
