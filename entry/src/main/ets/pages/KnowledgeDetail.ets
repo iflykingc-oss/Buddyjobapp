@@ -4,6 +4,7 @@ import { KnowledgeService, ArticleDetail } from '../services/KnowledgeService';
 import { FavoriteService, FavoriteType } from '../services/FavoriteService';
 import { ShareService } from '../services/ShareService';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
+import { Router } from '../utils/Router';
 import {
   BrandColors,
   NeutralColors,
@@ -255,6 +256,144 @@ struct KnowledgeDetail {
               .lineHeight(28)
               .width('100%')
               .margin({ top: SemanticSpacing.Lg, bottom: Spacing.Space9 })
+
+            // 相关推荐操作
+            Column() {
+              Text('相关推荐操作')
+                .fontSize(FontSize.Base)
+                .fontWeight(FontWeight.Bold)
+                .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                .width('100%')
+                .margin({ bottom: SemanticSpacing.Lg })
+
+              // 第一行
+              Row({ space: Spacing.Space3 }) {
+                Column() {
+                  Column() {
+                    Image($r('app.media.ic_resume'))
+                      .width(24)
+                      .height(24)
+                      .fillColor(BrandColors.Brand500)
+                  }
+                  .width(44)
+                  .height(44)
+                  .borderRadius(22)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                  .justifyContent(FlexAlign.Center)
+
+                  Text('优化我的简历')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                    .margin({ top: Spacing.Space2 })
+                }
+                .layoutWeight(1)
+                .height(88)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+                .borderRadius(SemanticRadius.Component)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(HorizontalAlign.Center)
+                .onClick(() => {
+                  AppStorage.setOrCreate('currentTab', 1);
+                  router.back();
+                })
+
+                Column() {
+                  Column() {
+                    Image($r('app.media.ic_assessment'))
+                      .width(24)
+                      .height(24)
+                      .fillColor(BrandColors.Brand500)
+                  }
+                  .width(44)
+                  .height(44)
+                  .borderRadius(22)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                  .justifyContent(FlexAlign.Center)
+
+                  Text('测试我的能力')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                    .margin({ top: Spacing.Space2 })
+                }
+                .layoutWeight(1)
+                .height(88)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+                .borderRadius(SemanticRadius.Component)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(HorizontalAlign.Center)
+                .onClick(() => {
+                  AppStorage.setOrCreate('currentTab', 2);
+                  router.back();
+                })
+              }
+              .width('100%')
+
+              // 第二行
+              Row({ space: Spacing.Space3 }) {
+                Column() {
+                  Column() {
+                    Image($r('app.media.ic_chat'))
+                      .width(24)
+                      .height(24)
+                      .fillColor(BrandColors.Brand500)
+                  }
+                  .width(44)
+                  .height(44)
+                  .borderRadius(22)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                  .justifyContent(FlexAlign.Center)
+
+                  Text('开始模拟面试')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                    .margin({ top: Spacing.Space2 })
+                }
+                .layoutWeight(1)
+                .height(88)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+                .borderRadius(SemanticRadius.Component)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(HorizontalAlign.Center)
+                .onClick(() => {
+                  Router.push('pages/Interview');
+                })
+
+                Column() {
+                  Column() {
+                    Image($r('app.media.ic_order'))
+                      .width(24)
+                      .height(24)
+                      .fillColor(BrandColors.Brand500)
+                  }
+                  .width(44)
+                  .height(44)
+                  .borderRadius(22)
+                  .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                  .justifyContent(FlexAlign.Center)
+
+                  Text('分析我的Offer')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                    .margin({ top: Spacing.Space2 })
+                }
+                .layoutWeight(1)
+                .height(88)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+                .borderRadius(SemanticRadius.Component)
+                .justifyContent(FlexAlign.Center)
+                .alignItems(HorizontalAlign.Center)
+                .onClick(() => {
+                  Router.push('pages/OfferAnalysis');
+                })
+              }
+              .width('100%')
+              .margin({ top: Spacing.Space3 })
+            }
+            .width('100%')
+            .padding(SemanticSpacing.Lg)
+            .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+            .borderRadius(SemanticRadius.Component)
+            .margin({ top: SemanticSpacing.Lg })
           }
           .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
         }

@@ -4,6 +4,8 @@ import window from '@ohos.window';
 import { HMSUtils, HMSServiceType } from '../utils/hms';
 import { AuthService } from '../services/AuthService';
 import { PushService } from '../services/PushService';
+import { LazyDataLoader } from '../services/LazyDataLoader';
+import { StartupOptimizer } from '../utils/StartupOptimizer';
 import { agconnect } from '@hw-agconnect/core';
 import { MultiApi } from '@mlethe/multi-api';
 import { WindowUtil } from '../utils/WindowUtil';
@@ -38,11 +40,15 @@ export default class EntryAbility extends UIAbility {
   onCreate(want, launchParam) {
     hilog.info(DOMAIN, TAG, 'Ability onCreate');
 
-    // 初始化全局配置
+    // 启动优化：记录启动开始时间
+    const optimizer = StartupOptimizer.getInstance();
+    optimizer.markStart();
+
+    // 初始化全局配置（关键路径，必须在首帧前完成）
     AppStorage.setOrCreate('baseUrl', 'https://api.buddyjob.com');
     AppStorage.setOrCreate('apiVersion', 'v1');
 
-    // 初始化 HMS 服务
+    // 初始化 HMS 服务（异步，不阻塞首帧）
     this.initializeHMS();
   }
 
@@ -88,6 +94,36 @@ export default class EntryAbility extends UIAbility {
     const windowUtil = new WindowUtil();
     await windowUtil.init();
 
+    // 初始化懒加载服务（仅加载元数据，不加载全部数据）
+    try {
+      const lazyLoader = LazyDataLoader.getInstance();
+      lazyLoader.initializeResourceManager(this.context);
+      await lazyLoader.initializeMetadata('assessments', 'data/assessment_questions.json');
+      await lazyLoader.initializeMetadata('interviews', 'data/interview_questions_v2.json');
+      await lazyLoader.initializeMetadata('knowledge', 'data/knowledge_articles_v2.json');
+      hilog.info(DOMAIN, TAG, 'Data metadata initialized successfully (lazy loading mode)');
+
+      // 将元数据存入 AppStorage 供页面使用
+      const assessmentMeta = lazyLoader.getMetadata('assessments');
+      const interviewMeta = lazyLoader.getMetadata('interviews');
+      const knowledgeMeta = lazyLoader.getMetadata('knowledge');
+      if (assessmentMeta) {
+        AppStorage.setOrCreate('assessmentMetadata', assessmentMeta);
+      }
+      if (interviewMeta) {
+        AppStorage.setOrCreate('interviewMetadata', interviewMeta);
+      }
+      if (knowledgeMeta) {
+        AppStorage.setOrCreate('knowledgeMetadata', knowledgeMeta);
+      }
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'Data metadata initialization failed: %{public}s', JSON.stringify(error));
+    }
+
+    // 执行非关键初始化（首帧后异步执行）
+    const optimizer = StartupOptimizer.getInstance();
+    optimizer.deferredInit();
+
     windowStage.loadContent('pages/Splash', (err, data) => {
       if (err.code) {
         hilog.error(DOMAIN, TAG, 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
@@ -103,6 +139,15 @@ export default class EntryAbility extends UIAbility {
 
   onForeground() {
     hilog.info(DOMAIN, TAG, 'Ability onForeground');
+
+    // 输出启动耗时报告（仅首次前台时）
+    const optimizer = StartupOptimizer.getInstance();
+    if (!optimizer.hasReported) {
+      const report = optimizer.getStartupReport();
+      hilog.info(DOMAIN, TAG,
+        `Startup report: total=${report.totalDuration}ms, critical=${report.criticalInitDuration}ms, deferred=${report.deferredInitDuration}ms`);
+      optimizer.hasReported = true;
+    }
 
     // MultiApi 前台生命周期处理
     MultiApi.instance.onForeground();

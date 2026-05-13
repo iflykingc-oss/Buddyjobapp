@@ -1,0 +1,1828 @@
+{
+  "questions": [
+    {
+      "id": "holland_1",
+      "type": "R",
+      "question": "Test the quality of parts before shipment",
+      "questionZh": "在发货前测试零件质量",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_2",
+      "type": "R",
+      "question": "Lay brick or tile",
+      "questionZh": "铺设砖块或瓷砖",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_3",
+      "type": "R",
+      "question": "Work on an offshore oil-drilling rig",
+      "questionZh": "在海上石油钻井平台工作",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_4",
+      "type": "R",
+      "question": "Assemble electronic parts",
+      "questionZh": "组装电子零件",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_5",
+      "type": "R",
+      "question": "Operate a grinding machine in a factory",
+      "questionZh": "在工厂操作研磨机",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_6",
+      "type": "R",
+      "question": "Fix a broken faucet",
+      "questionZh": "修理坏掉的水龙头",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_7",
+      "type": "R",
+      "question": "Assemble products in a factory",
+      "questionZh": "在工厂组装产品",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_8",
+      "type": "R",
+      "question": "Install flooring in houses",
+      "questionZh": "为房屋安装地板",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_9",
+      "type": "I",
+      "question": "Study the structure of the human body",
+      "questionZh": "研究人体结构",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_10",
+      "type": "I",
+      "question": "Study animal behavior",
+      "questionZh": "研究动物行为",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_11",
+      "type": "I",
+      "question": "Do research on plants or animals",
+      "questionZh": "对植物或动物进行研究",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_12",
+      "type": "I",
+      "question": "Develop a new medical treatment or procedure",
+      "questionZh": "开发新的医疗治疗方法或程序",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_13",
+      "type": "I",
+      "question": "Conduct biological research",
+      "questionZh": "进行生物学研究",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_14",
+      "type": "I",
+      "question": "Study whales and other types of marine life",
+      "questionZh": "研究鲸鱼和其他海洋生物",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_15",
+      "type": "I",
+      "question": "Work in a biology lab",
+      "questionZh": "在生物实验室工作",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_16",
+      "type": "I",
+      "question": "Make a map of the bottom of an ocean",
+      "questionZh": "绘制海底地图",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_17",
+      "type": "A",
+      "question": "Conduct a musical choir",
+      "questionZh": "指挥合唱团",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_18",
+      "type": "A",
+      "question": "Direct a play",
+      "questionZh": "导演戏剧",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_19",
+      "type": "A",
+      "question": "Design artwork for magazines",
+      "questionZh": "为杂志设计美术作品",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_20",
+      "type": "A",
+      "question": "Write a song",
+      "questionZh": "创作歌曲",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_21",
+      "type": "A",
+      "question": "Write books or plays",
+      "questionZh": "撰写书籍或戏剧",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_22",
+      "type": "A",
+      "question": "Play a musical instrument",
+      "questionZh": "演奏乐器",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_23",
+      "type": "A",
+      "question": "Perform stunts for a movie or television show",
+      "questionZh": "在电影或电视节目中表演特技",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_24",
+      "type": "A",
+      "question": "Design sets for plays",
+      "questionZh": "为戏剧设计舞台布景",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_25",
+      "type": "S",
+      "question": "Give career guidance to people",
+      "questionZh": "为人们提供职业指导",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_26",
+      "type": "S",
+      "question": "Do volunteer work at a non-profit organization",
+      "questionZh": "在非营利组织做志愿者工作",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_27",
+      "type": "S",
+      "question": "Help people who have problems with drugs or alcohol",
+      "questionZh": "帮助有药物或酒精问题的人",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_28",
+      "type": "S",
+      "question": "Teach an individual an exercise routine",
+      "questionZh": "教授个人锻炼方法",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_29",
+      "type": "S",
+      "question": "Help people with family-related problems",
+      "questionZh": "帮助人们解决家庭相关问题",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_30",
+      "type": "S",
+      "question": "Supervise the activities of children at a camp",
+      "questionZh": "在营地监督孩子们的活动",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_31",
+      "type": "S",
+      "question": "Teach children how to read",
+      "questionZh": "教孩子们阅读",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_32",
+      "type": "S",
+      "question": "Help elderly people with their daily activities",
+      "questionZh": "帮助老年人进行日常活动",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_33",
+      "type": "E",
+      "question": "Sell restaurant franchises to individuals",
+      "questionZh": "向个人销售餐厅特许经营权",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_34",
+      "type": "E",
+      "question": "Sell merchandise at a department store",
+      "questionZh": "在百货公司销售商品",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_35",
+      "type": "E",
+      "question": "Manage the operations of a hotel",
+      "questionZh": "管理酒店运营",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_36",
+      "type": "E",
+      "question": "Operate a beauty salon or barber shop",
+      "questionZh": "经营美容院或理发店",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_37",
+      "type": "E",
+      "question": "Manage a department within a large company",
+      "questionZh": "管理大公司的一个部门",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_38",
+      "type": "E",
+      "question": "Manage a clothing store",
+      "questionZh": "管理服装店",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_39",
+      "type": "E",
+      "question": "Sell houses",
+      "questionZh": "销售房屋",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_40",
+      "type": "E",
+      "question": "Run a toy store",
+      "questionZh": "经营玩具店",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_41",
+      "type": "C",
+      "question": "Generate the monthly payroll checks for an office",
+      "questionZh": "为办公室生成月度工资支票",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_42",
+      "type": "C",
+      "question": "Inventory supplies using a hand-held computer",
+      "questionZh": "使用手持电脑盘点物资",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_43",
+      "type": "C",
+      "question": "Use a computer program to generate customer bills",
+      "questionZh": "使用计算机程序生成客户账单",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_44",
+      "type": "C",
+      "question": "Maintain employee records",
+      "questionZh": "维护员工记录",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_45",
+      "type": "C",
+      "question": "Compute and record statistical and other numerical data",
+      "questionZh": "计算并记录统计数据和其他数值数据",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_46",
+      "type": "C",
+      "question": "Operate a calculator",
+      "questionZh": "操作计算器",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_47",
+      "type": "C",
+      "question": "Handle customers' bank transactions",
+      "questionZh": "处理客户的银行交易",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    },
+    {
+      "id": "holland_48",
+      "type": "C",
+      "question": "Keep shipping and receiving recor",
+      "questionZh": "保留发货和收货记录",
+      "options": [
+        {
+          "id": "a",
+          "text": "非常喜欢",
+          "textEn": "Like Very Much",
+          "direction": 1
+        },
+        {
+          "id": "b",
+          "text": "比较喜欢",
+          "textEn": "Like",
+          "direction": 1
+        },
+        {
+          "id": "c",
+          "text": "一般",
+          "textEn": "Neutral",
+          "direction": 0
+        },
+        {
+          "id": "d",
+          "text": "不太喜欢",
+          "textEn": "Dislike",
+          "direction": -1
+        },
+        {
+          "id": "e",
+          "text": "非常不喜欢",
+          "textEn": "Dislike Very Much",
+          "direction": -1
+        }
+      ]
+    }
+  ]
+}

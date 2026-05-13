@@ -1,11 +1,35 @@
 /**
- * 模拟面试服务
+ * InterviewService - 模拟面试服务
  *
  * 提供面试问题生成、回答提交、AI点评等功能
  * 支持语音录制和语音识别
+ *
+ * @example
+ * const service = InterviewService.getInstance();
+ * const session = await service.createInterviewSession({
+ *   jobPosition: '前端工程师',
+ *   questionCount: 5,
+ *   categories: ['behavioral', 'technical'],
+ *   difficulty: 'mixed'
+ * });
+ *
+ * @since 1.0.0
  */
 import { ApiService } from './ApiService';
 import { HistoryService } from './HistoryService';
+import { DataLoadService } from './DataLoadService';
+import { DataConverter } from './DataConverter';
+import {
+  SpeechRecognitionService,
+  SpeechRecognitionState,
+  RecognitionResult
+} from './SpeechRecognitionService';
+import media from '@ohos.multimedia.media';
+import fileIo from '@ohos.file.fs';
+import hilog from '@ohos.hilog';
+
+const TAG = 'InterviewService';
+const DOMAIN = 0xFF00;
 
 // 面试问题类型
 export interface InterviewQuestion {
@@ -80,11 +104,26 @@ export class InterviewService {
   private static instance: InterviewService;
   private apiService: ApiService = ApiService.getInstance();
   private historyService: HistoryService = HistoryService.getInstance();
+  private dataLoadService: DataLoadService = DataLoadService.getInstance();
+  private dataConverter: DataConverter = DataConverter.getInstance();
+
+  // 语音识别服务
+  private speechService: SpeechRecognitionService = SpeechRecognitionService.getInstance();
+
+  // 从 rawfile 加载的面试题
+  private loadedQuestions: InterviewQuestion[] = [];
 
   // 录音相关
   private isRecording: boolean = false;
   private recordingStartTime: number = 0;
   private audioFilePath: string = '';
+  private avRecorder: media.AVRecorder | null = null;
+  private audioFd: number = -1;
+
+  // 语音识别回调
+  private onRecognitionResultCallback?: (text: string, confidence: number) => void;
+  private onRecognitionErrorCallback?: (error: string) => void;
+  private onRecognitionStateChangeCallback?: (state: SpeechRecognitionState) => void;
 
   private constructor() {}
 
@@ -96,7 +135,114 @@ export class InterviewService {
   }
 
   /**
+   * 初始化数据加载服务，从 rawfile JSON 文件加载面试题数据
+   * 加载失败时静默回退到内置默认数据，不影响应用正常运行
+   * @param context 应用上下文
+   */
+  async initialize(context: Context): Promise<void> {
+    try {
+      await this.dataLoadService.initialize(context);
+      hilog.info(DOMAIN, TAG, 'DataLoadService 初始化成功');
+
+      // 优先加载 v2 面试题数据（4000题，15岗位）
+      let v2Loaded = false;
+      try {
+        const v2Data = await this.dataLoadService.loadLocalJson<any>('data/interview_questions_v2.json');
+        if (v2Data !== null && v2Data.questions && v2Data.questions.length > 0) {
+          this.loadedQuestions = this.dataConverter.convertInterviewQuestionsV2(v2Data);
+          if (this.loadedQuestions.length > 0) {
+            v2Loaded = true;
+            hilog.info(DOMAIN, TAG, `v2面试题数据加载成功，共 ${this.loadedQuestions.length} 道题目`);
+          }
+        }
+      } catch (error) {
+        hilog.error(DOMAIN, TAG, `v2面试题数据加载失败，回退到v1: ${error}`);
+      }
+
+      // v1 回退：加载旧版面试题数据
+      if (!v2Loaded) {
+        try {
+          const rawData = await this.dataLoadService.loadLocalJson<any>('data/interview_questions.json');
+          if (rawData !== null) {
+            this.loadedQuestions = this.dataConverter.convertInterviewQuestions(rawData);
+            hilog.info(DOMAIN, TAG, `面试题数据加载成功（v1回退），共 ${this.loadedQuestions.length} 道题目`);
+          }
+        } catch (error) {
+          hilog.error(DOMAIN, TAG, `面试题数据加载失败，将使用默认数据: ${error}`);
+        }
+      }
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `初始化失败，将使用内置默认数据: ${error}`);
+    }
+  }
+
+  /**
+   * 设置语音识别回调
+   */
+  setSpeechRecognitionCallbacks(
+    onResult?: (text: string, confidence: number) => void,
+    onError?: (error: string) => void,
+    onStateChange?: (state: SpeechRecognitionState) => void
+  ): void {
+    this.onRecognitionResultCallback = onResult;
+    this.onRecognitionErrorCallback = onError;
+    this.onRecognitionStateChangeCallback = onStateChange;
+  }
+
+  /**
+   * 初始化语音识别服务
+   * @returns 初始化是否成功
+   * @throws 初始化失败时可能抛出异常
+   */
+  async initializeSpeechRecognition(): Promise<boolean> {
+    try {
+      const success = await this.speechService.initialize();
+      if (success) {
+        hilog.info(DOMAIN, TAG, 'Speech recognition initialized');
+
+        // 设置回调
+        this.speechService.onResult = (result: RecognitionResult) => {
+          hilog.info(DOMAIN, TAG, `Recognition result: ${result.text}, isFinal: ${result.isFinal}`);
+          this.onRecognitionResultCallback?.(result.text, result.confidence);
+        };
+
+        this.speechService.onError = (error: RecognitionResult) => {
+          hilog.error(DOMAIN, TAG, `Recognition error: ${error.errorMessage}`);
+          this.onRecognitionErrorCallback?.(error.errorMessage || '识别错误');
+        };
+
+        this.speechService.onStateChange = (state: SpeechRecognitionState) => {
+          hilog.info(DOMAIN, TAG, `Recognition state changed: ${state}`);
+          this.onRecognitionStateChangeCallback?.(state);
+        };
+      }
+      return success;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Initialize speech recognition failed: ${error}`);
+      return false;
+    }
+  }
+
+  /**
+   * 检查语音识别是否可用
+   */
+  async isSpeechRecognitionAvailable(): Promise<boolean> {
+    return await this.speechService.isAvailable();
+  }
+
+  /**
+   * 设置识别语言
+   * @param language 语言代码，如 'zh-CN'、'en-US'
+   */
+  setRecognitionLanguage(language: string): void {
+    this.speechService.setLanguage(language);
+  }
+
+  /**
    * 创建面试会话
+   * @param config 面试配置，包含岗位、题目数量、分类、难度等
+   * @returns 面试会话对象，包含生成的题目列表
+   * @throws API请求失败时使用本地默认数据创建会话
    */
   async createInterviewSession(config: InterviewConfig): Promise<InterviewSession> {
     try {
@@ -116,7 +262,23 @@ export class InterviewService {
    * 生成默认面试会话
    */
   private generateDefaultSession(config: InterviewConfig): InterviewSession {
-    const questions = this.generateQuestions(config);
+    let questions: InterviewQuestion[];
+
+    // 优先使用 rawfile 加载的面试题
+    if (this.loadedQuestions.length > 0) {
+      let filtered = this.loadedQuestions;
+      if (config.categories.length > 0) {
+        filtered = filtered.filter(q => config.categories.includes(q.category));
+      }
+      if (config.difficulty !== 'mixed') {
+        filtered = filtered.filter(q => q.difficulty === config.difficulty);
+      }
+      const shuffled = filtered.sort(() => Math.random() - 0.5);
+      questions = shuffled.slice(0, config.questionCount);
+    } else {
+      questions = this.generateQuestions(config);
+    }
+
     return {
       id: Date.now().toString(),
       jobPosition: config.jobPosition,
@@ -694,8 +856,14 @@ export class InterviewService {
     const totalScore = session.feedbacks.length === 0 ? 0 : session.feedbacks.reduce((sum, f) => sum + f.score, 0) / session.feedbacks.length;
 
     const completedSession: InterviewSession = {
-      ...session,
+      id: session.id,
+      jobPosition: session.jobPosition,
+      questions: session.questions,
+      answers: session.answers,
+      feedbacks: session.feedbacks,
+      currentQuestionIndex: session.currentQuestionIndex,
       status: 'completed',
+      startTime: session.startTime,
       endTime: Date.now(),
       totalScore: Math.round(totalScore)
     };
@@ -727,7 +895,9 @@ export class InterviewService {
 
   /**
    * 开始录音
-   * 使用 AVRecorder 进行录音
+   * 使用 AVRecorder 进行录音，同时初始化语音识别服务
+   * @returns 是否成功开始录音
+   * @throws 录音初始化失败时返回 false 并释放资源
    */
   async startRecording(): Promise<boolean> {
     if (this.isRecording) {
@@ -735,27 +905,62 @@ export class InterviewService {
     }
 
     try {
+      // 初始化语音识别服务
+      if (!this.speechService.isInitialized) {
+        await this.initializeSpeechRecognition();
+      }
+
       // 生成录音文件路径
       this.audioFilePath = `/data/local/tmp/interview_${Date.now()}.m4a`;
       this.recordingStartTime = Date.now();
+
+      // 创建音频文件并获取文件描述符
+      const file = fileIo.openSync(this.audioFilePath, fileIo.OpenMode.CREATE | fileIo.OpenMode.READ_WRITE);
+      this.audioFd = file.fd;
+
+      // 创建 AVRecorder 实例
+      this.avRecorder = await media.createAVRecorder();
+
+      // 配置录音参数
+      const avConfig: media.AVRecorderConfig = {
+        audioSourceType: media.AudioSourceType.MIC,
+        profile: {
+          audioBitrate: 128000,
+          audioChannels: 2,
+          audioCodec: media.CodecMimeType.AUDIO_AAC_LC,
+          audioSampleRate: 48000,
+          fileFormat: media.ContainerFormatType.M4A,
+        },
+        url: `fd://${this.audioFd}`,
+      };
+
+      // 设置 fdCallback 以传递文件描述符
+      this.avRecorder.fdCallback = (err, fd) => {
+        if (err) {
+          console.error('[InterviewService] fdCallback error:', err);
+          return;
+        }
+        console.log('[InterviewService] fdCallback fd:', fd);
+      };
+
+      await this.avRecorder.prepare(avConfig);
+      await this.avRecorder.start();
+
       this.isRecording = true;
-
-      // TODO: 集成 AVRecorder API
-      // import media from '@ohos.multimedia.media';
-      // const avRecorder = await media.createAVRecorder();
-      // 配置录音参数并开始录音
-
       console.log('[InterviewService] Recording started');
       return true;
     } catch (error) {
       console.error('[InterviewService] Start recording failed:', error);
       this.isRecording = false;
+      // 出错时释放资源
+      await this.releaseRecorder();
       return false;
     }
   }
 
   /**
    * 停止录音
+   * @returns 包含录音文件路径和时长的对象，未在录音时返回 null
    */
   async stopRecording(): Promise<{ path: string; duration: number } | null> {
     if (!this.isRecording) {
@@ -766,7 +971,22 @@ export class InterviewService {
       const duration = Math.floor((Date.now() - this.recordingStartTime) / 1000);
       this.isRecording = false;
 
-      // TODO: 停止 AVRecorder 并保存文件
+      // 停止并释放 AVRecorder
+      if (this.avRecorder) {
+        await this.avRecorder.stop();
+        await this.avRecorder.release();
+        this.avRecorder = null;
+      }
+
+      // 关闭文件描述符
+      if (this.audioFd >= 0) {
+        try {
+          fileIo.close(this.audioFd);
+        } catch (closeError) {
+          console.error('[InterviewService] Close audio fd failed:', closeError);
+        }
+        this.audioFd = -1;
+      }
 
       console.log('[InterviewService] Recording stopped, duration:', duration);
       return {
@@ -776,31 +996,210 @@ export class InterviewService {
     } catch (error) {
       console.error('[InterviewService] Stop recording failed:', error);
       this.isRecording = false;
+      // 出错时尝试释放资源
+      await this.releaseRecorder();
       return null;
     }
   }
 
   /**
    * 语音识别
-   * 使用 IntelligentVoice 进行语音转文字
+   * 使用 SpeechRecognitionService 进行语音转文字
    */
   async recognizeSpeech(audioPath: string): Promise<string> {
     try {
-      // TODO: 集成 IntelligentVoice API
-      // import intelligentVoice from '@ohos.ai.intelligentVoice';
-      // 使用语音识别服务将音频转为文字
+      hilog.info(DOMAIN, TAG, 'Recognizing speech from:', audioPath);
 
-      // 模拟识别结果
-      console.log('[InterviewService] Recognizing speech from:', audioPath);
-      return '这是语音识别的结果示例。在实际项目中，会通过IntelligentVoice API将录音转换为文字。';
+      // 如果服务未初始化，先初始化
+      if (!this.speechService.isInitialized) {
+        const success = await this.speechService.initialize();
+        if (!success) {
+          hilog.error(DOMAIN, TAG, 'Speech service initialization failed');
+          return '';
+        }
+      }
+
+      // 开始聆听获取识别结果
+      const startSuccess = await this.speechService.startListening();
+      if (!startSuccess) {
+        hilog.error(DOMAIN, TAG, 'Start listening failed');
+        return '';
+      }
+
+      // 等待识别完成（最多等待30秒）
+      const result = await new Promise<RecognitionResult | null>((resolve) => {
+        const timeout = setTimeout(() => {
+          this.speechService.stopListening();
+          resolve(null);
+        }, 30000);
+
+        // 监听结果
+        this.speechService.onResult = (result: RecognitionResult) => {
+          if (result.isFinal) {
+            clearTimeout(timeout);
+            this.speechService.stopListening();
+            resolve(result);
+          }
+        };
+
+        this.speechService.onError = (error: RecognitionResult) => {
+          clearTimeout(timeout);
+          this.speechService.stopListening();
+          hilog.error(DOMAIN, TAG, `Recognition error: ${error.errorMessage}`);
+          resolve(null);
+        };
+      });
+
+      if (result) {
+        hilog.info(DOMAIN, TAG, `Recognition result: ${result.text}`);
+        return result.text;
+      }
+
+      return '';
     } catch (error) {
-      console.error('[InterviewService] Speech recognition failed:', error);
+      hilog.error(DOMAIN, TAG, `Speech recognition failed: ${error}`);
       return '';
     }
   }
 
   /**
-   * 获取录音状态
+   * 直接使用语音识别（无需录音文件）
+   * 适用于实时语音识别场景
+   */
+  async recognizeSpeechDirect(): Promise<RecognitionResult | null> {
+    try {
+      // 如果服务未初始化，先初始化
+      if (!this.speechService.isInitialized) {
+        const success = await this.speechService.initialize();
+        if (!success) {
+          hilog.error(DOMAIN, TAG, 'Speech service initialization failed');
+          return null;
+        }
+      }
+
+      const success = await this.speechService.startListening();
+      if (!success) {
+        hilog.error(DOMAIN, TAG, 'Start listening failed');
+        return null;
+      }
+
+      return this.speechService.lastResult;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Direct speech recognition failed: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * 停止语音识别
+   */
+  async stopSpeechRecognition(): Promise<RecognitionResult | null> {
+    try {
+      const result = await this.speechService.stopListening();
+      return result;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Stop speech recognition failed: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * 取消语音识别
+   */
+  async cancelSpeechRecognition(): Promise<void> {
+    try {
+      await this.speechService.cancel();
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Cancel speech recognition failed: ${error}`);
+    }
+  }
+
+  /**
+   * 获取当前语音识别状态
+   */
+  getSpeechRecognitionState(): SpeechRecognitionState {
+    return this.speechService.state;
+  }
+
+  /**
+   * 释放录音器资源（用于错误恢复时的清理）
+   */
+  async releaseRecorder(): Promise<void> {
+    try {
+      if (this.avRecorder) {
+        try {
+          await this.avRecorder.release();
+        } catch (releaseError) {
+          console.error('[InterviewService] Release avRecorder failed:', releaseError);
+        }
+        this.avRecorder = null;
+      }
+    } catch (error) {
+      console.error('[InterviewService] Release recorder failed:', error);
+    }
+
+    try {
+      if (this.audioFd >= 0) {
+        fileIo.close(this.audioFd);
+        this.audioFd = -1;
+      }
+    } catch (error) {
+      console.error('[InterviewService] Close audio fd failed:', error);
+    }
+
+    this.isRecording = false;
+  }
+
+  /**
+   * 释放所有资源（包括语音识别服务）
+   */
+  release(): void {
+    // 释放录音器
+    this.releaseRecorder();
+
+    // 释放语音识别服务
+    this.speechService.release();
+
+    // 清除回调
+    this.onRecognitionResultCallback = undefined;
+    this.onRecognitionErrorCallback = undefined;
+    this.onRecognitionStateChangeCallback = undefined;
+
+    hilog.info(DOMAIN, TAG, 'InterviewService released all resources');
+  }
+
+  /**
+   * 根据 ID 获取面试问题
+   * @param id 问题ID
+   * @returns 匹配的面试问题，未找到返回 null
+   */
+  getQuestionById(id: string): InterviewQuestion | null {
+    // 先从 loadedQuestions 中查找
+    if (this.loadedQuestions.length > 0) {
+      for (let i = 0; i < this.loadedQuestions.length; i++) {
+        if (this.loadedQuestions[i].id === id) {
+          return this.loadedQuestions[i];
+        }
+      }
+    }
+    // 再从默认题库中查找
+    const defaultConfig: InterviewConfig = {
+      jobPosition: '',
+      questionCount: 999,
+      categories: [],
+      difficulty: 'mixed'
+    };
+    const allQuestions = this.generateQuestions(defaultConfig);
+    for (let i = 0; i < allQuestions.length; i++) {
+      if (allQuestions[i].id === id) {
+        return allQuestions[i];
+      }
+    }
+    return null;
+  }
+
+  /**
+   * 获取面试统计
    */
   getRecordingStatus(): { isRecording: boolean; duration: number } {
     return {
@@ -836,5 +1235,104 @@ export class InterviewService {
       averageScore: 0,
       recentSessions: []
     };
+  }
+
+  /**
+   * 搜索面试问题（支持分页、关键词、分类、难度筛选）
+   * 优先调用 API，失败时回退到本地题库过滤
+   */
+  async searchQuestions(params: {
+    keyword?: string;
+    category?: string;
+    difficulty?: string;
+    position?: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<{ items: InterviewQuestion[]; total: number }> {
+    const page = params.page ?? 1;
+    const pageSize = params.pageSize ?? 20;
+
+    try {
+      const response = await this.apiService.post<{ items: InterviewQuestion[]; total: number }>(
+        '/interview/questions/search',
+        params
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[InterviewService] Search questions failed, falling back to local:', error);
+    }
+
+    // 回退：从本地默认题库中过滤
+    const defaultConfig: InterviewConfig = {
+      jobPosition: '',
+      questionCount: 999,
+      categories: [],
+      difficulty: 'mixed'
+    };
+    const allQuestions = this.generateQuestions(defaultConfig);
+
+    let filtered = allQuestions;
+
+    if (params.keyword) {
+      const kw = params.keyword.toLowerCase();
+      filtered = filtered.filter(q => q.question.toLowerCase().includes(kw));
+    }
+    if (params.category) {
+      filtered = filtered.filter(q => q.category === params.category);
+    }
+    if (params.difficulty) {
+      filtered = filtered.filter(q => q.difficulty === params.difficulty);
+    }
+
+    const total = filtered.length;
+    const start = (page - 1) * pageSize;
+    const items = filtered.slice(start, start + pageSize);
+
+    return { items, total };
+  }
+
+  /**
+   * 按岗位获取面试问题
+   * 优先调用 API，失败时返回空数组（本地数据暂无岗位标签）
+   */
+  async getQuestionsByPosition(position: string): Promise<InterviewQuestion[]> {
+    try {
+      const response = await this.apiService.get<InterviewQuestion[]>(
+        `/interview/questions/position/${position}`
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[InterviewService] Get questions by position failed:', error);
+    }
+
+    // 本地数据暂无岗位标签，返回空数组
+    return [];
+  }
+
+  /**
+   * 获取面试历史记录（支持分页）
+   * 优先调用 API，失败时返回空结果
+   */
+  async getInterviewHistory(
+    page?: number,
+    pageSize?: number
+  ): Promise<{ items: any[]; total: number }> {
+    try {
+      const response = await this.apiService.get<{ items: any[]; total: number }>(
+        '/interview/history',
+        { page: page ?? 1, pageSize: pageSize ?? 20 }
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[InterviewService] Get interview history failed:', error);
+    }
+
+    return { items: [], total: 0 };
   }
 }

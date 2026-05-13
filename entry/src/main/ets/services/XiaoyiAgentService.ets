@@ -64,6 +64,80 @@ export interface AgentSuggestion {
   params?: Record<string, any>;
 }
 
+// 小艺技能接口
+export interface XiaoyiSkill {
+  id: string;
+  name: string;
+  description: string;
+  icon?: string;
+  keywords: string[];
+  intentName: string;
+  enabled: boolean;
+}
+
+// 小艺技能卡片
+export interface XiaoyiSkillCard {
+  skillId: string;
+  skillName: string;
+  skillIcon?: string;
+  quickActions: XiaoyiQuickAction[];
+}
+
+// 小艺快捷操作
+export interface XiaoyiQuickAction {
+  id: string;
+  title: string;
+  icon?: string;
+  action: string;
+  params?: Record<string, any>;
+}
+
+// 小艺响应卡片
+export interface XiaoyiResponseCard {
+  title: string;
+  content: string;
+  type: 'text' | 'card' | 'list' | 'action';
+  actions?: XiaoyiQuickAction[];
+  suggestions?: AgentSuggestion[];
+}
+
+// 智能体配置接口
+export interface XiaoyiAgentConfig {
+  agentId: string;
+  name: string;
+  description: string;
+  version: string;
+  skills: XiaoyiSkill[];
+  settings: AgentSettings;
+  capabilities: string[];
+}
+
+// 智能体设置
+export interface AgentSettings {
+  voiceEnabled: boolean;
+  autoAnalysis: boolean;
+  maxHistoryCount: number;
+  responseTimeout: number;
+}
+
+// 对话上下文
+export interface DialogContext {
+  userId: string;
+  sessionId: string;
+  intent?: string;
+  params?: Record<string, any>;
+  history: DialogTurn[];
+  startTime: number;
+}
+
+// 对话轮次
+export interface DialogTurn {
+  role: 'user' | 'assistant';
+  message: string;
+  timestamp: number;
+  intent?: string;
+}
+
 // 智能体状态
 export enum XiaoyiAgentState {
   UNINITIALIZED = 'uninitialized',
@@ -83,13 +157,42 @@ export class XiaoyiAgentService {
   private agentConfigs: Map<string, AgentConfig> = new Map();
   private intentHandlers: Map<string, (params: any) => Promise<AgentResponse>> = new Map();
 
+  // 小艺技能相关
+  private skills: XiaoyiSkill[] = [];
+  private currentDialogContext: DialogContext | null = null;
+
   // 智能体ID（需要在小艺开放平台申请）
   private readonly AGENT_ID_RESUME = 'buddyjob_resume_agent';
   private readonly AGENT_ID_INTERVIEW = 'buddyjob_interview_agent';
   private readonly AGENT_ID_CAREER = 'buddyjob_career_agent';
 
+  // 默认配置
+  private readonly DEFAULT_CONFIG: XiaoyiAgentConfig = {
+    agentId: 'buddyjob_xiaoyi_agent',
+    name: 'BuddyJob小艺助手',
+    description: '您的智能求职助手，帮您分析简历、准备面试、提升职场技能',
+    version: '1.0.0',
+    skills: [],
+    settings: {
+      voiceEnabled: true,
+      autoAnalysis: true,
+      maxHistoryCount: 50,
+      responseTimeout: 30000
+    },
+    capabilities: [
+      'intent_recognition',
+      'resume_analysis',
+      'interview_practice',
+      'skill_assessment',
+      'career_advice',
+      'voice_memo',
+      'circle_selection'
+    ]
+  };
+
   private constructor() {
     this.registerDefaultIntents();
+    this.initializeSkills();
   }
 
   static getInstance(): XiaoyiAgentService {
@@ -99,10 +202,492 @@ export class XiaoyiAgentService {
     return XiaoyiAgentService.instance;
   }
 
+  // ==================== 生命周期方法 ====================
+
+  /**
+   * 智能体初始化
+   * 在应用启动时调用
+   */
+  async onInitialize(): Promise<void> {
+    hilog.info(DOMAIN, TAG, 'Initializing Xiaoyi Agent Service...');
+
+    try {
+      // 检查智能体环境是否可用
+      const isAvailable = await this.checkAgentAvailability();
+      if (!isAvailable) {
+        hilog.warn(DOMAIN, TAG, 'Agent framework not available');
+        this.state = XiaoyiAgentState.ERROR;
+        return;
+      }
+
+      // 注册智能体配置
+      this.registerAgentConfigs();
+
+      // 注册小艺技能
+      this.registerSkills();
+
+      // 初始化对话上下文
+      this.initializeDialogContext();
+
+      this.state = XiaoyiAgentState.READY;
+      hilog.info(DOMAIN, TAG, 'Xiaoyi Agent Service initialized successfully');
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Initialization failed: ${JSON.stringify(error)}`);
+      this.state = XiaoyiAgentState.ERROR;
+      throw error;
+    }
+  }
+
+  /**
+   * 智能体销毁
+   * 在应用退出时调用
+   */
+  async onDestroy(): Promise<void> {
+    hilog.info(DOMAIN, TAG, 'Destroying Xiaoyi Agent Service...');
+
+    try {
+      // 保存对话历史
+      await this.saveDialogHistory();
+
+      // 清理资源
+      this.cleanup();
+
+      // 重置状态
+      this.state = XiaoyiAgentState.UNINITIALIZED;
+      this.currentDialogContext = null;
+
+      hilog.info(DOMAIN, TAG, 'Xiaoyi Agent Service destroyed');
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Destroy failed: ${error}`);
+    }
+  }
+
+  /**
+   * 清理资源
+   */
+  private cleanup(): void {
+    // 清理选择管理器
+    // 清理音频录制器
+    // 清理其他资源
+    hilog.info(DOMAIN, TAG, 'Resources cleaned up');
+  }
+
+  // ==================== 配置方法 ====================
+
+  /**
+   * 获取智能体配置
+   */
+  getAgentConfig(): XiaoyiAgentConfig {
+    return {
+      ...this.DEFAULT_CONFIG,
+      skills: this.skills.filter(s => s.enabled)
+    };
+  }
+
+  /**
+   * 更新智能体配置
+   */
+  async updateAgentConfig(config: Partial<XiaoyiAgentConfig>): Promise<boolean> {
+    try {
+      // 更新默认配置
+      Object.assign(this.DEFAULT_CONFIG, config);
+
+      // 保存到持久化存储
+      await storage.set('agent_config', JSON.stringify(this.DEFAULT_CONFIG));
+
+      hilog.info(DOMAIN, TAG, 'Agent config updated');
+      return true;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Update config failed: ${error}`);
+      return false;
+    }
+  }
+
+  /**
+   * 初始化对话上下文
+   */
+  private initializeDialogContext(): void {
+    const sessionId = this.generateSessionId();
+    this.currentDialogContext = {
+      userId: '',
+      sessionId,
+      history: [],
+      startTime: Date.now()
+    };
+  }
+
+  /**
+   * 生成会话ID
+   */
+  private generateSessionId(): string {
+    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  }
+
+  // ==================== 对话管理方法 ====================
+
+  /**
+   * 处理用户输入
+   * @param utterance 用户说的话
+   * @returns 智能体响应
+   */
+  async handleUserUtterance(utterance: string): Promise<string> {
+    hilog.info(DOMAIN, TAG, `Handling user utterance: ${utterance}`);
+
+    if (!this.currentDialogContext) {
+      this.initializeDialogContext();
+    }
+
+    try {
+      // 添加用户消息到历史
+      this.addToDialogHistory('user', utterance);
+
+      // 识别意图
+      const intentResult = this.recognizeIntent(utterance);
+
+      // 根据意图生成响应
+      let response: string;
+
+      if (intentResult.intent) {
+        // 已识别到意图
+        const result = await this.handleIntent(intentResult.intent, intentResult.params || {});
+        response = result.message;
+      } else {
+        // 无法识别意图，生成引导回复
+        response = this.generateGuidingResponse(utterance);
+      }
+
+      // 添加助手消息到历史
+      this.addToDialogHistory('assistant', response);
+
+      return response;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Handle utterance failed: ${error}`);
+      return '抱歉，我遇到了一些问题，请稍后再试。';
+    }
+  }
+
+  /**
+   * 识别用户意图
+   */
+  private recognizeIntent(utterance: string): { intent?: string; params?: Record<string, any> } {
+    const lowerUtterance = utterance.toLowerCase();
+
+    // 简历分析意图
+    if (lowerUtterance.includes('简历') && (lowerUtterance.includes('分析') || lowerUtterance.includes('优化'))) {
+      return { intent: 'buddyjob.analyze_resume', params: {} };
+    }
+
+    // 面试练习意图
+    if (lowerUtterance.includes('面试')) {
+      return { intent: 'buddyjob.interview_practice', params: {} };
+    }
+
+    // 能力测评意图
+    if (lowerUtterance.includes('测评') || lowerUtterance.includes('评估') || lowerUtterance.includes('测试')) {
+      return { intent: 'buddyjob.assess_ability', params: {} };
+    }
+
+    // 圈选分析意图
+    if (lowerUtterance.includes('圈选') || lowerUtterance.includes('选中') || lowerUtterance.includes('分析这段')) {
+      return { intent: 'buddyjob.circle_selection', params: {} };
+    }
+
+    // 语音备忘意图
+    if (lowerUtterance.includes('记录') || lowerUtterance.includes('备忘') || lowerUtterance.includes('帮记')) {
+      return { intent: 'buddyjob.voice_memo', params: {} };
+    }
+
+    // Offer分析意图
+    if (lowerUtterance.includes('offer') || lowerUtterance.includes('薪资') || lowerUtterance.includes('待遇')) {
+      return { intent: 'buddyjob.analyze_offer', params: {} };
+    }
+
+    // 职业建议意图
+    if (lowerUtterance.includes('职业') || lowerUtterance.includes('发展') || lowerUtterance.includes('建议')) {
+      return { intent: 'buddyjob.career_advice', params: {} };
+    }
+
+    return {};
+  }
+
+  /**
+   * 生成引导响应
+   */
+  private generateGuidingResponse(utterance: string): string {
+    // 基于用户输入的关键词生成引导
+    if (utterance.includes('?')) {
+      return '我理解您有疑问。请告诉我您想做什么：\n\n' +
+        '1. 分析简历 - "帮我分析简历"\n' +
+        '2. 面试练习 - "开始面试练习"\n' +
+        '3. 能力测评 - "进行能力测评"\n' +
+        '4. 语音备忘 - "记录面试要点"\n' +
+        '5. 职业建议 - "获取职业建议"';
+    }
+
+    return '您好！我是BuddyJob小艺助手。我可以帮您：\n\n' +
+      '• 分析和优化简历\n' +
+      '• 进行模拟面试练习\n' +
+      '• 评估职业能力\n' +
+      '• 记录面试要点\n' +
+      '• 分析Offer待遇\n\n' +
+      '请告诉我您需要什么帮助？';
+  }
+
+  /**
+   * 添加到对话历史
+   */
+  private addToDialogHistory(role: 'user' | 'assistant', message: string): void {
+    if (!this.currentDialogContext) return;
+
+    const turn: DialogTurn = {
+      role,
+      message,
+      timestamp: Date.now()
+    };
+
+    this.currentDialogContext.history.push(turn);
+
+    // 限制历史记录数量
+    const maxHistory = this.DEFAULT_CONFIG.settings.maxHistoryCount;
+    if (this.currentDialogContext.history.length > maxHistory) {
+      this.currentDialogContext.history = this.currentDialogContext.history.slice(-maxHistory);
+    }
+  }
+
+  /**
+   * 保存对话历史
+   */
+  private async saveDialogHistory(): Promise<void> {
+    if (!this.currentDialogContext) return;
+
+    try {
+      await storage.set('dialog_history', JSON.stringify(this.currentDialogContext.history));
+      hilog.info(DOMAIN, TAG, 'Dialog history saved');
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, `Save dialog history failed: ${error}`);
+    }
+  }
+
+  /**
+   * 获取对话历史
+   */
+  async getDialogHistory(): Promise<DialogTurn[]> {
+    if (!this.currentDialogContext) return [];
+    return this.currentDialogContext.history;
+  }
+
+  /**
+   * 清除对话历史
+   */
+  async clearDialogHistory(): Promise<void> {
+    if (this.currentDialogContext) {
+      this.currentDialogContext.history = [];
+    }
+    await storage.delete('dialog_history');
+    hilog.info(DOMAIN, TAG, 'Dialog history cleared');
+  }
+
+  // ==================== 技能卡片构建 ====================
+
+  /**
+   * 构建技能卡片
+   */
+  buildSkillCard(skill: XiaoyiSkill): XiaoyiSkillCard {
+    const quickActions = this.getSkillQuickActions(skill);
+
+    return {
+      skillId: skill.id,
+      skillName: skill.name,
+      skillIcon: skill.icon,
+      quickActions
+    };
+  }
+
+  /**
+   * 获取技能的快捷操作
+   */
+  private getSkillQuickActions(skill: XiaoyiSkill): XiaoyiQuickAction[] {
+    switch (skill.intentName) {
+      case 'buddyjob.analyze_resume':
+        return [
+          { id: '1', title: '上传简历', icon: 'ic_upload', action: 'upload_resume' },
+          { id: '2', title: '查看示例', icon: 'ic_example', action: 'view_example' },
+          { id: '3', title: '优化建议', icon: 'ic_suggest', action: 'get_suggestions' }
+        ];
+
+      case 'buddyjob.interview_practice':
+        return [
+          { id: '1', title: '自我介绍', icon: 'ic_intro', action: 'self_intro' },
+          { id: '2', title: '行为面试', icon: 'ic_behavior', action: 'behavioral' },
+          { id: '3', title: '技术面试', icon: 'ic_tech', action: 'technical' }
+        ];
+
+      case 'buddyjob.assess_ability':
+        return [
+          { id: '1', title: '开始测评', icon: 'ic_start', action: 'start_assessment' },
+          { id: '2', title: '查看结果', icon: 'ic_result', action: 'view_result' },
+          { id: '3', title: '提升建议', icon: 'ic_improve', action: 'get_advice' }
+        ];
+
+      case 'buddyjob.voice_memo':
+        return [
+          { id: '1', title: '开始录音', icon: 'ic_record', action: 'start_recording' },
+          { id: '2', title: '查看记录', icon: 'ic_list', action: 'view_memos' },
+          { id: '3', title: '分享', icon: 'ic_share', action: 'share' }
+        ];
+
+      default:
+        return [
+          { id: '1', title: '开始', icon: 'ic_start', action: 'start' }
+        ];
+    }
+  }
+
+  /**
+   * 获取所有技能卡片
+   */
+  getAllSkillCards(): XiaoyiSkillCard[] {
+    return this.skills
+      .filter(s => s.enabled)
+      .map(s => this.buildSkillCard(s));
+  }
+
+  // ==================== 技能管理 ====================
+
+  /**
+   * 初始化技能列表
+   */
+  private initializeSkills(): void {
+    this.skills = [
+      {
+        id: 'skill_resume',
+        name: '简历分析',
+        description: '分析简历内容，提供优化建议',
+        icon: 'ic_resume',
+        keywords: ['简历', '分析', '优化', '评分', 'ATS'],
+        intentName: 'buddyjob.analyze_resume',
+        enabled: true
+      },
+      {
+        id: 'skill_interview',
+        name: '面试练习',
+        description: '进行模拟面试练习',
+        icon: 'ic_interview',
+        keywords: ['面试', '练习', '模拟', '准备', '辅导'],
+        intentName: 'buddyjob.interview_practice',
+        enabled: true
+      },
+      {
+        id: 'skill_assessment',
+        name: '能力测评',
+        description: '进行职业能力测评',
+        icon: 'ic_assessment',
+        keywords: ['测评', '评估', '测试', '能力', '技能'],
+        intentName: 'buddyjob.assess_ability',
+        enabled: true
+      },
+      {
+        id: 'skill_circle',
+        name: '圈选分析',
+        description: '圈选内容进行AI分析',
+        icon: 'ic_circle',
+        keywords: ['圈选', '选中', '分析', '提取'],
+        intentName: 'buddyjob.circle_selection',
+        enabled: true
+      },
+      {
+        id: 'skill_memo',
+        name: '语音备忘',
+        description: '语音记录面试要点',
+        icon: 'ic_memo',
+        keywords: ['记录', '备忘', '帮记', '语音', '笔记'],
+        intentName: 'buddyjob.voice_memo',
+        enabled: true
+      },
+      {
+        id: 'skill_offer',
+        name: 'Offer分析',
+        description: '分析Offer薪资待遇',
+        icon: 'ic_offer',
+        keywords: ['offer', '薪资', '待遇', '比较', '分析'],
+        intentName: 'buddyjob.analyze_offer',
+        enabled: true
+      },
+      {
+        id: 'skill_career',
+        name: '职业建议',
+        description: '获取职业发展建议',
+        icon: 'ic_career',
+        keywords: ['职业', '发展', '建议', '规划', '方向'],
+        intentName: 'buddyjob.career_advice',
+        enabled: true
+      }
+    ];
+  }
+
+  /**
+   * 注册技能
+   */
+  private registerSkills(): void {
+    hilog.info(DOMAIN, TAG, `Registering ${this.skills.length} skills`);
+
+    this.skills.forEach(skill => {
+      // 注册意图处理
+      this.intentHandlers.set(skill.intentName, async (params) => {
+        return this.handleSkillIntent(skill, params);
+      });
+    });
+  }
+
+  /**
+   * 处理技能意图
+   */
+  private async handleSkillIntent(skill: XiaoyiSkill, params: any): Promise<AgentResponse> {
+    hilog.info(DOMAIN, TAG, `Handling skill intent: ${skill.intentName}`);
+
+    // 根据技能类型构建不同的响应
+    const skillCard = this.buildSkillCard(skill);
+
+    return {
+      success: true,
+      message: `已为您打开${skill.name}功能`,
+      actions: [
+        { type: 'open_page', target: `pages/${skill.name}` }
+      ],
+      suggestions: skillCard.quickActions.map((action, index) => ({
+        id: action.id,
+        title: action.title,
+        description: '',
+        icon: action.icon,
+        action: action.action
+      }))
+    };
+  }
+
+  /**
+   * 启用/禁用技能
+   */
+  async setSkillEnabled(skillId: string, enabled: boolean): Promise<boolean> {
+    const skill = this.skills.find(s => s.id === skillId);
+    if (!skill) {
+      return false;
+    }
+
+    skill.enabled = enabled;
+    await storage.set(`skill_${skillId}_enabled`, enabled.toString());
+    hilog.info(DOMAIN, TAG, `Skill ${skillId} ${enabled ? 'enabled' : 'disabled'}`);
+    return true;
+  }
+
+  // ==================== 原有代码 ====================
+
   /**
    * 初始化智能体服务
    */
   async initialize(context: common.UIAbilityContext): Promise<boolean> {
+    this.context = context;
+    return this.onInitialize();
+  }
     try {
       this.context = context;
 

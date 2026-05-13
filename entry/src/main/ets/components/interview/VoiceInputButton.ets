@@ -1,7 +1,8 @@
 /**
  * 语音输入按钮组件
  *
- * 支持长按录音、录音波形动画、语音识别结果展示
+ * 支持长按录音、实时语音识别、录音波形动画、语音识别结果展示
+ * 集成 SpeechRecognitionService 实现实时语音转文字
  * 遵循鸿蒙设计规范
  */
 import {
@@ -17,11 +18,22 @@ import {
   FontWeight,
   Duration
 } from '../../constants/design-tokens';
+import {
+  SpeechRecognitionService,
+  SpeechRecognitionState,
+  RecognitionResult
+} from '../../services/SpeechRecognitionService';
 
 // 波形数据
 interface WaveBar {
   height: number;
   delay: number;
+}
+
+// 语言选项
+interface LanguageOption {
+  code: string;
+  label: string;
 }
 
 @Component
@@ -36,6 +48,7 @@ export struct VoiceInputButton {
   onStartRecording: () => void = () => {};
   onStopRecording: () => void = () => {};
   onTextChanged: (text: string) => void = () => {};
+  onRecognitionResult: (text: string, confidence: number) => void = () => {};
 
   // 内部状态
   @State private waveBars: WaveBar[] = [];
@@ -44,12 +57,33 @@ export struct VoiceInputButton {
   @State private inputMode: 'voice' | 'text' = 'voice';
   @State private textInput: string = '';
 
+  // 语音识别相关状态
+  @State private isListening: boolean = false;
+  @State private isRecognizing: boolean = false;
+  @State private recognitionState: SpeechRecognitionState = SpeechRecognitionState.IDLE;
+  @State private interimText: string = '';
+  @State private confidence: number = 0;
+  @State private speechAvailable: boolean = true;
+  @State private showSettings: boolean = false;
+
+  // 语言设置
+  @State private currentLanguage: string = 'zh-CN';
+  private languageOptions: LanguageOption[] = [
+    { code: 'zh-CN', label: '中文' },
+    { code: 'en-US', label: 'English' }
+  ];
+
+  // 语音服务
+  private speechService: SpeechRecognitionService = SpeechRecognitionService.getInstance();
+
   // 波形动画定时器
   private waveAnimationTimer: number = -1;
   private durationTimer: number = -1;
+  private speechTimer: number = -1;
 
   aboutToAppear() {
     this.initWaveBars();
+    this.checkSpeechAvailability();
   }
 
   aboutToDisappear() {
@@ -57,6 +91,18 @@ export struct VoiceInputButton {
     if (this.durationTimer !== -1) {
       clearInterval(this.durationTimer);
     }
+    if (this.speechTimer !== -1) {
+      clearTimeout(this.speechTimer);
+    }
+    // 释放语音服务
+    this.speechService.release();
+  }
+
+  /**
+   * 检查语音识别可用性
+   */
+  private async checkSpeechAvailability(): Promise<void> {
+    this.speechAvailable = await this.speechService.isAvailable();
   }
 
   /**
@@ -90,7 +136,7 @@ export struct VoiceInputButton {
       const newBars: WaveBar[] = [];
       for (let i = 0; i < 12; i++) {
         const baseHeight = 4;
-        const maxHeight = 24;
+        const maxHeight = this.isListening ? 28 : 24;
         const phase = this.animationProgress * Math.PI * 2 + i * 0.5;
         const height = baseHeight + (maxHeight - baseHeight) * (0.5 + 0.5 * Math.sin(phase));
         newBars.push({
@@ -124,7 +170,7 @@ export struct VoiceInputButton {
   build() {
     Column() {
       // 已识别的文字展示
-      if (this.recognizedText || this.textInput) {
+      if (this.recognizedText || this.textInput || this.interimText) {
         this.RecognizedTextDisplay()
       }
 
@@ -141,10 +187,20 @@ export struct VoiceInputButton {
           // 文字输入框
           this.TextInputArea()
         }
+
+        // 设置按钮（仅语音模式显示）
+        if (this.inputMode === 'voice' && this.speechAvailable) {
+          this.SettingsButton()
+        }
       }
       .width('100%')
       .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: Spacing.Space4, bottom: Spacing.Space4 })
       .backgroundColor(NeutralColors.Neutral0)
+
+      // 设置面板
+      if (this.showSettings) {
+        this.SettingsPanel()
+      }
     }
     .width('100%')
   }
@@ -162,18 +218,46 @@ export struct VoiceInputButton {
 
         Blank()
 
+        // 置信度显示
+        if (this.confidence > 0 && this.inputMode === 'voice') {
+          Text(`置信度: ${(this.confidence * 100).toFixed(0)}%`)
+            .fontSize(FontSize.Xs)
+            .fontColor(
+              this.confidence >= 0.8 ? SemanticColors.Success :
+              this.confidence >= 0.5 ? SemanticColors.Warning :
+              SemanticColors.Error
+            )
+        }
+
         // 清除按钮
         Text('清除')
           .fontSize(FontSize.Xs)
           .fontColor(BrandColors.Brand500)
+          .margin({ left: Spacing.Space3 })
           .onClick(() => {
             this.textInput = '';
+            this.interimText = '';
+            this.recognizedText = '';
+            this.confidence = 0;
             this.onTextChanged('');
           })
       }
       .width('100%')
       .margin({ bottom: Spacing.Space2 })
 
+      // 中间识别结果（实时显示）
+      if (this.interimText && this.isListening) {
+        Text(this.interimText)
+          .fontSize(FontSize.Sm)
+          .fontColor(SemanticColors.Text3)
+          .width('100%')
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .opacity(0.7)
+          .margin({ bottom: Spacing.Space2 })
+      }
+
+      // 最终识别结果
       Text(this.textInput || this.recognizedText)
         .fontSize(FontSize.Sm)
         .fontColor(SemanticColors.Text1)
@@ -204,7 +288,7 @@ export struct VoiceInputButton {
         Image($r('app.media.ic_microphone'))
           .width(24)
           .height(24)
-          .fillColor(SemanticColors.Text2)
+          .fillColor(this.speechAvailable ? SemanticColors.Text2 : SemanticColors.Text4)
       }
     }
     .width(44)
@@ -213,8 +297,91 @@ export struct VoiceInputButton {
     .backgroundColor(NeutralColors.Neutral100)
     .justifyContent(FlexAlign.Center)
     .onClick(() => {
-      this.inputMode = this.inputMode === 'voice' ? 'text' : 'voice';
+      if (this.inputMode === 'voice') {
+        this.inputMode = 'text';
+      } else if (this.speechAvailable) {
+        this.inputMode = 'voice';
+      }
     })
+  }
+
+  /**
+   * 设置按钮
+   */
+  @Builder
+  SettingsButton() {
+    Column() {
+      Image($r('app.media.ic_settings'))
+        .width(20)
+        .height(20)
+        .fillColor(SemanticColors.Text2)
+    }
+    .width(36)
+    .height(36)
+    .borderRadius(18)
+    .backgroundColor(NeutralColors.Neutral100)
+    .justifyContent(FlexAlign.Center)
+    .margin({ left: Spacing.Space2 })
+    .onClick(() => {
+      this.showSettings = !this.showSettings;
+    })
+  }
+
+  /**
+   * 设置面板
+   */
+  @Builder
+  SettingsPanel() {
+    Column() {
+      // 语言选择
+      Row() {
+        Text('识别语言')
+          .fontSize(FontSize.Sm)
+          .fontColor(SemanticColors.Text2)
+
+        Blank()
+
+        // 语言选项
+        Row() {
+          ForEach(this.languageOptions, (option: LanguageOption) => {
+            Text(option.label)
+              .fontSize(FontSize.Sm)
+              .fontColor(this.currentLanguage === option.code ? BrandColors.Brand500 : SemanticColors.Text3)
+              .backgroundColor(this.currentLanguage === option.code ? BrandColors.Brand50 : Color.Transparent)
+              .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space1, bottom: Spacing.Space1 })
+              .borderRadius(SemanticRadius.Sm)
+              .onClick(() => {
+                this.currentLanguage = option.code;
+                this.speechService.setLanguage(option.code);
+              })
+          })
+        }
+      }
+      .width('100%')
+      .padding({ top: Spacing.Space3, bottom: Spacing.Space3 })
+
+      // 可用性提示
+      if (!this.speechAvailable) {
+        Row() {
+          Image($r('app.media.ic_warning'))
+            .width(16)
+            .height(16)
+            .fillColor(ErrorColors.Error500)
+
+          Text('语音识别不可用，请检查权限设置')
+            .fontSize(FontSize.Xs)
+            .fontColor(ErrorColors.Error500)
+            .margin({ left: Spacing.Space2 })
+        }
+        .width('100%')
+        .padding({ top: Spacing.Space2 })
+      }
+    }
+    .width('100%')
+    .padding(SemanticSpacing.Md)
+    .backgroundColor(NeutralColors.Neutral100)
+    .borderRadius(SemanticRadius.Control)
+    .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, bottom: Spacing.Space2 })
   }
 
   /**
@@ -223,8 +390,87 @@ export struct VoiceInputButton {
   @Builder
   VoiceButton() {
     Row() {
-      if (this.isRecording) {
-        // 录音中状态
+      if (this.isListening) {
+        // 聆听中状态
+        Row() {
+          // 波形动画
+          Row() {
+            ForEach(this.waveBars, (bar: WaveBar, index: number) => {
+              Row()
+                .width(3)
+                .height(bar.height)
+                .backgroundColor(BrandColors.Brand400)
+                .borderRadius(1.5)
+                .margin({ left: index === 0 ? 0 : 2 })
+            })
+          }
+          .height(32)
+          .justifyContent(FlexAlign.Center)
+
+          // 聆听状态文字
+          Text('聆听中...')
+            .fontSize(FontSize.Sm)
+            .fontColor(SemanticColors.Text2)
+            .margin({ left: Spacing.Space4 })
+        }
+        .layoutWeight(1)
+        .height(48)
+        .backgroundColor(BrandColors.Brand100)
+        .borderRadius(SemanticRadius.Pill)
+        .border({
+          width: 2,
+          color: BrandColors.Brand500
+        })
+        .justifyContent(FlexAlign.Center)
+        .margin({ left: Spacing.Space3 })
+
+        // 停止按钮
+        Column() {
+          Image($r('app.media.ic_stop'))
+            .width(20)
+            .height(20)
+            .fillColor(ErrorColors.Error500)
+        }
+        .width(48)
+        .height(48)
+        .borderRadius(24)
+        .backgroundColor(NeutralColors.Neutral0)
+        .border({
+          width: 2,
+          color: ErrorColors.Error500
+        })
+        .justifyContent(FlexAlign.Center)
+        .margin({ left: Spacing.Space3 })
+        .onClick(() => {
+          this.stopSpeechRecognition();
+        })
+
+      } else if (this.isProcessing || this.isRecognizing) {
+        // 处理中状态
+        Row() {
+          LoadingProgress()
+            .width(20)
+            .height(20)
+            .color(BrandColors.Brand500)
+
+          Text('识别中...')
+            .fontSize(FontSize.Sm)
+            .fontColor(BrandColors.Brand500)
+            .margin({ left: Spacing.Space3 })
+        }
+        .layoutWeight(1)
+        .height(48)
+        .backgroundColor(BrandColors.Brand50)
+        .borderRadius(SemanticRadius.Pill)
+        .border({
+          width: 2,
+          color: BrandColors.Brand300
+        })
+        .justifyContent(FlexAlign.Center)
+        .margin({ left: Spacing.Space3 })
+
+      } else if (this.isRecording) {
+        // 录音中状态（传统录音模式）
         Row() {
           // 波形动画
           Row() {
@@ -270,37 +516,19 @@ export struct VoiceInputButton {
           this.stopWaveAnimation();
           this.onStopRecording();
         })
-      } else if (this.isProcessing) {
-        // 处理中状态
-        Row() {
-          LoadingProgress()
-            .width(20)
-            .height(20)
-            .color(NeutralColors.Neutral0)
 
-          Text('识别中...')
-            .fontSize(FontSize.Sm)
-            .fontColor(NeutralColors.Neutral0)
-            .margin({ left: Spacing.Space3 })
-        }
-        .layoutWeight(1)
-        .height(48)
-        .backgroundColor(BrandColors.Brand400)
-        .borderRadius(SemanticRadius.Pill)
-        .justifyContent(FlexAlign.Center)
-        .margin({ left: Spacing.Space3 })
       } else {
-        // 待录音状态 - 长按录音按钮
+        // 待聆听状态 - 点击开始语音识别
         Column() {
           Row() {
             Image($r('app.media.ic_microphone'))
               .width(20)
               .height(20)
-              .fillColor(NeutralColors.Neutral0)
+              .fillColor(this.speechAvailable ? NeutralColors.Neutral0 : SemanticColors.Text3)
 
-            Text('按住说话')
+            Text(this.speechAvailable ? '点击说话' : '语音不可用')
               .fontSize(FontSize.Sm)
-              .fontColor(NeutralColors.Neutral0)
+              .fontColor(this.speechAvailable ? NeutralColors.Neutral0 : SemanticColors.Text3)
               .margin({ left: Spacing.Space3 })
           }
         }
@@ -310,24 +538,10 @@ export struct VoiceInputButton {
         .borderRadius(SemanticRadius.Pill)
         .justifyContent(FlexAlign.Center)
         .margin({ left: Spacing.Space3 })
-        .gesture(
-          LongPressGesture({ repeat: false })
-            .onAction(() => {
-              this.isPressed = true;
-              this.startWaveAnimation();
-              this.onStartRecording();
-            })
-            .onActionEnd(() => {
-              this.isPressed = false;
-              this.stopWaveAnimation();
-              this.onStopRecording();
-            })
-        )
-        .onTouch((event: TouchEvent) => {
-          if (event.type === TouchType.Down) {
-            this.isPressed = true;
-          } else if (event.type === TouchType.Up || event.type === TouchType.Cancel) {
-            this.isPressed = false;
+        .opacity(this.speechAvailable ? 1 : 0.6)
+        .onClick(() => {
+          if (this.speechAvailable) {
+            this.startSpeechRecognition();
           }
         })
       }
@@ -362,5 +576,101 @@ export struct VoiceInputButton {
         .margin({ left: Spacing.Space3 })
     }
     .layoutWeight(1)
+  }
+
+  /**
+   * 开始语音识别
+   */
+  private async startSpeechRecognition(): Promise<void> {
+    // 如果已经在聆听，先停止
+    if (this.isListening) {
+      await this.stopSpeechRecognition();
+      return;
+    }
+
+    // 初始化服务
+    if (!this.speechService.isInitialized) {
+      const initSuccess = await this.speechService.initialize({
+        language: this.currentLanguage,
+        enablePunctuation: true,
+        enableInterimResults: true
+      });
+
+      if (!initSuccess) {
+        return;
+      }
+    }
+
+    // 设置回调
+    this.speechService.onResult = (result: RecognitionResult) => {
+      if (result.isFinal) {
+        // 最终结果
+        this.recognizedText = result.text;
+        this.textInput = result.text;
+        this.confidence = result.confidence;
+        this.interimText = '';
+        this.isRecognizing = false;
+
+        // 回调
+        this.onRecognitionResult(result.text, result.confidence);
+        this.onTextChanged(result.text);
+
+      } else {
+        // 中间结果
+        this.interimText = result.text;
+      }
+    };
+
+    this.speechService.onError = (error: RecognitionResult) => {
+      this.isListening = false;
+      this.isRecognizing = false;
+      this.recognitionState = SpeechRecognitionState.ERROR;
+      this.stopWaveAnimation();
+    };
+
+    this.speechService.onStateChange = (state: SpeechRecognitionState) => {
+      this.recognitionState = state;
+      this.isListening = state === SpeechRecognitionState.LISTENING;
+      this.isRecognizing = state === SpeechRecognitionState.PROCESSING;
+    };
+
+    // 开始聆听
+    const success = await this.speechService.startListening();
+
+    if (success) {
+      this.isListening = true;
+      this.recognitionState = SpeechRecognitionState.LISTENING;
+      this.startWaveAnimation();
+    }
+  }
+
+  /**
+   * 停止语音识别
+   */
+  private async stopSpeechRecognition(): Promise<void> {
+    await this.speechService.stopListening();
+    this.isListening = false;
+    this.isRecognizing = true;
+    this.recognitionState = SpeechRecognitionState.PROCESSING;
+    this.stopWaveAnimation();
+
+    // 获取最终结果
+    const result = this.speechService.lastResult;
+    if (result) {
+      this.recognizedText = result.text;
+      this.textInput = result.text;
+      this.confidence = result.confidence;
+      this.onRecognitionResult(result.text, result.confidence);
+      this.onTextChanged(result.text);
+    }
+
+    // 延迟重置处理状态
+    if (this.speechTimer !== -1) {
+      clearTimeout(this.speechTimer);
+    }
+    this.speechTimer = setTimeout(() => {
+      this.isRecognizing = false;
+      this.recognitionState = SpeechRecognitionState.IDLE;
+    }, 1000);
   }
 }

@@ -121,7 +121,9 @@ export interface PaymentCallback {
 
 /**
  * 华为支付服务 - 支持消耗型商品和订阅型商品
- * TODO: 等待华为支付 SDK 接入，目前使用 mock 实现
+ *
+ * 当前状态：使用 mock 实现，等待华为支付 SDK 接入
+ * 需要接入 HMS IAP 服务并替换相关方法
  */
 export class PaymentService {
   private static instance: PaymentService;
@@ -354,7 +356,11 @@ export class PaymentService {
 
   /**
    * 验证购买（发送到服务器）
-   * TODO: 等待华为支付 SDK 接入，目前使用 mock 实现
+   *
+   * 注意：当前使用 mock 实现，等待华为支付 SDK 接入后需要：
+   * 1. 替换为真实的 IAP 购买验证流程
+   * 2. 添加服务器端签名验证
+   * 3. 实现订单状态同步
    */
   private async verifyPurchase(orderInfo: OrderInfo, isSubscription: boolean = false): Promise<boolean> {
     try {

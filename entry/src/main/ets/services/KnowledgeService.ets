@@ -1,5 +1,7 @@
 import { ApiService } from './ApiService';
 import { API_ENDPOINTS } from '../constants/config';
+import { DataLoadService } from './DataLoadService';
+import { DataConverter } from './DataConverter';
 
 /**
  * 知识库文章接口
@@ -42,11 +44,24 @@ export interface ArticleListResponse {
 }
 
 /**
- * 知识库服务 - 管理知识库文章
+ * KnowledgeService - 知识库服务
+ *
+ * 管理知识库文章的获取、搜索和收藏
+ *
+ * @example
+ * const service = KnowledgeService.getInstance();
+ * const articles = await service.getArticles('面试攻略', 1, 20);
+ * const detail = await service.getArticleById('1');
+ * await service.addToFavorites('1');
+ *
+ * @since 1.0.0
  */
 export class KnowledgeService {
   private apiService: ApiService;
   private static instance: KnowledgeService;
+  private dataLoadService: DataLoadService = DataLoadService.getInstance();
+  private dataConverter: DataConverter = DataConverter.getInstance();
+  private loadedArticles: KnowledgeArticle[] = [];
 
   private constructor() {
     this.apiService = ApiService.getInstance();
@@ -57,6 +72,48 @@ export class KnowledgeService {
       KnowledgeService.instance = new KnowledgeService();
     }
     return KnowledgeService.instance;
+  }
+
+  /**
+   * 初始化数据加载服务，从 rawfile JSON 文件加载知识库文章数据
+   * 加载失败时静默回退到内置默认数据，不影响应用正常运行
+   * @param context 应用上下文
+   */
+  async initialize(context: Context): Promise<void> {
+    try {
+      await this.dataLoadService.initialize(context);
+      console.info('[KnowledgeService] DataLoadService 初始化成功');
+
+      // 优先加载 v2 知识库数据（2000篇，43子分类）
+      let v2Loaded = false;
+      try {
+        const v2Data = await this.dataLoadService.loadLocalJson<any>('data/knowledge_articles_v2.json');
+        if (v2Data !== null && v2Data.articles && v2Data.articles.length > 0) {
+          this.loadedArticles = this.dataConverter.convertKnowledgeArticlesV2(v2Data);
+          if (this.loadedArticles.length > 0) {
+            v2Loaded = true;
+            console.info(`[KnowledgeService] v2知识库文章加载成功，共 ${this.loadedArticles.length} 篇文章`);
+          }
+        }
+      } catch (error) {
+        console.error('[KnowledgeService] v2知识库文章加载失败，回退到v1:', error);
+      }
+
+      // v1 回退：加载旧版知识库文章数据
+      if (!v2Loaded) {
+        try {
+          const rawData = await this.dataLoadService.loadLocalJson<any>('data/knowledge_articles.json');
+          if (rawData !== null) {
+            this.loadedArticles = this.dataConverter.convertKnowledgeArticles(rawData);
+            console.info(`[KnowledgeService] 知识库文章加载成功（v1回退），共 ${this.loadedArticles.length} 篇文章`);
+          }
+        } catch (error) {
+          console.error('[KnowledgeService] 知识库文章加载失败，将使用默认数据:', error);
+        }
+      }
+    } catch (error) {
+      console.error('[KnowledgeService] 初始化失败，将使用内置默认数据:', error);
+    }
   }
 
   /**
@@ -85,6 +142,29 @@ export class KnowledgeService {
       return response;
     } catch (error) {
       console.error('[KnowledgeService] Get articles failed:', error);
+
+      // API 失败时，优先使用 rawfile 加载的文章
+      if (this.loadedArticles.length > 0) {
+        let filtered = this.loadedArticles;
+        if (category && category !== '全部' && category !== '我的收藏') {
+          filtered = filtered.filter(a => a.category === category);
+        }
+        const total = filtered.length;
+        const start = (page - 1) * limit;
+        const items = filtered.slice(start, start + limit);
+        return {
+          success: true,
+          data: {
+            list: items,
+            total: total,
+            page: page,
+            limit: limit,
+            hasMore: start + limit < total
+          },
+          message: '从本地数据加载'
+        };
+      }
+
       return {
         success: false,
         data: null as ArticleListResponse,
@@ -735,6 +815,135 @@ export class KnowledgeService {
     };
 
     return defaultArticles[id] || defaultArticles['1'];
+  }
+
+  /**
+   * 高级搜索文章（支持关键词、分类筛选及分页）
+   * 优先调用 API，失败时回退到本地文章过滤
+   */
+  async searchArticlesFiltered(params: {
+    keyword?: string;
+    category?: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<{ items: KnowledgeArticle[]; total: number }> {
+    const page = params.page ?? 1;
+    const pageSize = params.pageSize ?? 20;
+
+    try {
+      const response = await this.apiService.post<{ items: KnowledgeArticle[]; total: number }>(
+        '/knowledge/articles/search',
+        params
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[KnowledgeService] Search articles filtered failed, falling back to local:', error);
+    }
+
+    // 回退：从本地默认文章中过滤
+    let filtered = this.getDefaultArticles();
+
+    if (params.keyword) {
+      const kw = params.keyword.toLowerCase();
+      filtered = filtered.filter(
+        a => a.title.toLowerCase().includes(kw) || a.summary.toLowerCase().includes(kw)
+      );
+    }
+    if (params.category) {
+      filtered = filtered.filter(a => a.category === params.category);
+    }
+
+    const total = filtered.length;
+    const start = (page - 1) * pageSize;
+    const items = filtered.slice(start, start + pageSize);
+
+    return { items, total };
+  }
+
+  /**
+   * 根据 ID 获取文章详情
+   * 优先调用 API，失败时回退到本地数据
+   */
+  async fetchArticleDetail(id: string): Promise<ArticleDetail | null> {
+    try {
+      const response = await this.apiService.get<ArticleDetail>(
+        `/knowledge/articles/${id}`
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[KnowledgeService] Fetch article detail failed, falling back to local:', error);
+    }
+
+    // 回退：从本地默认数据中查找
+    return this.getDefaultArticleById(id);
+  }
+
+  /**
+   * 获取相关文章
+   * 优先调用 API，失败时返回同分类的随机文章
+   */
+  async getRelatedArticles(
+    articleId: string,
+    category?: string,
+    limit?: number
+  ): Promise<KnowledgeArticle[]> {
+    const actualLimit = limit ?? 5;
+
+    try {
+      const response = await this.apiService.get<KnowledgeArticle[]>(
+        `/knowledge/articles/${articleId}/related`,
+        { category, limit: actualLimit }
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[KnowledgeService] Get related articles failed, falling back to local:', error);
+    }
+
+    // 回退：从同分类文章中随机选取
+    const allArticles = this.getDefaultArticles();
+    let candidates = allArticles.filter(a => a.id !== articleId);
+
+    if (category) {
+      const sameCategory = candidates.filter(a => a.category === category);
+      if (sameCategory.length > 0) {
+        candidates = sameCategory;
+      }
+    }
+
+    // 随机打乱并取前 N 篇
+    const shuffled = candidates.sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, actualLimit);
+  }
+
+  /**
+   * 获取热门文章
+   * 优先调用 API，失败时返回本地阅读量最高的前 N 篇
+   */
+  async getPopularArticles(limit?: number): Promise<KnowledgeArticle[]> {
+    const actualLimit = limit ?? 10;
+
+    try {
+      const response = await this.apiService.get<KnowledgeArticle[]>(
+        '/knowledge/articles/popular',
+        { limit: actualLimit }
+      );
+      if (response.success && response.data) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('[KnowledgeService] Get popular articles failed, falling back to local:', error);
+    }
+
+    // 回退：按阅读量降序排列，取前 N 篇
+    const allArticles = this.getDefaultArticles();
+    const sorted = allArticles.sort((a, b) => b.readCount - a.readCount);
+    return sorted.slice(0, actualLimit);
   }
 }
 

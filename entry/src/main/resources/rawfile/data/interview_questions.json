@@ -1,0 +1,3978 @@
+{
+  "categories": [
+    {
+      "id": "self_intro",
+      "name": "自我介绍",
+      "nameEn": "Self Introduction"
+    },
+    {
+      "id": "behavioral",
+      "name": "行为面试",
+      "nameEn": "Behavioral"
+    },
+    {
+      "id": "technical",
+      "name": "技术面试",
+      "nameEn": "Technical"
+    },
+    {
+      "id": "situational",
+      "name": "情景面试",
+      "nameEn": "Situational"
+    },
+    {
+      "id": "salary",
+      "name": "薪资谈判",
+      "nameEn": "Salary Negotiation"
+    },
+    {
+      "id": "culture_fit",
+      "name": "文化匹配",
+      "nameEn": "Culture Fit"
+    },
+    {
+      "id": "case_study",
+      "name": "案例分析",
+      "nameEn": "Case Study"
+    },
+    {
+      "id": "leadership",
+      "name": "领导力",
+      "nameEn": "Leadership"
+    }
+  ],
+  "positions": [
+    {
+      "id": "software_engineer",
+      "name": "软件工程师",
+      "nameEn": "Software Engineer"
+    },
+    {
+      "id": "product_manager",
+      "name": "产品经理",
+      "nameEn": "Product Manager"
+    },
+    {
+      "id": "data_analyst",
+      "name": "数据分析师",
+      "nameEn": "Data Analyst"
+    },
+    {
+      "id": "ui_designer",
+      "name": "UI设计师",
+      "nameEn": "UI Designer"
+    },
+    {
+      "id": "marketing",
+      "name": "市场营销",
+      "nameEn": "Marketing"
+    },
+    {
+      "id": "hr",
+      "name": "人力资源",
+      "nameEn": "HR"
+    },
+    {
+      "id": "finance",
+      "name": "财务管理",
+      "nameEn": "Finance"
+    },
+    {
+      "id": "operations",
+      "name": "运营",
+      "nameEn": "Operations"
+    },
+    {
+      "id": "sales",
+      "name": "销售",
+      "nameEn": "Sales"
+    },
+    {
+      "id": "consultant",
+      "name": "咨询顾问",
+      "nameEn": "Consultant"
+    }
+  ],
+  "questions": [
+    {
+      "id": "interview_001",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "请做一个简短的自我介绍",
+      "questionEn": "Please give a brief self-introduction",
+      "tips": "控制在1-2分钟，突出与岗位相关的经历",
+      "tipsEn": "Keep it 1-2 minutes, highlight relevant experience",
+      "starGuide": {
+        "situation": "描述你当前的求职状态和目标岗位",
+        "task": "说明你希望展示的核心能力",
+        "action": "用2-3个关键经历来支撑",
+        "result": "总结你的核心优势和求职动机"
+      },
+      "referenceAnswer": "总结你的核心优势和求职动机",
+      "tags": "您好，我是XX，毕业于XX大学XX专业。过去X年在XX领域积累了丰富的经验，主导过XX项目，取得了XX成果。我对贵公司的XX岗位非常感兴趣。"
+    },
+    {
+      "id": "interview_002",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "用三个关键词来形容你自己，并解释原因",
+      "questionEn": "Describe yourself with three keywords and explain why",
+      "tips": "选择与岗位匹配的关键词",
+      "tipsEn": "Choose keywords matching the position",
+      "starGuide": {
+        "situation": "思考岗位最看重的特质",
+        "task": "选出三个最匹配的关键词",
+        "action": "每个关键词用一个真实经历来证明",
+        "result": "展示你与岗位的高度契合"
+      },
+      "referenceAnswer": "展示你与岗位的高度契合",
+      "tags": "第一个关键词是'执行力强'，在上一家公司我带领团队在两周内完成了原本需要一个月的任务。第二个是'学习能力强'，一个月内自学了XX技术并成功应用。第三个是'善于沟通'，经常作为跨部门协调人推动项目进展。"
+    },
+    {
+      "id": "interview_003",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你最大的优势和劣势分别是什么？",
+      "questionEn": "What are your greatest strengths and weaknesses?",
+      "tips": "优势要与岗位匹配，劣势要真实但不是致命缺陷",
+      "tipsEn": "Strengths should match the position",
+      "starGuide": {
+        "situation": "客观评估自己的能力",
+        "task": "找出与岗位最相关的优势和可改进的方面",
+        "action": "用具体事例说明优势，说明劣势的改进计划",
+        "result": "展示自我认知和成长思维"
+      },
+      "referenceAnswer": "展示自我认知和成长思维",
+      "tags": "我最大的优势是数据分析能力，帮助团队提升了30%的转化率。劣势是有时过于追求完美，为此我现在会先设定优先级，区分哪些细节需要精雕细琢。"
+    },
+    {
+      "id": "interview_004",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你为什么选择我们公司？",
+      "questionEn": "Why did you choose our company?",
+      "tips": "提前了解公司业务、文化、最新动态",
+      "tipsEn": "Research the company beforehand",
+      "starGuide": {
+        "situation": "展示你对公司的了解程度",
+        "task": "找到你与公司的连接点",
+        "action": "从行业前景、公司文化、个人发展三个维度阐述",
+        "result": "表达真诚的求职动机"
+      },
+      "referenceAnswer": "表达真诚的求职动机",
+      "tags": "首先，贵公司在XX领域的行业地位让我非常钦佩。其次，注重创新的企业文化与我的价值观高度契合。最后，这个岗位能让我发挥XX方面的专长。"
+    },
+    {
+      "id": "interview_005",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你对我们公司有什么了解？",
+      "questionEn": "What do you know about our company?",
+      "tips": "展示你做了充分的功课",
+      "tipsEn": "Show you've done your homework",
+      "starGuide": {
+        "situation": "面试前对公司进行调研",
+        "task": "整理公司的关键信息",
+        "action": "从产品、市场、文化、新闻等多角度回答",
+        "result": "展示你的诚意和准备程度"
+      },
+      "referenceAnswer": "展示你的诚意和准备程度",
+      "tags": "贵公司主要从事XX业务，核心产品包括XX和XX。公司企业理念是XX，在XX方面有很好的口碑。最近在XX方面有了新进展。"
+    },
+    {
+      "id": "interview_006",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你未来3-5年的职业规划是什么？",
+      "questionEn": "What are your career plans for the next 3-5 years?",
+      "tips": "规划要合理、务实，与公司发展方向一致",
+      "tipsEn": "Plans should be realistic",
+      "starGuide": {
+        "situation": "思考个人职业发展路径",
+        "task": "制定与岗位相关的中期目标",
+        "action": "分阶段描述你的成长计划",
+        "result": "展示你的进取心和对公司的长期承诺"
+      },
+      "referenceAnswer": "展示你的进取心和对公司的长期承诺",
+      "tags": "短期内1-2年快速熟悉业务成为核心成员，中期3-5年在XX领域成为专家能带领团队，长期在XX方向有更深入发展。"
+    },
+    {
+      "id": "interview_007",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你上一份工作为什么离职？",
+      "questionEn": "Why did you leave your last job?",
+      "tips": "保持积极态度，不要抱怨前公司",
+      "tipsEn": "Stay positive",
+      "starGuide": {
+        "situation": "客观描述离职原因",
+        "task": "找到积极正面的表达方式",
+        "action": "聚焦于个人成长和职业发展",
+        "result": "让面试官理解你的选择是合理的"
+      },
+      "referenceAnswer": "让面试官理解你的选择是合理的",
+      "tags": "我在上一家公司工作了X年，学到了很多。但我希望能在XX领域有更深入的发展，而贵公司在这方面有更好的平台和资源。"
+    },
+    {
+      "id": "interview_008",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你期望的薪资是多少？",
+      "questionEn": "What is your expected salary?",
+      "tips": "提前了解市场行情，给出合理范围",
+      "tipsEn": "Research market rates",
+      "starGuide": {
+        "situation": "了解市场薪资水平",
+        "task": "确定自己的底线和期望",
+        "action": "给出一个合理的薪资范围",
+        "result": "达成双方都能接受的薪资方案"
+      },
+      "referenceAnswer": "达成双方都能接受的薪资方案",
+      "tags": "根据我对市场的了解和过往经验，我期望的薪资范围是XX到XX。当然薪资只是考虑因素之一，我更看重发展空间和公司平台。"
+    },
+    {
+      "id": "interview_009",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你什么时候可以入职？",
+      "questionEn": "When can you start?",
+      "tips": "根据实际情况回答",
+      "tipsEn": "Answer based on your actual situation",
+      "starGuide": {
+        "situation": "评估当前工作交接需要的时间",
+        "task": "给出一个合理的入职时间",
+        "action": "考虑离职通知期和交接安排",
+        "result": "展示你的职业素养和责任心"
+      },
+      "referenceAnswer": "展示你的职业素养和责任心",
+      "tags": "我需要给当前公司一个月的交接时间，最快可以在X月X日入职。在此期间我也会做好充分准备。"
+    },
+    {
+      "id": "interview_010",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你有什么问题想问我们的？",
+      "questionEn": "Do you have any questions for us?",
+      "tips": "准备2-3个有深度的问题",
+      "tipsEn": "Prepare 2-3 thoughtful questions",
+      "starGuide": {
+        "situation": "思考你对这个岗位最关心的问题",
+        "task": "准备有针对性的问题",
+        "action": "围绕团队、项目、发展等方向提问",
+        "result": "展示你的主动性和专业度"
+      },
+      "referenceAnswer": "展示你的主动性和专业度",
+      "tags": "我想了解这个岗位目前面临的最大挑战是什么？团队目前的规模和分工是怎样的？公司对这个岗位在未来一年的期望是什么？"
+    },
+    {
+      "id": "interview_011",
+      "category": "self_intro",
+      "position": "software_engineer",
+      "difficulty": "easy",
+      "question": "介绍一下你的技术栈和最擅长的技术方向",
+      "questionEn": "Introduce your tech stack and areas of expertise",
+      "tips": "突出与目标岗位匹配的技术能力",
+      "tipsEn": "Highlight matching technical skills",
+      "starGuide": {
+        "situation": "梳理自己的技术能力",
+        "task": "找出与岗位最匹配的技术栈",
+        "action": "按熟练程度排列，重点介绍核心技术",
+        "result": "展示技术深度和广度"
+      },
+      "referenceAnswer": "展示技术深度和广度",
+      "tags": "我主要使用Java/Python进行后端开发，熟悉Spring Boot、MySQL、Redis等技术栈。主要负责高并发系统的设计和开发。"
+    },
+    {
+      "id": "interview_012",
+      "category": "self_intro",
+      "position": "product_manager",
+      "difficulty": "easy",
+      "question": "介绍一下你做过的最成功的产品",
+      "questionEn": "Introduce the most successful product you've worked on",
+      "tips": "用数据说话，突出你的贡献",
+      "tipsEn": "Use data to highlight your contribution",
+      "starGuide": {
+        "situation": "回顾你的产品经历",
+        "task": "选择最能展示能力的产品案例",
+        "action": "从背景、角色、行动、成果来介绍",
+        "result": "展示你的产品思维和执行力"
+      },
+      "referenceAnswer": "展示你的产品思维和执行力",
+      "tags": "我最成功的产品是XX，上线后三个月内用户量达到XX万，日活XX万，用户留存率达到XX%。"
+    },
+    {
+      "id": "interview_013",
+      "category": "self_intro",
+      "position": "data_analyst",
+      "difficulty": "easy",
+      "question": "介绍一下你最擅长使用的数据分析工具和方法",
+      "questionEn": "Introduce the data analysis tools and methods you're most skilled at",
+      "tips": "展示技术工具掌握程度和分析方法论",
+      "tipsEn": "Demonstrate tool proficiency",
+      "starGuide": {
+        "situation": "梳理数据分析技能",
+        "task": "选择与岗位最相关的工具和方法",
+        "action": "结合实际项目经验介绍",
+        "result": "展示专业能力"
+      },
+      "referenceAnswer": "展示专业能力",
+      "tags": "我最擅长使用Python和SQL进行数据分析，熟练掌握Pandas、NumPy等库。擅长A/B测试、漏斗分析、用户分群等方法。"
+    },
+    {
+      "id": "interview_014",
+      "category": "self_intro",
+      "position": "ui_designer",
+      "difficulty": "easy",
+      "question": "介绍一下你的设计风格和设计理念",
+      "questionEn": "Introduce your design style and design philosophy",
+      "tips": "展示设计审美和用户思维",
+      "tipsEn": "Show design aesthetics",
+      "starGuide": {
+        "situation": "思考自己的设计特点",
+        "task": "总结设计风格和理念",
+        "action": "用作品案例来支撑",
+        "result": "展示设计能力和思考深度"
+      },
+      "referenceAnswer": "展示设计能力和思考深度",
+      "tags": "我的设计风格偏向简约、现代，注重用户体验和可用性。好的设计不仅要美观，更要解决用户的实际问题。"
+    },
+    {
+      "id": "interview_015",
+      "category": "self_intro",
+      "position": "marketing",
+      "difficulty": "easy",
+      "question": "介绍一下你最成功的一次营销活动",
+      "questionEn": "Introduce your most successful marketing campaign",
+      "tips": "用具体数据和ROI来展示成果",
+      "tipsEn": "Show results with specific data and ROI",
+      "starGuide": {
+        "situation": "回顾营销经历",
+        "task": "选择最能展示能力的营销案例",
+        "action": "从策略、执行、结果三个维度介绍",
+        "result": "展示营销思维和执行能力"
+      },
+      "referenceAnswer": "展示营销思维和执行能力",
+      "tags": "我最成功的一次营销活动是XX产品的上市推广。品牌曝光量达到XX万，新用户增长XX%，ROI达到XX倍。"
+    },
+    {
+      "id": "interview_016",
+      "category": "self_intro",
+      "position": "hr",
+      "difficulty": "easy",
+      "question": "介绍一下你在人力资源管理中最擅长的模块",
+      "questionEn": "Introduce your strongest HR module",
+      "tips": "聚焦1-2个核心模块深入介绍",
+      "tipsEn": "Focus on 1-2 core modules",
+      "starGuide": {
+        "situation": "梳理HR专业能力",
+        "task": "选择与岗位最匹配的模块",
+        "action": "结合具体案例和成果介绍",
+        "result": "展示专业深度"
+      },
+      "referenceAnswer": "展示专业深度",
+      "tags": "我最擅长招聘和人才发展模块。在招聘方面将招聘周期缩短了30%，在人才发展方面培养了XX名中层管理者。"
+    },
+    {
+      "id": "interview_017",
+      "category": "self_intro",
+      "position": "finance",
+      "difficulty": "easy",
+      "question": "介绍一下你的财务管理经验和专业资质",
+      "questionEn": "Introduce your financial management experience",
+      "tips": "突出专业证书和实操经验",
+      "tipsEn": "Highlight certifications and experience",
+      "starGuide": {
+        "situation": "梳理财务专业背景",
+        "task": "选择与岗位最相关的经验",
+        "action": "从资质、经验、成果三个维度介绍",
+        "result": "展示专业能力和可信度"
+      },
+      "referenceAnswer": "展示专业能力和可信度",
+      "tags": "我持有CPA证书，有X年财务管理经验。负责全面预算管理和财务分析，帮助公司优化了成本结构，年度节省成本XX万元。"
+    },
+    {
+      "id": "interview_018",
+      "category": "self_intro",
+      "position": "operations",
+      "difficulty": "easy",
+      "question": "介绍一下你最擅长的运营方向",
+      "questionEn": "Introduce your strongest operations area",
+      "tips": "聚焦内容运营、用户运营或活动运营",
+      "tipsEn": "Focus on content, user, or event operations",
+      "starGuide": {
+        "situation": "梳理运营能力",
+        "task": "选择与岗位最匹配的运营方向",
+        "action": "用数据和案例来支撑",
+        "result": "展示运营能力和成果"
+      },
+      "referenceAnswer": "展示运营能力和成果",
+      "tags": "我最擅长用户运营，负责XX产品的用户增长和留存。通过精细化运营策略，将用户月活跃度提升了XX%。"
+    },
+    {
+      "id": "interview_019",
+      "category": "self_intro",
+      "position": "sales",
+      "difficulty": "easy",
+      "question": "介绍一下你的销售业绩和销售方法",
+      "questionEn": "Introduce your sales performance and methodology",
+      "tips": "用具体数字展示销售能力",
+      "tipsEn": "Show sales ability with specific numbers",
+      "starGuide": {
+        "situation": "梳理销售经历",
+        "task": "选择最能展示销售能力的案例",
+        "action": "用数据和排名来证明",
+        "result": "展示销售实力"
+      },
+      "referenceAnswer": "展示销售实力",
+      "tags": "连续X个季度超额完成销售目标，年度销售额达到XX万元，在团队中排名前X。我的方法是深入了解客户需求，提供定制化解决方案。"
+    },
+    {
+      "id": "interview_020",
+      "category": "self_intro",
+      "position": "consultant",
+      "difficulty": "easy",
+      "question": "介绍一下你做过的最有影响力的咨询项目",
+      "questionEn": "Introduce your most impactful consulting project",
+      "tips": "展示分析能力和项目影响力",
+      "tipsEn": "Show analytical ability and project impact",
+      "starGuide": {
+        "situation": "回顾咨询经历",
+        "task": "选择最能展示能力的项目",
+        "action": "从问题分析、解决方案、实施效果来介绍",
+        "result": "展示咨询能力和价值"
+      },
+      "referenceAnswer": "展示咨询能力和价值",
+      "tags": "最有影响力的项目是为XX公司做的数字化转型咨询。项目实施后，客户运营效率提升了XX%，年营收增长了XX%。"
+    },
+    {
+      "id": "interview_021",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何处理工作与生活的平衡？",
+      "questionEn": "How do you balance work and life?",
+      "tips": "展示你有良好的时间管理能力",
+      "tipsEn": "Show good time management",
+      "starGuide": {
+        "situation": "思考自己的时间管理方式",
+        "task": "找到工作与生活的平衡点",
+        "action": "介绍你的时间管理方法和优先级设定",
+        "result": "展示你是一个高效且有自控力的人"
+      },
+      "referenceAnswer": "展示你是一个高效且有自控力的人",
+      "tags": "我认为工作与生活的平衡不是固定的时间分配，而是根据不同阶段的优先级来灵活调整。我会通过高效的时间管理来确保工作质量。"
+    },
+    {
+      "id": "interview_022",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何看待加班？",
+      "questionEn": "What is your view on overtime?",
+      "tips": "表达灵活态度，强调效率优先",
+      "tipsEn": "Express flexibility, emphasize efficiency",
+      "starGuide": {
+        "situation": "客观看待加班问题",
+        "task": "给出合理的加班态度",
+        "action": "强调效率，同时表达在必要时愿意加班",
+        "result": "展示你的职业态度"
+      },
+      "referenceAnswer": "展示你的职业态度",
+      "tags": "我认为加班应该是必要的而非常态的。我更注重提高工作效率来避免不必要的加班。但在项目关键节点，我完全愿意加班确保任务完成。"
+    },
+    {
+      "id": "interview_023",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你更喜欢团队合作还是独立工作？",
+      "questionEn": "Do you prefer teamwork or working independently?",
+      "tips": "展示你两种方式都能胜任",
+      "tipsEn": "Show you can handle both",
+      "starGuide": {
+        "situation": "思考自己的工作偏好",
+        "task": "展示适应能力",
+        "action": "举例说明你在团队和独立工作中的经验",
+        "result": "展示你的灵活性和协作能力"
+      },
+      "referenceAnswer": "展示你的灵活性和协作能力",
+      "tags": "我认为两者各有优势，取决于具体任务。对于需要多元视角的复杂项目，我享受团队协作。对于需要深度专注的任务，我也能高效独立完成。"
+    },
+    {
+      "id": "interview_024",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你从上一份工作中学到了什么？",
+      "questionEn": "What did you learn from your last job?",
+      "tips": "展示学习能力和成长思维",
+      "tipsEn": "Show learning ability and growth mindset",
+      "starGuide": {
+        "situation": "反思上一份工作的收获",
+        "task": "总结关键的学习和成长",
+        "action": "从专业技能和软技能两个维度回答",
+        "result": "展示你的成长和进步"
+      },
+      "referenceAnswer": "展示你的成长和进步",
+      "tags": "专业方面深入掌握了XX技能，软技能方面学会了如何更好地跨部门协作，如何在压力下做出决策。最重要的是学会了持续学习和自我提升。"
+    },
+    {
+      "id": "interview_025",
+      "category": "self_intro",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你有什么业余爱好或特长？",
+      "questionEn": "What are your hobbies or special talents?",
+      "tips": "选择能展示积极品质的爱好",
+      "tipsEn": "Choose hobbies demonstrating positive qualities",
+      "starGuide": {
+        "situation": "思考自己的兴趣爱好",
+        "task": "选择与工作相关的积极爱好",
+        "action": "说明爱好如何帮助你提升工作能力",
+        "result": "展示你的全面发展和积极态度"
+      },
+      "referenceAnswer": "展示你的全面发展和积极态度",
+      "tags": "我平时喜欢阅读技术博客和参加技术社区活动，保持对行业趋势的敏感度。此外也喜欢跑步，培养毅力和自律。"
+    },
+    {
+      "id": "interview_026",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请描述一次你在团队中解决冲突的经历",
+      "questionEn": "Describe a time you resolved a conflict in a team",
+      "tips": "使用STAR法则，重点描述调解过程",
+      "tipsEn": "Use STAR method",
+      "starGuide": {
+        "situation": "团队中出现意见分歧或人际冲突",
+        "task": "需要化解矛盾恢复团队协作",
+        "action": "主动沟通、倾听各方意见、寻找共同点",
+        "result": "冲突得到解决团队关系更加融洽"
+      },
+      "referenceAnswer": "冲突得到解决团队关系更加融洽",
+      "tags": "两个团队成员因技术方案产生分歧。我主动组织讨论会，让双方充分表达观点和顾虑，引导他们找到共同目标。最终综合两个方案的优点制定了更好的混合方案。"
+    },
+    {
+      "id": "interview_027",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请举例说明你如何处理一个紧急且重要的任务",
+      "questionEn": "Give an example of handling an urgent and important task",
+      "tips": "展示你的优先级管理和抗压能力",
+      "tipsEn": "Show priority management",
+      "starGuide": {
+        "situation": "面临紧急且重要的任务",
+        "task": "需要在有限时间内高质量完成任务",
+        "action": "快速评估、制定计划、分配资源、高效执行",
+        "result": "任务按时完成质量达标"
+      },
+      "referenceAnswer": "任务按时完成质量达标",
+      "tags": "客户突然要求提前一周交付项目。我重新规划了任务优先级，将非核心功能延后，协调了额外人力资源，最终按时交付了核心功能。"
+    },
+    {
+      "id": "interview_028",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你主动承担额外责任的经历",
+      "questionEn": "Describe a time you took on additional responsibilities",
+      "tips": "展示你的主动性和责任心",
+      "tipsEn": "Show initiative and responsibility",
+      "starGuide": {
+        "situation": "团队或公司需要有人站出来",
+        "task": "主动承担超出职责范围的工作",
+        "action": "识别需求、主动请缨、制定计划、有效执行",
+        "result": "为团队创造了额外价值"
+      },
+      "referenceAnswer": "为团队创造了额外价值",
+      "tags": "团队负责人请假时我主动承担了项目管理职责。组织每日站会，协调解决了几个关键问题，确保项目按计划推进。"
+    },
+    {
+      "id": "interview_029",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请描述一次你失败的经历，以及你从中学到了什么",
+      "questionEn": "Describe a failure and what you learned from it",
+      "tips": "展示你的反思能力和成长思维",
+      "tipsEn": "Show reflection and growth mindset",
+      "starGuide": {
+        "situation": "经历了一次失败",
+        "task": "需要从失败中恢复并吸取教训",
+        "action": "分析失败原因、制定改进措施",
+        "result": "从失败中成长变得更加强大"
+      },
+      "referenceAnswer": "从失败中成长变得更加强大",
+      "tags": "负责新产品上线时因用户调研不够充分导致用户反馈不佳。之后建立了一套更完善的用户调研流程，在后续产品开发中再没犯过同样错误。"
+    },
+    {
+      "id": "interview_030",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你与上级意见不一致的经历",
+      "questionEn": "Describe a time you disagreed with your supervisor",
+      "tips": "展示你的沟通能力和专业坚持",
+      "tipsEn": "Show communication and professional persistence",
+      "starGuide": {
+        "situation": "与上级在某个决策上存在分歧",
+        "task": "需要表达不同意见并达成共识",
+        "action": "准备数据和论据、选择合适时机沟通",
+        "result": "达成共识或找到更好的方案"
+      },
+      "referenceAnswer": "达成共识或找到更好的方案",
+      "tags": "项目技术选型时我和上级有不同看法。我准备了详细的技术对比分析报告，包括性能数据、社区活跃度、学习成本等多维度比较。最终上级采纳了我的建议。"
+    },
+    {
+      "id": "interview_031",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请举例说明你如何在压力下保持高效工作",
+      "questionEn": "Give an example of maintaining efficiency under pressure",
+      "tips": "展示你的抗压方法和时间管理技巧",
+      "tipsEn": "Show stress management skills",
+      "starGuide": {
+        "situation": "面临高强度的工作压力",
+        "task": "需要在压力下保持工作质量和效率",
+        "action": "分解任务、设定优先级、保持专注、适当休息",
+        "result": "高质量完成任务"
+      },
+      "referenceAnswer": "高质量完成任务",
+      "tags": "双十一大促期间需要在三天内完成系统压测和性能优化。我将任务分解为若干小目标，每天设定明确的完成指标，保持规律作息。最终提前一天完成所有优化工作。"
+    },
+    {
+      "id": "interview_032",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你帮助同事解决困难的经历",
+      "questionEn": "Describe a time you helped a colleague",
+      "tips": "展示你的团队精神和助人品质",
+      "tipsEn": "Show team spirit",
+      "starGuide": {
+        "situation": "同事遇到了工作上的困难",
+        "task": "需要帮助同事解决问题",
+        "action": "主动了解问题、分享经验、提供指导",
+        "result": "同事的问题得到解决"
+      },
+      "referenceAnswer": "同事的问题得到解决",
+      "tags": "新入职同事遇到技术难题。我花了一个下午和他一起分析问题，分享了解决思路和相关资料。之后他很快解决了问题。"
+    },
+    {
+      "id": "interview_033",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请描述一次你推动变革的经历",
+      "questionEn": "Describe a time you drove a change",
+      "tips": "展示你的创新思维和推动力",
+      "tipsEn": "Show innovative thinking",
+      "starGuide": {
+        "situation": "发现现有流程存在改进空间",
+        "task": "推动团队或组织做出改变",
+        "action": "识别问题、提出方案、说服利益相关者、试点推广",
+        "result": "成功实施变革带来积极影响"
+      },
+      "referenceAnswer": "成功实施变革带来积极影响",
+      "tags": "注意到代码审查流程效率很低。调研了几种改进方案，提出分阶段优化计划。先在小团队试点用数据证明效果，然后逐步推广。最终代码审查时间缩短了50%。"
+    },
+    {
+      "id": "interview_034",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你多任务并行的经历",
+      "questionEn": "Describe a time you managed multiple tasks",
+      "tips": "展示你的多任务管理能力",
+      "tipsEn": "Show multitasking ability",
+      "starGuide": {
+        "situation": "同时需要处理多个重要任务",
+        "task": "合理分配时间和精力",
+        "action": "评估优先级、制定时间表、利用工具管理",
+        "result": "所有任务按时高质量完成"
+      },
+      "referenceAnswer": "所有任务按时高质量完成",
+      "tags": "同时负责三个项目。使用项目管理工具跟踪每个任务的进度和截止日期，每天早上花15分钟规划当天重点。三个项目都顺利推进。"
+    },
+    {
+      "id": "interview_035",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "请举例说明你如何说服他人接受你的观点",
+      "questionEn": "Give an example of persuading others",
+      "tips": "展示你的影响力和说服技巧",
+      "tipsEn": "Show influence and persuasion",
+      "starGuide": {
+        "situation": "需要说服他人接受你的方案",
+        "task": "通过有效沟通让对方认可你的观点",
+        "action": "了解对方需求、准备充分论据",
+        "result": "成功说服对方"
+      },
+      "referenceAnswer": "成功说服对方",
+      "tags": "推动新功能上线时产品团队认为开发成本太高。我准备了详细ROI分析，包括用户需求数据、竞品对比、预期收益。最终产品团队同意，功能上线后用户满意度提升15%。"
+    },
+    {
+      "id": "interview_036",
+      "category": "behavioral",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "描述一次你解决复杂技术Bug的经历",
+      "questionEn": "Describe solving a complex technical bug",
+      "tips": "展示你的问题排查能力和技术深度",
+      "tipsEn": "Show debugging ability",
+      "starGuide": {
+        "situation": "系统出现难以定位的Bug",
+        "task": "快速找到并修复问题",
+        "action": "系统排查、日志分析、逐步缩小范围",
+        "result": "Bug被修复系统恢复正常"
+      },
+      "referenceAnswer": "Bug被修复系统恢复正常",
+      "tags": "线上系统出现间歇性性能下降。通过分析请求链路日志，发现是第三方服务响应时间偶尔飙升。进一步排查发现连接池配置不合理。优化参数并增加熔断机制后问题解决。"
+    },
+    {
+      "id": "interview_037",
+      "category": "behavioral",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "描述一次你做技术选型的经历",
+      "questionEn": "Describe a technology selection decision",
+      "tips": "展示你的技术判断力和决策能力",
+      "tipsEn": "Show technical judgment",
+      "starGuide": {
+        "situation": "项目需要选择合适的技术方案",
+        "task": "评估多个方案并做出最优选择",
+        "action": "调研对比、性能测试、团队讨论",
+        "result": "选择了最适合的技术方案"
+      },
+      "referenceAnswer": "选择了最适合的技术方案",
+      "tags": "新项目需要选择消息队列。对比了Kafka、RabbitMQ和RocketMQ，从吞吐量、延迟、可靠性、运维成本等维度详细评估。搭建测试环境进行性能对比后选择了RocketMQ。"
+    },
+    {
+      "id": "interview_038",
+      "category": "behavioral",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "描述一次你处理用户投诉的经历",
+      "questionEn": "Describe handling user complaints",
+      "tips": "展示你的用户思维和危机处理能力",
+      "tipsEn": "Show user-centric thinking",
+      "starGuide": {
+        "situation": "收到大量用户对某个功能的投诉",
+        "task": "快速响应并解决问题",
+        "action": "收集反馈、分析根因、制定解决方案",
+        "result": "用户满意度恢复并提升"
+      },
+      "referenceAnswer": "用户满意度恢复并提升",
+      "tags": "产品上线后收到大量搜索功能不准的投诉。立即组建专项小组，收集反馈进行数据分析，发现是搜索算法权重设置不合理。快速调整后投诉量下降80%。"
+    },
+    {
+      "id": "interview_039",
+      "category": "behavioral",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "描述一次你成功推动产品上线的经历",
+      "questionEn": "Describe successfully driving a product launch",
+      "tips": "展示你的项目管理能力和执行力",
+      "tipsEn": "Show project management ability",
+      "starGuide": {
+        "situation": "需要在紧张期限内完成产品上线",
+        "task": "协调各方资源确保按时上线",
+        "action": "制定详细计划、协调开发设计测试、风险管控",
+        "result": "产品按时上线达到预期效果"
+      },
+      "referenceAnswer": "产品按时上线达到预期效果",
+      "tags": "公司要求两个月内完成新产品上线。制定了详细里程碑计划，每周进度评审。遇到技术难题及时协调外部支持。最终产品如期上线，首月用户量突破预期。"
+    },
+    {
+      "id": "interview_040",
+      "category": "behavioral",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "描述一次你的数据分析结果影响了业务决策",
+      "questionEn": "Describe data analysis influencing business decisions",
+      "tips": "展示你的分析能力和业务影响力",
+      "tipsEn": "Show analytical ability and business impact",
+      "starGuide": {
+        "situation": "业务团队需要数据支持来做决策",
+        "task": "通过数据分析提供有价值的洞察",
+        "action": "明确问题、收集数据、分析建模、呈现结论",
+        "result": "分析结果被采纳业务指标改善"
+      },
+      "referenceAnswer": "分析结果被采纳业务指标改善",
+      "tags": "市场团队犹豫应该投入更多资源到哪个渠道。进行全面渠道效果分析，发现某个看似效果一般的渠道有很高的用户生命周期价值。基于分析整体ROI提升25%。"
+    },
+    {
+      "id": "interview_041",
+      "category": "behavioral",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "描述一次你发现数据异常并找到根因的经历",
+      "questionEn": "Describe identifying a data anomaly",
+      "tips": "展示你的数据敏感度和分析能力",
+      "tipsEn": "Show data sensitivity",
+      "starGuide": {
+        "situation": "在常规数据监控中发现异常",
+        "task": "快速定位异常原因",
+        "action": "数据验证、维度拆解、关联分析",
+        "result": "找到根因并推动修复"
+      },
+      "referenceAnswer": "找到根因并推动修复",
+      "tags": "日常数据巡检中发现核心指标转化率突然下降15%。逐层拆解分析发现是特定用户群体转化率大幅下降，进一步排查发现是最近代码变更导致页面加载异常。"
+    },
+    {
+      "id": "interview_042",
+      "category": "behavioral",
+      "position": "ui_designer",
+      "difficulty": "medium",
+      "question": "描述一次你的设计方案被否决后如何应对",
+      "questionEn": "Describe handling design rejection",
+      "tips": "展示你的设计韧性和迭代能力",
+      "tipsEn": "Show design resilience",
+      "starGuide": {
+        "situation": "设计稿被产品或开发团队否决",
+        "task": "理解反馈调整方案达成共识",
+        "action": "倾听反馈、分析原因、提供替代方案",
+        "result": "最终方案获得认可"
+      },
+      "referenceAnswer": "最终方案获得认可",
+      "tags": "设计稿在评审会上被认为过于复杂。仔细记录反馈意见，与产品经理深入沟通后重新设计了更简洁的方案，保留了核心体验同时降低了开发复杂度。"
+    },
+    {
+      "id": "interview_043",
+      "category": "behavioral",
+      "position": "marketing",
+      "difficulty": "medium",
+      "question": "描述一次营销活动效果不如预期的经历",
+      "questionEn": "Describe an underperforming marketing campaign",
+      "tips": "展示你的复盘能力和优化思维",
+      "tipsEn": "Show review and optimization ability",
+      "starGuide": {
+        "situation": "营销活动效果未达到预期目标",
+        "task": "分析原因并优化策略",
+        "action": "数据复盘、找出问题、调整方案",
+        "result": "优化后效果显著提升"
+      },
+      "referenceAnswer": "优化后效果显著提升",
+      "tags": "新品推广活动转化率远低于预期。全面复盘发现是目标人群定位不够精准。快速调整受众定向策略，重新制作更贴近目标用户的素材。调整后转化率提升3倍。"
+    },
+    {
+      "id": "interview_044",
+      "category": "behavioral",
+      "position": "hr",
+      "difficulty": "medium",
+      "question": "描述一次你成功招聘到关键人才的经历",
+      "questionEn": "Describe successfully recruiting key talent",
+      "tips": "展示你的招聘技巧和人才判断力",
+      "tipsEn": "Show recruitment skills",
+      "starGuide": {
+        "situation": "急需招聘一个关键岗位的人才",
+        "task": "在竞争激烈的人才市场中找到合适人选",
+        "action": "精准定位、多渠道搜索、优化面试流程",
+        "result": "成功招聘到优秀人才"
+      },
+      "referenceAnswer": "成功招聘到优秀人才",
+      "tags": "公司急需招聘高级架构师。重新梳理岗位画像，通过技术社区、猎头、员工推荐等多渠道并行搜索。优化面试流程缩短周期。一个月内成功招聘到优秀候选人。"
+    },
+    {
+      "id": "interview_045",
+      "category": "behavioral",
+      "position": "finance",
+      "difficulty": "medium",
+      "question": "描述一次你发现财务风险并及时预警的经历",
+      "questionEn": "Describe identifying a financial risk",
+      "tips": "展示你的风险意识和专业判断力",
+      "tipsEn": "Show risk awareness",
+      "starGuide": {
+        "situation": "在日常财务分析中发现潜在风险",
+        "task": "及时预警并推动风险防控",
+        "action": "数据分析、风险评估、提出建议",
+        "result": "风险得到有效控制"
+      },
+      "referenceAnswer": "风险得到有效控制",
+      "tags": "月度财务分析中发现某大客户应收账款周转天数持续增加。深入分析发现客户经营状况出现问题。向管理层提交风险预警报告，公司及时采取措施成功收回大部分款项。"
+    },
+    {
+      "id": "interview_046",
+      "category": "behavioral",
+      "position": "operations",
+      "difficulty": "medium",
+      "question": "描述一次你通过运营手段提升用户留存的经历",
+      "questionEn": "Describe improving user retention through operations",
+      "tips": "展示你的运营策略设计和执行能力",
+      "tipsEn": "Show operations strategy ability",
+      "starGuide": {
+        "situation": "产品用户流失率较高",
+        "task": "通过运营手段提升用户留存",
+        "action": "分析流失原因、设计召回策略",
+        "result": "用户留存率显著提升"
+      },
+      "referenceAnswer": "用户留存率显著提升",
+      "tags": "产品7日留存率只有30%。通过用户行为分析发现新用户前三天没有体验到核心功能。设计了一套新手引导和激励体系，实施后7日留存率提升到50%。"
+    },
+    {
+      "id": "interview_047",
+      "category": "behavioral",
+      "position": "sales",
+      "difficulty": "medium",
+      "question": "描述一次你拿下大客户的经历",
+      "questionEn": "Describe winning a major client",
+      "tips": "展示你的销售技巧和客户管理能力",
+      "tipsEn": "Show sales and client management skills",
+      "starGuide": {
+        "situation": "需要攻克一个重要的大客户",
+        "task": "建立信任了解需求促成合作",
+        "action": "前期调研、建立关系、需求分析、方案定制",
+        "result": "成功签约大客户"
+      },
+      "referenceAnswer": "成功签约大客户",
+      "tags": "花了三个月跟进行业头部客户。前期通过行业研究深入了解业务痛点。多次沟通建立信任后组织团队定制完整解决方案。最终成功签约，合同金额XX万元。"
+    },
+    {
+      "id": "interview_048",
+      "category": "behavioral",
+      "position": "consultant",
+      "difficulty": "medium",
+      "question": "描述一次你面对客户质疑时如何应对",
+      "questionEn": "Describe facing client skepticism",
+      "tips": "展示你的专业能力和客户管理技巧",
+      "tipsEn": "Show professional ability",
+      "starGuide": {
+        "situation": "客户对你的方案提出质疑",
+        "task": "用专业和事实说服客户",
+        "action": "理解质疑、准备证据、专业沟通",
+        "result": "客户认可方案项目顺利推进"
+      },
+      "referenceAnswer": "客户认可方案项目顺利推进",
+      "tags": "项目汇报中客户对分析结论提出强烈质疑。认真听取顾虑后拿出详细原始数据和分析过程，一步步展示推导逻辑。同时承认分析局限性并提出补充分析计划。客户被专业态度打动。"
+    },
+    {
+      "id": "interview_049",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你学习新技能并快速应用的经历",
+      "questionEn": "Describe learning a new skill quickly",
+      "tips": "展示你的学习能力和适应能力",
+      "tipsEn": "Show learning ability",
+      "starGuide": {
+        "situation": "工作需要掌握一项新技能",
+        "task": "快速学习并应用到实际工作中",
+        "action": "制定学习计划、利用多种资源学习",
+        "result": "成功掌握新技能并产出成果"
+      },
+      "referenceAnswer": "成功掌握新技能并产出成果",
+      "tags": "公司决定将数据分析工具从Excel迁移到Python。制定了一个月学习计划，通过在线课程和实际项目练习，三周内掌握基本数据处理和分析能力。"
+    },
+    {
+      "id": "interview_050",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你在资源有限的情况下完成任务的经历",
+      "questionEn": "Describe completing a task with limited resources",
+      "tips": "展示你的资源整合能力和创造力",
+      "tipsEn": "Show resource integration ability",
+      "starGuide": {
+        "situation": "项目资源非常有限",
+        "task": "在有限资源下达成目标",
+        "action": "优化资源配置、寻找替代方案",
+        "result": "在有限资源下超额完成目标"
+      },
+      "referenceAnswer": "在有限资源下超额完成目标",
+      "tags": "公司削减活动预算但仍需举办客户答谢活动。重新规划为线上+线下混合模式，利用免费社交媒体宣传。最终参与人数不降反升，成本只有原来的40%。"
+    },
+    {
+      "id": "interview_051",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你收到负面反馈后的反应",
+      "questionEn": "Describe your response to negative feedback",
+      "tips": "展示你的开放心态和改进意愿",
+      "tipsEn": "Show open-mindedness",
+      "starGuide": {
+        "situation": "收到了来自上级或同事的负面反馈",
+        "task": "正确对待反馈并做出改进",
+        "action": "虚心接受、深入反思、制定改进计划",
+        "result": "将负面反馈转化为成长动力"
+      },
+      "referenceAnswer": "将负面反馈转化为成长动力",
+      "tags": "绩效评估中上级指出跨部门沟通时表达不够清晰。刻意练习将技术语言转化为业务语言的能力。几个月后同事们都反馈沟通变得更加清晰有效。"
+    },
+    {
+      "id": "interview_052",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你处理跨部门协作问题的经历",
+      "questionEn": "Describe handling cross-department collaboration issues",
+      "tips": "展示你的协调能力和大局观",
+      "tipsEn": "Show coordination ability",
+      "starGuide": {
+        "situation": "跨部门协作中出现了问题",
+        "task": "协调各方利益推动问题解决",
+        "action": "了解各方诉求、建立沟通机制、寻找共赢方案",
+        "result": "跨部门协作顺畅"
+      },
+      "referenceAnswer": "跨部门协作顺畅",
+      "tags": "涉及产品、技术、运营三个部门的项目因目标不一致陷入僵局。主动组织跨部门协调会，让各方充分表达KPI和顾虑。帮助大家找到共同目标框架。"
+    },
+    {
+      "id": "interview_053",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你在不确定情况下做决策的经历",
+      "questionEn": "Describe making a decision under uncertainty",
+      "tips": "展示你的决策能力和风险意识",
+      "tipsEn": "Show decision-making ability",
+      "starGuide": {
+        "situation": "信息不充分但需要尽快做出决策",
+        "task": "在不确定中做出合理判断",
+        "action": "收集可用信息、评估风险、做出决策",
+        "result": "决策正确或及时调整"
+      },
+      "referenceAnswer": "决策正确或及时调整",
+      "tags": "疫情期间公司需要决定是否继续举办线下活动。收集各方面信息评估不同场景风险和收益，提出灵活方案：准备线上备选的同时推进线下筹备。最终转线上举办效果超预期。"
+    },
+    {
+      "id": "interview_054",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你给团队带来积极影响的经历",
+      "questionEn": "Describe positively impacting your team",
+      "tips": "展示你的团队影响力",
+      "tipsEn": "Show team influence",
+      "starGuide": {
+        "situation": "团队士气低落或效率不高",
+        "task": "提升团队状态和效率",
+        "action": "了解问题、采取行动、带动氛围",
+        "result": "团队状态明显改善"
+      },
+      "referenceAnswer": "团队状态明显改善",
+      "tags": "团队连续加班后士气低落。组织非正式团队活动让大家放松，与上级沟通争取弹性工作安排。在日常工作中注重认可和鼓励同事贡献。团队氛围明显改善。"
+    },
+    {
+      "id": "interview_055",
+      "category": "behavioral",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "描述一次你处理客户投诉的经历",
+      "questionEn": "Describe handling a customer complaint",
+      "tips": "展示你的客户服务意识",
+      "tipsEn": "Show customer service awareness",
+      "starGuide": {
+        "situation": "客户对产品或服务提出严重投诉",
+        "task": "安抚客户情绪并解决问题",
+        "action": "倾听、道歉、调查、解决、跟进",
+        "result": "客户满意关系得到维护"
+      },
+      "referenceAnswer": "客户满意关系得到维护",
+      "tags": "重要客户对我们的服务提出强烈投诉威胁终止合作。第一时间联系客户认真倾听表达歉意。24小时内给出详细解决方案和补偿措施。客户对快速响应非常满意。"
+    },
+    {
+      "id": "interview_056",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "请解释什么是微服务架构，它的优缺点是什么？",
+      "questionEn": "Explain microservices architecture and its pros and cons",
+      "tips": "从架构设计角度全面回答",
+      "tipsEn": "Answer from architecture perspective",
+      "starGuide": {
+        "situation": "面试官考察架构设计知识",
+        "task": "清晰解释微服务概念并分析利弊",
+        "action": "定义概念、列举优点、分析缺点、给出适用场景",
+        "result": "展示架构设计能力"
+      },
+      "referenceAnswer": "展示架构设计能力",
+      "tags": "微服务架构是将应用拆分为多个小型独立服务的架构风格。优点：独立部署、技术栈灵活、团队自治、故障隔离。缺点：分布式复杂度高、数据一致性挑战、运维成本增加。适用于大型复杂系统。"
+    },
+    {
+      "id": "interview_057",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "如何设计一个高并发的系统？",
+      "questionEn": "How would you design a high-concurrency system?",
+      "tips": "从缓存、负载均衡、异步处理等方面回答",
+      "tipsEn": "Cover caching, load balancing, async",
+      "starGuide": {
+        "situation": "需要设计高并发系统",
+        "task": "从多个层面设计高并发方案",
+        "action": "前端优化、网关层、服务层、数据层",
+        "result": "给出完整的高并发设计方案"
+      },
+      "referenceAnswer": "给出完整的高并发设计方案",
+      "tags": "1.前端：CDN加速、静态缓存；2.网关层：负载均衡、限流、熔断；3.服务层：异步处理消息队列、缓存Redis；4.数据层：读写分离、分库分表；5.运维层：自动扩缩容、监控告警。"
+    },
+    {
+      "id": "interview_058",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "请解释数据库索引的原理和类型",
+      "questionEn": "Explain database indexing principles and types",
+      "tips": "从B+树、哈希索引等方面回答",
+      "tipsEn": "Cover B+ tree, hash index",
+      "starGuide": {
+        "situation": "面试官考察数据库基础知识",
+        "task": "解释索引原理和常见类型",
+        "action": "介绍索引概念、B+树原理、索引类型",
+        "result": "展示数据库知识深度"
+      },
+      "referenceAnswer": "展示数据库知识深度",
+      "tags": "数据库索引是加速数据检索的数据结构。最常用B+树索引，所有数据在叶子节点、支持范围查询。其他类型：哈希索引等值查询快、全文索引、空间索引。注意不要过度索引、遵循最左前缀原则。"
+    },
+    {
+      "id": "interview_059",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "什么是RESTful API设计原则？",
+      "questionEn": "What are RESTful API design principles?",
+      "tips": "从资源、HTTP方法、状态码等方面回答",
+      "tipsEn": "Cover resources, HTTP methods, status codes",
+      "starGuide": {
+        "situation": "面试官考察API设计能力",
+        "task": "解释RESTful设计原则",
+        "action": "介绍核心概念、设计规范、最佳实践",
+        "result": "展示API设计能力"
+      },
+      "referenceAnswer": "展示API设计能力",
+      "tags": "核心原则：1.资源导向URL用名词；2.HTTP方法语义化：GET/POST/PUT/DELETE；3.状态码规范：200/201/400/401/404/500；4.版本管理；5.分页过滤；6.HATEOAS。"
+    },
+    {
+      "id": "interview_060",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "hard",
+      "question": "如何保证分布式系统的数据一致性？",
+      "questionEn": "How do you ensure data consistency in distributed systems?",
+      "tips": "从CAP理论、分布式事务等方面回答",
+      "tipsEn": "Cover CAP theorem, distributed transactions",
+      "starGuide": {
+        "situation": "面试官考察分布式系统知识",
+        "task": "解释数据一致性挑战和解决方案",
+        "action": "CAP理论、一致性模型、分布式事务方案",
+        "result": "展示分布式系统知识深度"
+      },
+      "referenceAnswer": "展示分布式系统知识深度",
+      "tags": "根据CAP理论一致性、可用性和分区容错性无法同时满足。强一致性方案：2PC、3PC、Paxos/Raft。最终一致性：TCC、Saga、基于消息的最终一致性。实际应用通常选择BASE理论。"
+    },
+    {
+      "id": "interview_061",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "请解释Redis的常用数据类型和应用场景",
+      "questionEn": "Explain Redis common data types and use cases",
+      "tips": "从String、Hash、List、Set、ZSet等方面回答",
+      "tipsEn": "Cover String, Hash, List, Set, ZSet",
+      "starGuide": {
+        "situation": "面试官考察缓存技术",
+        "task": "介绍Redis数据类型和实际应用",
+        "action": "逐一介绍数据类型、特点、典型应用场景",
+        "result": "展示Redis使用经验"
+      },
+      "referenceAnswer": "展示Redis使用经验",
+      "tags": "String：缓存、计数器、分布式锁。Hash：存储对象。List：消息队列。Set：去重、标签。ZSet：排行榜、延迟队列。还有HyperLogLog、Bitmap、Geo等特殊类型。"
+    },
+    {
+      "id": "interview_062",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "什么是设计模式？请举例说明你常用的设计模式",
+      "questionEn": "What are design patterns? Give examples",
+      "tips": "从创建型、结构型、行为型三个维度回答",
+      "tipsEn": "Cover creational, structural, behavioral",
+      "starGuide": {
+        "situation": "面试官考察设计能力",
+        "task": "解释设计模式概念并举例",
+        "action": "分类介绍、举例说明实际应用",
+        "result": "展示面向对象设计能力"
+      },
+      "referenceAnswer": "展示面向对象设计能力",
+      "tags": "创建型：单例、工厂、建造者。结构型：适配器、装饰器、代理。行为型：策略、观察者、模板方法。实际开发中经常使用策略模式和工厂模式提高代码可扩展性。"
+    },
+    {
+      "id": "interview_063",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "如何进行代码审查？你认为好的代码应该具备哪些特质？",
+      "questionEn": "How do you conduct code reviews?",
+      "tips": "从代码质量、可维护性、安全性等方面回答",
+      "tipsEn": "Cover code quality, maintainability, security",
+      "starGuide": {
+        "situation": "面试官考察代码质量和工程素养",
+        "task": "阐述代码审查方法和好代码的标准",
+        "action": "审查流程、关注点、好代码特质",
+        "result": "展示工程素养"
+      },
+      "referenceAnswer": "展示工程素养",
+      "tags": "代码审查关注：正确性、可读性、可维护性、性能、安全性。好代码应具备：可读性强、职责单一、易于测试、适当抽象、良好错误处理。遵循SOLID原则。"
+    },
+    {
+      "id": "interview_064",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "hard",
+      "question": "如何排查和解决内存泄漏问题？",
+      "questionEn": "How do you troubleshoot memory leaks?",
+      "tips": "从排查工具、常见原因、解决方案等方面回答",
+      "tipsEn": "Cover debugging tools, common causes",
+      "starGuide": {
+        "situation": "线上系统出现内存泄漏",
+        "task": "定位并修复内存泄漏",
+        "action": "监控告警、堆内存分析、定位泄漏点、修复验证",
+        "result": "内存泄漏被修复"
+      },
+      "referenceAnswer": "内存泄漏被修复",
+      "tags": "步骤：1.监控发现内存持续增长；2.使用jmap、MAT等工具导出堆内存快照；3.分析大对象和引用链；4.定位泄漏点。常见原因：静态集合持有引用、未关闭资源、监听器未注销、ThreadLocal未清理。"
+    },
+    {
+      "id": "interview_065",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "请解释Docker和Kubernetes的基本概念",
+      "questionEn": "Explain Docker and Kubernetes basics",
+      "tips": "从容器化、编排、部署等方面回答",
+      "tipsEn": "Cover containerization, orchestration",
+      "starGuide": {
+        "situation": "面试官考察DevOps知识",
+        "task": "解释容器化和容器编排技术",
+        "action": "Docker概念、Kubernetes组件、实际应用",
+        "result": "展示DevOps知识"
+      },
+      "referenceAnswer": "展示DevOps知识",
+      "tags": "Docker将应用及依赖打包到可移植容器中。Kubernetes是容器编排平台，核心概念：Pod最小部署单元、Service服务发现、Deployment声明式更新、Namespace资源隔离。实现了自动化部署和弹性扩缩容。"
+    },
+    {
+      "id": "interview_066",
+      "category": "technical",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "你如何进行需求优先级排序？",
+      "questionEn": "How do you prioritize requirements?",
+      "tips": "从用户价值、商业价值、开发成本等维度回答",
+      "tipsEn": "Cover user value, business value, cost",
+      "starGuide": {
+        "situation": "面临大量需求需要排序",
+        "task": "科学合理地确定需求优先级",
+        "action": "评估维度、排序方法、利益相关者沟通",
+        "result": "给出清晰的优先级排序"
+      },
+      "referenceAnswer": "给出清晰的优先级排序",
+      "tags": "通常使用RICE模型：Reach影响用户数、Impact影响程度、Confidence信心指数、Effort开发成本。结合KANO模型区分基本需求、期望需求和兴奋需求。参考公司OKR对齐战略。"
+    },
+    {
+      "id": "interview_067",
+      "category": "technical",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "你如何定义产品的成功指标？",
+      "questionEn": "How do you define product success metrics?",
+      "tips": "从北极星指标、分层指标体系等方面回答",
+      "tipsEn": "Cover North Star metric, layered metrics",
+      "starGuide": {
+        "situation": "需要为产品设定衡量成功的指标",
+        "task": "建立科学的指标体系",
+        "action": "确定北极星指标、拆解分层指标、设定目标值",
+        "result": "建立完整的产品指标体系"
+      },
+      "referenceAnswer": "建立完整的产品指标体系",
+      "tags": "首先确定北极星指标，如月活跃用户数。然后建立分层指标体系：一级指标北极星指标，二级指标拆解为获客、激活、留存、变现、推荐，三级指标具体运营指标。每个指标设定基准值、目标值和警戒线。"
+    },
+    {
+      "id": "interview_068",
+      "category": "technical",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "你如何进行竞品分析？",
+      "questionEn": "How do you conduct competitive analysis?",
+      "tips": "从分析框架、数据来源、输出物等方面回答",
+      "tipsEn": "Cover analysis framework, data sources",
+      "starGuide": {
+        "situation": "需要了解市场竞争格局",
+        "task": "系统地进行竞品分析",
+        "action": "确定分析范围、收集信息、多维度对比",
+        "result": "为产品决策提供参考"
+      },
+      "referenceAnswer": "为产品决策提供参考",
+      "tags": "分析框架：1.市场定位；2.功能对比；3.用户体验；4.商业模式；5.市场表现；6.技术架构。数据来源：产品体验、公开数据、用户评价、行业报告。"
+    },
+    {
+      "id": "interview_069",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "什么是A/B测试？如何设计一个有效的A/B测试？",
+      "questionEn": "What is A/B testing? How do you design one?",
+      "tips": "从假设、样本量、指标、统计显著性等方面回答",
+      "tipsEn": "Cover hypothesis, sample size, significance",
+      "starGuide": {
+        "situation": "需要通过实验验证产品改进效果",
+        "task": "设计科学严谨的A/B测试",
+        "action": "提出假设、确定指标、计算样本量、随机分组、分析结果",
+        "result": "得出可靠的实验结论"
+      },
+      "referenceAnswer": "得出可靠的实验结论",
+      "tags": "A/B测试是通过对照实验验证假设的方法。步骤：1.明确假设；2.确定主要和辅助指标；3.基于显著性水平95%、统计功效80%计算样本量；4.随机分组确保等价；5.确定实验周期；6.分析结果检查统计显著性。"
+    },
+    {
+      "id": "interview_070",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "什么是数据仓库？数据仓库和数据库有什么区别？",
+      "questionEn": "What is a data warehouse? How does it differ from a database?",
+      "tips": "从架构设计、数据模型、使用场景等方面回答",
+      "tipsEn": "Cover architecture, data models, use cases",
+      "starGuide": {
+        "situation": "面试官考察数据工程基础",
+        "task": "解释数据仓库概念和与数据库的区别",
+        "action": "定义数据仓库、对比差异、介绍分层架构",
+        "result": "展示数据工程知识"
+      },
+      "referenceAnswer": "展示数据工程知识",
+      "tags": "数据仓库是面向主题的、集成的、稳定的数据集合。与数据库区别：1.用途：数据库OLTP，数据仓库OLAP；2.模型：数据库三范式，数据仓库星型/雪花模型；3.数据量：数据仓库存储大量历史数据。通常分为ODS、DWD、DWS、ADS层次。"
+    },
+    {
+      "id": "interview_071",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "如何处理缺失值和异常值？",
+      "questionEn": "How do you handle missing values and outliers?",
+      "tips": "从识别、分析、处理三个方面回答",
+      "tipsEn": "Cover identification, analysis, treatment",
+      "starGuide": {
+        "situation": "数据中存在缺失值和异常值",
+        "task": "合理处理数据质量问题",
+        "action": "识别问题、分析原因、选择处理方法",
+        "result": "保证数据质量不影响分析结论"
+      },
+      "referenceAnswer": "保证数据质量不影响分析结论",
+      "tags": "缺失值处理：分析缺失原因、删除法（缺失比例小）、填充法（均值/中位数/模型预测）。异常值处理：3σ原则、箱线图识别，分析异常原因后删除或替换为边界值。处理前一定要理解业务背景。"
+    },
+    {
+      "id": "interview_072",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "请解释RFM模型及其在用户分析中的应用",
+      "questionEn": "Explain the RFM model and its application",
+      "tips": "从R、F、M三个维度和实际应用回答",
+      "tipsEn": "Cover R, F, M dimensions",
+      "starGuide": {
+        "situation": "需要进行用户价值分析",
+        "task": "使用RFM模型进行用户分层",
+        "action": "定义R/F/M指标、计算分值、用户分群、制定策略",
+        "result": "实现精细化用户运营"
+      },
+      "referenceAnswer": "实现精细化用户运营",
+      "tags": "RFM通过三个维度衡量用户价值：R最近消费时间、F消费频率、M消费金额。将每个维度分为高/低两组可分为8个群体。如高R高F高M是重要价值客户需重点维护。结合业务场景调整RFM定义和分群策略。"
+    },
+    {
+      "id": "interview_073",
+      "category": "technical",
+      "position": "ui_designer",
+      "difficulty": "medium",
+      "question": "你如何进行用户研究？",
+      "questionEn": "How do you conduct user research?",
+      "tips": "从定性和定量方法两方面回答",
+      "tipsEn": "Cover qualitative and quantitative methods",
+      "starGuide": {
+        "situation": "设计前需要了解目标用户",
+        "task": "系统地进行用户研究",
+        "action": "选择研究方法、执行研究、分析洞察",
+        "result": "获得有价值的用户洞察指导设计"
+      },
+      "referenceAnswer": "获得有价值的用户洞察指导设计",
+      "tags": "定性方法：用户访谈深入了解需求、可用性测试观察使用过程、卡片分类了解信息架构认知。定量方法：问卷调查大样本收集数据、数据分析发现模式、A/B测试验证假设。研究后整理用户画像和旅程地图。"
+    },
+    {
+      "id": "interview_074",
+      "category": "technical",
+      "position": "ui_designer",
+      "difficulty": "medium",
+      "question": "你如何确保设计的可用性和无障碍性？",
+      "questionEn": "How do you ensure design usability and accessibility?",
+      "tips": "从设计原则、测试方法、标准规范等方面回答",
+      "tipsEn": "Cover design principles, testing, standards",
+      "starGuide": {
+        "situation": "需要确保设计对所有用户友好",
+        "task": "在设计中融入可用性和无障碍性",
+        "action": "遵循设计规范、进行可用性测试、检查无障碍标准",
+        "result": "设计具有良好的可用性和包容性"
+      },
+      "referenceAnswer": "设计具有良好的可用性和包容性",
+      "tags": "可用性：遵循尼尔森十大可用性原则、保持一致设计语言、多轮可用性测试。无障碍性：足够色彩对比度WCAG AA标准、支持屏幕阅读器、键盘操作、替代文本、字体大小可调。使用axe等工具检查。"
+    },
+    {
+      "id": "interview_075",
+      "category": "technical",
+      "position": "ui_designer",
+      "difficulty": "medium",
+      "question": "你如何建立和维护设计系统？",
+      "questionEn": "How do you build and maintain a design system?",
+      "tips": "从组件库、设计规范、协作流程等方面回答",
+      "tipsEn": "Cover component library, specs, workflow",
+      "starGuide": {
+        "situation": "团队需要统一的设计语言",
+        "task": "建立完整的设计系统",
+        "action": "定义设计原则、搭建组件库、编写规范文档",
+        "result": "提高设计一致性和开发效率"
+      },
+      "referenceAnswer": "提高设计一致性和开发效率",
+      "tags": "步骤：1.设计原则（简洁、一致、可用）；2.基础元素（颜色、字体、间距）；3.组件库（原子到有机体）；4.模式库（交互模式和页面模板）；5.文档（使用指南）。定期更新、收集反馈、版本管理。通常使用Figma搭建。"
+    },
+    {
+      "id": "interview_076",
+      "category": "technical",
+      "position": "marketing",
+      "difficulty": "medium",
+      "question": "你如何制定数字营销策略？",
+      "questionEn": "How do you develop a digital marketing strategy?",
+      "tips": "从目标设定、渠道选择、内容策略、效果评估等方面回答",
+      "tipsEn": "Cover goals, channels, content, measurement",
+      "starGuide": {
+        "situation": "需要为产品制定数字营销策略",
+        "task": "制定全面的数字营销方案",
+        "action": "市场分析、目标设定、渠道规划、内容策略、预算分配",
+        "result": "制定可执行的营销策略"
+      },
+      "referenceAnswer": "制定可执行的营销策略",
+      "tags": "步骤：1.市场分析（用户画像、竞品、SWOT）；2.目标设定SMART原则；3.渠道策略（SEO/SEM、社交媒体、内容营销）；4.内容策略（内容日历）；5.预算分配（基于渠道ROI）；6.效果评估（归因模型、定期复盘）。"
+    },
+    {
+      "id": "interview_077",
+      "category": "technical",
+      "position": "marketing",
+      "difficulty": "medium",
+      "question": "你如何衡量营销活动的ROI？",
+      "questionEn": "How do you measure marketing campaign ROI?",
+      "tips": "从指标体系、归因模型、数据分析等方面回答",
+      "tipsEn": "Cover metrics, attribution, data analysis",
+      "starGuide": {
+        "situation": "需要评估营销活动的投入产出比",
+        "task": "建立科学的ROI衡量体系",
+        "action": "定义指标、选择归因模型、数据收集分析",
+        "result": "准确衡量营销效果"
+      },
+      "referenceAnswer": "准确衡量营销效果",
+      "tags": "步骤：1.明确成本（广告费、人力、工具）；2.定义收益（直接转化+品牌曝光+长期价值）；3.选择归因模型（首次/最终/线性/时间衰减）；4.建立指标体系（CPA、CPC、CTR、转化率、LTV/CAC）；5.建立数据看板实时监控。"
+    },
+    {
+      "id": "interview_078",
+      "category": "technical",
+      "position": "hr",
+      "difficulty": "medium",
+      "question": "你如何设计员工绩效管理体系？",
+      "questionEn": "How do you design an employee performance management system?",
+      "tips": "从目标设定、过程管理、评估方法、结果应用等方面回答",
+      "tipsEn": "Cover goals, process, evaluation, application",
+      "starGuide": {
+        "situation": "需要建立或优化绩效管理体系",
+        "task": "设计科学合理的绩效管理方案",
+        "action": "确定考核模式、设计指标、建立流程",
+        "result": "建立有效的绩效管理体系"
+      },
+      "referenceAnswer": "建立有效的绩效管理体系",
+      "tags": "步骤：1.目标设定结合公司战略使用OKR或KPI；2.过程管理定期检查及时反馈；3.评估方法360度评估、自评+上级评估、关键事件法；4.评估维度业绩70%+能力行为30%；5.结果应用薪酬调整、晋升、培训发展。确保公平性和透明度。"
+    },
+    {
+      "id": "interview_079",
+      "category": "technical",
+      "position": "hr",
+      "difficulty": "medium",
+      "question": "你如何进行岗位分析和人才画像构建？",
+      "questionEn": "How do you conduct job analysis and build talent profiles?",
+      "tips": "从分析方法、能力模型、画像构建等方面回答",
+      "tipsEn": "Cover analysis methods, competency models",
+      "starGuide": {
+        "situation": "需要明确岗位要求和人才标准",
+        "task": "系统地进行岗位分析和人才画像",
+        "action": "岗位分析、能力建模、画像构建、验证优化",
+        "result": "形成清晰的岗位要求和人才标准"
+      },
+      "referenceAnswer": "形成清晰的岗位要求和人才标准",
+      "tags": "步骤：1.信息收集访谈现有员工和上级；2.职责梳理明确核心职责和关键任务；3.能力要求专业技能、通用能力、性格特质；4.人才画像基于高绩效员工数据提炼成功要素。使用冰山模型：水面以上知识和技能，水面以下价值观、特质和动机。"
+    },
+    {
+      "id": "interview_080",
+      "category": "technical",
+      "position": "finance",
+      "difficulty": "medium",
+      "question": "你如何进行财务预算管理？",
+      "questionEn": "How do you manage financial budgets?",
+      "tips": "从预算编制、执行监控、调整优化等方面回答",
+      "tipsEn": "Cover preparation, monitoring, adjustment",
+      "starGuide": {
+        "situation": "需要制定和管理公司或部门预算",
+        "task": "建立科学的预算管理体系",
+        "action": "预算编制、审批流程、执行监控、差异分析",
+        "result": "有效控制成本支持业务发展"
+      },
+      "referenceAnswer": "有效控制成本支持业务发展",
+      "tags": "步骤：1.预算编制自上而下和自下而上结合；2.分类：收入、成本、费用、资本支出；3.审批流程部门编制-财务审核-管理层审批；4.执行监控月度/季度报告；5.差异分析区分可控和不可控因素；6.滚动调整根据实际情况季度调整。"
+    },
+    {
+      "id": "interview_081",
+      "category": "technical",
+      "position": "finance",
+      "difficulty": "medium",
+      "question": "你如何进行财务报表分析？",
+      "questionEn": "How do you analyze financial statements?",
+      "tips": "从三大报表、分析方法和关键指标等方面回答",
+      "tipsEn": "Cover statements, methods, key metrics",
+      "starGuide": {
+        "situation": "需要通过财务报表了解企业经营状况",
+        "task": "系统地进行财务报表分析",
+        "action": "阅读报表、计算指标、趋势分析、横向对比",
+        "result": "全面了解企业财务状况"
+      },
+      "referenceAnswer": "全面了解企业财务状况",
+      "tags": "三大报表：1.资产负债表分析偿债能力（流动比率、速动比率、资产负债率）；2.利润表分析盈利能力（毛利率、净利率、ROE、ROA）；3.现金流量表分析现金流健康（经营现金流、自由现金流）。方法：趋势分析、同行业对比、杜邦分析。"
+    },
+    {
+      "id": "interview_082",
+      "category": "technical",
+      "position": "operations",
+      "difficulty": "medium",
+      "question": "你如何制定用户增长策略？",
+      "questionEn": "How do you develop user growth strategies?",
+      "tips": "从AARRR模型、增长实验、渠道运营等方面回答",
+      "tipsEn": "Cover AARRR model, growth experiments",
+      "starGuide": {
+        "situation": "需要制定产品的用户增长方案",
+        "task": "系统性推动用户增长",
+        "action": "分析现状、设定目标、制定策略、执行实验",
+        "result": "实现可持续的用户增长"
+      },
+      "referenceAnswer": "实现可持续的用户增长",
+      "tags": "基于AARRR模型：1.Acquisition获客（SEO/ASO、内容营销、社交媒体、裂变）；2.Activation激活（优化新手引导、降低门槛）；3.Retention留存（Push、个性化推荐、激励体系）；4.Revenue变现（会员、增值服务）；5.Referral推荐（邀请奖励、社交分享）。关键是建立增长实验机制。"
+    },
+    {
+      "id": "interview_083",
+      "category": "technical",
+      "position": "operations",
+      "difficulty": "medium",
+      "question": "你如何进行内容运营？",
+      "questionEn": "How do you handle content operations?",
+      "tips": "从内容规划、创作、分发、数据反馈等方面回答",
+      "tipsEn": "Cover planning, creation, distribution, feedback",
+      "starGuide": {
+        "situation": "需要通过内容来吸引用户和提升品牌",
+        "task": "建立系统化的内容运营体系",
+        "action": "内容策略、选题规划、创作生产、渠道分发",
+        "result": "建立有效的内容运营体系"
+      },
+      "referenceAnswer": "建立有效的内容运营体系",
+      "tags": "核心步骤：1.内容策略明确目标用户和定位；2.选题规划建立选题库结合热点；3.内容创作建立模板和质量标准；4.渠道分发根据内容类型选择平台；5.数据反馈关注阅读量、互动率、转化率；6.持续优化基于数据调整策略。"
+    },
+    {
+      "id": "interview_084",
+      "category": "technical",
+      "position": "sales",
+      "difficulty": "medium",
+      "question": "你如何进行客户关系管理？",
+      "questionEn": "How do you manage customer relationships?",
+      "tips": "从客户分级、维护策略、CRM系统等方面回答",
+      "tipsEn": "Cover segmentation, maintenance, CRM",
+      "starGuide": {
+        "situation": "需要系统性地管理客户关系",
+        "task": "建立科学的客户关系管理体系",
+        "action": "客户分级、维护策略、定期跟进、价值挖掘",
+        "result": "提升客户满意度和复购率"
+      },
+      "referenceAnswer": "提升客户满意度和复购率",
+      "tags": "步骤：1.客户分级基于消费金额、合作潜力、战略价值分为ABC三级；2.维护策略A类每月拜访定制化服务，B类季度拜访标准化服务，C类定期跟进；3.客户档案记录需求和沟通历史；4.价值挖掘交叉销售向上销售；5.流失预警关注活跃度和满意度。"
+    },
+    {
+      "id": "interview_085",
+      "category": "technical",
+      "position": "sales",
+      "difficulty": "medium",
+      "question": "你如何进行销售预测？",
+      "questionEn": "How do you forecast sales?",
+      "tips": "从数据方法、市场分析、经验判断等方面回答",
+      "tipsEn": "Cover data methods, market analysis, judgment",
+      "starGuide": {
+        "situation": "需要预测未来的销售业绩",
+        "task": "做出准确的销售预测",
+        "action": "历史数据分析、市场趋势判断、销售管道分析",
+        "result": "为业务决策提供可靠参考"
+      },
+      "referenceAnswer": "为业务决策提供可靠参考",
+      "tags": "方法：1.历史数据法基于去年同期和增长趋势；2.销售管道法分析商机阶段和赢率加权计算；3.市场因素法考虑市场规模、竞争、季节性；4.自下而上法各销售分别预测汇总。综合使用多种方法设定乐观、中性、悲观三个场景。"
+    },
+    {
+      "id": "interview_086",
+      "category": "technical",
+      "position": "consultant",
+      "difficulty": "medium",
+      "question": "你如何进行行业分析？",
+      "questionEn": "How do you conduct industry analysis?",
+      "tips": "从分析框架、数据来源、输出物等方面回答",
+      "tipsEn": "Cover frameworks, data sources, deliverables",
+      "starGuide": {
+        "situation": "需要深入了解一个行业",
+        "task": "系统地进行行业分析",
+        "action": "选择框架、收集数据、分析洞察、输出报告",
+        "result": "为战略决策提供行业洞察"
+      },
+      "referenceAnswer": "为战略决策提供行业洞察",
+      "tags": "框架：1.PEST分析政治经济社技；2.波特五力模型；3.价值链分析；4.生命周期分析。数据来源：行业报告（艾瑞、IDC）、上市公司财报、专家访谈、政府统计数据。输出：行业图谱、竞争格局图、趋势预判。"
+    },
+    {
+      "id": "interview_087",
+      "category": "technical",
+      "position": "consultant",
+      "difficulty": "medium",
+      "question": "你如何进行商业尽职调查？",
+      "questionEn": "How do you conduct commercial due diligence?",
+      "tips": "从调查范围、分析方法、风险识别等方面回答",
+      "tipsEn": "Cover scope, methods, risk identification",
+      "starGuide": {
+        "situation": "客户需要进行投资或并购前的尽职调查",
+        "task": "全面评估目标公司的商业价值",
+        "action": "市场分析、财务分析、运营分析、风险评估",
+        "result": "为投资决策提供全面参考"
+      },
+      "referenceAnswer": "为投资决策提供全面参考",
+      "tags": "核心模块：1.市场分析规模增长竞争格局；2.业务分析商业模式客户结构收入质量；3.财务分析收入确认成本结构现金流；4.运营分析管理团队运营效率核心能力；5.风险评估市场竞争监管技术风险。通过管理层访谈、客户访谈、数据分析获取信息。"
+    },
+    {
+      "id": "interview_088",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "什么是CI/CD？你如何搭建自动化部署流程？",
+      "questionEn": "What is CI/CD? How do you set up automated deployment?",
+      "tips": "从持续集成、持续交付、工具链等方面回答",
+      "tipsEn": "Cover CI, CD, toolchain",
+      "starGuide": {
+        "situation": "需要建立自动化的开发和部署流程",
+        "task": "搭建完整的CI/CD流水线",
+        "action": "代码提交、自动构建、自动测试、自动部署",
+        "result": "实现快速可靠的交付"
+      },
+      "referenceAnswer": "实现快速可靠的交付",
+      "tags": "CI/CD是持续集成和持续交付/部署。CI核心是每次代码提交触发自动构建和测试。CD分为持续交付（自动部署到预发布）和持续部署（自动到生产）。搭建：1.代码管理Git Flow；2.构建Maven/Gradle/npm；3.CI Jenkins/GitLab CI；4.自动化测试单元/集成/E2E；5.部署Docker+K8s或蓝绿部署。"
+    },
+    {
+      "id": "interview_089",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "如何设计一个安全的API接口？",
+      "questionEn": "How do you design a secure API?",
+      "tips": "从认证、授权、加密、防攻击等方面回答",
+      "tipsEn": "Cover auth, encryption, attack prevention",
+      "starGuide": {
+        "situation": "需要设计安全可靠的API接口",
+        "task": "从多个层面保证API安全",
+        "action": "身份认证、权限控制、数据加密、输入验证",
+        "result": "设计出安全的API方案"
+      },
+      "referenceAnswer": "设计出安全的API方案",
+      "tags": "要点：1.身份认证JWT或OAuth2.0；2.权限控制RBAC细粒度管理；3.数据传输全程HTTPS；4.输入验证参数校验SQL注入XSS防护；5.限流防刷令牌桶或漏桶算法；6.敏感信息加密存储脱敏返回；7.日志审计记录关键操作；8.CORS严格限制跨域。"
+    },
+    {
+      "id": "interview_090",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "hard",
+      "question": "如何进行系统的性能优化？",
+      "questionEn": "How do you optimize system performance?",
+      "tips": "从前端、后端、数据库、架构等层面回答",
+      "tipsEn": "Cover frontend, backend, database, architecture",
+      "starGuide": {
+        "situation": "系统性能不达标需要进行优化",
+        "task": "系统性地进行性能优化",
+        "action": "性能测试、瓶颈定位、分层优化、验证效果",
+        "result": "系统性能达到目标"
+      },
+      "referenceAnswer": "系统性能达到目标",
+      "tags": "1.前端：减少HTTP请求、启用压缩、懒加载、CDN、浏览器缓存；2.后端：异步处理、缓存策略、连接池、算法优化；3.数据库：索引优化、SQL优化、读写分离、分库分表；4.架构：服务拆分、负载均衡、弹性扩缩容。优化前先做性能测试找到真正瓶颈。"
+    },
+    {
+      "id": "interview_091",
+      "category": "technical",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "你如何进行技术方案评审？",
+      "questionEn": "How do you conduct technical design reviews?",
+      "tips": "从评审流程、关注点、输出物等方面回答",
+      "tipsEn": "Cover review process, focus areas, deliverables",
+      "starGuide": {
+        "situation": "需要在开发前评审技术方案",
+        "task": "组织有效的技术方案评审",
+        "action": "准备评审文档、组织评审会议、收集反馈",
+        "result": "确保技术方案的合理性和可行性"
+      },
+      "referenceAnswer": "确保技术方案的合理性和可行性",
+      "tags": "流程：1.准备编写技术设计文档包括背景目标方案设计接口定义数据模型风险评估；2.评审会议邀请相关方先讲解再讨论；3.关注架构合理性可扩展性安全性性能可维护性兼容性；4.记录反馈；5.后续跟进修改方案必要时二次评审。"
+    },
+    {
+      "id": "interview_092",
+      "category": "technical",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "你如何进行产品需求文档（PRD）的撰写？",
+      "questionEn": "How do you write PRDs?",
+      "tips": "从文档结构、核心内容、协作方式等方面回答",
+      "tipsEn": "Cover structure, content, collaboration",
+      "starGuide": {
+        "situation": "需要撰写产品需求文档",
+        "task": "写出清晰完整的PRD",
+        "action": "明确背景目标、详细描述功能需求、定义验收标准",
+        "result": "产出高质量的PRD指导开发"
+      },
+      "referenceAnswer": "产出高质量的PRD指导开发",
+      "tags": "PRD包含：1.项目概述背景目标范围时间计划；2.用户故事；3.功能需求用流程图+用例描述包括正常和异常流程；4.非功能需求性能安全兼容性；5.数据需求埋点方案数据指标；6.UI/UX需求；7.验收标准。使用原型图辅助说明并组织评审会。"
+    },
+    {
+      "id": "interview_093",
+      "category": "technical",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "你如何衡量产品功能的成功？",
+      "questionEn": "How do you measure feature success?",
+      "tips": "从指标设定、数据收集、分析方法等方面回答",
+      "tipsEn": "Cover metrics, data collection, analysis",
+      "starGuide": {
+        "situation": "功能上线后需要评估效果",
+        "task": "科学地衡量功能是否成功",
+        "action": "上线前设定指标、上线后收集数据、分析评估",
+        "result": "得出功能效果的客观评估"
+      },
+      "referenceAnswer": "得出功能效果的客观评估",
+      "tags": "步骤：1.上线前设定核心指标和辅助指标，确定基线值和目标值；2.上线时确保埋点正确；3.上线后短期关注功能使用率和用户反馈，中期关注对业务指标影响，长期关注留存和LTV；4.分析方法对比分析、A/B测试、用户分群分析。区分相关性和因果性。"
+    },
+    {
+      "id": "interview_094",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "请解释SQL中JOIN的几种类型及其区别",
+      "questionEn": "Explain SQL JOIN types and differences",
+      "tips": "从INNER JOIN、LEFT JOIN、RIGHT JOIN等方面回答",
+      "tipsEn": "Cover INNER, LEFT, RIGHT, FULL JOIN",
+      "starGuide": {
+        "situation": "面试官考察SQL基础",
+        "task": "清晰解释各种JOIN类型",
+        "action": "定义每种JOIN、说明区别、举例应用场景",
+        "result": "展示SQL知识掌握程度"
+      },
+      "referenceAnswer": "展示SQL知识掌握程度",
+      "tags": "主要类型：1.INNER JOIN只返回匹配行最常用；2.LEFT JOIN返回左表所有行右表无匹配为NULL适用于保留左表全部数据；3.RIGHT JOIN返回右表所有行；4.FULL OUTER JOIN返回两表所有行；5.CROSS JOIN笛卡尔积。实际工作中LEFT JOIN使用最多。"
+    },
+    {
+      "id": "interview_095",
+      "category": "technical",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "什么是漏斗分析？如何用漏斗分析发现问题？",
+      "questionEn": "What is funnel analysis? How do you use it?",
+      "tips": "从漏斗定义、分析方法、问题发现等方面回答",
+      "tipsEn": "Cover funnel definition, analysis, problem finding",
+      "starGuide": {
+        "situation": "需要分析用户转化流程",
+        "task": "通过漏斗分析发现转化问题",
+        "action": "定义漏斗步骤、计算转化率、分析流失原因",
+        "result": "找到转化瓶颈并提出优化建议"
+      },
+      "referenceAnswer": "找到转化瓶颈并提出优化建议",
+      "tags": "漏斗分析分析用户在一系列步骤中转化和流失。步骤：1.定义漏斗如浏览到加购到下单到支付；2.计算每步转化率和整体转化率；3.分析流失在哪一步最多、流失用户特征；4.归因分析。通过对比不同用户群体和时间段的数据精准定位问题。"
+    },
+    {
+      "id": "interview_096",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你的项目截止日期被提前了一半，你会怎么办？",
+      "questionEn": "If your project deadline was cut in half, what would you do?",
+      "tips": "展示你的应变能力和优先级管理",
+      "tipsEn": "Show adaptability and priority management",
+      "starGuide": {
+        "situation": "项目截止日期突然提前",
+        "task": "在更短时间内完成项目",
+        "action": "重新评估范围、调整优先级、协调资源、制定新计划",
+        "result": "按时交付核心功能"
+      },
+      "referenceAnswer": "按时交付核心功能",
+      "tags": "冷静评估剩余工作量和可用资源，与相关方沟通确认必须交付的核心功能。重新制定项目计划协调额外资源，建立每日进度同步机制。提前预警可能的风险让管理层有充分了解和决策空间。"
+    },
+    {
+      "id": "interview_097",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你发现同事在工作中存在严重错误，你会怎么做？",
+      "questionEn": "If you found a colleague making a serious mistake, what would you do?",
+      "tips": "展示你的职业操守和沟通技巧",
+      "tipsEn": "Show professional ethics and communication",
+      "starGuide": {
+        "situation": "同事的工作存在严重问题",
+        "task": "妥善处理既帮助同事又不影响项目",
+        "action": "私下沟通、客观指出问题、提供帮助",
+        "result": "问题得到及时纠正"
+      },
+      "referenceAnswer": "问题得到及时纠正",
+      "tags": "选择合适时机私下与同事沟通。先肯定工作努力然后客观指出问题表达担忧。以帮助的态度提供建议和资源。如果问题严重涉及项目风险，建议一起向上级汇报。注意保护同事自尊心。"
+    },
+    {
+      "id": "interview_098",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你被分配了一个你完全不熟悉的项目，你会怎么做？",
+      "questionEn": "If assigned a project you're unfamiliar with, what would you do?",
+      "tips": "展示你的学习能力和解决问题的方法",
+      "tipsEn": "Show learning ability and problem-solving",
+      "starGuide": {
+        "situation": "面对完全陌生的项目领域",
+        "task": "快速上手并推进项目",
+        "action": "学习研究、请教专家、制定计划、小步快跑",
+        "result": "快速掌握并推进项目"
+      },
+      "referenceAnswer": "快速掌握并推进项目",
+      "tags": "花时间系统性学习了解项目背景技术栈和业务逻辑。找到团队中或公司里的专家请教。制定分阶段的学习和执行计划先从简单任务开始逐步深入。保持开放心态及时承认不足并寻求帮助。"
+    },
+    {
+      "id": "interview_099",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你的上级给你布置了一个你认为不合理的任务，你会怎么做？",
+      "questionEn": "If your supervisor assigned an unreasonable task, what would you do?",
+      "tips": "展示你的沟通能力和专业判断",
+      "tipsEn": "Show communication and professional judgment",
+      "starGuide": {
+        "situation": "上级布置的任务看似不合理",
+        "task": "妥善处理分歧",
+        "action": "先理解意图、准备数据、选择时机沟通",
+        "result": "达成共识或找到更好的方案"
+      },
+      "referenceAnswer": "达成共识或找到更好的方案",
+      "tags": "先努力理解上级布置任务的背景和意图。如果仍认为有问题，准备具体数据和论据选择合适时机沟通。先表达对任务的理解然后提出顾虑和建议的替代方案。最终尊重上级决策但如果风险很大确保意见被记录。"
+    },
+    {
+      "id": "interview_100",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你同时收到两个部门的紧急需求，你会怎么处理？",
+      "questionEn": "If you received urgent requests from two departments, what would you do?",
+      "tips": "展示你的优先级管理和沟通能力",
+      "tipsEn": "Show priority management and communication",
+      "starGuide": {
+        "situation": "两个部门同时提出紧急需求",
+        "task": "合理安排优先级平衡各方需求",
+        "action": "评估紧急程度和影响、沟通协调、制定方案",
+        "result": "两个需求都得到妥善处理"
+      },
+      "referenceAnswer": "两个需求都得到妥善处理",
+      "tags": "快速评估两个需求的紧急程度和业务影响，与两个部门负责人沟通了解真实截止时间和业务影响。如果无法同时满足向上级汇报请上级协助决策优先级。看看是否有同事可以协助或临时方案。"
+    },
+    {
+      "id": "interview_101",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你在工作中犯了错误导致项目延期，你会怎么做？",
+      "questionEn": "If you made a mistake causing a project delay, what would you do?",
+      "tips": "展示你的责任心和问题解决能力",
+      "tipsEn": "Show responsibility and problem-solving",
+      "starGuide": {
+        "situation": "自己的错误导致项目延期",
+        "task": "及时补救并防止再次发生",
+        "action": "承认错误、评估影响、制定补救方案、总结教训",
+        "result": "将影响降到最低"
+      },
+      "referenceAnswer": "将影响降到最低",
+      "tags": "第一时间向上级和团队坦诚承认错误不推卸责任。立即评估影响范围制定补救方案包括加班赶工调整计划。分析错误根本原因制定预防措施确保不再发生。事后复盘将经验教训分享给团队。"
+    },
+    {
+      "id": "interview_102",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你的团队成员不配合你的工作，你会怎么做？",
+      "questionEn": "If a team member is uncooperative, what would you do?",
+      "tips": "展示你的团队管理和人际沟通能力",
+      "tipsEn": "Show team management and interpersonal skills",
+      "starGuide": {
+        "situation": "团队成员不配合工作",
+        "task": "改善协作关系推进工作",
+        "action": "了解原因、主动沟通、建立信任、寻求上级支持",
+        "result": "改善合作关系工作顺利推进"
+      },
+      "referenceAnswer": "改善合作关系工作顺利推进",
+      "tags": "先反思自己是否有做得不够好的地方，然后主动找同事沟通了解不配合的原因。可能是需求不清晰、优先级有冲突或个人有困难。倾听想法寻找双方都能接受的协作方式。如果无法改善寻求上级帮助协调。"
+    },
+    {
+      "id": "interview_103",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你发现公司的某个流程存在严重问题，你会怎么做？",
+      "questionEn": "If you found a serious process problem, what would you do?",
+      "tips": "展示你的洞察力和推动改进的能力",
+      "tipsEn": "Show insight and improvement ability",
+      "starGuide": {
+        "situation": "发现公司流程存在严重问题",
+        "task": "推动流程改进",
+        "action": "收集证据、分析影响、提出方案、推动实施",
+        "result": "流程得到优化"
+      },
+      "referenceAnswer": "流程得到优化",
+      "tags": "详细记录问题现象收集相关数据和案例，分析影响范围和严重程度。准备改进提案包括问题描述影响分析改进建议和预期效果。先与直接上级沟通听取意见，根据问题层级决定在哪个层面推动。先小范围试点用数据证明效果后再推广。"
+    },
+    {
+      "id": "interview_104",
+      "category": "situational",
+      "position": "software_engineer",
+      "difficulty": "hard",
+      "question": "如果线上系统突然崩溃，你会如何处理？",
+      "questionEn": "If the production system crashed, how would you handle it?",
+      "tips": "展示你的应急处理能力和技术判断力",
+      "tipsEn": "Show emergency response ability",
+      "starGuide": {
+        "situation": "线上系统突然不可用",
+        "task": "尽快恢复服务",
+        "action": "告警响应、影响评估、快速恢复、根因分析、复盘改进",
+        "result": "系统快速恢复防止再次发生"
+      },
+      "referenceAnswer": "系统快速恢复防止再次发生",
+      "tags": "应急流程：1.告警响应确认告警信息通知相关团队；2.影响评估确定影响范围和严重程度；3.快速恢复如果是最近发布先回滚，资源问题先扩容，第三方服务考虑降级方案；4.根因分析恢复后深入分析；5.复盘改进完善监控和应急预案。保持冷静及时同步信息。"
+    },
+    {
+      "id": "interview_105",
+      "category": "situational",
+      "position": "software_engineer",
+      "difficulty": "medium",
+      "question": "如果产品经理提出的需求在技术上很难实现，你会怎么做？",
+      "questionEn": "If a PM proposes a technically difficult requirement, what would you do?",
+      "tips": "展示你的技术沟通和方案设计能力",
+      "tipsEn": "Show technical communication ability",
+      "starGuide": {
+        "situation": "产品需求技术实现难度大",
+        "task": "找到技术与产品的平衡点",
+        "action": "理解需求本质、评估技术方案、提出替代方案",
+        "result": "达成双方满意的方案"
+      },
+      "referenceAnswer": "达成双方满意的方案",
+      "tags": "深入了解产品经理提出需求的业务背景和用户价值，理解需求背后的本质问题。评估技术实现难度和风险，如果确实难以实现提出分阶段实现方案或技术替代方案。用产品经理能理解的语言解释技术限制同时展示积极解决问题的态度。"
+    },
+    {
+      "id": "interview_106",
+      "category": "situational",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "如果开发团队告诉你某个核心功能无法按时完成，你会怎么做？",
+      "questionEn": "If dev team says a core feature can't be completed on time, what would you do?",
+      "tips": "展示你的项目管理能力和灵活应变",
+      "tipsEn": "Show project management and flexibility",
+      "starGuide": {
+        "situation": "核心功能开发延期",
+        "task": "调整计划确保产品按时交付",
+        "action": "了解原因、评估影响、调整方案、沟通协调",
+        "result": "产品按时交付核心价值不受影响"
+      },
+      "referenceAnswer": "产品按时交付核心价值不受影响",
+      "tags": "先了解延期具体原因和预计延迟时间，评估对上线计划的影响。与开发团队讨论可能解决方案：是否可以简化功能范围、分阶段上线、增加资源。及时与上级和利益相关方沟通调整后的计划管理好预期。"
+    },
+    {
+      "id": "interview_107",
+      "category": "situational",
+      "position": "product_manager",
+      "difficulty": "medium",
+      "question": "如果用户反馈与你的产品方向不一致，你会怎么做？",
+      "questionEn": "If user feedback contradicts your product direction, what would you do?",
+      "tips": "展示你的用户思维和战略判断力",
+      "tipsEn": "Show user-centric thinking and strategic judgment",
+      "starGuide": {
+        "situation": "用户反馈与产品方向冲突",
+        "task": "平衡用户需求和产品战略",
+        "action": "深入分析反馈、区分个体和共性、评估战略影响",
+        "result": "做出正确的产品决策"
+      },
+      "referenceAnswer": "做出正确的产品决策",
+      "tags": "深入分析用户反馈区分是个别意见还是普遍需求趋势。如果是普遍需求反思产品方向是否需要调整。如果是个别需求但与战略冲突考虑折中方案。关键是用数据说话而不是凭直觉决策。同时关注竞品动态看是否有类似趋势。"
+    },
+    {
+      "id": "interview_108",
+      "category": "situational",
+      "position": "data_analyst",
+      "difficulty": "medium",
+      "question": "如果业务方要你证明一个你认为是错误的假设，你会怎么做？",
+      "questionEn": "If asked to prove a hypothesis you believe is wrong, what would you do?",
+      "tips": "展示你的专业坚持和数据驱动思维",
+      "tipsEn": "Show professional integrity and data-driven thinking",
+      "starGuide": {
+        "situation": "业务方的假设可能有误",
+        "task": "用数据客观地验证假设",
+        "action": "理解假设、设计分析、客观呈现结果",
+        "result": "用数据得出客观结论"
+      },
+      "referenceAnswer": "用数据得出客观结论",
+      "tags": "先充分理解业务方的假设背景和动机，然后设计严谨的分析方案来验证。分析过程中保持客观不预设立场。如果数据不支持假设用清晰数据和图表展示分析结果，同时尊重业务方观点探讨是否有其他角度解释。关键是让数据说话。"
+    },
+    {
+      "id": "interview_109",
+      "category": "situational",
+      "position": "ui_designer",
+      "difficulty": "medium",
+      "question": "如果开发告诉你你的设计方案无法实现，你会怎么做？",
+      "questionEn": "If developers say your design can't be implemented, what would you do?",
+      "tips": "展示你的设计灵活性和技术理解力",
+      "tipsEn": "Show design flexibility and technical understanding",
+      "starGuide": {
+        "situation": "设计方案技术实现受限",
+        "task": "找到设计与技术的平衡点",
+        "action": "了解技术限制、调整设计方案、保持核心体验",
+        "result": "在技术约束下实现最佳设计"
+      },
+      "referenceAnswer": "在技术约束下实现最佳设计",
+      "tags": "请开发详细解释哪些部分无法实现以及技术原因，评估限制对用户体验的影响。如果影响较小调整设计方案适应技术约束。如果影响较大和开发一起探讨替代技术方案。原则是在技术约束下最大化用户体验保持设计核心价值。"
+    },
+    {
+      "id": "interview_110",
+      "category": "situational",
+      "position": "marketing",
+      "difficulty": "medium",
+      "question": "如果营销预算突然被削减50%，你会怎么调整策略？",
+      "questionEn": "If marketing budget was cut by 50%, how would you adjust?",
+      "tips": "展示你的资源整合能力和策略调整能力",
+      "tipsEn": "Show resource integration and strategy adjustment",
+      "starGuide": {
+        "situation": "营销预算大幅削减",
+        "task": "在有限预算下维持营销效果",
+        "action": "重新评估渠道ROI、聚焦高回报渠道、利用免费资源",
+        "result": "在减预算情况下保持核心营销效果"
+      },
+      "referenceAnswer": "在减预算情况下保持核心营销效果",
+      "tags": "立即重新评估所有营销渠道ROI，将预算集中到效果最好的渠道。加大免费渠道投入如SEO、内容营销、社交媒体运营。考虑与合作伙伴资源置换和联合营销。优化广告投放精准度提高每一分钱产出效率。更加注重用户口碑和裂变。"
+    },
+    {
+      "id": "interview_111",
+      "category": "situational",
+      "position": "hr",
+      "difficulty": "medium",
+      "question": "如果公司需要裁员10%，你会如何处理？",
+      "questionEn": "If the company needs to lay off 10%, how would you handle it?",
+      "tips": "展示你的专业性和人文关怀",
+      "tipsEn": "Show professionalism and humanistic care",
+      "starGuide": {
+        "situation": "公司面临裁员",
+        "task": "合法合规且人性化地执行裁员",
+        "action": "制定标准、沟通方案、补偿方案、后续支持",
+        "result": "裁员平稳完成对留任员工影响最小"
+      },
+      "referenceAnswer": "裁员平稳完成对留任员工影响最小",
+      "tags": "裁员步骤：1.制定客观裁员标准基于岗位价值和绩效确保公平；2.制定沟通方案先沟通上级再通知员工确保信息一致；3.准备合理补偿方案符合劳动法适当增加补偿；4.提供过渡支持推荐信就业辅导；5.关注留任员工及时沟通稳定军心。"
+    },
+    {
+      "id": "interview_112",
+      "category": "situational",
+      "position": "finance",
+      "difficulty": "medium",
+      "question": "如果公司现金流出现紧张，你会如何应对？",
+      "questionEn": "If company cash flow becomes tight, how would you respond?",
+      "tips": "展示你的财务应变能力和风险管控能力",
+      "tipsEn": "Show financial adaptability and risk management",
+      "starGuide": {
+        "situation": "公司现金流紧张",
+        "task": "缓解现金流压力",
+        "action": "分析原因、制定短期措施、规划长期方案",
+        "result": "现金流恢复正常"
+      },
+      "referenceAnswer": "现金流恢复正常",
+      "tags": "短期：1.加速应收账款回收主动催收提供提前付款折扣；2.延缓非必要支出暂停非核心项目削减费用；3.优化库存管理减少积压加快周转；4.融资安排与银行沟通授信考虑短期借款。长期：改善收款政策、优化付款周期、建立现金流预警机制。"
+    },
+    {
+      "id": "interview_113",
+      "category": "situational",
+      "position": "operations",
+      "difficulty": "medium",
+      "question": "如果产品日活突然下降了30%，你会怎么排查？",
+      "questionEn": "If product DAU suddenly dropped 30%, how would you investigate?",
+      "tips": "展示你的数据分析能力和问题排查思路",
+      "tipsEn": "Show data analysis and troubleshooting approach",
+      "starGuide": {
+        "situation": "产品核心指标异常下降",
+        "task": "快速定位原因并制定应对方案",
+        "action": "数据排查、维度拆解、内外因分析、制定对策",
+        "result": "找到原因并恢复指标"
+      },
+      "referenceAnswer": "找到原因并恢复指标",
+      "tags": "排查步骤：1.确认数据准确性排除统计问题；2.时间维度是突然还是持续下降是否与特定时间点相关；3.用户维度是新用户还是老用户下降；4.渠道维度是否某个获客渠道出问题；5.功能维度是否某个功能异常；6.外部因素竞品动作政策变化节假日影响。"
+    },
+    {
+      "id": "interview_114",
+      "category": "situational",
+      "position": "sales",
+      "difficulty": "medium",
+      "question": "如果一个大客户突然要终止合作，你会怎么做？",
+      "questionEn": "If a major client wants to terminate, what would you do?",
+      "tips": "展示你的客户挽留能力和危机处理能力",
+      "tipsEn": "Show client retention and crisis management",
+      "starGuide": {
+        "situation": "大客户要终止合作",
+        "task": "了解原因并尽力挽留",
+        "action": "深入了解原因、提出解决方案、展示价值",
+        "result": "挽留客户或实现平稳过渡"
+      },
+      "referenceAnswer": "挽留客户或实现平稳过渡",
+      "tags": "第一时间联系客户真诚了解终止合作原因。如果是服务问题立即提出改进方案和补偿措施；如果是价格问题重新评估报价策略；如果是决策者变更重新建立关系。展示合作价值和对客户的重视。如果无法挽留确保平稳过渡保持良好关系。"
+    },
+    {
+      "id": "interview_115",
+      "category": "situational",
+      "position": "consultant",
+      "difficulty": "medium",
+      "question": "如果客户对你的咨询报告不满意，你会怎么做？",
+      "questionEn": "If a client is unsatisfied with your report, what would you do?",
+      "tips": "展示你的专业素养和客户管理能力",
+      "tipsEn": "Show professionalism and client management",
+      "starGuide": {
+        "situation": "客户对交付物不满意",
+        "task": "了解不满原因并改进交付物",
+        "action": "倾听反馈、分析差距、快速改进、重新交付",
+        "result": "客户满意项目顺利推进"
+      },
+      "referenceAnswer": "客户满意项目顺利推进",
+      "tags": "认真倾听客户具体不满了解期望和交付之间的差距。快速组织团队进行补充分析和修改，在约定时间内提交改进版本。反思项目前期是否充分理解客户需求，后续加强需求确认。让客户感受到专业态度和快速响应能力。"
+    },
+    {
+      "id": "interview_116",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你需要在两个同样优秀的候选人中做一个选择，你会怎么做？",
+      "questionEn": "If choosing between two equally strong candidates, what would you do?",
+      "tips": "展示你的评估能力和决策逻辑",
+      "tipsEn": "Show evaluation ability and decision logic",
+      "starGuide": {
+        "situation": "两个候选人实力相当难以抉择",
+        "task": "做出最优选择",
+        "action": "细化评估维度、考虑团队互补、参考文化匹配度",
+        "result": "做出科学合理的选择"
+      },
+      "referenceAnswer": "做出科学合理的选择",
+      "tags": "从更细维度评估：1.团队互补性当前团队更需要哪种能力；2.发展潜力谁的学习能力和成长空间更大；3.文化匹配度谁更契合公司价值观；4.求职动机谁的动机更真诚持久；5.稳定性谁的离职风险更低。如果仍难以决定安排加试或让候选人与未来团队成员互动。"
+    },
+    {
+      "id": "interview_117",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你被要求做一件违反公司规定的事情，你会怎么做？",
+      "questionEn": "If asked to do something violating company policy, what would you do?",
+      "tips": "展示你的职业操守和判断力",
+      "tipsEn": "Show professional ethics and judgment",
+      "starGuide": {
+        "situation": "被要求做违反规定的事",
+        "task": "坚守原则同时妥善处理",
+        "action": "了解原因、说明规定、提出替代方案、必要时上报",
+        "result": "既坚守原则又不破坏关系"
+      },
+      "referenceAnswer": "既坚守原则又不破坏关系",
+      "tags": "先了解对方要求这样做的原因和背景，可能对方不了解相关规定。礼貌地向对方说明公司规定和可能的风险。积极思考是否有合规的替代方案满足对方实际需求。如果对方坚持向上级或合规部门寻求指导。在任何情况下不违反合规要求。"
+    },
+    {
+      "id": "interview_118",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你的工作成果被同事冒领了，你会怎么做？",
+      "questionEn": "If a colleague took credit for your work, what would you do?",
+      "tips": "展示你的成熟度和处理人际关系的能力",
+      "tipsEn": "Show maturity and interpersonal skills",
+      "starGuide": {
+        "situation": "工作成果被同事冒领",
+        "task": "维护自己的权益同时不破坏关系",
+        "action": "私下沟通、澄清事实、建立机制",
+        "result": "问题得到妥善解决"
+      },
+      "referenceAnswer": "问题得到妥善解决",
+      "tags": "非正式场合选择私下与同事沟通表达感受请他在公开场合给予正确归属。正式绩效评估或汇报中准备相关证据（邮件记录、代码提交记录等）客观向上级说明。长期建立更好的工作留痕机制确保贡献被准确记录。"
+    },
+    {
+      "id": "interview_119",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你入职后发现实际工作内容与面试时描述的完全不同，你会怎么做？",
+      "questionEn": "If the actual job differs from the interview description, what would you do?",
+      "tips": "展示你的适应能力和沟通能力",
+      "tipsEn": "Show adaptability and communication",
+      "starGuide": {
+        "situation": "实际工作与预期不符",
+        "task": "评估情况并做出合理应对",
+        "action": "了解原因、评估影响、沟通调整",
+        "result": "找到满意的解决方案"
+      },
+      "referenceAnswer": "找到满意的解决方案",
+      "tags": "先给自己一段时间适应和了解，因为有时变化是因为业务需要。如果确实与面试承诺差异很大与上级坦诚沟通了解变化原因和公司考虑。如果新方向有发展空间愿意尝试。如果确实不合适给公司和自己合理过渡期体面处理。"
+    },
+    {
+      "id": "interview_120",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你需要在信息不完整的情况下向管理层做汇报，你会怎么做？",
+      "questionEn": "If you need to report to management with incomplete info, what would you do?",
+      "tips": "展示你的沟通能力和专业素养",
+      "tipsEn": "Show communication and professionalism",
+      "starGuide": {
+        "situation": "需要在信息不充分时做汇报",
+        "task": "做出有价值的汇报同时管理好预期",
+        "action": "整理已知信息、标注不确定性、给出初步判断、说明后续计划",
+        "result": "管理层获得有价值的信息"
+      },
+      "referenceAnswer": "管理层获得有价值的信息",
+      "tags": "坦诚说明当前信息完整程度，将已知和未知部分清晰分开。已知部分提供详细分析和初步结论。未知部分说明可能影响范围和获取计划。给出基于现有信息的最佳判断，明确标注确定结论和推测。最重要的是给出明确后续行动计划和时间表。"
+    },
+    {
+      "id": "interview_121",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你发现团队中存在信息孤岛现象，你会怎么做？",
+      "questionEn": "If you found information silos in your team, what would you do?",
+      "tips": "展示你的团队建设能力和推动力",
+      "tipsEn": "Show team building and driving ability",
+      "starGuide": {
+        "situation": "团队中信息流通不畅",
+        "task": "打破信息壁垒促进信息共享",
+        "action": "建立沟通机制、推动知识分享、营造开放文化",
+        "result": "团队信息流通顺畅"
+      },
+      "referenceAnswer": "团队信息流通顺畅",
+      "tags": "从几个方面入手：1.建立定期沟通机制如周会跨部门同步会；2.推动文档化鼓励将工作进展和经验记录在共享文档中；3.组织知识分享会定期让不同方向同事分享工作；4.使用协作工具如企业微信/飞书群Wiki；5.以身作则主动分享自己的工作信息和知识。"
+    },
+    {
+      "id": "interview_122",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你需要向非技术人员解释一个复杂的技术概念，你会怎么做？",
+      "questionEn": "If you need to explain a complex technical concept to non-tech people, what would you do?",
+      "tips": "展示你的沟通能力和化繁为简的能力",
+      "tipsEn": "Show communication and simplification ability",
+      "starGuide": {
+        "situation": "需要将技术概念传达给非技术人员",
+        "task": "让对方理解核心概念",
+        "action": "使用比喻、简化术语、关注对方关心的价值",
+        "result": "非技术人员理解了核心概念"
+      },
+      "referenceAnswer": "非技术人员理解了核心概念",
+      "tags": "使用日常生活中的比喻解释复杂概念避免技术术语。例如解释API时用餐厅点餐比喻：菜单是API文档，服务员是API接口，厨房是后端服务。关注对方最关心的方面——技术能解决什么问题带来什么价值。如果对方有兴趣再逐步展开技术细节。"
+    },
+    {
+      "id": "interview_123",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你接手了一个前任留下的混乱项目，你会怎么做？",
+      "questionEn": "If you inherited a messy project, what would you do?",
+      "tips": "展示你的整理能力和项目管理能力",
+      "tipsEn": "Show organizing and project management ability",
+      "starGuide": {
+        "situation": "接手一个混乱的项目",
+        "task": "理清项目状况并建立秩序",
+        "action": "全面了解、梳理问题、制定计划、逐步改善",
+        "result": "项目走上正轨"
+      },
+      "referenceAnswer": "项目走上正轨",
+      "tags": "先花时间全面了解项目现状：代码质量、文档情况、团队状态、历史决策。梳理出最关键的问题清单按优先级排序。制定分阶段改善计划：第一阶段解决最紧急问题如线上Bug安全隐患，第二阶段建立规范和流程，第三阶段系统性优化。与团队保持充分沟通。"
+    },
+    {
+      "id": "interview_124",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果你的工作需要频繁出差，但你有家庭需要照顾，你会如何平衡？",
+      "questionEn": "If your job requires frequent travel but you have family, how would you balance?",
+      "tips": "展示你的时间管理和家庭观念",
+      "tipsEn": "Show time management and family values",
+      "starGuide": {
+        "situation": "工作需要频繁出差与家庭责任冲突",
+        "task": "找到工作与家庭的平衡点",
+        "action": "评估频率、提高出差效率、利用远程方式、家庭沟通",
+        "result": "兼顾工作和家庭"
+      },
+      "referenceAnswer": "兼顾工作和家庭",
+      "tags": "先了解出差的频率和必要性看看是否有部分可以通过远程方式替代。对于必须出差的场合提高出差效率尽量缩短时间。与家人充分沟通让他们理解工作需要并制定出差期间家庭支持方案。不出差时确保高质量陪伴家人。"
+    },
+    {
+      "id": "interview_125",
+      "category": "situational",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果公司要求你转岗到一个你不感兴趣的方向，你会怎么做？",
+      "questionEn": "If asked to transfer to a position you're not interested in, what would you do?",
+      "tips": "展示你的职业态度和沟通能力",
+      "tipsEn": "Show professional attitude and communication",
+      "starGuide": {
+        "situation": "被要求转岗到不感兴趣的方向",
+        "task": "妥善处理转岗要求",
+        "action": "了解原因、表达想法、评估机会、做出决定",
+        "result": "做出对双方都有利的选择"
+      },
+      "referenceAnswer": "做出对双方都有利的选择",
+      "tags": "先了解公司安排转岗的原因可能是业务调整或看到了在该方向的潜力。然后坦诚与上级沟通职业兴趣和发展方向。如果转岗方向有发展空间愿意尝试并给适应期。如果确实与职业规划差距太大表达想法看看是否有折中方案。"
+    },
+    {
+      "id": "interview_126",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何评估自己的市场价值？",
+      "questionEn": "How do you assess your market value?",
+      "tips": "从多维度评估展示你的自我认知",
+      "tipsEn": "Assess from multiple dimensions",
+      "starGuide": {
+        "situation": "需要了解自己在市场上的价值",
+        "task": "客观评估自己的市场价值",
+        "action": "参考市场数据、评估自身能力、考虑行业和地区因素",
+        "result": "得出合理的市场价值评估"
+      },
+      "referenceAnswer": "得出合理的市场价值评估",
+      "tags": "从以下维度评估：1.市场数据参考招聘网站行业报告薪资范围；2.自身能力技术深度项目经验管理能力行业影响力；3.行业因素所处行业发展阶段和薪资水平；4.地区因素不同城市薪资差异；5.公司因素规模发展阶段盈利能力。综合得出合理薪资范围。"
+    },
+    {
+      "id": "interview_127",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果公司给的薪资低于你的期望，你会怎么谈判？",
+      "questionEn": "If the offer is below your expectation, how would you negotiate?",
+      "tips": "展示你的谈判技巧和灵活性",
+      "tipsEn": "Show negotiation skills and flexibility",
+      "starGuide": {
+        "situation": "收到的offer薪资低于期望",
+        "task": "通过谈判争取更好的待遇",
+        "action": "表达感谢、说明期望、提供依据、探讨其他福利",
+        "result": "达成双方满意的薪资方案"
+      },
+      "referenceAnswer": "达成双方满意的薪资方案",
+      "tags": "首先表达对offer的感谢和对公司的认可。然后礼貌说明薪资期望并提供市场数据和自身价值作为依据。如果薪资空间有限探讨其他补偿如签字费、股票期权、额外年假、远程办公、培训预算。谈判关键是保持专业和尊重寻找双赢方案。"
+    },
+    {
+      "id": "interview_128",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你会如何比较多个offer？",
+      "questionEn": "How would you compare multiple offers?",
+      "tips": "展示你的综合评估能力",
+      "tipsEn": "Show comprehensive evaluation ability",
+      "starGuide": {
+        "situation": "同时收到多个offer",
+        "task": "科学地比较和选择",
+        "action": "建立评估维度、权重分配、综合打分",
+        "result": "做出最优选择"
+      },
+      "referenceAnswer": "做出最优选择",
+      "tags": "建立评估矩阵包含：1.薪资福利权重30%基本薪资奖金股票福利；2.职业发展权重25%晋升空间学习机会行业前景；3.工作内容权重20%兴趣匹配挑战性影响力；4.团队和文化权重15%团队氛围领导风格公司文化；5.工作生活平衡权重10%工作时间通勤距离灵活性。"
+    },
+    {
+      "id": "interview_129",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何看待薪资和成长空间的权衡？",
+      "questionEn": "How do you balance salary and growth opportunities?",
+      "tips": "展示你的长期思维和价值观",
+      "tipsEn": "Show long-term thinking and values",
+      "starGuide": {
+        "situation": "高薪但成长有限 vs 薪资一般但成长空间大",
+        "task": "做出符合长期利益的选择",
+        "action": "评估长期收益、考虑职业阶段、分析机会成本",
+        "result": "做出有利于长期发展的选择"
+      },
+      "referenceAnswer": "做出有利于长期发展的选择",
+      "tags": "取决于个人职业阶段和目标。职业早期倾向于选择成长空间大的机会因为能力提升带来长期薪资增长。职业中期需要更平衡考虑。关键是评估成长空间能否转化为未来薪资增长。个人选择倾向于优先考虑成长但设定合理薪资底线。"
+    },
+    {
+      "id": "interview_130",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何准备薪资谈判？",
+      "questionEn": "How do you prepare for salary negotiation?",
+      "tips": "展示你的准备方法和策略思维",
+      "tipsEn": "Show preparation methods and strategic thinking",
+      "starGuide": {
+        "situation": "即将进行薪资谈判",
+        "task": "充分准备争取最佳结果",
+        "action": "市场调研、确定底线、准备论据、模拟谈判",
+        "result": "在谈判中处于有利位置"
+      },
+      "referenceAnswer": "在谈判中处于有利位置",
+      "tags": "准备步骤：1.市场调研了解同行业同岗位薪资范围；2.确定底线明确能接受的最低薪资；3.确定目标设定理想薪资目标；4.准备论据梳理核心竞争力和价值贡献；5.了解对方研究公司薪资体系和福利政策；6.准备替代方案薪资谈不拢其他福利可以争取什么；7.模拟练习与朋友模拟谈判。"
+    },
+    {
+      "id": "interview_131",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你目前的薪资是多少？",
+      "questionEn": "What is your current salary?",
+      "tips": "谨慎回答避免被锁定在现有薪资水平",
+      "tipsEn": "Answer cautiously, avoid being locked at current level",
+      "starGuide": {
+        "situation": "面试官询问当前薪资",
+        "task": "在不不利自己的情况下回答",
+        "action": "提供范围而非精确数字、强调期望薪资、转向价值讨论",
+        "result": "不被现有薪资限制谈判空间"
+      },
+      "referenceAnswer": "不被现有薪资限制谈判空间",
+      "tags": "我目前的总薪酬包大约在XX到XX万之间包括基本薪资奖金和福利。但我更希望讨论基于这个岗位的价值和我的能力来确定的合理薪资。根据我对市场的了解期望的薪资范围是XX到XX。"
+    },
+    {
+      "id": "interview_132",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你会如何要求加薪？",
+      "questionEn": "How would you ask for a raise?",
+      "tips": "展示你的自我价值展示和沟通能力",
+      "tipsEn": "Show self-advocacy and communication",
+      "starGuide": {
+        "situation": "认为自己应该获得加薪",
+        "task": "成功说服上级给予加薪",
+        "action": "准备业绩数据、选择合适时机、提出合理请求",
+        "result": "获得合理的加薪"
+      },
+      "referenceAnswer": "获得合理的加薪",
+      "tags": "先准备详细业绩总结包括过去一年核心成果、超出预期的工作表现、承担的额外责任、对团队的贡献尽量用数据说话。选择合适时机如绩效评估时或完成重要项目后。沟通中先表达对公司认可然后客观展示业绩和价值最后提出具体加薪请求和理由。"
+    },
+    {
+      "id": "interview_133",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果面试官问你还有没有其他offer，你会怎么回答？",
+      "questionEn": "If asked if you have other offers, how would you respond?",
+      "tips": "展示你的诚实和策略",
+      "tipsEn": "Show honesty and strategy",
+      "starGuide": {
+        "situation": "面试官询问是否有其他offer",
+        "task": "诚实回答同时维护谈判地位",
+        "action": "根据实际情况回答、强调对当前公司的兴趣",
+        "result": "既诚实又不损害谈判地位"
+      },
+      "referenceAnswer": "既诚实又不损害谈判地位",
+      "tags": "如果有其他offer：是的我正在与其他几家公司沟通但我最感兴趣的是贵公司这个岗位因为XX原因。如果没有：目前还在面试阶段有几家在推进中但我最希望加入贵公司因为XX。关键是表达对当前公司的强烈兴趣同时展示市场竞争力。"
+    },
+    {
+      "id": "interview_134",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何评估一个offer的总体价值？",
+      "questionEn": "How do you evaluate the total value of an offer?",
+      "tips": "展示你的全面思考能力",
+      "tipsEn": "Show comprehensive thinking",
+      "starGuide": {
+        "situation": "需要评估offer的总体价值",
+        "task": "不只看基本薪资全面评估",
+        "action": "拆解薪酬包、考虑隐性价值、计算时薪",
+        "result": "全面了解offer的真实价值"
+      },
+      "referenceAnswer": "全面了解offer的真实价值",
+      "tags": "评估总体价值考虑：1.直接薪酬基本薪资绩效奖金签字费股票期权；2.福利五险一金缴纳基数和比例补充医疗年假体检；3.隐性价值通勤成本加班频率学习成长机会人脉资源；4.长期价值公司发展前景股票增值潜力职业发展空间。将所有因素量化计算综合价值。"
+    },
+    {
+      "id": "interview_135",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果对方要求你先给出期望薪资，你会怎么做？",
+      "questionEn": "If asked to name your expected salary first, what would you do?",
+      "tips": "展示你的谈判策略",
+      "tipsEn": "Show negotiation strategy",
+      "starGuide": {
+        "situation": "被要求先出价",
+        "task": "避免锚定效应的不利影响",
+        "action": "推迟出价、给出范围、反问对方",
+        "result": "在谈判中保持主动"
+      },
+      "referenceAnswer": "在谈判中保持主动",
+      "tags": "尽量避免先给出具体数字而是先了解岗位薪资范围。如果必须给出提供基于市场调研的合理范围而不是固定数字。例如：根据我对市场的了解和经验期望的薪资范围是XX到XX。当然具体薪资取决于岗位职责整体范围和公司福利体系。请问贵公司这个岗位的薪资范围是怎样的？"
+    },
+    {
+      "id": "interview_136",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何看待股权/期权在薪酬中的比重？",
+      "questionEn": "How do you view equity/options in compensation?",
+      "tips": "展示你的财务知识和风险意识",
+      "tipsEn": "Show financial knowledge and risk awareness",
+      "starGuide": {
+        "situation": "offer中包含股权/期权",
+        "task": "合理评估股权/期权的价值",
+        "action": "了解授予条件、评估公司前景、计算预期价值",
+        "result": "做出明智的判断"
+      },
+      "referenceAnswer": "做出明智的判断",
+      "tags": "股权/期权价值取决于：1.公司阶段初创公司期权风险高但潜在回报大成熟公司股票更稳定；2.授予条件行权价格归属周期兑现条件；3.公司前景行业趋势竞争格局盈利能力；4.流动性是否有上市计划或回购机制。原则是基本薪资满足生活需求股权期权作为额外激励。"
+    },
+    {
+      "id": "interview_137",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你对福利待遇有什么特别的要求？",
+      "questionEn": "Do you have special requirements for benefits?",
+      "tips": "展示你的务实态度和灵活性",
+      "tipsEn": "Show pragmatic attitude and flexibility",
+      "starGuide": {
+        "situation": "讨论福利待遇",
+        "task": "合理表达福利需求",
+        "action": "区分必需和加分项、保持灵活",
+        "result": "获得满意的福利方案"
+      },
+      "referenceAnswer": "获得满意的福利方案",
+      "tags": "除了基本五险一金外比较看重：1.学习发展培训预算技术大会参会机会；2.工作灵活性弹性工作时间远程办公；3.健康保障补充医疗保险年度体检；4.假期带薪年假天数。这些是加分项而非硬性要求会综合考虑整体薪酬包来决定。"
+    },
+    {
+      "id": "interview_138",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "如果两个offer薪资相差30%但低薪的那个你更喜欢，你怎么选？",
+      "questionEn": "If two offers differ by 30% but you prefer the lower one, how would you choose?",
+      "tips": "展示你的价值判断和决策能力",
+      "tipsEn": "Show value judgment and decision-making",
+      "starGuide": {
+        "situation": "薪资和喜好之间的权衡",
+        "task": "做出理性的选择",
+        "action": "量化差异、考虑长期收益、评估机会成本",
+        "result": "做出不后悔的选择"
+      },
+      "referenceAnswer": "做出不后悔的选择",
+      "tags": "仔细权衡：计算30%薪资差异在3-5年内的累计金额，评估高薪offer的其他优势能否弥补低薪offer中获得的满足感。如果低薪offer在成长空间工作内容团队氛围方面明显更好且这些优势能在2-3年内转化为更高收入可能会选择低薪offer。但确保不会因薪资差距在日常工作中感到不满。"
+    },
+    {
+      "id": "interview_139",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何进行薪资的年度复盘？",
+      "questionEn": "How do you conduct an annual salary review?",
+      "tips": "展示你的职业规划意识",
+      "tipsEn": "Show career planning awareness",
+      "starGuide": {
+        "situation": "年底需要评估自己的薪资水平",
+        "task": "客观评估薪资是否合理",
+        "action": "对比市场、评估贡献、制定计划",
+        "result": "为下一年的薪资谈判做准备"
+      },
+      "referenceAnswer": "为下一年的薪资谈判做准备",
+      "tags": "年度薪资复盘：1.市场对比了解同行业同岗位薪资变化；2.贡献评估总结过去一年核心贡献和成长；3.内部公平了解公司内部薪资调整情况；4.差距分析当前薪资与市场水平的差距；5.行动计划如果差距较大制定加薪谈判计划或考虑外部机会。薪资复盘不是单纯追求高薪而是确保付出得到合理回报。"
+    },
+    {
+      "id": "interview_140",
+      "category": "salary",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "在远程办公的情况下，你如何与公司谈薪资？",
+      "questionEn": "How do you negotiate salary for a remote position?",
+      "tips": "展示你对远程工作市场的了解",
+      "tipsEn": "Show understanding of remote work market",
+      "starGuide": {
+        "situation": "远程岗位的薪资谈判",
+        "task": "在远程工作场景下争取合理薪资",
+        "action": "了解远程薪资标准、考虑地区差异、展示自律能力",
+        "result": "获得合理的远程工作薪资"
+      },
+      "referenceAnswer": "获得合理的远程工作薪资",
+      "tags": "远程岗位薪资谈判注意：1.了解远程薪资标准通常会考虑候选人所在地区生活成本；2.展示自律能力远程工作需要很强自我管理能力这是谈判筹码；3.考虑总价值远程工作省去通勤成本和时间也是隐性收入；4.明确工作安排时区差异工作时间出差要求都会影响薪资。"
+    },
+    {
+      "id": "interview_141",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你理想中的工作环境是什么样的？",
+      "questionEn": "What does your ideal work environment look like?",
+      "tips": "展示你的工作偏好和文化匹配度",
+      "tipsEn": "Show work preferences and culture fit",
+      "starGuide": {
+        "situation": "描述理想的工作环境",
+        "task": "展示与公司文化的匹配度",
+        "action": "描述理想环境与公司文化对标",
+        "result": "展示文化契合度"
+      },
+      "referenceAnswer": "展示文化契合度",
+      "tags": "我理想的工作环境是：有清晰的团队目标和方向，同事之间互相信任和支持，有开放包容的沟通氛围，鼓励创新和尝试，同时也有规范的工作流程。贵公司的XX文化与我理想的环境非常契合。"
+    },
+    {
+      "id": "interview_142",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你如何定义成功？",
+      "questionEn": "How do you define success?",
+      "tips": "展示你的价值观和人生观",
+      "tipsEn": "Show values and life philosophy",
+      "starGuide": {
+        "situation": "被问及对成功的定义",
+        "task": "展示积极正向的价值观",
+        "action": "从个人成长、社会贡献、工作成就等维度回答",
+        "result": "展示正确的价值观"
+      },
+      "referenceAnswer": "展示正确的价值观",
+      "tags": "成功是多维度的：职业上能够持续学习和成长在自己的领域做出有价值的贡献；个人层面保持身心健康拥有良好人际关系；社会层面能够帮助他人产生积极影响。成功不是终点而是持续进步的过程。"
+    },
+    {
+      "id": "interview_143",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你最喜欢和最不喜欢的管理风格是什么？",
+      "questionEn": "What is your favorite and least favorite management style?",
+      "tips": "展示你的管理偏好和适应能力",
+      "tipsEn": "Show management preferences and adaptability",
+      "starGuide": {
+        "situation": "讨论管理风格偏好",
+        "task": "展示对不同管理风格的适应能力",
+        "action": "描述偏好展示灵活性",
+        "result": "展示适应能力"
+      },
+      "referenceAnswer": "展示适应能力",
+      "tags": "最喜欢教练式管理——管理者提供方向和资源同时给予充分自主权在需要时给予指导和反馈。最不喜欢微观管理——过度控制每一个细节不信任团队成员。不过不同情境需要不同管理风格我能够适应各种管理方式关键是保持良好沟通。"
+    },
+    {
+      "id": "interview_144",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你如何处理与同事的分歧？",
+      "questionEn": "How do you handle disagreements with colleagues?",
+      "tips": "展示你的沟通技巧和团队精神",
+      "tipsEn": "Show communication and team spirit",
+      "starGuide": {
+        "situation": "与同事产生分歧",
+        "task": "妥善解决分歧维护团队和谐",
+        "action": "倾听、理解、求同存异、寻找共识",
+        "result": "分歧得到妥善解决"
+      },
+      "referenceAnswer": "分歧得到妥善解决",
+      "tags": "面对分歧首先认真倾听对方观点努力理解立场和顾虑。然后清晰表达自己的想法重点放在问题上而不是人身上。寻找双方共同点在此基础上探讨折中方案。如果无法达成一致尊重对方意见同时保留自己看法必要时请第三方协调。"
+    },
+    {
+      "id": "interview_145",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "easy",
+      "question": "你如何理解公司的核心价值观？",
+      "questionEn": "How do you understand the company's core values?",
+      "tips": "展示你对公司文化的了解和认同",
+      "tipsEn": "Show understanding and alignment with company culture",
+      "starGuide": {
+        "situation": "被问及对公司价值观的理解",
+        "task": "展示对公司文化的认同",
+        "action": "阐述理解举例说明如何践行",
+        "result": "展示文化匹配度"
+      },
+      "referenceAnswer": "展示文化匹配度",
+      "tags": "我了解到贵公司的核心价值观是XX、XX、XX。我对XX的理解是在工作中要XX，例如在上一份工作中我XX。对XX的理解是XX，这与我的工作理念高度一致。我非常认同贵公司的文化这也是我选择申请贵公司的重要原因之一。"
+    },
+    {
+      "id": "interview_146",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你在工作中最看重什么？",
+      "questionEn": "What do you value most in your work?",
+      "tips": "展示你的工作动机和价值观",
+      "tipsEn": "Show work motivation and values",
+      "starGuide": {
+        "situation": "被问及工作中最看重的因素",
+        "task": "展示积极的工作动机",
+        "action": "列举核心因素解释原因",
+        "result": "展示与公司文化的匹配"
+      },
+      "referenceAnswer": "展示与公司文化的匹配",
+      "tags": "工作中最看重三个因素：1.成长空间能够持续学习新知识新技能有挑战性的工作内容；2.影响力我的工作能够产生实际的价值和影响；3.团队氛围与优秀的同事一起工作互相学习和支持。这三个因素也是我选择贵公司的原因。"
+    },
+    {
+      "id": "interview_147",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解'主人翁精神'？",
+      "questionEn": "How do you understand ownership mentality?",
+      "tips": "展示你的责任感和主动性",
+      "tipsEn": "Show sense of responsibility and initiative",
+      "starGuide": {
+        "situation": "被问及主人翁精神",
+        "task": "展示你对责任感的理解",
+        "action": "定义概念举例说明",
+        "result": "展示责任心"
+      },
+      "referenceAnswer": "展示责任心",
+      "tags": "主人翁精神就是把公司的事情当成自己的事情来对待。具体表现：1.不推卸责任遇到问题主动解决；2.主动思考不仅完成分配的任务还会思考如何做得更好；3.关注全局不只关注自己的工作范围还会关注团队和公司的整体目标。"
+    },
+    {
+      "id": "interview_148",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何应对公司文化与你个人习惯不一致的情况？",
+      "questionEn": "How do you handle culture differences?",
+      "tips": "展示你的适应能力和开放心态",
+      "tipsEn": "Show adaptability and open-mindedness",
+      "starGuide": {
+        "situation": "公司文化与个人习惯有差异",
+        "task": "积极适应并找到平衡",
+        "action": "理解文化背景、调整自己、保持核心原则",
+        "result": "融入公司文化"
+      },
+      "referenceAnswer": "融入公司文化",
+      "tags": "以开放心态去理解公司文化背后的逻辑和目的。如果差异不大主动调整自己的习惯来适应。如果差异涉及核心原则在合适时机以建设性方式提出看法。融入公司文化并不意味着完全改变自己而是在保持核心价值的前提下积极适应和学习。"
+    },
+    {
+      "id": "interview_149",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解团队合作中的'信任'？",
+      "questionEn": "How do you understand trust in teamwork?",
+      "tips": "展示你对团队关系的理解",
+      "tipsEn": "Show understanding of team relationships",
+      "starGuide": {
+        "situation": "讨论团队合作中的信任",
+        "task": "展示对信任的深刻理解",
+        "action": "定义信任说明如何建立和维护信任",
+        "result": "展示团队意识"
+      },
+      "referenceAnswer": "展示团队意识",
+      "tags": "团队合作中的信任包含：1.能力信任相信队友有能力完成他们的工作；2.意图信任相信队友的出发点是好的；3.承诺信任相信队友会兑现他们的承诺。建立信任需要：说到做到、主动沟通、承认错误、给予支持。"
+    },
+    {
+      "id": "interview_150",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何看待工作中的竞争？",
+      "questionEn": "What is your view on workplace competition?",
+      "tips": "展示你的健康竞争观",
+      "tipsEn": "Show healthy view of competition",
+      "starGuide": {
+        "situation": "讨论工作中的竞争",
+        "task": "展示积极的竞争态度",
+        "action": "区分良性竞争和恶性竞争强调合作共赢",
+        "result": "展示成熟的竞争观"
+      },
+      "referenceAnswer": "展示成熟的竞争观",
+      "tags": "良性的工作竞争是积极的可以激发个人潜能推动团队整体水平提升。但竞争应该是基于能力和贡献的公平竞争而不是内卷或互相倾轧。我更倾向于将竞争转化为合作——通过分享知识和经验来共同进步。在竞争中保持谦逊在合作中展现价值。"
+    },
+    {
+      "id": "interview_151",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解'扁平化管理'？",
+      "questionEn": "How do you understand flat management?",
+      "tips": "展示你的组织理解力",
+      "tipsEn": "Show understanding of organizational structures",
+      "starGuide": {
+        "situation": "讨论扁平化管理",
+        "task": "展示对管理模式的思考",
+        "action": "分析优缺点说明适应方式",
+        "result": "展示管理认知"
+      },
+      "referenceAnswer": "展示管理认知",
+      "tags": "扁平化管理减少管理层级让信息传递更高效决策更快速员工有更大自主权。优点包括沟通效率高创新空间大员工参与感强。挑战包括管理幅度大晋升路径不够清晰需要员工有更强自驱力。我认为扁平化管理适合创新型和快速发展的公司。"
+    },
+    {
+      "id": "interview_152",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解'持续学习'在职场中的重要性？",
+      "questionEn": "How do you understand the importance of continuous learning?",
+      "tips": "展示你的学习态度和方法",
+      "tipsEn": "Show learning attitude and methods",
+      "starGuide": {
+        "situation": "讨论持续学习",
+        "task": "展示学习理念和实际做法",
+        "action": "阐述重要性分享学习方法",
+        "result": "展示成长型思维"
+      },
+      "referenceAnswer": "展示成长型思维",
+      "tags": "在技术快速迭代的时代持续学习不仅是职业发展需要更是保持竞争力的基本要求。学习方法：1.日常学习每天阅读技术文章和行业动态；2.系统学习定期参加在线课程和认证考试；3.实践学习在工作中尝试新技术新方法；4.社交学习参加技术社区和行业会议。学习最重要的是将知识转化为实际能力。"
+    },
+    {
+      "id": "interview_153",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解'客户第一'的理念？",
+      "questionEn": "How do you understand customer first philosophy?",
+      "tips": "展示你的客户服务意识",
+      "tipsEn": "Show customer service awareness",
+      "starGuide": {
+        "situation": "讨论客户第一理念",
+        "task": "展示对客户价值的理解",
+        "action": "阐述理解举例说明",
+        "result": "展示客户思维"
+      },
+      "referenceAnswer": "展示客户思维",
+      "tags": "客户第一意味着在做出任何决策时都要考虑对客户的影响。这不仅仅是客服的态度，更是产品设计的出发点、运营策略的核心、技术优化的方向。在上一份工作中我XX的经历就是践行客户第一理念的体现。"
+    },
+    {
+      "id": "interview_154",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何看待公司的社会责任？",
+      "questionEn": "How do you view corporate social responsibility?",
+      "tips": "展示你的社会责任感",
+      "tipsEn": "Show social responsibility awareness",
+      "starGuide": {
+        "situation": "讨论企业社会责任",
+        "task": "展示对社会贡献的思考",
+        "action": "阐述理解说明个人参与",
+        "result": "展示社会责任感"
+      },
+      "referenceAnswer": "展示社会责任感",
+      "tags": "我认为企业的社会责任不仅仅是慈善捐赠，更包括：1.对员工负责提供公平的薪酬和发展机会；2.对客户负责提供优质的产品和服务；3.对环境负责推行可持续发展；4.对社会负责创造就业和贡献税收。我愿意加入有社会责任感的公司并积极参与相关活动。"
+    },
+    {
+      "id": "interview_155",
+      "category": "culture_fit",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何理解'透明沟通'在团队中的重要性？",
+      "questionEn": "How do you understand transparent communication in teams?",
+      "tips": "展示你对沟通文化的理解",
+      "tipsEn": "Show understanding of communication culture",
+      "starGuide": {
+        "situation": "讨论透明沟通",
+        "task": "展示对沟通文化的思考",
+        "action": "阐述理解举例说明",
+        "result": "展示沟通意识"
+      },
+      "referenceAnswer": "展示沟通意识",
+      "tags": "透明沟通是高效团队的基础。它意味着：1.信息及时共享不让团队成员在信息不对称中工作；2.决策过程公开让每个人理解为什么做出某个决定；3.问题坦诚面对不掩盖不回避；4.反馈直接真诚但尊重对方。透明沟通能减少误解提高效率增强信任。"
+    },
+    {
+      "id": "interview_156",
+      "category": "case_study",
+      "position": "product_manager",
+      "difficulty": "hard",
+      "question": "如果让你从零开始设计一款求职APP，你会怎么做？",
+      "questionEn": "If you were to design a job-seeking APP from scratch, what would you do?",
+      "tips": "展示你的产品思维和系统设计能力",
+      "tipsEn": "Show product thinking and system design",
+      "starGuide": {
+        "situation": "需要从零设计一款求职APP",
+        "task": "系统性地规划产品",
+        "action": "市场调研、用户分析、功能规划、迭代策略",
+        "result": "给出完整的产品设计方案"
+      },
+      "referenceAnswer": "给出完整的产品设计方案",
+      "tags": "步骤：1.市场调研分析竞品和市场缺口；2.用户画像定义目标用户群体；3.核心功能MVP版本（简历管理、职位推荐、面试准备）；4.差异化功能（AI简历优化、模拟面试、薪资分析）；5.商业模式（免费+增值服务）；6.迭代策略基于用户反馈持续优化。"
+    },
+    {
+      "id": "interview_157",
+      "category": "case_study",
+      "position": "software_engineer",
+      "difficulty": "hard",
+      "question": "如果让你设计一个短链接服务，你会怎么做？",
+      "questionEn": "If you were to design a URL shortener service, what would you do?",
+      "tips": "展示你的系统设计能力",
+      "tipsEn": "Show system design ability",
+      "starGuide": {
+        "situation": "需要设计一个短链接服务",
+        "task": "设计高可用短链接系统",
+        "action": "需求分析、方案设计、存储设计、性能优化",
+        "result": "给出完整的系统设计方案"
+      },
+      "referenceAnswer": "给出完整的系统设计方案",
+      "tags": "核心功能：长链接转短链接、短链接跳转。方案设计：1.生成算法（自增ID+Base62编码或MD5+哈希）；2.存储方案（Redis缓存+MySQL持久化）；3.跳转优化（301永久重定向）；4.高可用（读写分离、分库分表）；5.安全（防恶意链接、访问统计）。"
+    },
+    {
+      "id": "interview_158",
+      "category": "case_study",
+      "position": "data_analyst",
+      "difficulty": "hard",
+      "question": "如果公司用户流失率持续上升，你会如何分析？",
+      "questionEn": "If user churn rate is rising, how would you analyze it?",
+      "tips": "展示你的数据分析框架和业务理解",
+      "tipsEn": "Show data analysis framework and business understanding",
+      "starGuide": {
+        "situation": "用户流失率持续上升",
+        "task": "系统分析流失原因并提出解决方案",
+        "action": "数据探索、维度分析、根因定位、提出建议",
+        "result": "找到流失原因并提出改进方案"
+      },
+      "referenceAnswer": "找到流失原因并提出改进方案",
+      "tags": "分析框架：1.数据探索确认流失定义和计算口径；2.时间趋势分析流失率变化拐点和周期性；3.用户维度分析流失用户的特征（注册渠道、使用频率、功能偏好）；4.行为分析流失前的行为模式；5.外部因素竞品动态、市场变化；6.提出假设并验证；7.制定召回策略。"
+    },
+    {
+      "id": "interview_159",
+      "category": "case_study",
+      "position": "marketing",
+      "difficulty": "hard",
+      "question": "如果让你为一个B2B SaaS产品制定获客策略，你会怎么做？",
+      "questionEn": "If you were to create an acquisition strategy for a B2B SaaS product, what would you do?",
+      "tips": "展示你的B2B营销策略能力",
+      "tipsEn": "Show B2B marketing strategy ability",
+      "starGuide": {
+        "situation": "需要为B2B SaaS产品制定获客策略",
+        "task": "制定全面的B2B获客方案",
+        "action": "市场定位、渠道策略、内容策略、转化优化",
+        "result": "给出完整的获客策略"
+      },
+      "referenceAnswer": "给出完整的获客策略",
+      "tags": "策略框架：1.市场定位明确目标客户画像（行业规模、决策链、痛点）；2.渠道策略SEO获取长尾流量、内容营销建立专业形象、行业会议获取精准线索、合作伙伴渠道；3.内容策略白皮书、案例研究、行业报告；4.转化优化着陆页优化、免费试用、销售跟进流程。"
+    },
+    {
+      "id": "interview_160",
+      "category": "case_study",
+      "position": "operations",
+      "difficulty": "hard",
+      "question": "如果产品DAU从100万降到50万，你会如何应对？",
+      "questionEn": "If product DAU dropped from 1M to 500K, how would you respond?",
+      "tips": "展示你的应急处理和数据分析能力",
+      "tipsEn": "Show emergency response and data analysis",
+      "starGuide": {
+        "situation": "产品DAU大幅下降",
+        "task": "快速定位原因并制定恢复方案",
+        "action": "紧急排查、数据分析、制定对策、执行恢复",
+        "result": "DAU恢复到正常水平"
+      },
+      "referenceAnswer": "DAU恢复到正常水平",
+      "tags": "应急响应：1.确认数据准确性排除统计问题；2.紧急排查技术故障、渠道异常、外部因素；3.数据分析按维度拆解找到下降最大的群体和渠道；4.制定恢复方案针对不同原因采取不同策略；5.执行恢复召回流失用户、修复问题、加大投放；6.复盘改进建立预警机制。"
+    },
+    {
+      "id": "interview_161",
+      "category": "case_study",
+      "position": "consultant",
+      "difficulty": "hard",
+      "question": "如果一个传统零售企业希望数字化转型，你会如何建议？",
+      "questionEn": "How would you advise a traditional retailer on digital transformation?",
+      "tips": "展示你的咨询框架和行业理解",
+      "tipsEn": "Show consulting framework and industry understanding",
+      "starGuide": {
+        "situation": "传统零售企业需要数字化转型",
+        "task": "制定数字化转型方案",
+        "action": "现状评估、战略规划、实施路径、风险管控",
+        "result": "给出完整的转型建议"
+      },
+      "referenceAnswer": "给出完整的转型建议",
+      "tags": "咨询框架：1.现状评估业务流程、IT基础、组织能力、客户数据；2.战略规划明确转型目标和愿景（全渠道、数据驱动、智能运营）；3.实施路径分阶段推进（基础数字化→业务数字化→智能化）；4.关键举措（线上渠道建设、数据中台、供应链数字化、会员体系）；5.组织变革建立数字化团队。"
+    },
+    {
+      "id": "interview_162",
+      "category": "case_study",
+      "position": "hr",
+      "difficulty": "hard",
+      "question": "如果公司快速扩张需要一年内团队规模翻倍，你会如何规划？",
+      "questionEn": "If the company needs to double team size in a year, what would you plan?",
+      "tips": "展示你的招聘规划和组织发展能力",
+      "tipsEn": "Show recruitment planning and org development",
+      "starGuide": {
+        "situation": "公司快速扩张需要大量招聘",
+        "task": "制定大规模招聘和组织发展计划",
+        "action": "需求分析、渠道规划、雇主品牌、入职培训",
+        "result": "确保快速扩张的同时保持团队质量"
+      },
+      "referenceAnswer": "确保快速扩张的同时保持团队质量",
+      "tags": "规划方案：1.需求分析各部门人员需求、岗位画像、优先级；2.渠道规划内推激励、校园招聘、社会招聘、猎头合作；3.雇主品牌优化招聘页面、员工故事、公司文化宣传；4.面试流程标准化面试官培训提高效率；5.入职培训设计系统化培训计划加速新人融入；6.文化传承确保快速扩张中文化不稀释。"
+    },
+    {
+      "id": "interview_163",
+      "category": "case_study",
+      "position": "finance",
+      "difficulty": "hard",
+      "question": "如果公司准备进行A轮融资，作为财务负责人你需要做哪些准备？",
+      "questionEn": "If the company is preparing for Series A, what financial preparations are needed?",
+      "tips": "展示你的融资财务准备能力",
+      "tipsEn": "Show financing financial preparation ability",
+      "starGuide": {
+        "situation": "公司准备A轮融资",
+        "task": "做好财务方面的融资准备",
+        "action": "财务梳理、数据准备、估值分析、尽职调查准备",
+        "result": "确保融资过程顺利"
+      },
+      "referenceAnswer": "确保融资过程顺利",
+      "tags": "准备工作：1.财务报表梳理确保账目清晰合规；2.财务模型建立详细的收入预测和成本模型；3.关键业务指标整理用户增长、收入、毛利率等核心指标；4.估值分析参考行业可比公司；5.尽职调查准备提前整理好所有财务文档和合同；6.税务合规确保无税务风险；7.资金使用规划明确融资资金用途。"
+    },
+    {
+      "id": "interview_164",
+      "category": "case_study",
+      "position": "sales",
+      "difficulty": "hard",
+      "question": "如果让你开拓一个全新的市场区域，你会怎么做？",
+      "questionEn": "If you were to open a new market region, what would you do?",
+      "tips": "展示你的市场开拓能力",
+      "tipsEn": "Show market development ability",
+      "starGuide": {
+        "situation": "需要开拓全新市场区域",
+        "task": "制定市场开拓策略和执行计划",
+        "action": "市场调研、策略制定、团队组建、执行推进",
+        "result": "成功开拓新市场"
+      },
+      "referenceAnswer": "成功开拓新市场",
+      "tags": "开拓步骤：1.市场调研市场规模、竞争格局、客户需求、渠道特点；2.策略制定目标客户定位、产品适配、定价策略、渠道策略；3.团队组建招聘当地销售、培训产品知识；4.试点推进选择1-2个重点客户建立标杆案例；5.复制推广基于试点经验快速复制；6.持续优化根据市场反馈调整策略。"
+    },
+    {
+      "id": "interview_165",
+      "category": "case_study",
+      "position": "ui_designer",
+      "difficulty": "hard",
+      "question": "如果让你重新设计一个常用的APP（如微信），你会从哪些方面入手？",
+      "questionEn": "If you were to redesign a popular APP like WeChat, where would you start?",
+      "tips": "展示你的设计思维和批判性分析能力",
+      "tipsEn": "Show design thinking and critical analysis",
+      "starGuide": {
+        "situation": "重新设计一个常用APP",
+        "task": "展示设计分析能力和创新思维",
+        "action": "用户研究、痛点分析、创新方案、设计验证",
+        "result": "给出有见地的重新设计方案"
+      },
+      "referenceAnswer": "给出有见地的重新设计方案",
+      "tags": "分析步骤：1.用户研究现有用户痛点和未被满足的需求；2.竞品分析国内外同类产品的优秀设计；3.信息架构重新梳理核心功能和信息层级；4.交互优化简化高频操作流程；5.视觉升级统一设计语言提升品质感；6.创新功能基于用户需求提出差异化功能；7.可用性测试验证新设计的有效性。"
+    },
+    {
+      "id": "interview_166",
+      "category": "case_study",
+      "position": "general",
+      "difficulty": "hard",
+      "question": "如果公司面临业务转型，作为员工你会如何应对？",
+      "questionEn": "If the company is facing business transformation, how would you respond?",
+      "tips": "展示你的适应能力和职业判断",
+      "tipsEn": "Show adaptability and career judgment",
+      "starGuide": {
+        "situation": "公司面临业务转型",
+        "task": "积极应对变化",
+        "action": "了解转型方向、评估自身适配性、主动学习、做出选择",
+        "result": "在转型中找到自己的位置"
+      },
+      "referenceAnswer": "在转型中找到自己的位置",
+      "tags": "应对策略：1.了解转型深入了解公司转型的方向、原因和计划；2.评估适配性分析新业务方向与自身技能的匹配度；3.主动学习快速学习新业务所需的知识和技能；4.积极沟通表达对新方向的兴趣和想法；5.保持开放如果转型方向确实不适合自己也要理性评估做好两手准备。"
+    },
+    {
+      "id": "interview_167",
+      "category": "case_study",
+      "position": "general",
+      "difficulty": "hard",
+      "question": "如果让你负责一个跨部门的大型项目，你会如何管理？",
+      "questionEn": "If you were to lead a large cross-department project, how would you manage it?",
+      "tips": "展示你的项目管理能力",
+      "tipsEn": "Show project management ability",
+      "starGuide": {
+        "situation": "负责跨部门大型项目",
+        "task": "确保项目成功交付",
+        "action": "项目规划、团队组建、进度管理、风险管理",
+        "result": "给出完整的项目管理方案"
+      },
+      "referenceAnswer": "给出完整的项目管理方案",
+      "tags": "管理框架：1.项目规划明确目标范围时间线里程碑；2.团队组建明确各角色职责建立沟通机制；3.进度管理制定详细WBS分解定期同步进度；4.风险管理识别关键风险制定应对预案；5.质量管理定义验收标准进行阶段性评审；6.沟通管理建立定期汇报机制确保信息透明；7.变更管理控制需求变更的影响。"
+    },
+    {
+      "id": "interview_168",
+      "category": "case_study",
+      "position": "general",
+      "difficulty": "hard",
+      "question": "如果团队中有两个核心成员同时要离职，你会怎么做？",
+      "questionEn": "If two core team members want to leave simultaneously, what would you do?",
+      "tips": "展示你的危机处理和人才保留能力",
+      "tipsEn": "Show crisis management and talent retention",
+      "starGuide": {
+        "situation": "两个核心成员同时要离职",
+        "task": "紧急处理人才流失危机",
+        "action": "了解原因、挽留沟通、知识转移、补充计划",
+        "result": "将影响降到最低"
+      },
+      "referenceAnswer": "将影响降到最低",
+      "tags": "应对步骤：1.了解原因分别与两人深入沟通了解离职真实原因；2.挽留沟通如果有挽留空间提出有吸引力的条件；3.知识转移如果确定离职立即启动知识转移确保业务连续性；4.补充计划启动紧急招聘同时考虑内部晋升和临时调配；5.团队稳定与其他成员沟通稳定军心；6.复盘反思分析根本原因防止再次发生。"
+    },
+    {
+      "id": "interview_169",
+      "category": "case_study",
+      "position": "general",
+      "difficulty": "hard",
+      "question": "如果让你制定一个新员工的90天入职计划，你会怎么做？",
+      "questionEn": "If you were to create a 90-day onboarding plan, what would you do?",
+      "tips": "展示你的培训规划和组织能力",
+      "tipsEn": "Show training planning and organizational ability",
+      "starGuide": {
+        "situation": "需要制定新员工入职计划",
+        "task": "设计系统化的90天入职方案",
+        "action": "分阶段规划、设定目标、安排资源",
+        "result": "新员工快速融入并产出价值"
+      },
+      "referenceAnswer": "新员工快速融入并产出价值",
+      "tags": "90天计划：第1-30天（学习期）了解公司文化业务流程产品知识，完成基础培训，与团队成员建立关系。第31-60天（实践期）参与实际项目在指导下完成具体任务，参加代码/方案评审。第61-90天（独立期）独立负责小模块或小项目，提出改进建议，完成试用期评估。"
+    },
+    {
+      "id": "interview_170",
+      "category": "case_study",
+      "position": "general",
+      "difficulty": "hard",
+      "question": "如果公司的产品在市场上遇到了强有力的新竞争对手，你会怎么做？",
+      "questionEn": "If a strong new competitor entered the market, what would you do?",
+      "tips": "展示你的竞争应对策略",
+      "tipsEn": "Show competitive response strategy",
+      "starGuide": {
+        "situation": "面临强有力的新竞争对手",
+        "task": "制定竞争应对策略",
+        "action": "竞品分析、差异化定位、快速迭代",
+        "result": "在竞争中保持优势"
+      },
+      "referenceAnswer": "在竞争中保持优势",
+      "tags": "应对策略：1.深入分析竞品产品功能、定价策略、目标用户、营销方式；2.差异化定位找到竞品的弱点突出自身独特优势；3.用户防御加强核心用户维护提升切换成本；4.快速迭代基于竞品动态加速产品创新；5.市场策略调整营销策略强化品牌差异化；6.长期壁垒构建技术和生态壁垒提高竞争门槛。"
+    },
+    {
+      "id": "interview_171",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何定义好的领导力？",
+      "questionEn": "How do you define good leadership?",
+      "tips": "展示你的领导理念",
+      "tipsEn": "Show your leadership philosophy",
+      "starGuide": {
+        "situation": "被问及对领导力的理解",
+        "task": "阐述你的领导理念",
+        "action": "定义领导力、列举核心特质、举例说明",
+        "result": "展示成熟的领导观"
+      },
+      "referenceAnswer": "展示成熟的领导观",
+      "tags": "好的领导力包括：1.愿景能力能够为团队指明方向；2.同理心能够理解和支持团队成员；3.决策力能够在复杂情况下做出正确判断；4.执行力能够将目标转化为实际行动；5.成长心态能够从失败中学习并帮助他人成长。领导力不是职位而是影响力。"
+    },
+    {
+      "id": "interview_172",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何激励团队成员？",
+      "questionEn": "How do you motivate team members?",
+      "tips": "展示你的团队激励方法",
+      "tipsEn": "Show team motivation methods",
+      "starGuide": {
+        "situation": "需要激励团队成员提升积极性",
+        "task": "制定有效的激励方案",
+        "action": "了解需求、设定目标、提供反馈、创造环境",
+        "result": "团队成员积极性显著提升"
+      },
+      "referenceAnswer": "团队成员积极性显著提升",
+      "tags": "激励方法：1.了解需求不同人有不同的驱动力（成就感、学习成长、薪酬认可）；2.设定目标帮助成员设定有挑战性但可达成的工作目标；3.及时反馈对好的表现给予及时认可和赞赏；4.赋予权责给予足够的自主权和决策空间；5.创造环境营造积极向上的团队氛围。"
+    },
+    {
+      "id": "interview_173",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何处理团队中的低绩效员工？",
+      "questionEn": "How do you handle underperforming team members?",
+      "tips": "展示你的绩效管理能力",
+      "tipsEn": "Show performance management ability",
+      "starGuide": {
+        "situation": "团队中有员工绩效不达标",
+        "task": "帮助低绩效员工提升或做出合理处理",
+        "action": "诊断原因、制定计划、跟踪进度、做出决策",
+        "result": "低绩效员工得到改善或合理处理"
+      },
+      "referenceAnswer": "低绩效员工得到改善或合理处理",
+      "tags": "处理步骤：1.诊断原因是能力问题还是态度问题还是外部因素；2.坦诚沟通与员工进行一对一沟通了解情况表达关切；3.制定计划共同制定绩效改进计划PI设定明确目标和时间表；4.提供支持提供必要的培训和资源；5.跟踪进度定期检查改进情况给予反馈；6.做出决策如果改进无效按公司流程处理。"
+    },
+    {
+      "id": "interview_174",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何培养团队的创新能力？",
+      "questionEn": "How do you foster team innovation?",
+      "tips": "展示你的创新管理能力",
+      "tipsEn": "Show innovation management ability",
+      "starGuide": {
+        "situation": "需要提升团队的创新能力",
+        "task": "营造创新的团队文化",
+        "action": "建立机制、鼓励尝试、容忍失败、知识分享",
+        "result": "团队创新能力显著提升"
+      },
+      "referenceAnswer": "团队创新能力显著提升",
+      "tags": "培养方法：1.建立机制设立创新时间如Google的20%时间鼓励员工探索新想法；2.鼓励尝试对新的想法给予试点的机会和资源；3.容忍失败将失败视为学习机会而不是惩罚的理由；4.知识分享定期组织技术分享和头脑风暴；5.跨团队交流促进不同团队之间的交流和碰撞。"
+    },
+    {
+      "id": "interview_175",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何进行有效的授权？",
+      "questionEn": "How do you delegate effectively?",
+      "tips": "展示你的授权能力",
+      "tipsEn": "Show delegation ability",
+      "starGuide": {
+        "situation": "需要在团队中进行有效授权",
+        "task": "合理分配任务和权限",
+        "action": "评估能力、明确目标、提供支持、跟踪进度",
+        "result": "团队成员得到成长工作效率提升"
+      },
+      "referenceAnswer": "团队成员得到成长工作效率提升",
+      "tags": "授权步骤：1.评估能力了解团队成员的能力和发展需求；2.选择任务选择适合授权的任务（有挑战性但可完成）；3.明确目标清晰说明任务目标、期望结果和截止时间；4.授予权力给予完成任务所需的决策权限和资源；5.提供支持在需要时提供指导和帮助但不过度干预；6.跟踪进度定期检查进展给予反馈。"
+    },
+    {
+      "id": "interview_176",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何建立高效的团队沟通机制？",
+      "questionEn": "How do you build effective team communication?",
+      "tips": "展示你的沟通管理能力",
+      "tipsEn": "Show communication management ability",
+      "starGuide": {
+        "situation": "需要建立高效的团队沟通",
+        "task": "设计适合团队的沟通机制",
+        "action": "分析需求、选择工具、建立规则、持续优化",
+        "result": "团队沟通效率显著提升"
+      },
+      "referenceAnswer": "团队沟通效率显著提升",
+      "tags": "建立步骤：1.分析需求了解团队规模、工作模式、信息流转需求；2.选择工具根据需求选择合适的沟通工具（即时通讯、项目管理、文档协作）；3.建立规则明确什么信息通过什么渠道传达、响应时间要求；4.定期会议设立每日站会、周会、月度回顾等节奏；5.文档化重要决策和讨论结果要文档化；6.持续优化定期评估沟通效果并调整。"
+    },
+    {
+      "id": "interview_177",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何在压力下带领团队？",
+      "questionEn": "How do you lead a team under pressure?",
+      "tips": "展示你的压力领导能力",
+      "tipsEn": "Show ability to lead under pressure",
+      "starGuide": {
+        "situation": "团队面临巨大压力",
+        "task": "在压力下保持团队高效运转",
+        "action": "保持冷静、明确方向、合理分配、关注状态",
+        "result": "团队在压力下表现出色"
+      },
+      "referenceAnswer": "团队在压力下表现出色",
+      "tags": "方法：1.保持冷静领导者情绪会传染给团队保持冷静和理性；2.明确方向在混乱中为团队提供清晰的方向和优先级；3.合理分配根据成员能力和状态合理分配工作避免过度集中；4.关注状态关注团队成员的心理状态及时提供支持；5.小步快跑将大目标分解为小里程碑每完成一个就庆祝增强信心。"
+    },
+    {
+      "id": "interview_178",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何给团队成员提供有效的反馈？",
+      "questionEn": "How do you give effective feedback to team members?",
+      "tips": "展示你的反馈技巧",
+      "tipsEn": "Show feedback skills",
+      "starGuide": {
+        "situation": "需要给团队成员提供反馈",
+        "task": "提供有建设性的反馈",
+        "action": "及时、具体、客观、双向",
+        "result": "反馈被接受并产生积极效果"
+      },
+      "referenceAnswer": "反馈被接受并产生积极效果",
+      "tags": "反馈原则：1.及时在事件发生后尽快反馈不要等到绩效评估；2.具体描述具体的行为和影响而不是模糊的评价；3.客观基于事实和数据而不是主观判断；4.双向鼓励对方表达观点和感受；5.建设性不仅指出问题还要提供改进建议；6.私下负面反馈一定要私下进行保护对方自尊。"
+    },
+    {
+      "id": "interview_179",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何处理团队中的办公室政治？",
+      "questionEn": "How do you handle office politics in your team?",
+      "tips": "展示你的政治敏感度和处理能力",
+      "tipsEn": "Show political awareness and handling ability",
+      "starGuide": {
+        "situation": "团队中存在办公室政治",
+        "task": "减少政治对团队的负面影响",
+        "action": "保持中立、建立透明、关注目标、以身作则",
+        "result": "团队氛围保持健康"
+      },
+      "referenceAnswer": "团队氛围保持健康",
+      "tags": "处理方式：1.保持中立不参与任何小团体或站队；2.建立透明推动信息透明和决策公开减少政治空间；3.关注目标引导团队将注意力集中在工作目标上；4.以身作则用专业和正直赢得信任；5.及时干预发现政治行为影响团队时及时介入处理；6.建立规则制定明确的团队行为准则。"
+    },
+    {
+      "id": "interview_180",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何做出艰难的决策？",
+      "questionEn": "How do you make tough decisions?",
+      "tips": "展示你的决策框架",
+      "tipsEn": "Show your decision-making framework",
+      "starGuide": {
+        "situation": "面临艰难的决策",
+        "task": "做出正确且果断的决策",
+        "action": "收集信息、分析利弊、听取意见、果断执行",
+        "result": "做出经得起检验的决策"
+      },
+      "referenceAnswer": "做出经得起检验的决策",
+      "tags": "决策框架：1.明确问题准确理解需要决策的问题和约束条件；2.收集信息尽可能收集全面和准确的信息；3.分析选项列出所有可能的选项分析各自的利弊和风险；4.听取意见征询相关方的观点特别是不同意见；5.做出决策在分析基础上果断做出决策不拖延；6.执行跟进坚定执行并根据反馈及时调整。"
+    },
+    {
+      "id": "interview_181",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何管理远程团队？",
+      "questionEn": "How do you manage a remote team?",
+      "tips": "展示你的远程管理能力",
+      "tipsEn": "Show remote team management ability",
+      "starGuide": {
+        "situation": "需要管理远程工作的团队",
+        "task": "确保远程团队高效协作",
+        "action": "建立信任、明确期望、保持沟通、关注结果",
+        "result": "远程团队高效运转"
+      },
+      "referenceAnswer": "远程团队高效运转",
+      "tags": "管理要点：1.建立信任通过一致的言行和透明的沟通建立信任基础；2.明确期望清晰定义工作目标、交付标准和沟通规范；3.保持沟通增加一对一沟通频率使用视频会议保持连接感；4.关注结果以结果为导向而非以工作时间为导向；5.团队建设定期组织线上团队活动增强凝聚力；6.文档化所有重要信息都要文档化。"
+    },
+    {
+      "id": "interview_182",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何进行团队建设？",
+      "questionEn": "How do you build team cohesion?",
+      "tips": "展示你的团队建设能力",
+      "tipsEn": "Show team building ability",
+      "starGuide": {
+        "situation": "需要增强团队凝聚力",
+        "task": "设计有效的团队建设方案",
+        "action": "了解团队、设计活动、营造文化、持续投入",
+        "result": "团队凝聚力显著增强"
+      },
+      "referenceAnswer": "团队凝聚力显著增强",
+      "tags": "建设方法：1.了解团队通过一对一沟通了解每个成员的特点和需求；2.共同目标确保团队成员对团队目标有清晰的共识；3.团建活动定期组织有意义的团建活动不限于吃喝玩乐；4.知识分享鼓励成员分享专业知识和经验促进互相学习；5.认可贡献及时公开认可每个成员的贡献；6.解决冲突及时发现和处理团队内部矛盾。"
+    },
+    {
+      "id": "interview_183",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何管理向上期望？",
+      "questionEn": "How do you manage upward expectations?",
+      "tips": "展示你的向上管理能力",
+      "tipsEn": "Show upward management ability",
+      "starGuide": {
+        "situation": "需要管理上级的期望",
+        "task": "合理设定和管理上级期望",
+        "action": "了解期望、主动沟通、管理承诺、超出预期",
+        "result": "上级对工作成果满意"
+      },
+      "referenceAnswer": "上级对工作成果满意",
+      "tags": "管理方法：1.了解期望明确上级对工作成果的期望和优先级；2.主动沟通定期向上级汇报进展不要等被问；3.合理承诺不要过度承诺只承诺能做到的；4.提前预警如果可能无法按时完成提前告知并提出解决方案；5.超出预期在承诺的基础上争取超出预期；6.对齐目标确保自己的工作目标与上级的目标一致。"
+    },
+    {
+      "id": "interview_184",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何在资源不足的情况下带领团队？",
+      "questionEn": "How do you lead a team with limited resources?",
+      "tips": "展示你的资源整合和创造力",
+      "tipsEn": "Show resource integration and creativity",
+      "starGuide": {
+        "situation": "团队资源不足但需要完成任务",
+        "task": "在资源约束下带领团队达成目标",
+        "action": "优先级管理、资源整合、创新方法、团队激励",
+        "result": "在资源不足的情况下达成目标"
+      },
+      "referenceAnswer": "在资源不足的情况下达成目标",
+      "tags": "方法：1.优先级管理聚焦最核心的目标砍掉非必要的功能；2.资源整合充分利用现有资源寻找免费或低成本替代方案；3.创新方法用不同的方式解决问题而不是用更多资源；4.借力合作与其他团队或外部合作伙伴共享资源；5.团队激励在困难时期更需要激励团队保持士气；6.向上沟通及时向上级反映资源状况争取支持。"
+    },
+    {
+      "id": "interview_185",
+      "category": "leadership",
+      "position": "general",
+      "difficulty": "medium",
+      "question": "你如何帮助团队成员制定职业发展计划？",
+      "questionEn": "How do you help team members with career development plans?",
+      "tips": "展示你的教练式领导能力",
+      "tipsEn": "Show coaching leadership ability",
+      "starGuide": {
+        "situation": "需要帮助团队成员规划职业发展",
+        "task": "制定个性化的职业发展计划",
+        "action": "了解意愿、评估能力、制定计划、提供支持",
+        "result": "团队成员实现职业成长"
+      },
+      "referenceAnswer": "团队成员实现职业成长",
+      "tags": "步骤：1.了解意愿与成员深入沟通了解他们的职业目标和兴趣方向；2.评估能力客观评估成员当前的能力水平和差距；3.制定计划共同制定短期和长期的职业发展计划；4.提供机会在工作中安排有挑战性的任务和学习机会；5.反馈指导定期给予反馈和职业发展指导；6.资源支持提供培训、导师等发展资源。"
+    },
+    {
+      "id": "interview_186",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "描述一次你在跨文化环境中工作的经历",
+      "question": "Describe working in a cross-cultural environment",
+      "questionEn": "展示你的跨文化沟通能力",
+      "tips": "Show cross-cultural communication",
+      "tipsEn": "在多元文化背景的团队中工作",
+      "starGuide": {
+        "situation": "适应不同文化的工作方式",
+        "task": "了解文化差异、尊重差异、找到共同工作方式",
+        "action": "在多元文化环境中高效协作",
+        "result": "在一家跨国公司工作时，团队成员来自5个不同的国家。我主动了解各国的工作文化和沟通习惯，在会议中注意时区安排，在沟通中避免文化敏感话题。最终团队形成了包容高效的工作方式。"
+      },
+      "referenceAnswer": "在一家跨国公司工作时，团队成员来自5个不同的国家。我主动了解各国的工作文化和沟通习惯，在会议中注意时区安排，在沟通中避免文化敏感话题。最终团队形成了包容高效的工作方式。",
+      "tags": [
+        "通用",
+        "跨文化",
+        "多样性"
+      ]
+    },
+    {
+      "id": "interview_187",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "描述一次你通过数据分析发现业务机会的经历",
+      "question": "Describe discovering a business opportunity through data analysis",
+      "questionEn": "展示你的数据驱动业务能力",
+      "tips": "Show data-driven business ability",
+      "tipsEn": "通过数据分析发现潜在的业务机会",
+      "starGuide": {
+        "situation": "将数据洞察转化为业务行动",
+        "task": "数据探索、发现模式、提出建议、推动实施",
+        "action": "成功将数据洞察转化为业务成果",
+        "result": "在分析用户行为数据时，我发现有一批用户虽然活跃度不高但消费能力很强。我建议针对这批用户推出高端会员服务。方案实施后，这批用户的月均消费提升了40%，为公司带来了可观的收入增长。"
+      },
+      "referenceAnswer": "在分析用户行为数据时，我发现有一批用户虽然活跃度不高但消费能力很强。我建议针对这批用户推出高端会员服务。方案实施后，这批用户的月均消费提升了40%，为公司带来了可观的收入增长。",
+      "tags": [
+        "通用",
+        "数据分析",
+        "业务洞察"
+      ]
+    },
+    {
+      "id": "interview_188",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "描述一次你在资源冲突时如何协调的经历",
+      "question": "Describe resolving resource conflicts",
+      "questionEn": "展示你的资源协调能力",
+      "tips": "Show resource coordination ability",
+      "tipsEn": "多个项目或团队争夺有限资源",
+      "starGuide": {
+        "situation": "合理分配资源确保各方利益",
+        "task": "评估优先级、寻找替代方案、协调各方",
+        "action": "资源得到合理分配各方满意",
+        "result": "两个项目同时需要使用测试环境，但环境资源有限。我评估了两个项目的紧急程度和上线时间，与两个项目负责人协商，制定了错峰使用方案。同时申请了额外的测试资源。最终两个项目都按时完成了测试。"
+      },
+      "referenceAnswer": "两个项目同时需要使用测试环境，但环境资源有限。我评估了两个项目的紧急程度和上线时间，与两个项目负责人协商，制定了错峰使用方案。同时申请了额外的测试资源。最终两个项目都按时完成了测试。",
+      "tags": [
+        "通用",
+        "资源协调",
+        "项目管理"
+      ]
+    },
+    {
+      "id": "interview_189",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "描述一次你帮助新人快速融入团队的经历",
+      "question": "Describe helping a new team member integrate quickly",
+      "questionEn": "展示你的导师能力",
+      "tips": "Show mentoring ability",
+      "tipsEn": "新员工需要快速融入团队",
+      "starGuide": {
+        "situation": "帮助新人快速上手并融入",
+        "task": "制定入职计划、安排导师、定期跟进",
+        "action": "新人快速融入并开始产出价值",
+        "result": "我负责指导一位新入职的同事。我为他制定了一个30天的入职计划，包括学习路线、任务安排和里程碑。第一周重点了解业务和团队，第二周参与实际项目，第三周独立承担小任务。同时我每天花15分钟回答他的问题。他在一个月后就成为了团队的有效贡献者。"
+      },
+      "referenceAnswer": "我负责指导一位新入职的同事。我为他制定了一个30天的入职计划，包括学习路线、任务安排和里程碑。第一周重点了解业务和团队，第二周参与实际项目，第三周独立承担小任务。同时我每天花15分钟回答他的问题。他在一个月后就成为了团队的有效贡献者。",
+      "tags": [
+        "通用",
+        "导师",
+        "团队建设"
+      ]
+    },
+    {
+      "id": "interview_190",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "描述一次你在不确定的市场环境中做出正确决策的经历",
+      "question": "Describe making a correct decision in an uncertain market",
+      "questionEn": "展示你的商业判断力",
+      "tips": "Show business judgment",
+      "tipsEn": "市场环境不确定但需要做出重要决策",
+      "starGuide": {
+        "situation": "在信息不充分时做出正确判断",
+        "task": "收集信息、分析趋势、评估风险、果断决策",
+        "action": "在不确定环境中做出正确决策",
+        "result": "在市场趋势不明朗时，公司需要决定是否进入一个新市场。我通过分析行业数据、用户调研和竞品动态，判断这个市场虽然短期有风险但长期潜力巨大。我建议小规模试点进入，设定明确的评估指标。事实证明这个决策是正确的，我们抢占了先发优势。"
+      },
+      "referenceAnswer": "在市场趋势不明朗时，公司需要决定是否进入一个新市场。我通过分析行业数据、用户调研和竞品动态，判断这个市场虽然短期有风险但长期潜力巨大。我建议小规模试点进入，设定明确的评估指标。事实证明这个决策是正确的，我们抢占了先发优势。",
+      "tags": [
+        "通用",
+        "商业判断",
+        "决策"
+      ]
+    },
+    {
+      "id": "interview_191",
+      "category": "software_engineer",
+      "position": "medium",
+      "difficulty": "请解释什么是领域驱动设计（DDD）？",
+      "question": "Explain Domain-Driven Design (DDD)",
+      "questionEn": "从战略设计和战术设计两方面回答",
+      "tips": "Cover strategic and tactical design",
+      "tipsEn": "面试官考察架构设计方法论",
+      "starGuide": {
+        "situation": "解释DDD的核心概念和应用",
+        "task": "战略设计、战术设计、实际应用",
+        "action": "展示DDD知识深度",
+        "result": "DDD是一种以业务领域为中心的软件设计方法。战略设计包括：限界上下文划分领域边界、统一语言建立团队共识、上下文映射管理上下文关系。战术设计包括：实体、值对象、聚合根、领域服务、领域事件、仓储。适用于业务逻辑复杂的系统。"
+      },
+      "referenceAnswer": "DDD是一种以业务领域为中心的软件设计方法。战略设计包括：限界上下文划分领域边界、统一语言建立团队共识、上下文映射管理上下文关系。战术设计包括：实体、值对象、聚合根、领域服务、领域事件、仓储。适用于业务逻辑复杂的系统。",
+      "tags": [
+        "技术",
+        "DDD",
+        "架构"
+      ]
+    },
+    {
+      "id": "interview_192",
+      "category": "software_engineer",
+      "position": "medium",
+      "difficulty": "什么是消息队列？常见的消息队列有哪些？",
+      "question": "What is a message queue? What are common MQ systems?",
+      "questionEn": "从概念、类型、应用场景等方面回答",
+      "tips": "Cover concepts, types, use cases",
+      "tipsEn": "面试官考察中间件知识",
+      "starGuide": {
+        "situation": "解释消息队列概念和常见实现",
+        "task": "定义概念、分类介绍、应用场景",
+        "action": "展示中间件知识",
+        "result": "消息队列是一种异步通信机制。按消费模式分为：点对点（Queue）和发布订阅（Topic）。常见实现：RabbitMQ（功能丰富适合复杂路由）、Kafka（高吞吐适合日志和流处理）、RocketMQ（事务消息适合金融场景）、Pulsar（多租户云原生）。应用场景：异步处理、应用解耦、流量削峰。"
+      },
+      "referenceAnswer": "消息队列是一种异步通信机制。按消费模式分为：点对点（Queue）和发布订阅（Topic）。常见实现：RabbitMQ（功能丰富适合复杂路由）、Kafka（高吞吐适合日志和流处理）、RocketMQ（事务消息适合金融场景）、Pulsar（多租户云原生）。应用场景：异步处理、应用解耦、流量削峰。",
+      "tags": [
+        "技术",
+        "消息队列",
+        "中间件"
+      ]
+    },
+    {
+      "id": "interview_193",
+      "category": "software_engineer",
+      "position": "medium",
+      "difficulty": "请解释什么是OAuth2.0和JWT？",
+      "question": "Explain OAuth2.0 and JWT",
+      "questionEn": "从认证授权和令牌机制回答",
+      "tips": "Cover authentication and token mechanism",
+      "tipsEn": "面试官考察安全和认证知识",
+      "starGuide": {
+        "situation": "解释OAuth2.0和JWT的概念和区别",
+        "task": "OAuth2.0流程、JWT结构、各自用途",
+        "action": "展示安全和认证知识",
+        "result": "OAuth2.0是授权框架，定义了四种授权模式：授权码模式、隐式模式、密码模式、客户端凭证模式。JWT是JSON Web Token，由Header、Payload、Signature三部分组成，用于在各方之间安全传输信息。OAuth2.0解决授权问题，JWT解决身份验证和信息传递问题。两者经常配合使用。"
+      },
+      "referenceAnswer": "OAuth2.0是授权框架，定义了四种授权模式：授权码模式、隐式模式、密码模式、客户端凭证模式。JWT是JSON Web Token，由Header、Payload、Signature三部分组成，用于在各方之间安全传输信息。OAuth2.0解决授权问题，JWT解决身份验证和信息传递问题。两者经常配合使用。",
+      "tags": [
+        "技术",
+        "安全",
+        "认证"
+      ]
+    },
+    {
+      "id": "interview_194",
+      "category": "data_analyst",
+      "position": "medium",
+      "difficulty": "什么是因果推断？在业务分析中如何应用？",
+      "question": "What is causal inference? How to apply it in business analysis?",
+      "questionEn": "从因果vs相关、常用方法等方面回答",
+      "tips": "Cover causation vs correlation, common methods",
+      "tipsEn": "面试官考察高级分析能力",
+      "starGuide": {
+        "situation": "解释因果推断概念和业务应用",
+        "task": "区分因果和相关、介绍常用方法",
+        "action": "展示高级分析能力",
+        "result": "因果推断是从数据中识别因果关系的方法。与相关性分析不同，因果推断关注的是一个变量是否真正导致另一个变量的变化。常用方法：1.随机对照实验（A/B测试）最可靠；2.工具变量法；3.双重差分法；4.倾向得分匹配。在业务中用于评估营销活动的真实效果、产品改动的因果影响等。"
+      },
+      "referenceAnswer": "因果推断是从数据中识别因果关系的方法。与相关性分析不同，因果推断关注的是一个变量是否真正导致另一个变量的变化。常用方法：1.随机对照实验（A/B测试）最可靠；2.工具变量法；3.双重差分法；4.倾向得分匹配。在业务中用于评估营销活动的真实效果、产品改动的因果影响等。",
+      "tags": [
+        "数据",
+        "因果推断",
+        "高级分析"
+      ]
+    },
+    {
+      "id": "interview_195",
+      "category": "data_analyst",
+      "position": "medium",
+      "difficulty": "请解释什么是用户生命周期价值（LTV）以及如何计算？",
+      "question": "Explain Customer Lifetime Value (LTV) and how to calculate it",
+      "questionEn": "从定义、计算方法、应用场景等方面回答",
+      "tips": "Cover definition, calculation, applications",
+      "tipsEn": "面试官考察用户分析能力",
+      "starGuide": {
+        "situation": "解释LTV概念和计算方法",
+        "task": "定义LTV、介绍计算方法、说明应用场景",
+        "action": "展示用户分析能力",
+        "result": "LTV是用户在整个生命周期内为企业创造的总价值。计算方法：1.历史法LTV=历史总消费金额；2.预测法LTV=平均客单价×购买频率×平均生命周期。更精确的预测可以使用 cohort 分析或概率模型。LTV的应用：评估获客成本是否合理（LTV/CAC>3为健康）、用户分群、资源分配。"
+      },
+      "referenceAnswer": "LTV是用户在整个生命周期内为企业创造的总价值。计算方法：1.历史法LTV=历史总消费金额；2.预测法LTV=平均客单价×购买频率×平均生命周期。更精确的预测可以使用 cohort 分析或概率模型。LTV的应用：评估获客成本是否合理（LTV/CAC>3为健康）、用户分群、资源分配。",
+      "tags": [
+        "数据",
+        "LTV",
+        "用户分析"
+      ]
+    },
+    {
+      "id": "interview_196",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "如果你的直属上级频繁更换，你会如何适应？",
+      "question": "If your direct supervisor changes frequently, how would you adapt?",
+      "questionEn": "展示你的适应能力和职业素养",
+      "tips": "Show adaptability and professionalism",
+      "tipsEn": "直属上级频繁更换",
+      "starGuide": {
+        "situation": "快速适应新领导的工作风格",
+        "task": "了解新领导、主动沟通、保持一致性",
+        "action": "在新领导下保持高效工作",
+        "result": "每次更换上级时，我会主动与新领导进行一对一沟通，了解他的管理风格、工作期望和沟通偏好。同时保持工作质量和节奏的一致性，不让领导更替影响工作产出。我也会总结每次合作的经验，提升自己的向上管理能力。"
+      },
+      "referenceAnswer": "每次更换上级时，我会主动与新领导进行一对一沟通，了解他的管理风格、工作期望和沟通偏好。同时保持工作质量和节奏的一致性，不让领导更替影响工作产出。我也会总结每次合作的经验，提升自己的向上管理能力。",
+      "tags": [
+        "通用",
+        "适应",
+        "向上管理"
+      ]
+    },
+    {
+      "id": "interview_197",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "如果你发现公司的产品存在安全隐患，但修复会影响上线时间，你会怎么做？",
+      "question": "If you found a security vulnerability but fixing it would delay launch, what would you do?",
+      "questionEn": "展示你的安全意识和责任心",
+      "tips": "Show security awareness and responsibility",
+      "tipsEn": "产品存在安全隐患但修复会影响上线",
+      "starGuide": {
+        "situation": "在安全和进度之间做出正确选择",
+        "task": "评估风险、沟通协调、提出折中方案",
+        "action": "安全隐患得到妥善处理",
+        "result": "我会立即对安全隐患进行风险评估，确定严重程度和潜在影响。然后向上级汇报，用数据和案例说明不修复的风险。同时提出折中方案：如果风险可控可以先上线后修复，如果风险严重则必须修复后再上线。安全永远是第一位的。"
+      },
+      "referenceAnswer": "我会立即对安全隐患进行风险评估，确定严重程度和潜在影响。然后向上级汇报，用数据和案例说明不修复的风险。同时提出折中方案：如果风险可控可以先上线后修复，如果风险严重则必须修复后再上线。安全永远是第一位的。",
+      "tags": [
+        "通用",
+        "安全",
+        "责任心"
+      ]
+    },
+    {
+      "id": "interview_198",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "如果你的团队需要与海外团队协作，你会如何管理时差和文化差异？",
+      "question": "If your team needs to collaborate with an overseas team, how would you manage?",
+      "questionEn": "展示你的全球化协作能力",
+      "tips": "Show global collaboration ability",
+      "tipsEn": "需要与海外团队跨时区协作",
+      "starGuide": {
+        "situation": "建立高效的跨时区协作机制",
+        "task": "时区管理、沟通机制、文化理解",
+        "action": "跨时区团队高效协作",
+        "result": "时差管理：找到重叠的工作时间安排重要会议，非重叠时间通过异步沟通。沟通机制：建立清晰的文档和进度同步机制，使用项目管理工具追踪。文化理解：了解对方的工作文化和节日安排，在沟通中注意文化差异。关键是要建立信任和透明度。"
+      },
+      "referenceAnswer": "时差管理：找到重叠的工作时间安排重要会议，非重叠时间通过异步沟通。沟通机制：建立清晰的文档和进度同步机制，使用项目管理工具追踪。文化理解：了解对方的工作文化和节日安排，在沟通中注意文化差异。关键是要建立信任和透明度。",
+      "tags": [
+        "通用",
+        "跨时区",
+        "全球化"
+      ]
+    },
+    {
+      "id": "interview_199",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "如果你的工作成果被竞争对手抄袭了，你会怎么做？",
+      "question": "If your work was copied by a competitor, what would you do?",
+      "questionEn": "展示你的竞争应对能力和创新思维",
+      "tips": "Show competitive response and innovation",
+      "tipsEn": "工作成果被竞争对手抄袭",
+      "starGuide": {
+        "situation": "快速应对并建立竞争壁垒",
+        "task": "分析差距、加速创新、建立壁垒",
+        "action": "在竞争中保持领先",
+        "result": "首先分析竞争对手的抄袭程度和我们的差异化优势。然后加速产品迭代，在竞争对手追赶上来之前推出更多创新功能。同时建立技术和品牌壁垒：申请专利保护核心技术，加强品牌建设提升用户忠诚度。最重要的是保持持续创新的能力，让竞争对手永远在追赶。"
+      },
+      "referenceAnswer": "首先分析竞争对手的抄袭程度和我们的差异化优势。然后加速产品迭代，在竞争对手追赶上来之前推出更多创新功能。同时建立技术和品牌壁垒：申请专利保护核心技术，加强品牌建设提升用户忠诚度。最重要的是保持持续创新的能力，让竞争对手永远在追赶。",
+      "tags": [
+        "通用",
+        "竞争",
+        "创新"
+      ]
+    },
+    {
+      "id": "interview_200",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "如果你需要在两周内学会一门全新的技术并应用到项目中，你会怎么做？",
+      "question": "If you need to learn a new technology in 2 weeks and apply it, what would you do?",
+      "questionEn": "展示你的快速学习能力",
+      "tips": "Show rapid learning ability",
+      "tipsEn": "需要在极短时间内掌握新技术",
+      "starGuide": {
+        "situation": "制定高效的学习计划并快速应用",
+        "task": "制定计划、聚焦核心、实践验证、快速迭代",
+        "action": "两周内掌握并应用新技术",
+        "result": "制定详细的学习计划：第1-3天了解技术概览和核心概念；第4-7天通过官方文档和教程深入学习核心功能；第8-10天搭建实验项目进行实践验证；第11-14天在实际项目中应用并解决问题。学习时聚焦最核心的20%功能，这通常能解决80%的问题。"
+      },
+      "referenceAnswer": "制定详细的学习计划：第1-3天了解技术概览和核心概念；第4-7天通过官方文档和教程深入学习核心功能；第8-10天搭建实验项目进行实践验证；第11-14天在实际项目中应用并解决问题。学习时聚焦最核心的20%功能，这通常能解决80%的问题。",
+      "tags": [
+        "通用",
+        "快速学习",
+        "时间管理"
+      ]
+    },
+    {
+      "id": "interview_201",
+      "category": "general",
+      "position": "hard",
+      "difficulty": "如果让你设计一个员工培训体系，你会怎么做？",
+      "question": "If you were to design an employee training system, what would you do?",
+      "questionEn": "展示你的培训体系设计能力",
+      "tips": "Show training system design ability",
+      "tipsEn": "需要从零设计员工培训体系",
+      "starGuide": {
+        "situation": "设计系统化的培训方案",
+        "task": "需求分析、体系设计、课程开发、效果评估",
+        "action": "建立有效的培训体系",
+        "result": "设计框架：1.需求分析通过调研了解各岗位的培训需求；2.分层设计新员工培训、专业技能培训、管理能力培训、领导力培训；3.课程开发内部专家授课+外部课程+在线学习平台；4.学习路径为每个岗位设计清晰的学习路径；5.效果评估使用柯氏四级评估模型（反应-学习-行为-结果）。"
+      },
+      "referenceAnswer": "设计框架：1.需求分析通过调研了解各岗位的培训需求；2.分层设计新员工培训、专业技能培训、管理能力培训、领导力培训；3.课程开发内部专家授课+外部课程+在线学习平台；4.学习路径为每个岗位设计清晰的学习路径；5.效果评估使用柯氏四级评估模型（反应-学习-行为-结果）。",
+      "tags": [
+        "通用",
+        "案例",
+        "培训体系"
+      ]
+    },
+    {
+      "id": "interview_202",
+      "category": "general",
+      "position": "hard",
+      "difficulty": "如果公司的核心系统需要从单体架构迁移到微服务架构，你会如何规划？",
+      "question": "How would you plan migrating from monolith to microservices?",
+      "questionEn": "展示你的架构迁移规划能力",
+      "tips": "Show architecture migration planning",
+      "tipsEn": "核心系统需要架构迁移",
+      "starGuide": {
+        "situation": "制定安全可靠的迁移方案",
+        "task": "评估现状、制定策略、分步实施、风险管控",
+        "action": "成功完成架构迁移",
+        "result": "迁移规划：1.评估现状分析现有系统的模块边界和依赖关系；2.制定策略选择渐进式迁移（绞杀者模式）而非一次性重写；3.优先级排序从最独立的模块开始迁移；4.分步实施每个微服务独立开发、测试、部署；5.数据拆分先共享数据库后分库；6.风险管控每个阶段都有回滚方案。"
+      },
+      "referenceAnswer": "迁移规划：1.评估现状分析现有系统的模块边界和依赖关系；2.制定策略选择渐进式迁移（绞杀者模式）而非一次性重写；3.优先级排序从最独立的模块开始迁移；4.分步实施每个微服务独立开发、测试、部署；5.数据拆分先共享数据库后分库；6.风险管控每个阶段都有回滚方案。",
+      "tags": [
+        "通用",
+        "案例",
+        "架构迁移"
+      ]
+    },
+    {
+      "id": "interview_203",
+      "category": "general",
+      "position": "hard",
+      "difficulty": "如果让你设计一个推荐系统，你会怎么做？",
+      "question": "If you were to design a recommendation system, what would you do?",
+      "questionEn": "展示你的推荐系统设计能力",
+      "tips": "Show recommendation system design ability",
+      "tipsEn": "需要设计一个推荐系统",
+      "starGuide": {
+        "situation": "设计完整的推荐系统方案",
+        "task": "需求分析、算法选择、系统架构、效果评估",
+        "action": "给出完整的推荐系统设计方案",
+        "result": "设计框架：1.需求分析明确推荐场景和业务目标；2.数据准备用户行为数据、物品属性数据、上下文数据；3.算法选择召回层（协同过滤、内容过滤、热门推荐）+ 排序层（CTR预估模型如LR/DNN）；4.系统架构离线计算+近线更新+在线服务；5.效果评估A/B测试、离线指标（precision@K、recall@K）。"
+      },
+      "referenceAnswer": "设计框架：1.需求分析明确推荐场景和业务目标；2.数据准备用户行为数据、物品属性数据、上下文数据；3.算法选择召回层（协同过滤、内容过滤、热门推荐）+ 排序层（CTR预估模型如LR/DNN）；4.系统架构离线计算+近线更新+在线服务；5.效果评估A/B测试、离线指标（precision@K、recall@K）。",
+      "tags": [
+        "通用",
+        "案例",
+        "推荐系统"
+      ]
+    },
+    {
+      "id": "interview_204",
+      "category": "general",
+      "position": "hard",
+      "difficulty": "如果公司要进入一个全新的海外市场，你会如何制定进入策略？",
+      "question": "If the company wants to enter a new overseas market, what strategy would you develop?",
+      "questionEn": "展示你的国际化战略能力",
+      "tips": "Show internationalization strategy ability",
+      "tipsEn": "公司要进入全新海外市场",
+      "starGuide": {
+        "situation": "制定市场进入策略",
+        "task": "市场调研、进入模式、本地化策略、风险管控",
+        "action": "制定可行的海外市场进入方案",
+        "result": "策略框架：1.市场调研目标市场规模、竞争格局、法规环境、文化差异；2.进入模式选择直接出口、合资、独资还是并购；3.本地化策略产品本地化、团队本地化、营销本地化；4.合规准备法律、税务、数据保护等合规要求；5.风险管控汇率风险、政治风险、运营风险；6.里程碑设定分阶段的进入计划和评估指标。"
+      },
+      "referenceAnswer": "策略框架：1.市场调研目标市场规模、竞争格局、法规环境、文化差异；2.进入模式选择直接出口、合资、独资还是并购；3.本地化策略产品本地化、团队本地化、营销本地化；4.合规准备法律、税务、数据保护等合规要求；5.风险管控汇率风险、政治风险、运营风险；6.里程碑设定分阶段的进入计划和评估指标。",
+      "tags": [
+        "通用",
+        "案例",
+        "国际化"
+      ]
+    },
+    {
+      "id": "interview_205",
+      "category": "general",
+      "position": "hard",
+      "difficulty": "如果让你优化公司的招聘流程，将招聘周期缩短50%，你会怎么做？",
+      "question": "If you were to optimize the hiring process to cut cycle time by 50%, what would you do?",
+      "questionEn": "展示你的流程优化能力",
+      "tips": "Show process optimization ability",
+      "tipsEn": "招聘流程效率低下需要优化",
+      "starGuide": {
+        "situation": "系统性地优化招聘流程",
+        "task": "流程分析、瓶颈识别、方案设计、执行优化",
+        "action": "招聘周期缩短50%",
+        "result": "优化方案：1.流程分析绘制当前招聘流程图计算各环节耗时；2.瓶颈识别找到最耗时的环节（通常是面试安排和决策）；3.标准化面试使用结构化面试减少面试轮次；4.自动化工具使用ATS系统自动筛选简历和安排面试；5.并行处理初试和笔试可以并行进行；6.快速决策建立面试后48小时内给出反馈的机制。"
+      },
+      "referenceAnswer": "优化方案：1.流程分析绘制当前招聘流程图计算各环节耗时；2.瓶颈识别找到最耗时的环节（通常是面试安排和决策）；3.标准化面试使用结构化面试减少面试轮次；4.自动化工具使用ATS系统自动筛选简历和安排面试；5.并行处理初试和笔试可以并行进行；6.快速决策建立面试后48小时内给出反馈的机制。",
+      "tags": [
+        "通用",
+        "案例",
+        "流程优化"
+      ]
+    },
+    {
+      "id": "interview_206",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "你如何处理团队中的'刺头'员工？",
+      "question": "How do you handle a difficult team member?",
+      "questionEn": "展示你的管理智慧和情商",
+      "tips": "Show management wisdom and EQ",
+      "tipsEn": "团队中有难以管理的员工",
+      "starGuide": {
+        "situation": "妥善管理困难员工保持团队和谐",
+        "task": "了解原因、建立信任、设定边界、持续关注",
+        "action": "困难员工转变为积极贡献者",
+        "result": "首先深入了解该员工行为背后的原因——可能是工作不匹配、个人问题或对管理方式不满。然后通过一对一沟通建立信任关系。在信任基础上明确行为期望和底线。给予适当的自主权和挑战性任务让他感受到被重视。持续关注并给予正面反馈。如果最终无法改善则按公司流程处理。"
+      },
+      "referenceAnswer": "首先深入了解该员工行为背后的原因——可能是工作不匹配、个人问题或对管理方式不满。然后通过一对一沟通建立信任关系。在信任基础上明确行为期望和底线。给予适当的自主权和挑战性任务让他感受到被重视。持续关注并给予正面反馈。如果最终无法改善则按公司流程处理。",
+      "tags": [
+        "通用",
+        "领导力",
+        "困难员工"
+      ]
+    },
+    {
+      "id": "interview_207",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "你如何在团队中推行一项不受欢迎的新政策？",
+      "question": "How do you implement an unpopular new policy?",
+      "questionEn": "展示你的变革管理能力",
+      "tips": "Show change management ability",
+      "tipsEn": "需要推行一项团队不欢迎的新政策",
+      "starGuide": {
+        "situation": "有效推行政策同时减少抵触",
+        "task": "解释原因、倾听反馈、分步实施、展示效果",
+        "action": "政策得到有效推行抵触最小化",
+        "result": "推行策略：1.解释原因清晰传达政策背后的原因和必要性；2.倾听反馈给团队成员表达意见的机会认真对待合理的反馈；3.分步实施如果可能先试点再推广让团队逐步适应；4.提供支持为受影响的成员提供必要的支持和过渡期；5.展示效果用数据证明政策的积极效果；6.保持耐心变革需要时间。"
+      },
+      "referenceAnswer": "推行策略：1.解释原因清晰传达政策背后的原因和必要性；2.倾听反馈给团队成员表达意见的机会认真对待合理的反馈；3.分步实施如果可能先试点再推广让团队逐步适应；4.提供支持为受影响的成员提供必要的支持和过渡期；5.展示效果用数据证明政策的积极效果；6.保持耐心变革需要时间。",
+      "tags": [
+        "通用",
+        "领导力",
+        "变革管理"
+      ]
+    },
+    {
+      "id": "interview_208",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "你如何判断一个人是否具备领导潜质？",
+      "question": "How do you assess leadership potential?",
+      "questionEn": "展示你的识人能力",
+      "tips": "Show talent assessment ability",
+      "tipsEn": "需要评估某人的领导潜质",
+      "starGuide": {
+        "situation": "多维度评估领导潜质",
+        "task": "观察行为、分析特质、评估成长性",
+        "action": "准确判断领导潜质",
+        "result": "评估维度：1.主动性是否主动承担责任和推动事情发展；2.影响力是否能自然地影响和带动他人；3.学习 agility面对新挑战的学习和适应速度；4.同理心是否能够理解和支持他人；5.抗压能力在压力下的表现和决策质量；6.全局观是否能从整体角度思考问题。领导潜质不仅是能力更是意愿。"
+      },
+      "referenceAnswer": "评估维度：1.主动性是否主动承担责任和推动事情发展；2.影响力是否能自然地影响和带动他人；3.学习 agility面对新挑战的学习和适应速度；4.同理心是否能够理解和支持他人；5.抗压能力在压力下的表现和决策质量；6.全局观是否能从整体角度思考问题。领导潜质不仅是能力更是意愿。",
+      "tags": [
+        "通用",
+        "领导力",
+        "人才评估"
+      ]
+    },
+    {
+      "id": "interview_209",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "你如何在团队中建立学习型文化？",
+      "question": "How do you build a learning culture in your team?",
+      "questionEn": "展示你的文化建设能力",
+      "tips": "Show culture building ability",
+      "tipsEn": "需要建立持续学习的团队文化",
+      "starGuide": {
+        "situation": "营造积极的学习氛围",
+        "task": "以身作则、建立机制、创造环境",
+        "action": "团队形成良好的学习氛围",
+        "result": "建设方法：1.以身作则自己保持持续学习并分享学习成果；2.建立机制设立固定的学习时间如每周技术分享会、读书会；3.知识管理建立团队知识库鼓励文档化和知识沉淀；4.学习资源提供学习预算购买书籍和课程；5.鼓励实践给团队成员尝试新技术和新方法的机会；6.认可奖励对学习和分享行为给予认可。"
+      },
+      "referenceAnswer": "建设方法：1.以身作则自己保持持续学习并分享学习成果；2.建立机制设立固定的学习时间如每周技术分享会、读书会；3.知识管理建立团队知识库鼓励文档化和知识沉淀；4.学习资源提供学习预算购买书籍和课程；5.鼓励实践给团队成员尝试新技术和新方法的机会；6.认可奖励对学习和分享行为给予认可。",
+      "tags": [
+        "通用",
+        "领导力",
+        "学习文化"
+      ]
+    },
+    {
+      "id": "interview_210",
+      "category": "general",
+      "position": "medium",
+      "difficulty": "你如何进行有效的目标管理（OKR）？",
+      "question": "How do you effectively manage goals using OKR?",
+      "questionEn": "展示你的目标管理能力",
+      "tips": "Show goal management ability",
+      "tipsEn": "需要为团队制定和执行OKR",
+      "starGuide": {
+        "situation": "设计有效的OKR体系",
+        "task": "设定目标、对齐方向、跟踪进度、复盘评估",
+        "action": "OKR体系有效运行提升团队执行力",
+        "result": "OKR管理方法：1.设定目标O要有野心和启发性，KR要可量化可衡量；2.对齐方向确保团队OKR与公司战略对齐，成员OKR与团队OKR对齐；3.数量控制每个周期3-5个O每个O对应3-5个KR；4.跟踪进度每周或双周检查KR进展使用红黄绿状态标记；5.复盘评估周期结束时评估完成度分析差距原因。"
+      },
+      "referenceAnswer": "OKR管理方法：1.设定目标O要有野心和启发性，KR要可量化可衡量；2.对齐方向确保团队OKR与公司战略对齐，成员OKR与团队OKR对齐；3.数量控制每个周期3-5个O每个O对应3-5个KR；4.跟踪进度每周或双周检查KR进展使用红黄绿状态标记；5.复盘评估周期结束时评估完成度分析差距原因。",
+      "tags": [
+        "通用",
+        "领导力",
+        "OKR"
+      ]
+    }
+  ]
+}

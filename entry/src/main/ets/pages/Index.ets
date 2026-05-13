@@ -5,6 +5,9 @@ import { KnowledgePage } from './Knowledge';
 import { ProfilePage } from './Profile';
 import { ThemeManager, ThemeMode } from '../utils/Theme';
 import { WindowUtil } from '../utils/WindowUtil';
+import { OnboardingGuide } from '../components/OnboardingGuide';
+import { NetworkStatusBanner } from '../components/NetworkStatusBanner';
+import { AppStore } from '../stores/AppStore';
 import {
   BrandColors,
   NeutralColors,
@@ -16,7 +19,8 @@ import {
   SemanticRadius,
   FontSize,
   FontWeight,
-  ComponentSizes
+  ComponentSizes,
+  ZIndex
 } from '../constants/design-tokens';
 
 /**
@@ -31,10 +35,24 @@ interface NavItem {
 @Entry
 @Component
 struct Index {
+  @StorageProp('currentTab') @Watch('onCurrentTabChange') currentTabFromStorage: number = 0;
   @State currentTabIndex: number = 0
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
   @StorageLink('windowUtil') windowUtil: WindowUtil | undefined = undefined;
-  private tabController: TabsController = new TabsController()
+  @State showOnboarding: boolean = false;
+  // 网络状态相关
+  @StorageLink('isOnline') isOnline: boolean = true;
+  @StorageLink('connectionType') connectionType: string = 'unknown';
+  private tabController: TabsController = new TabsController();
+  private appStore: AppStore = AppStore.getInstance();
+
+  // 监听 currentTabFromStorage 变化，同步到 currentTabIndex
+  onCurrentTabChange() {
+    if (this.currentTabFromStorage !== this.currentTabIndex) {
+      this.currentTabIndex = this.currentTabFromStorage;
+      this.tabController.changeIndex(this.currentTabFromStorage);
+    }
+  }
 
   // 导航项列表
   private navItems: NavItem[] = [
@@ -51,6 +69,31 @@ struct Index {
       const wu = new WindowUtil();
       wu.init();
     }
+    // 同步 currentTabFromStorage 到 currentTabIndex
+    if (this.currentTabFromStorage !== 0) {
+      this.currentTabIndex = this.currentTabFromStorage;
+    }
+    // 检查是否需要显示新用户引导
+    const isLoggedIn = AppStorage.get<boolean>('isLoggedIn');
+    const hasCompletedOnboarding = AppStorage.get<boolean>('hasCompletedOnboarding');
+    if (isLoggedIn && !hasCompletedOnboarding) {
+      this.showOnboarding = true;
+    }
+
+    // 初始化 AppStore
+    this.initializeAppStore();
+  }
+
+  /**
+   * 初始化 AppStore
+   */
+  private async initializeAppStore(): Promise<void> {
+    try {
+      await this.appStore.initialize();
+      console.info('[Index] AppStore initialized');
+    } catch (error) {
+      console.error('[Index] Failed to initialize AppStore:', JSON.stringify(error));
+    }
   }
 
   /**
@@ -62,7 +105,7 @@ struct Index {
   }
 
   build() {
-    Stack() {
+    Stack({ alignContent: Alignment.Top }) {
       // 微妙的背景效果
       Column()
         .width('100%')
@@ -115,7 +158,8 @@ struct Index {
           .barWidth('100%')
           .barBackgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
           .onChange((index: number) => {
-            this.currentTabIndex = index
+            this.currentTabIndex = index;
+            AppStorage.setOrCreate('currentTab', index);
           })
         }
         .layoutWeight(1)
@@ -123,6 +167,19 @@ struct Index {
       }
       .width('100%')
       .height('100%')
+
+      // 网络状态横幅（从顶部滑入）
+      NetworkStatusBanner()
+        .width('100%')
+        .zIndex(ZIndex.Sticky)
+
+      // 新用户引导遮罩
+      if (this.showOnboarding) {
+        OnboardingGuide({
+          onComplete: () => { this.showOnboarding = false; },
+          onSkip: () => { this.showOnboarding = false; }
+        })
+      }
     }
     .width('100%')
     .height('100%')
@@ -167,7 +224,7 @@ struct Index {
 
       // 分割线
       Divider()
-        .color(this.isDarkMode ? DarkSemanticColors.Divider : SemanticColors.Divider)
+        .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
         .width('100%')
 
       // 导航项列表
@@ -182,34 +239,22 @@ struct Index {
 
       // 分割线
       Divider()
-        .color(this.isDarkMode ? DarkSemanticColors.Divider : SemanticColors.Divider)
+        .color(this.isDarkMode ? DarkSemanticColors.Border : SemanticColors.Border)
         .width('100%')
 
-      // 底部用户信息
-      Row({ space: Spacing.Space3 }) {
-        Column() {
-          Image($r('app.media.ic_profile'))
-            .width(28)
-            .height(28)
-            .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
-        }
-        .width(36)
-        .height(36)
-        .borderRadius(18)
-        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface3 : SemanticColors.Surface3)
-        .justifyContent(FlexAlign.Center)
+      // 底部：网络状态指示
+      Row({ space: Spacing.Space2 }) {
+        // 网络状态指示点
+        Circle()
+          .width(8)
+          .height(8)
+          .fill(this.isOnline
+            ? (this.isDarkMode ? '#64BB5C' : '#64BB5C')
+            : (this.isDarkMode ? '#FF9800' : '#FF9800'))
 
-        Column({ space: 2 }) {
-          Text('用户')
-            .fontSize(FontSize.Sm)
-            .fontWeight(FontWeight.Medium)
-            .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
-          Text('个人中心')
-            .fontSize(FontSize.Xs)
-            .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
-        }
-        .alignItems(HorizontalAlign.Start)
-        .layoutWeight(1)
+        Text(this.isOnline ? '在线' : '离线')
+          .fontSize(FontSize.Xs)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
       }
       .width('100%')
       .padding({
@@ -218,6 +263,7 @@ struct Index {
         top: SemanticSpacing.Md,
         bottom: SemanticSpacing.Lg
       })
+      .alignItems(VerticalAlign.Center)
     }
     .width(260)
     .height('100%')

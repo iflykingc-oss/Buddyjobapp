@@ -87,7 +87,8 @@ export async function submitFeedback(data: FeedbackData): Promise<boolean> {
     // 保存到本地存储
     AppStorage.setOrCreate(STORAGE_KEYS.FEEDBACKS, JSON.stringify(existingFeedbacks));
 
-    // TODO: 这里可以添加实际的后端 API 调用
+    // 提交反馈到后端 API（当前仅保存本地）
+    // TODO: 生产环境需接入后端 API
     // await ApiService.post('/feedback', feedback);
 
     console.info('Feedback submitted successfully:', feedback.id);

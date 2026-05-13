@@ -7,6 +7,7 @@
  */
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
+import { Router } from '../utils/Router';
 import {
   InterviewService,
   InterviewSession,
@@ -885,6 +886,162 @@ export struct InterviewPage {
           }
           .width('100%')
           .margin({ top: Spacing.Space9 })
+
+          // 面试后推荐操作
+          Column() {
+            Text('推荐下一步')
+              .fontSize(FontSize.Base)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(NeutralColors.Neutral0)
+              .width('100%')
+              .margin({ bottom: Spacing.Space4 })
+
+            // 查看面试技巧
+            Row() {
+              Column() {
+                Image($r('app.media.ic_knowledge'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(NeutralColors.Neutral0)
+              }
+              .width(36)
+              .height(36)
+              .borderRadius(18)
+              .backgroundColor('rgba(255, 255, 255, 0.15)')
+              .justifyContent(FlexAlign.Center)
+
+              Text('查看面试技巧')
+                .fontSize(FontSize.Sm)
+                .fontColor(NeutralColors.Neutral0)
+                .margin({ left: Spacing.Space3 })
+                .layoutWeight(1)
+
+              Image($r('app.media.ic_arrow_right'))
+                .width(16)
+                .height(16)
+                .fillColor('rgba(255, 255, 255, 0.5)')
+            }
+            .width('100%')
+            .height(52)
+            .padding({ left: Spacing.Space3, right: Spacing.Space3 })
+            .backgroundColor('rgba(255, 255, 255, 0.1)')
+            .borderRadius(SemanticRadius.Component)
+            .onClick(() => {
+              AppStorage.setOrCreate('currentTab', 3);
+              router.back();
+            })
+
+            // 再做一次测评
+            Row() {
+              Column() {
+                Image($r('app.media.ic_assessment'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(NeutralColors.Neutral0)
+              }
+              .width(36)
+              .height(36)
+              .borderRadius(18)
+              .backgroundColor('rgba(255, 255, 255, 0.15)')
+              .justifyContent(FlexAlign.Center)
+
+              Text('再做一次测评')
+                .fontSize(FontSize.Sm)
+                .fontColor(NeutralColors.Neutral0)
+                .margin({ left: Spacing.Space3 })
+                .layoutWeight(1)
+
+              Image($r('app.media.ic_arrow_right'))
+                .width(16)
+                .height(16)
+                .fillColor('rgba(255, 255, 255, 0.5)')
+            }
+            .width('100%')
+            .height(52)
+            .padding({ left: Spacing.Space3, right: Spacing.Space3 })
+            .backgroundColor('rgba(255, 255, 255, 0.1)')
+            .borderRadius(SemanticRadius.Component)
+            .margin({ top: Spacing.Space2 })
+            .onClick(() => {
+              AppStorage.setOrCreate('currentTab', 2);
+              router.back();
+            })
+
+            // 分析Offer
+            Row() {
+              Column() {
+                Image($r('app.media.ic_order'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(NeutralColors.Neutral0)
+              }
+              .width(36)
+              .height(36)
+              .borderRadius(18)
+              .backgroundColor('rgba(255, 255, 255, 0.15)')
+              .justifyContent(FlexAlign.Center)
+
+              Text('分析Offer')
+                .fontSize(FontSize.Sm)
+                .fontColor(NeutralColors.Neutral0)
+                .margin({ left: Spacing.Space3 })
+                .layoutWeight(1)
+
+              Image($r('app.media.ic_arrow_right'))
+                .width(16)
+                .height(16)
+                .fillColor('rgba(255, 255, 255, 0.5)')
+            }
+            .width('100%')
+            .height(52)
+            .padding({ left: Spacing.Space3, right: Spacing.Space3 })
+            .backgroundColor('rgba(255, 255, 255, 0.1)')
+            .borderRadius(SemanticRadius.Component)
+            .margin({ top: Spacing.Space2 })
+            .onClick(() => {
+              Router.push('pages/OfferAnalysis');
+            })
+
+            // 记录到看板
+            Row() {
+              Column() {
+                Image($r('app.media.ic_history'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(NeutralColors.Neutral0)
+              }
+              .width(36)
+              .height(36)
+              .borderRadius(18)
+              .backgroundColor('rgba(255, 255, 255, 0.15)')
+              .justifyContent(FlexAlign.Center)
+
+              Text('记录到看板')
+                .fontSize(FontSize.Sm)
+                .fontColor(NeutralColors.Neutral0)
+                .margin({ left: Spacing.Space3 })
+                .layoutWeight(1)
+
+              Image($r('app.media.ic_arrow_right'))
+                .width(16)
+                .height(16)
+                .fillColor('rgba(255, 255, 255, 0.5)')
+            }
+            .width('100%')
+            .height(52)
+            .padding({ left: Spacing.Space3, right: Spacing.Space3 })
+            .backgroundColor('rgba(255, 255, 255, 0.1)')
+            .borderRadius(SemanticRadius.Component)
+            .margin({ top: Spacing.Space2 })
+            .onClick(() => {
+              Router.push('pages/Kanban');
+            })
+          }
+          .width('100%')
+          .padding(SemanticSpacing.Lg)
+          .backgroundColor('rgba(255, 255, 255, 0.08)')
+          .borderRadius(SemanticRadius.Component)
+          .margin({ top: Spacing.Space7 })
         }
         .padding({ left: SemanticSpacing.Xl, right: SemanticSpacing.Xl })
       }

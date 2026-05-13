@@ -1,6 +1,6 @@
 /**
  * ChatBubble - 聊天气泡组件
- * 
+ *
  * 鸿蒙规范设计：
  * - 根据内容长度自适应宽度
  * - 短消息：紧凑气泡
@@ -8,6 +8,7 @@
  * - 圆角遵循鸿蒙规范（12px 大圆角，4px 小圆角）
  * - 用户/AI 不同样式
  * - 时间戳显示
+ * - 已读状态显示
  */
 
 import { Message } from '../../models/Message';
@@ -17,6 +18,8 @@ import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  ErrorColors,
+  DarkSemanticColors,
   FontSize,
   FontWeight,
   Spacing,
@@ -24,6 +27,16 @@ import {
   SemanticRadius,
   BorderRadius
 } from '../../constants/design-tokens';
+
+/**
+ * 消息状态枚举
+ */
+export enum MessageStatus {
+  SENDING = 'sending',
+  SENT = 'sent',
+  READ = 'read',
+  ERROR = 'error'
+}
 
 /**
  * 聊天气泡组件
@@ -38,14 +51,26 @@ export struct ChatBubble {
   @Prop showTimestamp: boolean = true;
   /** 是否显示头像 */
   @Prop showAvatar: boolean = true;
+  /** 是否显示已读状态（仅用户消息） */
+  @Prop showStatus: boolean = false;
   /** 最大宽度百分比 */
   @Prop maxWidthPercent: number = 80;
-  
+  /** 外部传入的时间戳字符串（可选） */
+  @Prop timestamp: string = '';
+
+  /** 存储键 */
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
+
   /** 时间戳格式化缓存 */
   @State formattedTime: string = '';
 
   aboutToAppear() {
-    this.formattedTime = this.formatTime(this.message.timestamp);
+    // 如果外部没有传入时间戳，则格式化内部时间戳
+    if (this.timestamp) {
+      this.formattedTime = this.timestamp;
+    } else {
+      this.formattedTime = this.formatTime(this.message.timestamp);
+    }
   }
 
   /**
@@ -79,6 +104,44 @@ export struct ChatBubble {
     return this.message.content.length < 15 && !this.message.content.includes('\n');
   }
 
+  /**
+   * 获取消息状态文本
+   */
+  private getStatusText(): string {
+    const status = this.message.status || 'sent';
+    switch (status) {
+      case MessageStatus.SENDING:
+        return '发送中...';
+      case MessageStatus.SENT:
+        return '已发送';
+      case MessageStatus.READ:
+        return '已读';
+      case MessageStatus.ERROR:
+        return '发送失败';
+      default:
+        return '';
+    }
+  }
+
+  /**
+   * 获取消息状态图标颜色
+   */
+  private getStatusColor(): string {
+    const status = this.message.status || 'sent';
+    switch (status) {
+      case MessageStatus.SENDING:
+        return this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4;
+      case MessageStatus.SENT:
+        return this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4;
+      case MessageStatus.READ:
+        return BrandColors.Brand500;
+      case MessageStatus.ERROR:
+        return ErrorColors.Error500;
+      default:
+        return this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4;
+    }
+  }
+
   build() {
     if (this.message.role === 'user') {
       this.UserBubble();
@@ -108,13 +171,37 @@ export struct ChatBubble {
           .lineHeight(22)
           .textOverflow({ overflow: TextOverflow.Clip })
 
-        // 时间戳
-        if (this.showTimestamp) {
-          Text(this.formattedTime)
-            .fontSize(FontSize.Xs)
-            .fontColor('rgba(255, 255, 255, 0.7)')
-            .margin({ top: Spacing.Space1 })
-            .alignSelf(ItemAlign.End)
+        // 时间戳和状态行
+        if (this.showTimestamp || this.showStatus) {
+          Row() {
+            // 时间戳
+            if (this.showTimestamp) {
+              Text(this.formattedTime)
+                .fontSize(FontSize.Xs)
+                .fontColor('rgba(255, 255, 255, 0.7)')
+            }
+
+            // 已读状态
+            if (this.showStatus && this.message.status !== 'sending') {
+              Row({ space: 2 }) {
+                // 单勾/双勾图标表示状态
+                Text(this.message.status === 'read' ? '✓✓' : '✓')
+                  .fontSize(FontSize.Xs)
+                  .fontColor('rgba(255, 255, 255, 0.7)')
+              }
+              .margin({ left: Spacing.Space2 })
+            }
+
+            // 发送中状态
+            if (this.showStatus && this.message.status === 'sending') {
+              Text('...')
+                .fontSize(FontSize.Xs)
+                .fontColor('rgba(255, 255, 255, 0.7)')
+                .margin({ left: Spacing.Space2 })
+            }
+          }
+          .margin({ top: Spacing.Space1 })
+          .alignSelf(ItemAlign.End)
         }
       }
       .padding({
@@ -126,7 +213,7 @@ export struct ChatBubble {
       .backgroundColor(BrandColors.Brand500)
       .borderRadius({
         topLeft: SemanticRadius.Control,   // 8px
-        topRight: BorderRadius.RadiusSm,    // 4px 小圆角
+        topRight: BorderRadius.RadiusSm,  // 4px 小圆角
         bottomLeft: SemanticRadius.Control, // 8px
         bottomRight: SemanticRadius.Control // 8px
       })
@@ -161,7 +248,7 @@ export struct ChatBubble {
 
             Text('一职搭子')
               .fontSize(FontSize.Xs)
-              .fontColor(SemanticColors.Text3)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
               .margin({ left: Spacing.Space3 })
           }
           .margin({ bottom: Spacing.Space3 })
@@ -190,7 +277,7 @@ export struct ChatBubble {
           top: Spacing.Space4,
           bottom: Spacing.Space4
         })
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral0)
         .borderRadius({
           topLeft: BorderRadius.RadiusSm,    // 4px 小圆角
           topRight: SemanticRadius.Control,   // 8px
@@ -203,7 +290,7 @@ export struct ChatBubble {
         if (this.showTimestamp) {
           Text(this.formattedTime)
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text4)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
             .margin({ top: Spacing.Space2 })
         }
       }
@@ -228,7 +315,7 @@ export struct ChatBubble {
       Column() {
         Text(this.message.content)
           .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text3)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
           .lineHeight(18)
       }
       .padding({
@@ -237,7 +324,7 @@ export struct ChatBubble {
         top: Spacing.Space2,
         bottom: Spacing.Space2
       })
-      .backgroundColor(NeutralColors.Neutral100)
+      .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral100)
       .borderRadius(SemanticRadius.Control)
 
       Blank()
@@ -277,6 +364,9 @@ export struct StreamingChatBubble {
   @Prop content: string = '';
   @Prop isStreaming: boolean = false;
   @Prop timestamp: number = Date.now();
+
+  @StorageProp('isDarkMode') isDarkMode: boolean = false;
+
   @State formattedTime: string = '';
 
   aboutToAppear() {
@@ -309,8 +399,22 @@ export struct StreamingChatBubble {
 
           Text('一职搭子')
             .fontSize(FontSize.Xs)
-            .fontColor(SemanticColors.Text3)
+            .fontColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
             .margin({ left: Spacing.Space3 })
+
+          // 正在输入指示器
+          if (this.isStreaming) {
+            Row({ space: 2 }) {
+              ForEach([0, 1, 2], (index: number) => {
+                Column()
+                  .width(4)
+                  .height(4)
+                  .backgroundColor(BrandColors.Brand400)
+                  .borderRadius(2)
+              })
+            }
+            .margin({ left: Spacing.Space3 })
+          }
         }
         .margin({ bottom: Spacing.Space3 })
 
@@ -327,7 +431,7 @@ export struct StreamingChatBubble {
           top: Spacing.Space4,
           bottom: Spacing.Space4
         })
-        .backgroundColor(NeutralColors.Neutral0)
+        .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : NeutralColors.Neutral0)
         .borderRadius({
           topLeft: BorderRadius.RadiusSm,
           topRight: SemanticRadius.Control,
@@ -339,7 +443,7 @@ export struct StreamingChatBubble {
         // 时间戳
         Text(this.formattedTime)
           .fontSize(FontSize.Xs)
-          .fontColor(SemanticColors.Text4)
+          .fontColor(this.isDarkMode ? DarkSemanticColors.Text4 : SemanticColors.Text4)
           .margin({ top: Spacing.Space2 })
       }
       .alignItems(HorizontalAlign.Start)

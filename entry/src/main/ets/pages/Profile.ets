@@ -1,5 +1,6 @@
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
+import { Router } from '../utils/Router';
 import { User } from '../models/User';
 import { MemberService, MemberStatus, Benefit } from '../services/MemberService';
 import { MemberCard } from '../components/profile/MemberCard';
@@ -141,6 +142,145 @@ export struct ProfilePage {
             }
           })
           .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+
+          // 快速开始
+          Column() {
+            Text('快速开始')
+              .fontSize(FontSize.Base)
+              .fontWeight(FontWeight.Bold)
+              .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+              .width('100%')
+              .margin({ bottom: SemanticSpacing.Lg })
+
+            Row({ space: Spacing.Space3 }) {
+              // AI聊天
+              Column() {
+                Column() {
+                  Image($r('app.media.ic_chat'))
+                    .width(24)
+                    .height(24)
+                    .fillColor(BrandColors.Brand500)
+                }
+                .width(44)
+                .height(44)
+                .borderRadius(22)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                .justifyContent(FlexAlign.Center)
+
+                Text('AI聊天')
+                  .fontSize(FontSize.Xs)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                  .margin({ top: Spacing.Space2 })
+              }
+              .layoutWeight(1)
+              .height(88)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+              .borderRadius(SemanticRadius.Component)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Center)
+              .onClick(() => {
+                AppStorage.setOrCreate('currentTab', 0);
+              })
+
+              // 简历分析
+              Column() {
+                Column() {
+                  Image($r('app.media.ic_resume'))
+                    .width(24)
+                    .height(24)
+                    .fillColor(BrandColors.Brand500)
+                }
+                .width(44)
+                .height(44)
+                .borderRadius(22)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                .justifyContent(FlexAlign.Center)
+
+                Text('简历分析')
+                  .fontSize(FontSize.Xs)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                  .margin({ top: Spacing.Space2 })
+              }
+              .layoutWeight(1)
+              .height(88)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+              .borderRadius(SemanticRadius.Component)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Center)
+              .onClick(() => {
+                AppStorage.setOrCreate('currentTab', 1);
+              })
+
+              // 职业测评
+              Column() {
+                Column() {
+                  Image($r('app.media.ic_assessment'))
+                    .width(24)
+                    .height(24)
+                    .fillColor(BrandColors.Brand500)
+                }
+                .width(44)
+                .height(44)
+                .borderRadius(22)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                .justifyContent(FlexAlign.Center)
+
+                Text('职业测评')
+                  .fontSize(FontSize.Xs)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                  .margin({ top: Spacing.Space2 })
+              }
+              .layoutWeight(1)
+              .height(88)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+              .borderRadius(SemanticRadius.Component)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Center)
+              .onClick(() => {
+                AppStorage.setOrCreate('currentTab', 2);
+              })
+
+              // 模拟面试
+              Column() {
+                Column() {
+                  Image($r('app.media.ic_chat'))
+                    .width(24)
+                    .height(24)
+                    .fillColor(BrandColors.Brand500)
+                }
+                .width(44)
+                .height(44)
+                .borderRadius(22)
+                .backgroundColor(this.isDarkMode ? DarkSemanticColors.AccentSubtle : BrandColors.Brand50)
+                .justifyContent(FlexAlign.Center)
+
+                Text('模拟面试')
+                  .fontSize(FontSize.Xs)
+                  .fontColor(this.isDarkMode ? DarkSemanticColors.Text1 : SemanticColors.Text1)
+                  .margin({ top: Spacing.Space2 })
+              }
+              .layoutWeight(1)
+              .height(88)
+              .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+              .borderRadius(SemanticRadius.Component)
+              .justifyContent(FlexAlign.Center)
+              .alignItems(HorizontalAlign.Center)
+              .onClick(() => {
+                Router.push('pages/Interview');
+              })
+            }
+            .width('100%')
+          }
+          .width('100%')
+          .padding(SemanticSpacing.Lg)
+          .backgroundColor(this.isDarkMode ? DarkSemanticColors.Surface1 : SemanticColors.Surface1)
+          .borderRadius(SemanticRadius.Component)
+          .margin({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg, top: SemanticSpacing.Lg })
+          .shadow({
+            radius: 8,
+            color: this.isDarkMode ? 'rgba(0, 0, 0, 0.16)' : 'rgba(0, 0, 0, 0.04)',
+            offsetY: 2
+          })
 
           // 功能菜单
           Column() {

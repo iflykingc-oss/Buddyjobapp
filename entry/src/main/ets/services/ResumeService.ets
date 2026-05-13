@@ -2,6 +2,11 @@
  * 简历分析服务
  * 对接后端 /api/resume/analyze 接口
  * 支持 PDF/Word 文件上传和分析
+ * 
+ * 增强功能：
+ * - 简历草稿保存
+ * - 简历历史记录管理
+ * - 本地数据持久化
  */
 
 import file from '@ohos.file.picker';
@@ -9,6 +14,7 @@ import fs from '@ohos.file.fs';
 import request from '@ohos.request';
 import { ApiService } from './ApiService';
 import { ResumeAnalysisResult, Dimension, Suggestion, UploadResumeResult } from '../models/Resume';
+import { Storage } from '../utils/storage';
 import { API_ENDPOINTS, Config } from '../constants/config';
 
 // 分析进度回调类型
@@ -49,9 +55,94 @@ interface UploadResponse {
   uploadTime: string;
 }
 
+// 简历草稿
+export interface ResumeDraft {
+  id: string;
+  basicInfo: BasicInfo;
+  education: Education[];
+  workExperience: WorkExperience[];
+  projects: Project[];
+  skills: Skill[];
+  updatedAt: number;
+  createdAt: number;
+}
+
+// 基本信息
+export interface BasicInfo {
+  name: string;
+  gender: string;
+  age: string;
+  phone: string;
+  email: string;
+  location: string;
+  summary: string;
+}
+
+// 教育经历
+export interface Education {
+  id: string;
+  school: string;
+  major: string;
+  degree: string;
+  startDate: string;
+  endDate: string;
+  gpa: string;
+  honors: string;
+}
+
+// 工作经历
+export interface WorkExperience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  achievements: string;
+}
+
+// 项目经验
+export interface Project {
+  id: string;
+  name: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  results: string;
+  technologies: string;
+}
+
+// 技能
+export interface Skill {
+  id: string;
+  name: string;
+  level: string;
+  category: string;
+}
+
+// 简历历史记录
+export interface ResumeHistoryItem {
+  id: string;
+  fileName: string;
+  analysisDate: string;
+  atsScore: number;
+  summary: string;
+  keywords: string[];
+  analysisResult?: ResumeAnalysisResult;
+}
+
+// 存储键名
+const STORAGE_KEYS = {
+  RESUME_DRAFTS: 'resume_drafts',
+  RESUME_HISTORY: 'resume_history',
+  CURRENT_DRAFT: 'current_resume_draft'
+};
+
 export class ResumeService {
   private static instance: ResumeService;
   private apiService: ApiService;
+  private storage: Storage;
   
   // 最大文件大小 10MB
   private readonly MAX_FILE_SIZE = 10 * 1024 * 1024;
@@ -66,8 +157,12 @@ export class ResumeService {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ];
 
+  // 历史记录最大数量
+  private readonly MAX_HISTORY_COUNT = 50;
+
   private constructor() {
     this.apiService = ApiService.getInstance();
+    this.storage = Storage.getInstance();
   }
 
   static getInstance(): ResumeService {
@@ -76,6 +171,245 @@ export class ResumeService {
     }
     return ResumeService.instance;
   }
+
+  // ============================================
+  // 简历草稿管理
+  // ============================================
+
+  /**
+   * 保存简历草稿
+   */
+  async saveResumeDraft(draft: ResumeDraft): Promise<boolean> {
+    try {
+      // 获取现有草稿
+      const drafts = await this.getResumeDrafts();
+      
+      // 检查是否已存在
+      const existingIndex = drafts.findIndex(d => d.id === draft.id);
+      
+      // 更新草稿
+      draft.updatedAt = Date.now();
+      
+      if (existingIndex >= 0) {
+        drafts[existingIndex] = draft;
+      } else {
+        draft.createdAt = Date.now();
+        drafts.unshift(draft);
+      }
+
+      // 保存到存储
+      await this.storage.setObject(STORAGE_KEYS.RESUME_DRAFTS, drafts);
+      
+      console.info('[ResumeService] Resume draft saved:', draft.id);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Save draft failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 获取所有简历草稿
+   */
+  async getResumeDrafts(): Promise<ResumeDraft[]> {
+    try {
+      const drafts = await this.storage.getObject<ResumeDraft[]>(STORAGE_KEYS.RESUME_DRAFTS);
+      return drafts || [];
+    } catch (error) {
+      console.error('[ResumeService] Get drafts failed:', error);
+      return [];
+    }
+  }
+
+  /**
+   * 获取单个简历草稿
+   */
+  async getResumeDraft(id: string): Promise<ResumeDraft | null> {
+    try {
+      const drafts = await this.getResumeDrafts();
+      return drafts.find(d => d.id === id) || null;
+    } catch (error) {
+      console.error('[ResumeService] Get draft failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 删除简历草稿
+   */
+  async deleteResumeDraft(id: string): Promise<boolean> {
+    try {
+      const drafts = await this.getResumeDrafts();
+      const filteredDrafts = drafts.filter(d => d.id !== id);
+      
+      await this.storage.setObject(STORAGE_KEYS.RESUME_DRAFTS, filteredDrafts);
+      
+      console.info('[ResumeService] Resume draft deleted:', id);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Delete draft failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 获取当前编辑的草稿
+   */
+  async getCurrentDraft(): Promise<ResumeDraft | null> {
+    try {
+      return await this.storage.getObject<ResumeDraft>(STORAGE_KEYS.CURRENT_DRAFT);
+    } catch (error) {
+      console.error('[ResumeService] Get current draft failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * 保存当前编辑的草稿
+   */
+  async saveCurrentDraft(draft: ResumeDraft): Promise<boolean> {
+    try {
+      await this.storage.setObject(STORAGE_KEYS.CURRENT_DRAFT, draft);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Save current draft failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 清除当前编辑的草稿
+   */
+  async clearCurrentDraft(): Promise<boolean> {
+    try {
+      await this.storage.delete(STORAGE_KEYS.CURRENT_DRAFT);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Clear current draft failed:', error);
+      return false;
+    }
+  }
+
+  // ============================================
+  // 简历历史记录管理
+  // ============================================
+
+  /**
+   * 获取简历历史记录（分页）
+   */
+  async getResumeHistory(page: number = 1, pageSize: number = 10): Promise<ResumeHistoryItem[]> {
+    try {
+      const history = await this.storage.getObject<ResumeHistoryItem[]>(STORAGE_KEYS.RESUME_HISTORY);
+      const allHistory = history || [];
+      
+      // 分页处理
+      const startIndex = (page - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      
+      if (startIndex >= allHistory.length) {
+        return [];
+      }
+      
+      return allHistory.slice(startIndex, endIndex);
+    } catch (error) {
+      console.error('[ResumeService] Get resume history failed:', error);
+      return [];
+    }
+  }
+
+  /**
+   * 保存简历分析结果到历史记录
+   */
+  async saveToHistory(result: ResumeAnalysisResult, fileName: string): Promise<boolean> {
+    try {
+      const history = await this.storage.getObject<ResumeHistoryItem[]>(STORAGE_KEYS.RESUME_HISTORY);
+      const allHistory = history || [];
+
+      // 创建历史记录项
+      const historyItem: ResumeHistoryItem = {
+        id: Date.now().toString(36) + Math.random().toString(36).substring(2),
+        fileName: fileName,
+        analysisDate: new Date().toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        atsScore: result.atsScore,
+        summary: result.summary,
+        keywords: result.keywords,
+        analysisResult: result
+      };
+
+      // 添加到列表开头
+      allHistory.unshift(historyItem);
+
+      // 限制最大数量
+      if (allHistory.length > this.MAX_HISTORY_COUNT) {
+        allHistory.length = this.MAX_HISTORY_COUNT;
+      }
+
+      await this.storage.setObject(STORAGE_KEYS.RESUME_HISTORY, allHistory);
+      
+      console.info('[ResumeService] Resume saved to history:', historyItem.id);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Save to history failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 删除历史记录
+   */
+  async deleteHistoryItem(id: string): Promise<boolean> {
+    try {
+      const history = await this.storage.getObject<ResumeHistoryItem[]>(STORAGE_KEYS.RESUME_HISTORY);
+      const allHistory = history || [];
+      
+      const filteredHistory = allHistory.filter(item => item.id !== id);
+      
+      await this.storage.setObject(STORAGE_KEYS.RESUME_HISTORY, filteredHistory);
+      
+      console.info('[ResumeService] History item deleted:', id);
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Delete history failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 清空历史记录
+   */
+  async clearHistory(): Promise<boolean> {
+    try {
+      await this.storage.delete(STORAGE_KEYS.RESUME_HISTORY);
+      console.info('[ResumeService] History cleared');
+      return true;
+    } catch (error) {
+      console.error('[ResumeService] Clear history failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 获取历史记录总数
+   */
+  async getHistoryCount(): Promise<number> {
+    try {
+      const history = await this.storage.getObject<ResumeHistoryItem[]>(STORAGE_KEYS.RESUME_HISTORY);
+      return (history || []).length;
+    } catch (error) {
+      console.error('[ResumeService] Get history count failed:', error);
+      return 0;
+    }
+  }
+
+  // ============================================
+  // 简历分析相关方法
+  // ============================================
 
   /**
    * 验证文件类型和大小
@@ -235,6 +569,9 @@ export class ResumeService {
 
       // 完成
       onProgress?.(100, AnalysisStage.COMPLETED);
+
+      // 保存到历史记录
+      await this.saveToHistory(analyzeResponse.data, uploadResult.fileName);
 
       return analyzeResponse.data;
     } catch (error) {

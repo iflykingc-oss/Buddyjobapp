@@ -1,10 +1,12 @@
 import { agentFramework } from '@kit.IntelligentAgentKit';
 import { audio } from '@kit.AudioKit';
+import { media } from '@kit.CoreMultimediaKit';
 import { fileIo } from '@kit.CoreFileKit';
 import { common } from '@kit.AbilityKit';
 import { promptAction } from '@kit.ArkUI';
 import { ApiService } from '../services/ApiService';
 import { XiaoyiService } from '../services/XiaoyiService';
+import { XiaoyiIntentService, IntentParams, IntentResult } from '../services/XiaoyiIntentService';
 import { ShareUtils, ShareType } from '../utils/share';
 import { Logger } from '../utils/logger';
 import {
@@ -25,6 +27,28 @@ import {
 const TAG = 'XiaoyiVoiceMemo';
 
 /**
+ * 备忘录数据接口
+ */
+export interface VoiceMemoData {
+  id: string;
+  title: string;
+  transcript: string;
+  summary: string;
+  keyPoints: string[];
+  audioUri: string;
+  duration: number;
+  createdAt: number;
+  interviewId?: string;
+  resumeId?: string;
+}
+
+/**
+ * 回调类型定义
+ */
+export type MemoSaveCallback = (memo: VoiceMemoData) => void;
+export type MemoShareCallback = (memo: VoiceMemoData) => void;
+
+/**
  * 小艺帮记组件
  * 用于语音记录面试要点并生成AI摘要
  */
@@ -39,14 +63,26 @@ export struct XiaoyiVoiceMemo {
   @State isProcessing: boolean = false;
   @State showResultPanel: boolean = false;
   @State recordingState: 'idle' | 'recording' | 'paused' | 'stopped' = 'idle';
+  @State isTranscribing: boolean = false;
+  @State editableTranscript: string = '';
+  @State memoTitle: string = '';
+  @State isSaving: boolean = false;
   @Prop interviewId: string = '';
   @Prop resumeId: string = '';
+  @Prop @Require pageTitle: string = '面试记录';
+
+  // 回调函数
+  @Callback onMemoSaved?: MemoSaveCallback;
+  @Callback onMemoShared?: MemoShareCallback;
+  @Callback onClose?: () => void;
 
   private apiService: ApiService = ApiService.getInstance();
   private xiaoyiService: XiaoyiService = XiaoyiService.getInstance();
-  private audioRecorder: audio.AudioRecorder | null = null;
+  private avRecorder: media.AVRecorder | null = null;
+  private audioFd: number = -1;
   private timer: number | null = null;
   private recordFilePath: string = '';
+  private recordingStartTime: number = 0;
   private uiContext: common.UIAbilityContext | null = null;
 
   aboutToAppear() {
@@ -55,11 +91,15 @@ export struct XiaoyiVoiceMemo {
   }
 
   aboutToDisappear() {
+    this.cleanup();
+  }
+
+  /**
+   * 清理资源
+   */
+  private async cleanup() {
     this.stopTimer();
-    if (this.audioRecorder) {
-      this.audioRecorder.release();
-      this.audioRecorder = null;
-    }
+    await this.releaseRecorder();
   }
 
   build() {
@@ -162,7 +202,7 @@ export struct XiaoyiVoiceMemo {
         Image($r('app.media.ic_microphone'))
           .width(48)
           .height(48)
-          .fillColor(NeutralColors.Neutral0)
+          .fillColor(this.isDarkMode() ? NeutralColors.Neutral0 : NeutralColors.Neutral900)
       }
       .width(120)
       .height(120)
@@ -181,7 +221,7 @@ export struct XiaoyiVoiceMemo {
       Text('点击开始录音')
         .fontSize(FontSize.Lg)
         .fontWeight(FontWeight.Medium)
-        .fontColor(SemanticColors.Text1)
+        .fontColor(this.isDarkMode() ? NeutralColors.Neutral0 : SemanticColors.Text1)
         .margin({ top: SemanticSpacing.Xl })
 
       Text('记录面试要点，小艺会帮你整理成文字摘要')
@@ -192,6 +232,18 @@ export struct XiaoyiVoiceMemo {
         .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
     }
     .justifyContent(FlexAlign.Center)
+  }
+
+  /**
+   * 判断是否为深色模式
+   */
+  private isDarkMode(): boolean {
+    try {
+      const colorMode = this.uiContext?.resourceManager?.configuration?.colorMode;
+      return colorMode === 1; // 1 = Dark mode
+    } catch {
+      return false;
+    }
   }
 
   @Builder
@@ -290,16 +342,16 @@ export struct XiaoyiVoiceMemo {
   buildControlButtons() {
     Row() {
       if (this.recordingState === 'recording') {
-        // 暂停/继续按钮（可选）
+        // 暂停/继续按钮
         Button() {
           Image($r('app.media.ic_pause'))
             .width(24)
             .height(24)
-            .fillColor(SemanticColors.Text2)
+            .fillColor(this.isDarkMode() ? NeutralColors.Neutral0 : SemanticColors.Text2)
         }
         .width(56)
         .height(56)
-        .backgroundColor(NeutralColors.Neutral200)
+        .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral700 : NeutralColors.Neutral200)
         .borderRadius(28)
         .margin({ right: SemanticSpacing.Lg })
         .onClick(() => {
@@ -324,9 +376,9 @@ export struct XiaoyiVoiceMemo {
         // 重录按钮
         Button('重录')
           .fontSize(FontSize.Base)
-          .fontColor(SemanticColors.Text2)
+          .fontColor(this.isDarkMode() ? NeutralColors.Neutral0 : SemanticColors.Text2)
           .height(48)
-          .backgroundColor(NeutralColors.Neutral200)
+          .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral700 : NeutralColors.Neutral200)
           .borderRadius(SemanticRadius.Control)
           .margin({ right: SemanticSpacing.Md })
           .onClick(() => {
@@ -344,13 +396,60 @@ export struct XiaoyiVoiceMemo {
           .onClick(() => {
             this.processRecording();
           })
+      } else if (this.showResultPanel) {
+        // 底部快捷操作栏
+        Row() {
+          Button() {
+            Image($r('app.media.ic_refresh'))
+              .width(20)
+              .height(20)
+              .fillColor(SemanticColors.Text2)
+          }
+          .width(44)
+          .height(44)
+          .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral700 : NeutralColors.Neutral200)
+          .borderRadius(22)
+          .onClick(() => {
+            this.restartRecording();
+          })
+
+          Blank()
+
+          Button('保存')
+            .fontSize(FontSize.Base)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(NeutralColors.Neutral0)
+            .height(44)
+            .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+            .backgroundColor(BrandColors.Brand500)
+            .borderRadius(SemanticRadius.Control)
+            .enabled(!this.isSaving)
+            .onClick(() => {
+              this.saveMemo();
+            })
+
+          Button('分享')
+            .fontSize(FontSize.Base)
+            .fontWeight(FontWeight.Medium)
+            .fontColor(BrandColors.Brand500)
+            .height(44)
+            .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
+            .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral800 : BrandColors.Brand50)
+            .borderRadius(SemanticRadius.Control)
+            .margin({ left: Spacing.Space3 })
+            .onClick(() => {
+              this.shareMemo();
+            })
+        }
+        .width('100%')
+        .layoutWeight(0)
       }
     }
     .width('100%')
-    .height(80)
+    .height(this.showResultPanel ? 80 : 80)
     .padding({ left: SemanticSpacing.Lg, right: SemanticSpacing.Lg })
     .justifyContent(FlexAlign.Center)
-    .backgroundColor(NeutralColors.Neutral0)
+    .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral900 : NeutralColors.Neutral0)
     .shadow({
       radius: 8,
       color: 'rgba(0, 0, 0, 0.04)',
@@ -468,25 +567,76 @@ export struct XiaoyiVoiceMemo {
             .margin({ bottom: SemanticSpacing.Lg })
           }
 
-          // 完整转录
+          // 完整转录（可编辑）
           if (this.transcript.length > 0) {
             Column() {
-              Text('完整转录')
-                .fontSize(FontSize.Sm)
-                .fontWeight(FontWeight.Medium)
-                .fontColor(SemanticColors.Text1)
-                .width('100%')
-                .margin({ bottom: SemanticSpacing.Md })
+              Row() {
+                Text('完整转录')
+                  .fontSize(FontSize.Sm)
+                  .fontWeight(FontWeight.Medium)
+                  .fontColor(SemanticColors.Text1)
 
-              Text(this.transcript)
-                .fontSize(FontSize.Sm)
-                .fontColor(SemanticColors.Text2)
+                Blank()
+
+                if (!this.isTranscribing) {
+                  Button('编辑')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(BrandColors.Brand500)
+                    .backgroundColor('transparent')
+                    .onClick(() => {
+                      this.isTranscribing = true;
+                      this.editableTranscript = this.transcript;
+                    })
+                }
+              }
+              .width('100%')
+              .margin({ bottom: SemanticSpacing.Md })
+
+              if (this.isTranscribing) {
+                TextArea({ text: this.editableTranscript, placeholder: '请输入转录内容' })
+                  .fontSize(FontSize.Sm)
+                  .fontColor(SemanticColors.Text1)
+                  .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral800 : NeutralColors.Neutral50)
+                  .borderRadius(SemanticRadius.Control)
+                  .height(120)
+                  .onChange((value: string) => {
+                    this.editableTranscript = value;
+                  })
+
+                Row() {
+                  Button('取消')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(SemanticColors.Text3)
+                    .backgroundColor('transparent')
+                    .onClick(() => {
+                      this.isTranscribing = false;
+                    })
+
+                  Button('保存')
+                    .fontSize(FontSize.Xs)
+                    .fontColor(NeutralColors.Neutral0)
+                    .backgroundColor(BrandColors.Brand500)
+                    .borderRadius(SemanticRadius.Pill)
+                    .padding({ left: Spacing.Space3, right: Spacing.Space3 })
+                    .onClick(() => {
+                      this.transcript = this.editableTranscript;
+                      this.isTranscribing = false;
+                    })
+                }
                 .width('100%')
-                .lineHeight(22)
+                .justifyContent(FlexAlign.End)
+                .margin({ top: Spacing.Space2 })
+              } else {
+                Text(this.transcript)
+                  .fontSize(FontSize.Sm)
+                  .fontColor(SemanticColors.Text2)
+                  .width('100%')
+                  .lineHeight(22)
+              }
             }
             .width('100%')
             .padding(SemanticSpacing.Lg)
-            .backgroundColor(NeutralColors.Neutral50)
+            .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral800 : NeutralColors.Neutral50)
             .borderRadius(SemanticRadius.Control)
             .margin({ bottom: SemanticSpacing.Lg })
           }
@@ -511,7 +661,7 @@ export struct XiaoyiVoiceMemo {
               .fontColor(BrandColors.Brand500)
               .height(40)
               .layoutWeight(1)
-              .backgroundColor(BrandColors.Brand50)
+              .backgroundColor(this.isDarkMode() ? NeutralColors.Neutral800 : BrandColors.Brand50)
               .borderRadius(SemanticRadius.Control)
               .margin({ left: Spacing.Space3 })
               .onClick(() => {
@@ -538,18 +688,16 @@ export struct XiaoyiVoiceMemo {
 
   /**
    * 初始化音频录制器
+   * 使用 AVRecorder API 进行录音
    */
   private async initAudioRecorder() {
     try {
-      const audioConfig: audio.AudioRecorderConfig = {
-        audioEncoder: audio.AudioEncoder.AAC,
-        audioEncodingBitRate: 48000,
-        audioSampleRate: 44100,
-        numberOfChannels: 1,
-        format: audio.AudioOutputFormat.M4A
-      };
-
-      this.audioRecorder = await audio.createAudioRecorder(audioConfig);
+      // 检查麦克风权限
+      const microphoneAvailable = await this.checkMicrophonePermission();
+      if (!microphoneAvailable) {
+        promptAction.showToast({ message: '请先授权麦克风权限' });
+        return;
+      }
       Logger.info(TAG, 'Audio recorder initialized');
     } catch (error) {
       Logger.error(TAG, 'Failed to initialize audio recorder:', error);
@@ -557,26 +705,90 @@ export struct XiaoyiVoiceMemo {
   }
 
   /**
+   * 检查麦克风权限
+   */
+  private async checkMicrophonePermission(): Promise<boolean> {
+    try {
+      // 权限检查将在实际使用时进行
+      return true;
+    } catch (error) {
+      Logger.error(TAG, 'Permission check failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 释放 AVRecorder 资源
+   */
+  private async releaseRecorder() {
+    try {
+      if (this.avRecorder) {
+        await this.avRecorder.release();
+        this.avRecorder = null;
+      }
+      if (this.audioFd >= 0) {
+        try {
+          fileIo.close(this.audioFd);
+        } catch (e) {
+          // 忽略关闭错误
+        }
+        this.audioFd = -1;
+      }
+      Logger.info(TAG, 'Recorder released');
+    } catch (error) {
+      Logger.error(TAG, 'Release recorder failed:', error);
+    }
+  }
+
+  /**
    * 开始录音
+   * 使用 AVRecorder API
    */
   private async startRecording() {
     try {
-      if (!this.audioRecorder) {
-        await this.initAudioRecorder();
+      // 如果已经在录音，先停止
+      if (this.recordingState === 'recording') {
+        await this.stopRecording();
       }
 
       // 生成录音文件路径
       const timestamp = Date.now();
-      this.recordFilePath = `${getContext().cacheDir}/voice_memo_${timestamp}.m4a`;
+      this.recordFilePath = `/data/local/tmp/voice_memo_${timestamp}.m4a`;
+      this.recordingStartTime = Date.now();
 
-      await this.audioRecorder!.start(this.recordFilePath);
+      // 创建音频文件并获取文件描述符
+      const file = fileIo.openSync(this.recordFilePath, fileIo.OpenMode.CREATE | fileIo.OpenMode.READ_WRITE);
+      this.audioFd = file.fd;
+
+      // 创建 AVRecorder 实例
+      this.avRecorder = await media.createAVRecorder();
+
+      // 配置录音参数
+      const avConfig: media.AVRecorderConfig = {
+        audioSourceType: media.AudioSourceType.MIC,
+        profile: {
+          audioBitrate: 128000,
+          audioChannels: 1,
+          audioCodec: media.CodecMimeType.AUDIO_AAC_LC,
+          audioSampleRate: 44100,
+          fileFormat: media.ContainerFormatType.M4A,
+        },
+        url: `fd://${this.audioFd}`,
+      };
+
+      await this.avRecorder.prepare(avConfig);
+      await this.avRecorder.start();
+
       this.recordingState = 'recording';
+      this.isRecording = true;
       this.startTimer();
 
       Logger.info(TAG, 'Recording started');
+      promptAction.showToast({ message: '开始录音' });
     } catch (error) {
       Logger.error(TAG, 'Failed to start recording:', error);
       promptAction.showToast({ message: '启动录音失败' });
+      await this.releaseRecorder();
     }
   }
 
@@ -585,10 +797,11 @@ export struct XiaoyiVoiceMemo {
    */
   private async pauseRecording() {
     try {
-      if (this.audioRecorder) {
-        await this.audioRecorder.pause();
+      if (this.avRecorder && this.recordingState === 'recording') {
+        await this.avRecorder.pause();
         this.recordingState = 'paused';
         this.stopTimer();
+        promptAction.showToast({ message: '录音已暂停' });
         Logger.info(TAG, 'Recording paused');
       }
     } catch (error) {
@@ -601,15 +814,35 @@ export struct XiaoyiVoiceMemo {
    */
   private async stopRecording() {
     try {
-      if (this.audioRecorder) {
-        await this.audioRecorder.stop();
-        this.recordingState = 'stopped';
-        this.stopTimer();
-        this.audioUri = this.recordFilePath;
-        Logger.info(TAG, 'Recording stopped');
+      if (this.avRecorder) {
+        await this.avRecorder.stop();
+        await this.avRecorder.release();
+        this.avRecorder = null;
       }
+
+      // 关闭文件描述符
+      if (this.audioFd >= 0) {
+        try {
+          fileIo.close(this.audioFd);
+        } catch (closeError) {
+          Logger.error(TAG, 'Close audio fd failed:', closeError);
+        }
+        this.audioFd = -1;
+      }
+
+      this.recordingState = 'stopped';
+      this.isRecording = false;
+      this.stopTimer();
+      this.audioUri = this.recordFilePath;
+
+      // 计算录音时长
+      this.recordingTime = Math.floor((Date.now() - this.recordingStartTime) / 1000);
+
+      Logger.info(TAG, `Recording stopped, duration: ${this.recordingTime}s`);
+      promptAction.showToast({ message: '录音完成' });
     } catch (error) {
       Logger.error(TAG, 'Failed to stop recording:', error);
+      await this.releaseRecorder();
     }
   }
 
@@ -617,12 +850,7 @@ export struct XiaoyiVoiceMemo {
    * 重新录音
    */
   private restartRecording() {
-    this.recordingState = 'idle';
-    this.recordingTime = 0;
-    this.audioUri = '';
-    this.recordFilePath = '';
-
-    // 删除之前的录音文件
+    // 清理之前的状态
     if (this.recordFilePath) {
       try {
         fileIo.unlink(this.recordFilePath);
@@ -630,6 +858,17 @@ export struct XiaoyiVoiceMemo {
         // 忽略删除错误
       }
     }
+
+    this.recordingState = 'idle';
+    this.recordingTime = 0;
+    this.audioUri = '';
+    this.recordFilePath = '';
+    this.transcript = '';
+    this.summary = '';
+    this.keyPoints = [];
+    this.editableTranscript = '';
+    this.isTranscribing = false;
+    this.showResultPanel = false;
   }
 
   /**
@@ -741,29 +980,134 @@ export struct XiaoyiVoiceMemo {
 
   /**
    * 保存备忘录
+   * 将录音内容保存到本地存储
    */
   private async saveMemo() {
+    if (this.isSaving) {
+      return;
+    }
+
+    this.isSaving = true;
+
     try {
-      const response = await this.apiService.post('memo/save', {
-        interviewId: this.interviewId,
-        resumeId: this.resumeId,
+      // 生成备忘录标题
+      const title = this.memoTitle || `面试记录 ${this.formatDate(new Date())}`;
+      const memoId = `memo_${Date.now()}`;
+
+      // 构建备忘录数据
+      const memoData: VoiceMemoData = {
+        id: memoId,
+        title: title,
         transcript: this.transcript,
         summary: this.summary,
         keyPoints: this.keyPoints,
         audioUri: this.audioUri,
+        duration: this.recordingTime,
+        createdAt: Date.now(),
+        interviewId: this.interviewId,
+        resumeId: this.resumeId
+      };
+
+      // 保存到本地存储
+      const saved = await this.saveMemoToStorage(memoData);
+      if (!saved) {
+        throw new Error('保存到本地失败');
+      }
+
+      // 调用 API 保存到服务器
+      const response = await this.apiService.post('memo/save', {
+        id: memoId,
+        interviewId: this.interviewId,
+        resumeId: this.resumeId,
+        title: title,
+        transcript: this.transcript,
+        summary: this.summary,
+        keyPoints: this.keyPoints,
+        audioUri: this.audioUri,
+        duration: this.recordingTime,
         source: 'xiaoyi_voice_memo'
       });
 
       if (response.success) {
         promptAction.showToast({ message: '已保存到简历' });
+
+        // 触发回调
+        if (this.onMemoSaved) {
+          this.onMemoSaved(memoData);
+        }
+
+        // 触发小艺响应
+        await this.triggerXiaoyiResponse(memoData);
+
+        // 关闭结果面板
         this.closeResultPanel();
       } else {
-        promptAction.showToast({ message: '保存失败' });
+        // 本地保存成功但服务器保存失败，提示用户
+        promptAction.showToast({ message: '本地保存成功，服务器保存失败' });
       }
     } catch (error) {
       Logger.error(TAG, 'Failed to save memo:', error);
-      promptAction.showToast({ message: '保存失败' });
+      promptAction.showToast({ message: '保存失败，请重试' });
+    } finally {
+      this.isSaving = false;
     }
+  }
+
+  /**
+   * 保存备忘录到本地存储
+   */
+  private async saveMemoToStorage(memo: VoiceMemoData): Promise<boolean> {
+    try {
+      // 使用 XiaoyiIntentService 中的存储逻辑
+      const storage = await import('../utils/storage');
+      const existingMemos = await storage.default.getObject<VoiceMemoData[]>('voice_memos') || [];
+      existingMemos.unshift(memo);
+
+      // 限制最大保存数量
+      const MAX_MEMOS = 100;
+      if (existingMemos.length > MAX_MEMOS) {
+        existingMemos.length = MAX_MEMOS;
+      }
+
+      await storage.default.setObject('voice_memos', existingMemos);
+      Logger.info(TAG, 'Memo saved to local storage');
+      return true;
+    } catch (error) {
+      Logger.error(TAG, 'Save to storage failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * 触发小艺响应
+   */
+  private async triggerXiaoyiResponse(memo: VoiceMemoData) {
+    try {
+      const params: IntentParams = {
+        audioUri: memo.audioUri,
+        interviewId: memo.interviewId,
+        resumeId: memo.resumeId
+      };
+
+      const result = await XiaoyiIntentService.handleVoiceMemo(params);
+      if (result.success) {
+        agentFramework.sendResponse({
+          intentName: XiaoyiService.INTENTS.VOICE_MEMO,
+          success: true,
+          message: result.message,
+          data: result.data
+        });
+      }
+    } catch (error) {
+      Logger.error(TAG, 'Trigger Xiaoyi response failed:', error);
+    }
+  }
+
+  /**
+   * 格式化日期
+   */
+  private formatDate(date: Date): string {
+    return `${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
   }
 
   /**

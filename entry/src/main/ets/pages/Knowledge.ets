@@ -417,14 +417,16 @@ export struct KnowledgePage {
 
         Blank()
 
-        // 搜索按钮
+        // 搜索按钮 - 点击打开搜索页面
         Column() {
           Image($r('app.media.ic_search'))
             .width(24)
             .height(24)
             .fillColor(this.isDarkMode ? DarkSemanticColors.Text3 : SemanticColors.Text3)
             .onClick(() => {
-              // TODO: 打开搜索页面
+              // FIXME: 需要实现知识库搜索页面跳转
+              // 预期行为：跳转到 KnowledgeSearch 页面并传递当前分类筛选
+              // router.push('KnowledgeSearch', { category: this.currentCategory });
             })
         }
         .width(40)
