@@ -1,5 +1,8 @@
 {
-  "app_name": {
-    "value": "一职搭子"
-  }
+  "string": [
+    {
+      "name": "app_name",
+      "value": "一职搭子"
+    }
+  ]
 }
