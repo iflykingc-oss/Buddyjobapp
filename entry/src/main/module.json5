@@ -2,8 +2,6 @@
   "module": {
     "name": "entry",
     "type": "entry",
-    "launchType": "standard",
-    "label": "$string:entry_label",
     "description": "$string:entry_label",
     "mainElement": "EntryAbility",
     "deviceTypes": [
@@ -14,8 +12,6 @@
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "targetSdkVersion": "6.1.1(24)",
-    "compatibleSdkVersion": "6.1.1(24)",
     "querySchemes": [
       "plugs",
       "share",
@@ -164,164 +160,6 @@
             ]
           }
         ]
-      }
-    ],
-    "intents": [
-      {
-        "intent": {
-          "name": "buddyjob.analyze_resume",
-          "action": "analyze_resume",
-          "entities": [
-            {
-              "name": "resumeId",
-              "type": "string"
-            },
-            {
-              "name": "targetPosition",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.interview_practice",
-          "action": "interview_practice",
-          "entities": [
-            {
-              "name": "jobType",
-              "type": "string"
-            },
-            {
-              "name": "difficulty",
-              "type": "string"
-            },
-            {
-              "name": "company",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.assess_ability",
-          "action": "assess_ability",
-          "entities": [
-            {
-              "name": "assessmentType",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.circle_selection",
-          "action": "circle_selection",
-          "entities": [
-            {
-              "name": "selectedText",
-              "type": "string"
-            },
-            {
-              "name": "context",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.voice_memo",
-          "action": "voice_memo",
-          "entities": [
-            {
-              "name": "audioUri",
-              "type": "string"
-            },
-            {
-              "name": "interviewId",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.analyze_offer",
-          "action": "analyze_offer",
-          "entities": [
-            {
-              "name": "offerId",
-              "type": "string"
-            },
-            {
-              "name": "company",
-              "type": "string"
-            },
-            {
-              "name": "position",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.career_advice",
-          "action": "career_advice",
-          "entities": [
-            {
-              "name": "industry",
-              "type": "string"
-            },
-            {
-              "name": "experience",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.job_suggestion",
-          "action": "job_suggestion",
-          "entities": [
-            {
-              "name": "location",
-              "type": "string"
-            },
-            {
-              "name": "industry",
-              "type": "string"
-            },
-            {
-              "name": "query",
-              "type": "string"
-            }
-          ]
-        }
-      },
-      {
-        "intent": {
-          "name": "buddyjob.interview_reminder",
-          "action": "interview_reminder",
-          "entities": [
-            {
-              "name": "interviewId",
-              "type": "string"
-            },
-            {
-              "name": "company",
-              "type": "string"
-            },
-            {
-              "name": "time",
-              "type": "string"
-            }
-          ]
-        }
       }
     ]
   }
