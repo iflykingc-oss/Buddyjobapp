@@ -80,8 +80,7 @@ export class ChatStore {
    * @param message 消息
    */
   addMessage(message: Message): void {
-    const messages = this.getHistory();
-    messages.push(message);
+    const messages = [...this.getHistory(), message];
     this.saveHistory(messages);
   }
 
@@ -91,12 +90,8 @@ export class ChatStore {
    * @returns 删除后的消息列表
    */
   deleteMessage(messageId: string): Message[] {
-    const messages = this.getHistory();
-    const index = messages.findIndex(m => m.id === messageId);
-    if (index !== -1) {
-      messages.splice(index, 1);
-      this.saveHistory(messages);
-    }
+    const messages = this.getHistory().filter(m => m.id !== messageId);
+    this.saveHistory(messages);
     return messages;
   }
 

@@ -10,6 +10,6 @@
   "description": "一职搭子 - HarmonyOS求职助手应用",
   "main": "",
   "version": "1.0.0",
-  "modelVersion": "5.0.0",
+  "modelVersion": "6.0.0",
   "dependencies": {}
 }

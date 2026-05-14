@@ -56,7 +56,7 @@ struct FavoritesPage {
     try {
       const success = await this.favoriteService.removeFavorite(item.id);
       if (success) {
-        this.favoriteList.splice(index, 1);
+        this.favoriteList = this.favoriteList.filter((_, i) => i !== index);
         promptAction.showToast({ message: '已取消收藏' });
       } else {
         promptAction.showToast({ message: '操作失败，请重试' });

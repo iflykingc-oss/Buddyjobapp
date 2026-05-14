@@ -934,10 +934,7 @@ export struct ResumeGuide {
                 .fillColor(NeutralColors.Neutral0)
                 .margin({ left: Spacing.Space2 })
                 .onClick(() => {
-                  const skillIndex = this.draft.skills.findIndex(s => s.id === skill.id);
-                  if (skillIndex > -1) {
-                    this.draft.skills.splice(skillIndex, 1);
-                  }
+                  this.draft.skills = this.draft.skills.filter(s => s.id !== skill.id);
                 })
             }
             .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space2, bottom: Spacing.Space2 })
@@ -980,10 +977,7 @@ export struct ResumeGuide {
                 .fillColor(NeutralColors.Neutral0)
                 .margin({ left: Spacing.Space2 })
                 .onClick(() => {
-                  const skillIndex = this.draft.skills.findIndex(s => s.id === skill.id);
-                  if (skillIndex > -1) {
-                    this.draft.skills.splice(skillIndex, 1);
-                  }
+                  this.draft.skills = this.draft.skills.filter(s => s.id !== skill.id);
                 })
             }
             .padding({ left: Spacing.Space3, right: Spacing.Space3, top: Spacing.Space2, bottom: Spacing.Space2 })

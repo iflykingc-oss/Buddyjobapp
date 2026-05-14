@@ -117,12 +117,11 @@ export class KanbanStorageService {
    */
   static async deleteCard(cardId: string): Promise<boolean> {
     const data = await this.loadOrCreate();
-    const index = data.cards.findIndex(c => c.id === cardId);
-    if (index === -1) {
+    if (!data.cards.some(c => c.id === cardId)) {
       return false;
     }
 
-    data.cards.splice(index, 1);
+    data.cards = data.cards.filter(c => c.id !== cardId);
     await this.save(data);
     return true;
   }
@@ -130,48 +129,21 @@ export class KanbanStorageService {
   /**
    * 移动卡片到目标列
    */
-  static async moveCard(
-    cardId: string,
-    targetColumn: KanbanColumnStatus,
-    targetIndex?: number
-  ): Promise<JobCard | null> {
+  static async moveCard(cardId: string, targetColumn: KanbanColumnStatus): Promise<JobCard | null> {
     const data = await this.loadOrCreate();
     const card = data.cards.find(c => c.id === cardId);
     if (!card) {
       return null;
     }
 
-    const oldColumn = card.columnStatus;
-    card.columnStatus = targetColumn;
-    card.updatedAt = new Date().toISOString();
-
-    // 如果指定了目标位置，重新计算 sortWeight
-    if (targetIndex !== undefined) {
-      const targetColumnCards = data.cards
-        .filter(c => c.columnStatus === targetColumn && c.id !== cardId)
-        .sort((a, b) => a.sortWeight - b.sortWeight);
-
-      // 在目标位置插入
-      let newWeight: number;
-      if (targetIndex === 0) {
-        newWeight = targetColumnCards.length > 0
-          ? targetColumnCards[0].sortWeight - 1
-          : 0;
-      } else if (targetIndex >= targetColumnCards.length) {
-        newWeight = targetColumnCards.length > 0
-          ? targetColumnCards[targetColumnCards.length - 1].sortWeight + 1
-          : 0;
-      } else {
-        const before = targetColumnCards[targetIndex - 1].sortWeight;
-        const after = targetColumnCards[targetIndex].sortWeight;
-        newWeight = (before + after) / 2;
+    data.cards = data.cards.map(c => {
+      if (c.id === cardId) {
+        return { ...c, columnStatus: targetColumn };
       }
-
-      card.sortWeight = newWeight;
-    }
-
+      return c;
+    });
     await this.save(data);
-    return card;
+    return { ...card, columnStatus: targetColumn };
   }
 
   /**

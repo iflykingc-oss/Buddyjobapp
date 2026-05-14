@@ -524,7 +524,7 @@ export struct ChatPage {
    */
   private async resendMessage(message: Message, index: number) {
     // 删除当前消息
-    this.messageList.splice(index, 1);
+    this.messageList = this.messageList.filter((_, i) => i !== index);
     this.messageDataSource.setData([...this.messageList]);
     this.saveHistory();
 
@@ -538,7 +538,7 @@ export struct ChatPage {
    */
   private async deleteMessage(messageId: string, index: number) {
     // 从本地删除
-    this.messageList.splice(index, 1);
+    this.messageList = this.messageList.filter((_, i) => i !== index);
     this.messageDataSource.setData([...this.messageList]);
     this.saveHistory();
 

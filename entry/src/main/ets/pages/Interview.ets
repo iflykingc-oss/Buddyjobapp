@@ -161,8 +161,11 @@ export struct InterviewPage {
       const feedback = await this.interviewService.submitAnswer(this.session.id, answer);
 
       // 更新会话
-      this.session.answers.push(answer);
-      this.session.feedbacks.push(feedback);
+      this.session = {
+        ...this.session!,
+        answers: [...this.session!.answers, answer],
+        feedbacks: [...this.session!.feedbacks, feedback]
+      };
       this.currentFeedback = feedback;
 
       // 显示点评面板
@@ -492,7 +495,7 @@ export struct InterviewPage {
       if (this.selectedCategories.includes(key)) {
         this.selectedCategories = this.selectedCategories.filter(c => c !== key);
       } else {
-        this.selectedCategories.push(key);
+        this.selectedCategories = [...this.selectedCategories, key];
       }
     })
   }

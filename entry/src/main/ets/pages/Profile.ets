@@ -65,17 +65,16 @@ export struct ProfilePage {
   loadMemberStatus() {
     this.isLoading = true;
 
-    // 异步加载会员状态
-    this.memberService.getMemberStatus().then((status) => {
+    Promise.all([
+      this.memberService.getMemberStatus(),
+      this.memberService.getBenefits()
+    ]).then(([status, benefits]) => {
       this.memberStatus = status;
       this.isVip = status.isMember;
-    });
-
-    // 加载权益列表
-    this.memberService.getBenefits().then((benefits) => {
       this.benefits = benefits;
-      this.isLoading = false;
     }).catch(() => {
+      // handle error
+    }).finally(() => {
       this.isLoading = false;
     });
   }

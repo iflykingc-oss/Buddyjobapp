@@ -58,11 +58,10 @@ export struct OfferFormCard {
 
   /** 切换福利选择 */
   private toggleBenefit(type: BenefitType) {
-    const idx = this.selectedBenefits.indexOf(type);
-    if (idx >= 0) {
-      this.selectedBenefits.splice(idx, 1);
+    if (this.selectedBenefits.includes(type)) {
+      this.selectedBenefits = this.selectedBenefits.filter(b => b !== type);
     } else {
-      this.selectedBenefits.push(type);
+      this.selectedBenefits = [...this.selectedBenefits, type];
     }
     this.offer.benefits = [...this.selectedBenefits];
   }

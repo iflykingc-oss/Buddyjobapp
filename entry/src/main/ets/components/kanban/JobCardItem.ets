@@ -31,7 +31,7 @@ export struct JobCardItem {
         // 公司名 + 优先级
         Row() {
           // 公司首字头像
-          Text(this.card.company.charAt(0))
+          Text(this.card.company?.charAt(0) ?? '?')
             .fontSize(18)
             .fontColor('#FFFFFF')
             .width(36)

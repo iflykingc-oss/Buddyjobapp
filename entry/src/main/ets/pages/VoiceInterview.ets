@@ -176,7 +176,7 @@ struct VoiceInterviewPage {
     Column() {
       // 进度指示
       Row() {
-        Text(`问题 ${this.session?.currentQuestionIndex ?? 0 + 1}/${this.session?.questions.length ?? 0}`)
+        Text(`问题 ${(this.session?.currentQuestionIndex ?? 0) + 1}/${this.session?.questions.length ?? 0}`)
           .fontSize(14)
           .fontColor(Colors.textSecondary)
 

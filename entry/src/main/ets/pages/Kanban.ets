@@ -269,7 +269,7 @@ struct KanbanPage {
           ListItem() {
             Row() {
               // 公司首字
-              Text(card.company.charAt(0))
+              Text(card.company?.charAt(0) ?? '?')
                 .fontSize(16)
                 .fontColor('#FFFFFF')
                 .width(36)
