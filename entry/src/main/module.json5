@@ -144,7 +144,7 @@
       {
         "name": "XiaoyiAgentExtension",
         "srcEntry": "./ets/services/XiaoyiAgentExtension.ets",
-        "type": "intelligentAgent",
+        "type": "agent",
         "description": "小艺智能体扩展能力",
         "exported": true
       },
