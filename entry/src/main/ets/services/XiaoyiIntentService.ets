@@ -34,7 +34,7 @@ export interface IntentParams {
 export interface IntentResult {
   success: boolean;
   message: string;
-  data?: Record<string, any>;
+  data?: Record<string, Object>;
   card?: IntentResponseCard;
   error?: string;
 }
@@ -60,7 +60,7 @@ export interface IntentResponseCard {
 export interface IntentAction {
   type: 'navigate' | 'showDetail' | 'startSession' | 'showMemoCard' | 'saveMemo' | 'shareMemo';
   target?: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
   title?: string;
   content?: string;
   memoId?: string;
@@ -88,7 +88,7 @@ export interface XiaoyiIntent {
   interviewId?: string;
   company?: string;
   time?: string;
-  context?: Record<string, any>;
+  context?: Record<string, Object>;
 }
 
 /**
@@ -98,7 +98,7 @@ export interface IntentResponse {
   success: boolean;
   message: string;
   action?: string;
-  data?: Record<string, any>;
+  data?: Record<string, Object>;
   suggestions?: Suggestion[];
 }
 
@@ -111,7 +111,7 @@ export interface Suggestion {
   description: string;
   icon?: string;
   action: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
 }
 
 export class XiaoyiIntentService {
@@ -290,7 +290,8 @@ export class XiaoyiIntentService {
 
       if (analysisResult) {
         // 根据分析结果生成建议
-        if (analysisResult.scores.experience < 70) {
+        const scores = analysisResult['scores'] as Record<string, Object>;
+        if (scores && (scores['experience'] as number) < 70) {
           suggestions.push({
             id: '1',
             title: '优化工作经历',
@@ -301,7 +302,7 @@ export class XiaoyiIntentService {
           });
         }
 
-        if (analysisResult.scores.skills < 70) {
+        if (scores && (scores['skills'] as number) < 70) {
           suggestions.push({
             id: '2',
             title: '补充技能标签',
@@ -312,7 +313,7 @@ export class XiaoyiIntentService {
           });
         }
 
-        if (analysisResult.scores.format < 80) {
+        if (scores && (scores['format'] as number) < 80) {
           suggestions.push({
             id: '3',
             title: '优化简历格式',
@@ -413,10 +414,10 @@ export class XiaoyiIntentService {
   /**
    * 获取用户简历摘要
    */
-  private static async getUserResumeSummary(userId: string): Promise<any> {
+  private static async getUserResumeSummary(userId: string): Promise<Record<string, Object> | null> {
     try {
       const response = await ApiService.getInstance().get(`/api/resume/summary?userId=${userId}`);
-      return response.data;
+      return response.data as Record<string, Object> | null;
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Get resume summary failed: ${error}`);
       return null;
@@ -426,10 +427,10 @@ export class XiaoyiIntentService {
   /**
    * 获取最新简历分析结果
    */
-  private static async getLatestResumeAnalysis(userId: string): Promise<any> {
+  private static async getLatestResumeAnalysis(userId: string): Promise<Record<string, Object> | null> {
     try {
       const response = await ApiService.getInstance().get(`/api/resume/analysis/latest?userId=${userId}`);
-      return response.data;
+      return response.data as Record<string, Object> | null;
     } catch (error) {
       hilog.error(DOMAIN, TAG, `Get resume analysis failed: ${error}`);
       return null;
@@ -705,16 +706,17 @@ export class XiaoyiIntentService {
         analysisType: 'resume'
       });
 
-      let analysisResult;
+      let analysisResult: Record<string, Object>;
       if (response.success && response.data) {
-        analysisResult = response.data;
+        analysisResult = response.data as Record<string, Object>;
       } else {
         // 使用本地分析作为备选
         analysisResult = await this.performLocalAnalysis(selectedText, context);
       }
 
       // 构建优化建议
-      const suggestions: Suggestion[] = (analysisResult.suggestions || []).map((s: string, index: number) => ({
+      const rawSuggestions = (analysisResult['suggestions'] as string[]) || [];
+      const suggestions: Suggestion[] = rawSuggestions.map((s: string, index: number) => ({
         id: String(index + 1),
         title: this.extractSuggestionTitle(s),
         description: s,
@@ -726,9 +728,9 @@ export class XiaoyiIntentService {
       // 构建响应卡片
       const card: IntentResponseCard = {
         title: '圈选内容分析',
-        content: analysisResult.analysis || '已完成内容分析',
-        score: analysisResult.score,
-        analysis: analysisResult.analysis,
+        content: (analysisResult['analysis'] as string) || '已完成内容分析',
+        score: analysisResult['score'] as number,
+        analysis: analysisResult['analysis'] as string,
         suggestions
       };
 
@@ -790,7 +792,7 @@ export class XiaoyiIntentService {
         };
       }
 
-      const audioUrl = uploadResponse.data?.url || audioUri;
+      const audioUrl = (uploadResponse.data && (uploadResponse.data as Record<string, Object>)['url'] as string) || audioUri;
 
       // 2. 调用语音处理 API
       const processResponse = await apiService.post('ai/process-voice-memo', {
@@ -802,9 +804,9 @@ export class XiaoyiIntentService {
         extractKeyPoints: true
       });
 
-      let result;
+      let result: Record<string, Object>;
       if (processResponse.success && processResponse.data) {
-        result = processResponse.data;
+        result = processResponse.data as Record<string, Object>;
       } else {
         // 使用模拟数据作为备选
         result = this.generateMockMemoResult();
@@ -815,27 +817,27 @@ export class XiaoyiIntentService {
         userId,
         interviewId,
         resumeId,
-        transcript: result.transcript,
-        summary: result.summary,
-        keyPoints: result.keyPoints,
+        transcript: result['transcript'],
+        summary: result['summary'],
+        keyPoints: result['keyPoints'],
         audioUri: audioUrl,
         source: 'xiaoyi_voice_memo'
       });
 
-      const memoId = saveResponse.success ? saveResponse.data?.memoId : `memo_${Date.now()}`;
+      const memoId = (saveResponse.success && saveResponse.data && (saveResponse.data as Record<string, Object>)['memoId'] as string) || `memo_${Date.now()}`;
 
       // 构建响应卡片
       const card: IntentResponseCard = {
         title: '面试要点已记录',
-        content: result.summary,
-        summary: result.summary,
-        transcript: result.transcript,
-        keyPoints: result.keyPoints,
+        content: result['summary'] as string,
+        summary: result['summary'] as string,
+        transcript: result['transcript'] as string,
+        keyPoints: result['keyPoints'] as string[],
         actions: [
           {
             type: 'showMemoCard',
             title: '面试要点记录',
-            content: result.summary
+            content: result['summary'] as string
           },
           {
             type: 'saveMemo',
@@ -844,10 +846,19 @@ export class XiaoyiIntentService {
         ]
       };
 
+      const resultWithMemoId: Record<string, Object> = {};
+      for (const key in result) {
+        resultWithMemoId[key] = result[key];
+      }
+      resultWithMemoId['memoId'] = memoId;
+
+      const keyPointsArray = result['keyPoints'] as string[] || [];
+      const keyPointsText = keyPointsArray.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n') || '';
+
       return {
         success: true,
-        message: `面试要点已记录！\n\n摘要：${result.summary}\n\n关键要点：\n${result.keyPoints?.map((p: string, i: number) => `${i + 1}. ${p}`).join('\n') || ''}`,
-        data: { ...result, memoId },
+        message: `面试要点已记录！\n\n摘要：${result['summary']}\n\n关键要点：\n${keyPointsText}`,
+        data: resultWithMemoId,
         card
       };
     } catch (error) {
@@ -865,19 +876,20 @@ export class XiaoyiIntentService {
   /**
    * 构建简历建议列表
    */
-  private static buildResumeSuggestions(analysisResult: any): Suggestion[] {
+  private static buildResumeSuggestions(analysisResult: Record<string, Object>): Suggestion[] {
     const suggestions: Suggestion[] = [];
-    const dimensions = analysisResult.dimensions || [];
+    const dimensions = (analysisResult['dimensions'] as Object[]) || [];
 
-    dimensions.forEach((dim: any) => {
-      if (dim.score < 70) {
+    dimensions.forEach((dim: Object) => {
+      const dimRecord = dim as Record<string, Object>;
+      if ((dimRecord['score'] as number) < 70) {
         suggestions.push({
           id: String(suggestions.length + 1),
-          title: `优化${dim.name}`,
-          description: `${dim.name}得分较低，建议进行优化`,
+          title: `优化${dimRecord['name']}`,
+          description: `${dimRecord['name']}得分较低，建议进行优化`,
           icon: 'ic_edit',
           action: 'resume/edit',
-          params: { section: dim.key }
+          params: { section: dimRecord['key'] as string }
         });
       }
     });
@@ -899,7 +911,7 @@ export class XiaoyiIntentService {
   /**
    * 执行本地内容分析
    */
-  private static async performLocalAnalysis(selectedText: string, context: string): Promise<any> {
+  private static async performLocalAnalysis(selectedText: string, context: string): Promise<Record<string, Object>> {
     // 本地分析逻辑
     const wordCount = selectedText.split(/\s+/).length;
     const hasNumbers = /\d+/.test(selectedText);
@@ -940,7 +952,7 @@ export class XiaoyiIntentService {
   /**
    * 生成模拟备忘录结果
    */
-  private static generateMockMemoResult(): { transcript: string; summary: string; keyPoints: string[] } {
+  private static generateMockMemoResult(): Record<string, Object> {
     return {
       transcript: '这是一段模拟的面试要点记录...',
       summary: '本次面试主要围绕项目经验和技术深度展开。面试官对数据库优化和分布式系统比较关注，建议后续加强这两方面的准备。',

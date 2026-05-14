@@ -287,14 +287,14 @@ export class ResumeOptimizationService {
   private static async analyzeResume(
     content: string,
     targetPosition?: TargetPosition
-  ): Promise<any> {
+  ): Promise<Record<string, Object>> {
     try {
       const response = await ApiService.getInstance().post('/api/resume/analyze', {
         content,
         targetPosition
       });
 
-      return response.data || {
+      return (response.data as Record<string, Object>) || {
         overallScore: 60,
         atsScore: 70,
         keywordMatch: 50
@@ -314,7 +314,7 @@ export class ResumeOptimizationService {
    */
   private static async generateSuggestions(
     content: string,
-    analysis: any,
+    analysis: Record<string, Object>,
     config: OptimizationConfig
   ): Promise<OptimizationSuggestion[]> {
     try {

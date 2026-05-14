@@ -53,13 +53,13 @@ interface DataLoadState {
   /** 是否正在加载 */
   loading: boolean;
   /** 已加载的数据项 */
-  items: any[];
+  items: Object[];
   /** 数据总条数 */
   totalItems: number;
   /** 元数据信息 */
   metadata: DataMetadata | null;
   /** 预加载的下一批数据 */
-  preloadedBatch: any[] | null;
+  preloadedBatch: Object[] | null;
   /** 预加载的批次号 */
   preloadedBatchPage: number;
   /** 加载错误信息 */
@@ -143,10 +143,10 @@ export class LazyDataLoader {
       const parsedData = JSON.parse(contentStr);
 
       // 提取数组数据
-      const dataArray: any[] = Array.isArray(parsedData) ? parsedData :
-        (parsedData.data && Array.isArray(parsedData.data)) ? parsedData.data :
-          (parsedData.questions && Array.isArray(parsedData.questions)) ? parsedData.questions :
-            (parsedData.articles && Array.isArray(parsedData.articles)) ? parsedData.articles : [];
+      const dataArray: Object[] = Array.isArray(parsedData) ? parsedData as Object[] :
+        (parsedData['data'] && Array.isArray(parsedData['data'])) ? parsedData['data'] as Object[] :
+          (parsedData['questions'] && Array.isArray(parsedData['questions'])) ? parsedData['questions'] as Object[] :
+            (parsedData['articles'] && Array.isArray(parsedData['articles'])) ? parsedData['articles'] as Object[] : [];
 
       const totalItems = dataArray.length;
 
@@ -205,7 +205,7 @@ export class LazyDataLoader {
    * @param pageSize 每页条数，默认 BATCH_SIZE
    * @returns 当前批次的数据
    */
-  async loadBatch(dataKey: string, page: number, pageSize?: number): Promise<any[]> {
+  async loadBatch(dataKey: string, page: number, pageSize?: number): Promise<Object[]> {
     const size = pageSize || this.BATCH_SIZE;
     const state = this.loadStates.get(dataKey);
 
@@ -250,10 +250,10 @@ export class LazyDataLoader {
       const contentStr = this.uint8ArrayToString(rawContent);
       const parsedData = JSON.parse(contentStr);
 
-      const dataArray: any[] = Array.isArray(parsedData) ? parsedData :
-        (parsedData.data && Array.isArray(parsedData.data)) ? parsedData.data :
-          (parsedData.questions && Array.isArray(parsedData.questions)) ? parsedData.questions :
-            (parsedData.articles && Array.isArray(parsedData.articles)) ? parsedData.articles : [];
+      const dataArray: Object[] = Array.isArray(parsedData) ? parsedData as Object[] :
+        (parsedData['data'] && Array.isArray(parsedData['data'])) ? parsedData['data'] as Object[] :
+          (parsedData['questions'] && Array.isArray(parsedData['questions'])) ? parsedData['questions'] as Object[] :
+            (parsedData['articles'] && Array.isArray(parsedData['articles'])) ? parsedData['articles'] as Object[] : [];
 
       // 如果数据量不大（< MAX_CACHED_ITEMS），直接全量缓存
       if (dataArray.length <= this.MAX_CACHED_ITEMS) {
@@ -338,7 +338,7 @@ export class LazyDataLoader {
    * @param dataKey 数据源标识
    * @returns 已加载到内存中的数据项
    */
-  getLoadedItems(dataKey: string): any[] {
+  getLoadedItems(dataKey: string): Object[] {
     const state = this.loadStates.get(dataKey);
     return state ? state.items : [];
   }
@@ -371,17 +371,17 @@ export class LazyDataLoader {
    * @param field 搜索字段名
    * @returns 匹配的数据列表
    */
-  searchLoaded(dataKey: string, keyword: string, field: string): any[] {
+  searchLoaded(dataKey: string, keyword: string, field: string): Object[] {
     const state = this.loadStates.get(dataKey);
     if (!state || !keyword || keyword.length === 0) {
       return state ? state.items : [];
     }
 
     const lowerKeyword = keyword.toLowerCase();
-    return state.items.filter((item: any) => {
-      const val = item[field];
+    return state.items.filter((item: Object) => {
+      const val = (item as Record<string, Object>)[field];
       if (typeof val === 'string') {
-        return val.toLowerCase().includes(lowerKeyword);
+        return (val as string).toLowerCase().includes(lowerKeyword);
       }
       return false;
     });
@@ -393,14 +393,14 @@ export class LazyDataLoader {
    * @param category 分类名称
    * @returns 匹配的数据列表
    */
-  filterByCategory(dataKey: string, category: string): any[] {
+  filterByCategory(dataKey: string, category: string): Object[] {
     const state = this.loadStates.get(dataKey);
     if (!state || !category) {
       return state ? state.items : [];
     }
 
-    return state.items.filter((item: any) => {
-      return item['category'] === category;
+    return state.items.filter((item: Object) => {
+      return (item as Record<string, Object>)['category'] === category;
     });
   }
 
@@ -505,12 +505,12 @@ export class LazyDataLoader {
   /**
    * 从数据数组中提取指定字段的唯一值
    */
-  private extractUniqueValues(dataArray: any[], field: string): string[] {
+  private extractUniqueValues(dataArray: Object[], field: string): string[] {
     const valueSet = new Set<string>();
     for (let i = 0; i < dataArray.length; i++) {
-      const val = dataArray[i][field];
-      if (val && typeof val === 'string' && val.length > 0) {
-        valueSet.add(val);
+      const val = (dataArray[i] as Record<string, Object>)[field];
+      if (val && typeof val === 'string' && (val as string).length > 0) {
+        valueSet.add(val as string);
       }
     }
     return Array.from(valueSet);

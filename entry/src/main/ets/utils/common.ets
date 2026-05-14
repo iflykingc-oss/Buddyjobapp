@@ -10,9 +10,9 @@ export function generateId(prefix: string = 'id'): string {
 /**
  * 防抖函数
  */
-export function debounce<T extends (...args: any[]) => any>(fn: T, delay: number): T {
+export function debounce<T extends (...args: Object[]) => Object>(fn: T, delay: number): T {
   let timer: number = -1;
-  return ((...args: any[]) => {
+  return ((...args: Object[]) => {
     if (timer >= 0) clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   }) as T;
@@ -21,9 +21,9 @@ export function debounce<T extends (...args: any[]) => any>(fn: T, delay: number
 /**
  * 节流函数
  */
-export function throttle<T extends (...args: any[]) => any>(fn: T, delay: number): T {
+export function throttle<T extends (...args: Object[]) => Object>(fn: T, delay: number): T {
   let lastTime = 0;
-  return ((...args: any[]) => {
+  return ((...args: Object[]) => {
     const now = Date.now();
     if (now - lastTime >= delay) {
       lastTime = now;

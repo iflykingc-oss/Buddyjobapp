@@ -18,8 +18,7 @@ import {
   BorderRadius,
   SemanticRadius,
   FontSize,
-  FontWeight,
-  Shadows
+  FontWeight
 } from '../../constants/design-tokens';
 
 @Component

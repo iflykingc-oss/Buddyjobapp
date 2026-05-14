@@ -18,7 +18,7 @@ export enum ErrorCode {
 export interface ApiError {
   code: ErrorCode;
   message: string;
-  details?: any;
+  details?: Object;
   statusCode?: number;
 }
 
@@ -26,8 +26,8 @@ export interface ApiError {
 export interface RequestConfig {
   url: string;
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  data?: any;
-  params?: Record<string, any>;
+  data?: Object;
+  params?: Record<string, string>;
   headers?: Record<string, string>;
   timeout?: number;
   retry?: boolean;
@@ -44,7 +44,7 @@ export interface ApiResponse<T> {
 
 // 拦截器类型定义
 type RequestInterceptor = (config: RequestConfig) => RequestConfig | Promise<RequestConfig>;
-type ResponseInterceptor = (response: ApiResponse<any>) => ApiResponse<any> | Promise<ApiResponse<any>>;
+type ResponseInterceptor = (response: ApiResponse<Object>) => ApiResponse<Object> | Promise<ApiResponse<Object>>;
 
 // 取消请求接口（模拟AbortSignal）
 export interface CancellableRequest {
@@ -258,7 +258,7 @@ export class ApiService {
    * @param response 响应对象
    * @param requestId 请求ID（可选）
    */
-  private logResponse(response: ApiResponse<any>, requestId?: string): void {
+  private logResponse(response: ApiResponse<Object>, requestId?: string): void {
     if (!this.enableLogging) return;
     const timestamp = new Date().toISOString();
     const idTag = requestId ? ` [${requestId}]` : '';
@@ -325,7 +325,7 @@ export class ApiService {
    * @param statusCode HTTP状态码（可选）
    * @returns ApiError对象
    */
-  private createApiError(code: ErrorCode, message: string, details?: any, statusCode?: number): ApiError {
+  private createApiError(code: ErrorCode, message: string, details?: Object, statusCode?: number): ApiError {
     return {
       code,
       message,
@@ -340,23 +340,24 @@ export class ApiService {
    * @param attempt 当前尝试次数
    * @returns 是否应该重试
    */
-  private shouldRetry(error: any, attempt: number): boolean {
+  private shouldRetry(error: Record<string, Object>, attempt: number): boolean {
     if (attempt >= this.retryCount) {
       return false;
     }
 
     // 网络错误应该重试
-    if (error.code === -1 || error.code === 'NETWORK_ERROR') {
+    const errCode = error['code'];
+    if (errCode === -1 || errCode === 'NETWORK_ERROR') {
       return true;
     }
 
     // 超时错误应该重试
-    if (error.code === 0 || error.code === 'TIMEOUT') {
+    if (errCode === 0 || errCode === 'TIMEOUT') {
       return true;
     }
 
     // 服务器错误应该重试 (5xx)
-    if (error.code >= 500 && error.code < 600) {
+    if (typeof errCode === 'number' && errCode >= 500 && errCode < 600) {
       return true;
     }
 
@@ -384,7 +385,16 @@ export class ApiService {
    * @returns 处理后的请求配置
    */
   private async executeRequestInterceptors(config: RequestConfig): Promise<RequestConfig> {
-    let processedConfig = { ...config };
+    let processedConfig: RequestConfig = {
+      url: config.url,
+      method: config.method,
+      data: config.data,
+      params: config.params,
+      headers: config.headers,
+      timeout: config.timeout,
+      retry: config.retry,
+      requestId: config.requestId
+    };
 
     for (let i = 0; i < this.requestInterceptors.length; i++) {
       const interceptor = this.requestInterceptors[i];
@@ -399,8 +409,13 @@ export class ApiService {
    * @param response 响应对象
    * @returns 处理后的响应对象
    */
-  private async executeResponseInterceptors(response: ApiResponse<any>): Promise<ApiResponse<any>> {
-    let processedResponse = { ...response };
+  private async executeResponseInterceptors(response: ApiResponse<Object>): Promise<ApiResponse<Object>> {
+    let processedResponse: ApiResponse<Object> = {
+      success: response.success,
+      data: response.data,
+      message: response.message,
+      error: response.error
+    };
 
     for (let i = 0; i < this.responseInterceptors.length; i++) {
       const interceptor = this.responseInterceptors[i];
@@ -429,10 +444,11 @@ export class ApiService {
     try {
       processedConfig = await this.executeRequestInterceptors(config);
     } catch (interceptorError) {
-      this.logError(this.createApiError(ErrorCode.UNKNOWN, 'Request interceptor error', interceptorError), requestId);
+      const ie = interceptorError as Object;
+      this.logError(this.createApiError(ErrorCode.UNKNOWN, 'Request interceptor error', ie), requestId);
       return {
         success: false,
-        error: this.createApiError(ErrorCode.UNKNOWN, 'Request interceptor error', interceptorError)
+        error: this.createApiError(ErrorCode.UNKNOWN, 'Request interceptor error', ie)
       };
     }
 
@@ -454,9 +470,14 @@ export class ApiService {
 
     // 构建请求头
     const header: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...processedConfig.headers
+      'Content-Type': 'application/json'
     };
+    if (processedConfig.headers) {
+      const extraHeaders = processedConfig.headers;
+      for (const key in extraHeaders) {
+        header[key] = extraHeaders[key];
+      }
+    }
 
     if (this.token) {
       header['Authorization'] = `Bearer ${this.token}`;
@@ -466,11 +487,11 @@ export class ApiService {
     const finalUrl = url;
 
     // 记录请求
-    this.logRequest({ ...processedConfig, url: finalUrl });
+    this.logRequest({ url: finalUrl, method: processedConfig.method, data: processedConfig.data, params: processedConfig.params, headers: processedConfig.headers, timeout: processedConfig.timeout, retry: processedConfig.retry, requestId: processedConfig.requestId });
 
     // 执行带重试的请求
     const shouldRetryRequest = processedConfig.retry !== false; // 默认启用重试
-    let lastError: any = null;
+    let lastError: Record<string, Object> | null = null;
     let attempt = 0;
 
     while (true) {
@@ -485,8 +506,14 @@ export class ApiService {
 
       try {
         const response = await this.executeRequest<T>({
-          ...processedConfig,
           url: finalUrl,
+          method: processedConfig.method,
+          data: processedConfig.data,
+          params: processedConfig.params,
+          headers: header,
+          timeout: processedConfig.timeout,
+          retry: processedConfig.retry,
+          requestId: processedConfig.requestId,
           header
         }, requestId);
 
@@ -498,7 +525,7 @@ export class ApiService {
         try {
           processedResponse = await this.executeResponseInterceptors(response);
         } catch (interceptorError) {
-          this.logError(this.createApiError(ErrorCode.UNKNOWN, 'Response interceptor error', interceptorError), requestId);
+          this.logError(this.createApiError(ErrorCode.UNKNOWN, 'Response interceptor error', interceptorError as Object), requestId);
         }
 
         // 记录响应
@@ -506,19 +533,21 @@ export class ApiService {
 
         return processedResponse;
 
-      } catch (error: any) {
-        lastError = error;
+      } catch (error) {
+        lastError = error as Record<string, Object>;
+        const errMsg = lastError ? (lastError['message'] as string) || 'Network error' : 'Network error';
+        const errCode = lastError ? (lastError['code'] as number) : undefined;
 
         // 记录错误
         this.logError(this.createApiError(
           ErrorCode.NETWORK_ERROR,
-          error.message || 'Network error',
-          error,
-          error.code
+          errMsg,
+          lastError,
+          errCode
         ), requestId);
 
         // 检查是否应该重试
-        if (shouldRetryRequest && this.shouldRetry(error, attempt)) {
+        if (shouldRetryRequest && this.shouldRetry(lastError ?? {}, attempt)) {
           attempt++;
           const delay = this.calculateRetryDelay(attempt - 1);
           this.log(`[ApiService] Retrying request (attempt ${attempt}/${this.retryCount}) after ${delay}ms...`);
@@ -537,13 +566,15 @@ export class ApiService {
     this.pendingRequests.delete(requestId);
 
     // 返回错误响应
+    const lastCode = lastError ? (lastError['code'] as number) || 0 : 0;
+    const lastMsg = lastError ? (lastError['message'] as string) || 'Request failed' : 'Request failed';
     const errorResponse: ApiResponse<T> = {
       success: false,
       data: null as T,
       error: this.createApiError(
-        this.getErrorCode(lastError?.code || 0),
-        lastError?.message || 'Request failed',
-        lastError
+        this.getErrorCode(lastCode),
+        lastMsg,
+        lastError ?? undefined
       )
     };
 
@@ -575,11 +606,11 @@ export class ApiService {
 
       // 处理HTTP状态码
       if (response.code === 200) {
-        const result = JSON.parse(response.result as string);
+        const result = JSON.parse(response.result as string) as Record<string, Object>;
         return {
           success: true,
-          data: result.data,
-          message: result.message
+          data: result['data'] as T,
+          message: result['message'] as string
         };
       }
 
@@ -601,14 +632,14 @@ export class ApiService {
       }
 
       // 处理其他错误码
-      let resultData: Record<string, any> | null = null;
+      let resultData: Record<string, Object> | null = null;
       try {
         resultData = JSON.parse(response.result as string);
       } catch (e) {
         // ignore parse error
       }
 
-      const errorMsg = resultData?.message || resultData?.error || `请求失败(${response.code})`;
+      const errorMsg = (resultData?.['message'] as string) || (resultData?.['error'] as string) || `请求失败(${response.code})`;
 
       return {
         success: false,
@@ -621,14 +652,15 @@ export class ApiService {
         )
       };
 
-    } catch (error: any) {
+    } catch (error) {
       // 包装错误信息
-      const errorMessage = error?.message || '网络请求失败';
+      const err = error as Record<string, Object>;
+      const errorMessage = (err?.['message'] as string) || '网络请求失败';
 
       // 判断是否为超时错误
       const isTimeout = errorMessage.includes('timeout') ||
                         errorMessage.includes('Timeout') ||
-                        error.code === 0;
+                        err['code'] === 0;
 
       return {
         success: false,
@@ -636,7 +668,7 @@ export class ApiService {
         error: this.createApiError(
           isTimeout ? ErrorCode.TIMEOUT : ErrorCode.NETWORK_ERROR,
           errorMessage,
-          error
+          err
         )
       };
     }
@@ -679,7 +711,7 @@ export class ApiService {
    * @param params 查询参数（可选）
    * @returns API响应结果
    */
-  async get<T>(url: string, params?: Record<string, any>): Promise<ApiResponse<T>> {
+  async get<T>(url: string, params?: Record<string, string>): Promise<ApiResponse<T>> {
     return this.request<T>({
       url,
       method: 'GET',
@@ -694,13 +726,18 @@ export class ApiService {
    * @param config 其他请求配置（可选）
    * @returns API响应结果
    */
-  async post<T>(url: string, data?: object, config?: Partial<RequestConfig>): Promise<ApiResponse<T>> {
-    return this.request<T>({
+  async post<T>(url: string, data?: Object, config?: Partial<RequestConfig>): Promise<ApiResponse<T>> {
+    const reqConfig: RequestConfig = {
       url,
       method: 'POST',
       data,
-      ...config
-    });
+      params: config?.params,
+      headers: config?.headers,
+      timeout: config?.timeout,
+      retry: config?.retry,
+      requestId: config?.requestId
+    };
+    return this.request<T>(reqConfig);
   }
 
   /**
@@ -710,13 +747,18 @@ export class ApiService {
    * @param config 其他请求配置（可选）
    * @returns API响应结果
    */
-  async put<T>(url: string, data?: object, config?: Partial<RequestConfig>): Promise<ApiResponse<T>> {
-    return this.request<T>({
+  async put<T>(url: string, data?: Object, config?: Partial<RequestConfig>): Promise<ApiResponse<T>> {
+    const reqConfig: RequestConfig = {
       url,
       method: 'PUT',
       data,
-      ...config
-    });
+      params: config?.params,
+      headers: config?.headers,
+      timeout: config?.timeout,
+      retry: config?.retry,
+      requestId: config?.requestId
+    };
+    return this.request<T>(reqConfig);
   }
 
   /**
@@ -726,11 +768,16 @@ export class ApiService {
    * @returns API响应结果
    */
   async delete<T>(url: string, config?: Partial<RequestConfig>): Promise<ApiResponse<T>> {
-    return this.request<T>({
+    const reqConfig: RequestConfig = {
       url,
       method: 'DELETE',
-      ...config
-    });
+      params: config?.params,
+      headers: config?.headers,
+      timeout: config?.timeout,
+      retry: config?.retry,
+      requestId: config?.requestId
+    };
+    return this.request<T>(reqConfig);
   }
 
   /**
@@ -738,7 +785,7 @@ export class ApiService {
    * @param params 参数对象
    * @returns URL编码的查询参数字符串
    */
-  private buildQuery(params: Record<string, any>): string {
+  private buildQuery(params: Record<string, string>): string {
     const parts: string[] = [];
     for (const key in params) {
       const value = params[key];

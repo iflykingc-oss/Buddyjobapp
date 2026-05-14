@@ -8,18 +8,20 @@ import {
   BrandColors,
   NeutralColors,
   SemanticColors,
+  ErrorColors,
   SemanticSpacing,
   BorderRadius,
   SemanticRadius,
   FontSize,
   FontWeight,
-  Duration
+  Duration,
+  Spacing
 } from '../../constants/design-tokens';
 import {
   SpeechRecognitionService,
   SpeechRecognitionState,
   RecognitionResult
-} from '../services/SpeechRecognitionService';
+} from '../../services/SpeechRecognitionService';
 
 interface WavePoint {
   x: number;
@@ -489,7 +491,9 @@ export struct VoiceRecognitionPanel {
           baseAmplitude * 0.5;
 
         newPoints.push({
-          ...this.wavePoints[i],
+          x: this.wavePoints[i].x,
+          y: this.wavePoints[i].y,
+          phase: this.wavePoints[i].phase,
           amplitude: amplitude
         });
       }

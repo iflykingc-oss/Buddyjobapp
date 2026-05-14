@@ -26,35 +26,35 @@ export class Logger {
   /**
    * 输出调试日志
    */
-  debug(message: string, ...args: any[]): void {
+  debug(message: string, ...args: Object[]): void {
     hilog.debug(this.domain, this.prefix, message, args);
   }
 
   /**
    * 输出信息日志
    */
-  info(message: string, ...args: any[]): void {
+  info(message: string, ...args: Object[]): void {
     hilog.info(this.domain, this.prefix, message, args);
   }
 
   /**
    * 输出警告日志
    */
-  warn(message: string, ...args: any[]): void {
+  warn(message: string, ...args: Object[]): void {
     hilog.warn(this.domain, this.prefix, message, args);
   }
 
   /**
    * 输出错误日志
    */
-  error(message: string, ...args: any[]): void {
+  error(message: string, ...args: Object[]): void {
     hilog.error(this.domain, this.prefix, message, args);
   }
 
   /**
    * 输出致命错误日志
    */
-  fatal(message: string, ...args: any[]): void {
+  fatal(message: string, ...args: Object[]): void {
     hilog.fatal(this.domain, this.prefix, message, args);
   }
 

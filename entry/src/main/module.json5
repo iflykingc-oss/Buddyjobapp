@@ -65,26 +65,6 @@
         }
       },
       {
-        "name": "ohos.permission.READ_FILE",
-        "reason": "$string:permission_read_file_reason",
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "always"
-        }
-      },
-      {
-        "name": "ohos.permission.WRITE_FILE",
-        "reason": "$string:permission_write_file_reason",
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "always"
-        }
-      },
-      {
-        "name": "ohos.permission.DISTRIBUTED_DATASYNC",
-        "reason": "$string:permission_distributed_reason"
-      },
-      {
         "name": "ohos.permission.MICROPHONE",
         "reason": "$string:permission_microphone_reason",
         "usedScene": {
@@ -144,35 +124,6 @@
       }
     ],
     "extensionAbilities": [
-      {
-        "name": "XiaoyiAgentExtension",
-        "srcEntry": "./ets/services/XiaoyiAgentExtension.ets",
-        "type": "agent",
-        "description": "小艺智能体扩展能力",
-        "exported": true
-      },
-      {
-        "name": "SelectionExtensionAbility",
-        "srcEntry": "./ets/services/SelectionExtensionAbility.ets",
-        "type": "selection",
-        "description": "小艺圈选分析扩展能力",
-        "exported": true,
-        "skills": [
-          {
-            "entities": [
-              "entity.system.text"
-            ],
-            "actions": [
-              "ohos.want.action.sendText"
-            ],
-            "uris": [
-              {
-                "type": "text/plain"
-              }
-            ]
-          }
-        ]
-      }
     ]
   }
 }

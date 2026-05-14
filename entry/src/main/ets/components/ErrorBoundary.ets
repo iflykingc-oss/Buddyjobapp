@@ -25,6 +25,7 @@ import {
   SemanticColors,
   DarkSemanticColors,
   BrandColors,
+  NeutralColors,
   Spacing,
   BorderRadius,
   FontSize,
@@ -155,6 +156,3 @@ export struct ErrorBoundary {
     }
   }
 }
-
-// 引入 NeutralColors 用于按钮文字色
-import { NeutralColors } from '../constants/design-tokens';

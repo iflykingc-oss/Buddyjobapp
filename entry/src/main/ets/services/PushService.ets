@@ -29,7 +29,7 @@ export interface PushMessage {
   // 消息内容
   content: string;
   // 附加数据
-  payload?: Record<string, any>;
+  payload?: Record<string, Object>;
   // 发送时间
   timestamp: number;
   // 是否已读
@@ -113,7 +113,15 @@ export class PushService {
     try {
       // 合并配置
       if (config) {
-        this.config = { ...this.config, ...config };
+        if (config.autoGetToken !== undefined) {
+          this.config.autoGetToken = config.autoGetToken;
+        }
+        if (config.showNotification !== undefined) {
+          this.config.showNotification = config.showNotification;
+        }
+        if (config.onMessageClick !== undefined) {
+          this.config.onMessageClick = config.onMessageClick;
+        }
       }
 
       // 检查推送服务是否可用
@@ -235,21 +243,21 @@ export class PushService {
   private parsePushMessage(data: hmsPush.PushMessage): PushMessage | null {
     try {
       // 解析消息数据
-      let messageData: any;
+      let messageData: Record<string, Object>;
 
       if (typeof data.data === 'string') {
-        messageData = JSON.parse(data.data);
+        messageData = JSON.parse(data.data) as Record<string, Object>;
       } else {
-        messageData = data.data || data;
+        messageData = (data.data || data) as Record<string, Object>;
       }
 
       return {
-        messageId: messageData.messageId || data.messageId || String(Date.now()),
-        type: messageData.type || PushMessageType.SYSTEM,
-        title: messageData.title || data.title || '新消息',
-        content: messageData.content || messageData.message || data.content || '',
-        payload: messageData.payload || messageData.extras,
-        timestamp: messageData.timestamp || Date.now(),
+        messageId: (messageData['messageId'] || data.messageId || String(Date.now())) as string,
+        type: (messageData['type'] || PushMessageType.SYSTEM) as PushMessageType,
+        title: (messageData['title'] || data.title || '新消息') as string,
+        content: (messageData['content'] || messageData['message'] || data.content || '') as string,
+        payload: (messageData['payload'] || messageData['extras']) as Record<string, Object> | undefined,
+        timestamp: (messageData['timestamp'] || Date.now()) as number,
         isRead: false,
       };
     } catch (error) {
@@ -265,15 +273,15 @@ export class PushService {
     switch (message.type) {
       case PushMessageType.CHAT:
         // 跳转到聊天页面
-        if (message.payload?.sessionId) {
-          Router.push('pages/Chat', { sessionId: message.payload.sessionId });
+        if (message.payload && message.payload['sessionId']) {
+          Router.push('pages/Chat', { sessionId: message.payload['sessionId'] });
         }
         break;
 
       case PushMessageType.SYSTEM:
         // 跳转到系统通知详情
-        if (message.payload?.noticeId) {
-          Router.push('pages/NotificationDetail', { noticeId: message.payload.noticeId });
+        if (message.payload && message.payload['noticeId']) {
+          Router.push('pages/NotificationDetail', { noticeId: message.payload['noticeId'] });
         }
         break;
 
@@ -284,8 +292,8 @@ export class PushService {
 
       case PushMessageType.ORDER:
         // 跳转到订单详情
-        if (message.payload?.orderId) {
-          Router.push('pages/OrderDetail', { orderId: message.payload.orderId });
+        if (message.payload && message.payload['orderId']) {
+          Router.push('pages/OrderDetail', { orderId: message.payload['orderId'] });
         }
         break;
 
@@ -458,9 +466,13 @@ export class PushService {
    */
   sendLocalNotification(message: Omit<PushMessage, 'messageId' | 'timestamp'>): void {
     const fullMessage: PushMessage = {
-      ...message,
       messageId: `local_${Date.now()}`,
       timestamp: Date.now(),
+      type: message.type,
+      title: message.title,
+      content: message.content,
+      payload: message.payload,
+      isRead: message.isRead,
     };
 
     this.showLocalNotification(fullMessage);

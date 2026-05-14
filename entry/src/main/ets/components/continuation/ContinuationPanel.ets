@@ -12,7 +12,7 @@ import {
   BorderRadius,
   FontSize,
   FontWeight
-} from '../constants/design-tokens';
+} from '../../constants/design-tokens';
 
 // 流转面板参数
 interface ContinuationPanelProps {
@@ -343,7 +343,7 @@ export struct ContinuationPanel {
         .fontSize(FontSize.Size14)
         .fontColor(NeutralColors.Neutral700)
         .backgroundColor(NeutralColors.Neutral100)
-        .borderRadius(BorderRadius.RadiusLG)
+        .borderRadius(BorderRadius.RadiusLg)
         .onClick(() => {
           this.controller.close();
         });
@@ -354,7 +354,7 @@ export struct ContinuationPanel {
         .fontSize(FontSize.Size14)
         .fontColor(NeutralColors.Neutral0)
         .backgroundColor(this.selectedDevice ? BrandColors.Brand500 : NeutralColors.Neutral300)
-        .borderRadius(BorderRadius.RadiusLG)
+        .borderRadius(BorderRadius.RadiusLg)
         .enabled(this.selectedDevice !== null && 
                  this.continuationState === ContinuationState.IDLE)
         .onClick(async () => {

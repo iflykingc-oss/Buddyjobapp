@@ -8,11 +8,13 @@ import { FunctionController, FunctionComponent } from '@kit.AgentFrameworkKit';
 import {
   BrandColors,
   NeutralColors,
+  SemanticColors,
+  SuccessColors,
   Spacing,
   BorderRadius,
   FontSize,
   FontWeight
-} from '../constants/design-tokens';
+} from '../../constants/design-tokens';
 
 // 智能体类型
 export enum AgentType {
@@ -166,7 +168,7 @@ export struct AgentButton {
     .height(this.getButtonSize().height)
     .justifyContent(FlexAlign.Center)
     .backgroundColor(this.isAvailable ? BrandColors.Brand500 : NeutralColors.Neutral300)
-    .borderRadius(BorderRadius.RadiusLG)
+    .borderRadius(BorderRadius.RadiusLg)
     .enabled(this.isAvailable && !this.isLoading)
     .onClick(async () => {
       await this.launchAgent();
@@ -257,10 +259,10 @@ export struct AgentCard {
               Image($r('app.media.media_ic_check'))
                 .width(16)
                 .height(16)
-                .fillColor(SemanticColors.Success.Success500);
+                .fillColor(SemanticColors.Success);
 
               Text(feature)
-                .fontSize(FontSize.Size13)
+                .fontSize(FontSize.Xs)
                 .fontColor(NeutralColors.Neutral700)
                 .margin({ left: Spacing.Space2 });
             }
@@ -282,7 +284,7 @@ export struct AgentCard {
     }
     .width('100%')
     .backgroundColor(NeutralColors.Neutral0)
-    .borderRadius(BorderRadius.RadiusLG)
+    .borderRadius(BorderRadius.RadiusLg)
     .shadow({
       radius: 8,
       color: 'rgba(0, 0, 0, 0.08)',
@@ -373,6 +375,3 @@ export struct AgentCard {
     }
   }
 }
-
-// 导入 SemanticColors
-import { SemanticColors } from '../constants/design-tokens';

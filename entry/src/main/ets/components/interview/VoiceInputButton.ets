@@ -12,11 +12,9 @@ import {
   ErrorColors,
   Spacing,
   SemanticSpacing,
-  BorderRadius,
   SemanticRadius,
   FontSize,
-  FontWeight,
-  Duration
+  FontWeight
 } from '../../constants/design-tokens';
 import {
   SpeechRecognitionService,
@@ -41,8 +39,8 @@ export struct VoiceInputButton {
   // 状态
   @Prop isRecording: boolean = false;
   @Prop isProcessing: boolean = false;
-  @Prop recognizedText: string = '';
   @Prop recordingDuration: number = 0;
+  @State private internalRecognizedText: string = '';
 
   // 回调
   onStartRecording: () => void = () => {};
@@ -237,7 +235,7 @@ export struct VoiceInputButton {
           .onClick(() => {
             this.textInput = '';
             this.interimText = '';
-            this.recognizedText = '';
+            this.internalRecognizedText = '';
             this.confidence = 0;
             this.onTextChanged('');
           })
@@ -258,7 +256,7 @@ export struct VoiceInputButton {
       }
 
       // 最终识别结果
-      Text(this.textInput || this.recognizedText)
+      Text(this.textInput || this.internalRecognizedText)
         .fontSize(FontSize.Sm)
         .fontColor(SemanticColors.Text1)
         .width('100%')
@@ -605,7 +603,7 @@ export struct VoiceInputButton {
     this.speechService.onResult = (result: RecognitionResult) => {
       if (result.isFinal) {
         // 最终结果
-        this.recognizedText = result.text;
+        this.internalRecognizedText = result.text;
         this.textInput = result.text;
         this.confidence = result.confidence;
         this.interimText = '';
@@ -657,7 +655,7 @@ export struct VoiceInputButton {
     // 获取最终结果
     const result = this.speechService.lastResult;
     if (result) {
-      this.recognizedText = result.text;
+      this.internalRecognizedText = result.text;
       this.textInput = result.text;
       this.confidence = result.confidence;
       this.onRecognitionResult(result.text, result.confidence);

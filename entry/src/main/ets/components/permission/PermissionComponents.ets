@@ -11,7 +11,7 @@ import {
   BorderRadius,
   FontSize,
   FontWeight
-} from '../constants/design-tokens';
+} from '../../constants/design-tokens';
 
 // 权限引导配置
 interface PermissionGuideConfig {
@@ -86,7 +86,7 @@ export struct PermissionGuideDialog {
           .fontSize(FontSize.Size14)
           .fontColor(NeutralColors.Neutral700)
           .backgroundColor(NeutralColors.Neutral100)
-          .borderRadius(BorderRadius.RadiusLG)
+          .borderRadius(BorderRadius.RadiusLg)
           .onClick(() => {
             this.controller.close();
           });
@@ -97,7 +97,7 @@ export struct PermissionGuideDialog {
           .fontSize(FontSize.Size14)
           .fontColor(NeutralColors.Neutral0)
           .backgroundColor(BrandColors.Brand500)
-          .borderRadius(BorderRadius.RadiusLG)
+          .borderRadius(BorderRadius.RadiusLg)
           .enabled(!this.isRequesting)
           .onClick(async () => {
             await this.requestAllPermissions();

@@ -14,6 +14,7 @@ import {
   SemanticColors,
   WarningColors,
   SuccessColors,
+  ErrorColors,
   Spacing,
   SemanticSpacing,
   BorderRadius,

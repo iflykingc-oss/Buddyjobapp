@@ -55,19 +55,19 @@ export class DataConverter {
    *   }
    * Target: Assessment model
    */
-  convertMBTI(rawData: any): Assessment {
+  convertMBTI(rawData: Record<string, Object>): Assessment {
     try {
-      const title = rawData.title || rawData.name || 'MBTI人格测试';
-      const description = rawData.description || '通过93道题目探索你的MBTI人格类型';
-      const rawQuestions = rawData.questions || [];
+      const title = (rawData['title'] as string) || (rawData['name'] as string) || 'MBTI人格测试';
+      const description = (rawData['description'] as string) || '通过93道题目探索你的MBTI人格类型';
+      const rawQuestions = (rawData['questions'] as Record<string, Object>[]) || [];
 
       // 收集所有维度（E/I, S/N, T/F, J/P）
       const dimensionSet: Set<string> = new Set();
       for (let i = 0; i < rawQuestions.length; i++) {
         const q = rawQuestions[i];
-        const opts = q.options || q.option || [];
+        const opts = ((q['options'] as Record<string, Object>[]) || (q['option'] as Record<string, Object>[]) || []) as Record<string, Object>[];
         for (let j = 0; j < opts.length; j++) {
-          const score = opts[j].score || opts[j].dimension || '';
+          const score = (opts[j]['score'] as string) || (opts[j]['dimension'] as string) || '';
           // 取第一个字符作为维度标识
           if (score.length > 0) {
             dimensionSet.add(score.charAt(0).toUpperCase());
@@ -89,13 +89,13 @@ export class DataConverter {
       }
 
       const assessment: Assessment = {
-        id: rawData.id || 'mbti_test',
+        id: (rawData['id'] as string) || 'mbti_test',
         title: title,
         description: description,
         type: 'personality' as AssessmentType,
-        icon: rawData.icon || '🧠',
-        duration: rawData.duration || 30,
-        category: rawData.category || '性格测评',
+        icon: (rawData['icon'] as string) || '🧠',
+        duration: (rawData['duration'] as number) || 30,
+        category: (rawData['category'] as string) || '性格测评',
         dimensions: dimensions,
         questions: questions,
         status: 'not_started'
@@ -131,18 +131,18 @@ export class DataConverter {
    *   }
    * Target: Assessment model
    */
-  convertHolland(rawData: any): Assessment {
+  convertHolland(rawData: Record<string, Object>): Assessment {
     try {
-      const title = rawData.title || rawData.name || '霍兰德职业兴趣测试';
-      const description = rawData.description || '发现你的职业兴趣类型，找到最适合的职业方向';
-      const rawQuestions = rawData.questions || [];
+      const title = (rawData['title'] as string) || (rawData['name'] as string) || '霍兰德职业兴趣测试';
+      const description = (rawData['description'] as string) || '发现你的职业兴趣类型，找到最适合的职业方向';
+      const rawQuestions = ((rawData['questions'] as Record<string, Object>[]) || []) as Record<string, Object>[];
 
       // 收集维度
-      const dimensions: string[] = rawData.dimensions || [];
+      const dimensions: string[] = (rawData['dimensions'] as string[]) || [];
       if (dimensions.length === 0) {
         const dimSet: Set<string> = new Set();
         for (let i = 0; i < rawQuestions.length; i++) {
-          const dim = rawQuestions[i].dimension || rawQuestions[i].type || '';
+          const dim = (rawQuestions[i]['dimension'] as string) || (rawQuestions[i]['type'] as string) || '';
           if (dim.length > 0) {
             dimSet.add(dim);
           }
@@ -161,13 +161,13 @@ export class DataConverter {
       }
 
       const assessment: Assessment = {
-        id: rawData.id || 'holland_test',
+        id: (rawData['id'] as string) || 'holland_test',
         title: title,
         description: description,
         type: 'career' as AssessmentType,
-        icon: rawData.icon || '🎯',
-        duration: rawData.duration || 20,
-        category: rawData.category || '职业测评',
+        icon: (rawData['icon'] as string) || '🎯',
+        duration: (rawData['duration'] as number) || 20,
+        category: (rawData['category'] as string) || '职业测评',
         dimensions: dimensions,
         questions: questions,
         status: 'not_started'
@@ -188,7 +188,7 @@ export class DataConverter {
    * @param hollandData Holland原始JSON数据
    * @returns Assessment数组
    */
-  convertAllAssessments(mbtiData: any, hollandData: any): Assessment[] {
+  convertAllAssessments(mbtiData: Record<string, Object>, hollandData: Record<string, Object>): Assessment[] {
     const assessments: Assessment[] = [];
 
     if (mbtiData !== null && mbtiData !== undefined) {
@@ -223,26 +223,30 @@ export class DataConverter {
    *   ]
    * Target: InterviewQuestion[]
    */
-  convertInterviewQuestions(rawData: any): InterviewQuestion[] {
+  convertInterviewQuestions(rawData: Record<string, Object> | Record<string, Object>[]): InterviewQuestion[] {
     try {
       if (!rawData) {
         return [];
       }
 
       // 兼容数组和对象格式
-      const rawList: any[] = Array.isArray(rawData) ? rawData : (rawData.questions || rawData.data || []);
+      const rawList: Record<string, Object>[] = Array.isArray(rawData)
+        ? rawData as Record<string, Object>[]
+        : (((rawData as Record<string, Object>)['questions'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['data'] as Record<string, Object>[])
+          || []);
 
       const questions: InterviewQuestion[] = [];
       for (let i = 0; i < rawList.length; i++) {
         const rq = rawList[i];
         const question: InterviewQuestion = {
-          id: rq.id || `iq_${String(i).padStart(3, '0')}`,
-          category: rq.category || rq.type || 'behavioral',
-          question: rq.question || rq.text || rq.title || '',
-          tips: rq.tips || rq.hint || undefined,
-          difficulty: this.normalizeDifficulty(rq.difficulty || rq.level),
-          referenceAnswer: rq.referenceAnswer || rq.answer || rq.reference_answer || undefined,
-          starGuide: this.convertStarGuide(rq.starGuide || rq.star_guide || rq.star)
+          id: (rq['id'] as string) || `iq_${String(i).padStart(3, '0')}`,
+          category: (rq['category'] as string) || (rq['type'] as string) || 'behavioral',
+          question: (rq['question'] as string) || (rq['text'] as string) || (rq['title'] as string) || '',
+          tips: (rq['tips'] as string) || (rq['hint'] as string) || undefined,
+          difficulty: this.normalizeDifficulty((rq['difficulty'] as string) || (rq['level'] as string)),
+          referenceAnswer: (rq['referenceAnswer'] as string) || (rq['answer'] as string) || (rq['reference_answer'] as string) || undefined,
+          starGuide: this.convertStarGuide((rq['starGuide'] as Record<string, Object>) || (rq['star_guide'] as Record<string, Object>) || (rq['star'] as Record<string, Object>))
         };
         questions.push(question);
       }
@@ -275,28 +279,34 @@ export class DataConverter {
    *   ]
    * Target: KnowledgeArticle[]
    */
-  convertKnowledgeArticles(rawData: any): KnowledgeArticle[] {
+  convertKnowledgeArticles(rawData: Record<string, Object> | Record<string, Object>[]): KnowledgeArticle[] {
     try {
       if (!rawData) {
         return [];
       }
 
       // 兼容数组和对象格式
-      const rawList: any[] = Array.isArray(rawData) ? rawData : (rawData.articles || rawData.data || rawData.list || []);
+      const rawList: Record<string, Object>[] = Array.isArray(rawData)
+        ? rawData as Record<string, Object>[]
+        : (((rawData as Record<string, Object>)['articles'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['data'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['list'] as Record<string, Object>[])
+          || []);
 
       const articles: KnowledgeArticle[] = [];
       for (let i = 0; i < rawList.length; i++) {
         const ra = rawList[i];
+        const readCountVal = typeof ra['readCount'] === 'number' ? ra['readCount'] as number :
+          (typeof ra['read_count'] === 'number' ? ra['read_count'] as number :
+            (typeof ra['views'] === 'number' ? ra['views'] as number : 0));
         const article: KnowledgeArticle = {
-          id: ra.id || `ka_${String(i).padStart(3, '0')}`,
-          title: ra.title || ra.name || '未命名文章',
-          category: ra.category || ra.type || ra.tag || '未分类',
-          summary: ra.summary || ra.description || ra.brief || '',
-          readCount: typeof ra.readCount === 'number' ? ra.readCount :
-            (typeof ra.read_count === 'number' ? ra.read_count :
-              (typeof ra.views === 'number' ? ra.views : 0)),
-          updateTime: ra.updateTime || ra.update_time || ra.publishTime || ra.publish_time || ra.date || '',
-          coverImage: ra.coverImage || ra.cover_image || ra.cover || ra.image || undefined
+          id: (ra['id'] as string) || `ka_${String(i).padStart(3, '0')}`,
+          title: (ra['title'] as string) || (ra['name'] as string) || '未命名文章',
+          category: (ra['category'] as string) || (ra['type'] as string) || (ra['tag'] as string) || '未分类',
+          summary: (ra['summary'] as string) || (ra['description'] as string) || (ra['brief'] as string) || '',
+          readCount: readCountVal,
+          updateTime: (ra['updateTime'] as string) || (ra['update_time'] as string) || (ra['publishTime'] as string) || (ra['publish_time'] as string) || (ra['date'] as string) || '',
+          coverImage: (ra['coverImage'] as string) || (ra['cover_image'] as string) || (ra['cover'] as string) || (ra['image'] as string) || undefined
         };
         articles.push(article);
       }
@@ -318,13 +328,17 @@ export class DataConverter {
    * @param rawData v2测评原始JSON数据
    * @returns Assessment数组
    */
-  convertAssessmentV2(rawData: any): Assessment[] {
+  convertAssessmentV2(rawData: Record<string, Object> | Record<string, Object>[]): Assessment[] {
     try {
       if (!rawData) {
         return [];
       }
 
-      const rawList: any[] = Array.isArray(rawData) ? rawData : (rawData.assessments || rawData.data || []);
+      const rawList: Record<string, Object>[] = Array.isArray(rawData)
+        ? rawData as Record<string, Object>[]
+        : (((rawData as Record<string, Object>)['assessments'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['data'] as Record<string, Object>[])
+          || []);
 
       if (rawList.length === 0) {
         this.log('v2测评数据为空');
@@ -332,10 +346,10 @@ export class DataConverter {
       }
 
       // 按 type 分组，每组生成一个 Assessment 对象
-      const typeGroupMap: Map<string, any[]> = new Map();
+      const typeGroupMap: Map<string, Record<string, Object>[]> = new Map();
       for (let i = 0; i < rawList.length; i++) {
         const item = rawList[i];
-        const typeName = item.typeName || item.type || '未分类';
+        const typeName = (item['typeName'] as string) || (item['type'] as string) || '未分类';
         if (!typeGroupMap.has(typeName)) {
           typeGroupMap.set(typeName, []);
         }
@@ -379,11 +393,11 @@ export class DataConverter {
       typeToAssessmentType.set('抗压能力测评', 'skill');
       typeToAssessmentType.set('面试准备度测评', 'interview_readiness');
 
-      typeGroupMap.forEach((items: any[], typeName: string) => {
+      typeGroupMap.forEach((items: Record<string, Object>[], typeName: string) => {
         // 收集维度
         const dimensionSet: Set<string> = new Set();
         for (let i = 0; i < items.length; i++) {
-          const dim = items[i].dimension || '';
+          const dim = (items[i]['dimension'] as string) || '';
           if (dim.length > 0) {
             dimensionSet.add(dim);
           }
@@ -405,9 +419,9 @@ export class DataConverter {
         const assessmentType = typeToAssessmentType.get(typeName) || 'skill' as AssessmentType;
 
         const assessment: Assessment = {
-          id: `assess_${firstItem.type || 'unknown'}`,
+          id: `assess_${(firstItem['type'] as string) || 'unknown'}`,
           title: typeName,
-          description: firstItem.description || `${typeName}，共${questions.length}道题目`,
+          description: (firstItem['description'] as string) || `${typeName}，共${questions.length}道题目`,
           type: assessmentType,
           icon: typeIconMap.get(typeName) || '📋',
           duration: Math.max(10, Math.ceil(questions.length / 5)),
@@ -434,13 +448,17 @@ export class DataConverter {
    * @param rawData v2面试题原始JSON数据
    * @returns InterviewQuestion数组
    */
-  convertInterviewQuestionsV2(rawData: any): InterviewQuestion[] {
+  convertInterviewQuestionsV2(rawData: Record<string, Object> | Record<string, Object>[]): InterviewQuestion[] {
     try {
       if (!rawData) {
         return [];
       }
 
-      const rawList: any[] = Array.isArray(rawData) ? rawData : (rawData.questions || rawData.data || []);
+      const rawList: Record<string, Object>[] = Array.isArray(rawData)
+        ? rawData as Record<string, Object>[]
+        : (((rawData as Record<string, Object>)['questions'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['data'] as Record<string, Object>[])
+          || []);
 
       if (rawList.length === 0) {
         this.log('v2面试题数据为空');
@@ -451,13 +469,13 @@ export class DataConverter {
       for (let i = 0; i < rawList.length; i++) {
         const rq = rawList[i];
         const question: InterviewQuestion = {
-          id: rq.id || `iq_v2_${String(i).padStart(4, '0')}`,
-          category: rq.category || rq.type || 'behavioral',
-          question: rq.question || rq.text || rq.title || '',
-          tips: rq.tips || rq.hint || undefined,
-          difficulty: this.normalizeDifficulty(rq.difficulty || rq.level),
-          referenceAnswer: rq.referenceAnswer || rq.answer || rq.reference_answer || undefined,
-          starGuide: this.convertStarGuide(rq.starGuide || rq.star_guide || rq.star)
+          id: (rq['id'] as string) || `iq_v2_${String(i).padStart(4, '0')}`,
+          category: (rq['category'] as string) || (rq['type'] as string) || 'behavioral',
+          question: (rq['question'] as string) || (rq['text'] as string) || (rq['title'] as string) || '',
+          tips: (rq['tips'] as string) || (rq['hint'] as string) || undefined,
+          difficulty: this.normalizeDifficulty((rq['difficulty'] as string) || (rq['level'] as string)),
+          referenceAnswer: (rq['referenceAnswer'] as string) || (rq['answer'] as string) || (rq['reference_answer'] as string) || undefined,
+          starGuide: this.convertStarGuide((rq['starGuide'] as Record<string, Object>) || (rq['star_guide'] as Record<string, Object>) || (rq['star'] as Record<string, Object>))
         };
         questions.push(question);
       }
@@ -477,13 +495,18 @@ export class DataConverter {
    * @param rawData v2知识库原始JSON数据
    * @returns KnowledgeArticle数组
    */
-  convertKnowledgeArticlesV2(rawData: any): KnowledgeArticle[] {
+  convertKnowledgeArticlesV2(rawData: Record<string, Object> | Record<string, Object>[]): KnowledgeArticle[] {
     try {
       if (!rawData) {
         return [];
       }
 
-      const rawList: any[] = Array.isArray(rawData) ? rawData : (rawData.articles || rawData.data || rawData.list || []);
+      const rawList: Record<string, Object>[] = Array.isArray(rawData)
+        ? rawData as Record<string, Object>[]
+        : (((rawData as Record<string, Object>)['articles'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['data'] as Record<string, Object>[])
+          || ((rawData as Record<string, Object>)['list'] as Record<string, Object>[])
+          || []);
 
       if (rawList.length === 0) {
         this.log('v2知识库数据为空');
@@ -494,17 +517,18 @@ export class DataConverter {
       for (let i = 0; i < rawList.length; i++) {
         const ra = rawList[i];
         // v2的category使用子分类作为显示分类，更精确
-        const displayCategory = ra.subcategory || ra.category || '未分类';
+        const displayCategory = (ra['subcategory'] as string) || (ra['category'] as string) || '未分类';
+        const readCountVal2 = typeof ra['readCount'] === 'number' ? ra['readCount'] as number :
+          (typeof ra['read_count'] === 'number' ? ra['read_count'] as number :
+            (typeof ra['views'] === 'number' ? ra['views'] as number : 0));
         const article: KnowledgeArticle = {
-          id: ra.id || `ka_v2_${String(i).padStart(4, '0')}`,
-          title: ra.title || ra.name || '未命名文章',
+          id: (ra['id'] as string) || `ka_v2_${String(i).padStart(4, '0')}`,
+          title: (ra['title'] as string) || (ra['name'] as string) || '未命名文章',
           category: displayCategory,
-          summary: ra.summary || ra.description || ra.brief || '',
-          readCount: typeof ra.readCount === 'number' ? ra.readCount :
-            (typeof ra.read_count === 'number' ? ra.read_count :
-              (typeof ra.views === 'number' ? ra.views : 0)),
-          updateTime: ra.updateTime || ra.update_time || ra.publishTime || ra.publish_time || ra.date || '',
-          coverImage: ra.coverImage || ra.cover_image || ra.cover || ra.image || undefined
+          summary: (ra['summary'] as string) || (ra['description'] as string) || (ra['brief'] as string) || '',
+          readCount: readCountVal2,
+          updateTime: (ra['updateTime'] as string) || (ra['update_time'] as string) || (ra['publishTime'] as string) || (ra['publish_time'] as string) || (ra['date'] as string) || '',
+          coverImage: (ra['coverImage'] as string) || (ra['cover_image'] as string) || (ra['cover'] as string) || (ra['image'] as string) || undefined
         };
         articles.push(article);
       }
@@ -524,46 +548,47 @@ export class DataConverter {
    * 转换v2单条测评题目
    * v2选项结构: { id, text, score: { "E": 1, "I": 2 } }
    */
-  private convertAssessmentV2Question(item: any, index: number): Question {
-    const rawOptions = item.options || item.option || [];
+  private convertAssessmentV2Question(item: Record<string, Object>, index: number): Question {
+    const rawOptions = ((item['options'] as Record<string, Object>[]) || (item['option'] as Record<string, Object>[]) || []) as Record<string, Object>[];
 
     const options: Option[] = [];
     for (let j = 0; j < rawOptions.length; j++) {
       const ro = rawOptions[j];
-      const scoreObj = ro.score;
+      const scoreObj = ro['score'];
       let dimension: string | undefined = undefined;
       let score: number | undefined = undefined;
 
       if (typeof scoreObj === 'object' && scoreObj !== null) {
         // v2格式: score 是对象 { "E": 1, "I": 2 }
         let firstKey: string | undefined = undefined;
-        for (const k in scoreObj) {
+        for (const k in scoreObj as Record<string, Object>) {
           firstKey = k;
           break;
         }
         if (firstKey !== undefined) {
-          dimension = item.dimension || firstKey;
-          score = typeof scoreObj[firstKey] === 'number' ? scoreObj[firstKey] : undefined;
+          dimension = (item['dimension'] as string) || firstKey;
+          const scoreObjTyped = scoreObj as Record<string, Object>;
+          score = typeof scoreObjTyped[firstKey] === 'number' ? scoreObjTyped[firstKey] as number : undefined;
         }
       } else if (typeof scoreObj === 'number') {
         score = scoreObj;
-        dimension = item.dimension || undefined;
+        dimension = (item['dimension'] as string) || undefined;
       }
 
       const option: Option = {
-        id: ro.id || `opt_v2_${String(index).padStart(4, '0')}_${String(j).padStart(2, '0')}`,
-        text: ro.text || ro.content || ro.label || '',
+        id: (ro['id'] as string) || `opt_v2_${String(index).padStart(4, '0')}_${String(j).padStart(2, '0')}`,
+        text: (ro['text'] as string) || (ro['content'] as string) || (ro['label'] as string) || '',
         score: score,
         dimension: dimension,
-        direction: ro.direction !== undefined ? ro.direction : undefined
+        direction: ro['direction'] !== undefined ? ro['direction'] as number : undefined
       };
       options.push(option);
     }
 
     return {
-      id: item.id || `aq_v2_${String(index).padStart(4, '0')}`,
+      id: (item['id'] as string) || `aq_v2_${String(index).padStart(4, '0')}`,
       type: 'single',
-      title: item.question || item.text || item.title || '',
+      title: (item['question'] as string) || (item['text'] as string) || (item['title'] as string) || '',
       options: options,
       required: true
     };
@@ -572,27 +597,27 @@ export class DataConverter {
   /**
    * 转换单个MBTI问题
    */
-  private convertMBTIQuestion(rq: any, index: number): Question {
-    const rawOptions = rq.options || rq.option || [];
+  private convertMBTIQuestion(rq: Record<string, Object>, index: number): Question {
+    const rawOptions = ((rq['options'] as Record<string, Object>[]) || (rq['option'] as Record<string, Object>[]) || []) as Record<string, Object>[];
 
     const options: Option[] = [];
     for (let j = 0; j < rawOptions.length; j++) {
       const ro = rawOptions[j];
-      const scoreStr = ro.score || ro.dimension || '';
+      const scoreStr = (ro['score'] as string) || (ro['dimension'] as string) || '';
       const option: Option = {
         id: `opt_${String(index).padStart(3, '0')}_${String(j).padStart(2, '0')}`,
-        text: ro.text || ro.content || ro.label || '',
-        score: typeof ro.score === 'number' ? ro.score : undefined,
+        text: (ro['text'] as string) || (ro['content'] as string) || (ro['label'] as string) || '',
+        score: typeof ro['score'] === 'number' ? ro['score'] as number : undefined,
         dimension: scoreStr.length > 0 ? scoreStr.charAt(0).toUpperCase() : undefined,
-        direction: ro.direction !== undefined ? ro.direction : undefined
+        direction: ro['direction'] !== undefined ? ro['direction'] as number : undefined
       };
       options.push(option);
     }
 
     return {
-      id: rq.id || `mq_${String(index).padStart(3, '0')}`,
+      id: (rq['id'] as string) || `mq_${String(index).padStart(3, '0')}`,
       type: 'single',
-      title: rq.title || rq.text || rq.question || '',
+      title: (rq['title'] as string) || (rq['text'] as string) || (rq['question'] as string) || '',
       options: options,
       required: true
     };
@@ -601,8 +626,8 @@ export class DataConverter {
   /**
    * 转换单个Holland问题
    */
-  private convertHollandQuestion(rq: any, index: number): Question {
-    const rawOptions = rq.options || rq.option || [];
+  private convertHollandQuestion(rq: Record<string, Object>, index: number): Question {
+    const rawOptions = ((rq['options'] as Record<string, Object>[]) || (rq['option'] as Record<string, Object>[]) || []) as Record<string, Object>[];
 
     // Holland默认选项（是/否）
     let options: Option[] = [];
@@ -611,10 +636,10 @@ export class DataConverter {
         const ro = rawOptions[j];
         const option: Option = {
           id: `opt_${String(index).padStart(3, '0')}_${String(j).padStart(2, '0')}`,
-          text: ro.text || ro.content || ro.label || '',
-          score: typeof ro.score === 'number' ? ro.score : undefined,
-          dimension: rq.dimension || rq.type || undefined,
-          direction: ro.direction !== undefined ? ro.direction : undefined
+          text: (ro['text'] as string) || (ro['content'] as string) || (ro['label'] as string) || '',
+          score: typeof ro['score'] === 'number' ? ro['score'] as number : undefined,
+          dimension: (rq['dimension'] as string) || (rq['type'] as string) || undefined,
+          direction: ro['direction'] !== undefined ? ro['direction'] as number : undefined
         };
         options.push(option);
       }
@@ -625,23 +650,23 @@ export class DataConverter {
           id: `opt_${String(index).padStart(3, '0')}_00`,
           text: '是',
           score: 1,
-          dimension: rq.dimension || rq.type || undefined,
+          dimension: (rq['dimension'] as string) || (rq['type'] as string) || undefined,
           direction: 1
         },
         {
           id: `opt_${String(index).padStart(3, '0')}_01`,
           text: '否',
           score: 0,
-          dimension: rq.dimension || rq.type || undefined,
+          dimension: (rq['dimension'] as string) || (rq['type'] as string) || undefined,
           direction: -1
         }
       ];
     }
 
     return {
-      id: rq.id || `hq_${String(index).padStart(3, '0')}`,
+      id: (rq['id'] as string) || `hq_${String(index).padStart(3, '0')}`,
       type: 'single',
-      title: rq.text || rq.title || rq.question || '',
+      title: (rq['text'] as string) || (rq['title'] as string) || (rq['question'] as string) || '',
       options: options,
       required: true
     };
@@ -650,16 +675,16 @@ export class DataConverter {
   /**
    * 转换STAR法则引导数据
    */
-  private convertStarGuide(raw: any): any {
+  private convertStarGuide(raw: Record<string, Object> | null | undefined): Record<string, string> | undefined {
     if (!raw || typeof raw !== 'object') {
       return undefined;
     }
 
     return {
-      situation: raw.situation || '',
-      task: raw.task || '',
-      action: raw.action || '',
-      result: raw.result || ''
+      situation: (raw['situation'] as string) || '',
+      task: (raw['task'] as string) || '',
+      action: (raw['action'] as string) || '',
+      result: (raw['result'] as string) || ''
     };
   }
 

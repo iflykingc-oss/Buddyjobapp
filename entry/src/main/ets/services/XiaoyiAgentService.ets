@@ -27,7 +27,7 @@ export interface AgentIntent {
   action: string;
   description: string;
   parameters: AgentParameter[];
-  handler: (params: Record<string, any>) => Promise<AgentResponse>;
+  handler: (params: Record<string, Object>) => Promise<AgentResponse>;
 }
 
 // 意图参数
@@ -42,7 +42,7 @@ export interface AgentParameter {
 export interface AgentResponse {
   success: boolean;
   message: string;
-  data?: Record<string, any>;
+  data?: Record<string, Object>;
   actions?: AgentAction[];
   suggestions?: AgentSuggestion[];
 }
@@ -51,7 +51,7 @@ export interface AgentResponse {
 export interface AgentAction {
   type: 'open_page' | 'execute' | 'notify' | 'speak';
   target: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
 }
 
 // 智能体建议
@@ -61,7 +61,7 @@ export interface AgentSuggestion {
   description: string;
   icon?: string;
   action: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
 }
 
 // 小艺技能接口
@@ -89,7 +89,7 @@ export interface XiaoyiQuickAction {
   title: string;
   icon?: string;
   action: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
 }
 
 // 小艺响应卡片
@@ -125,7 +125,7 @@ export interface DialogContext {
   userId: string;
   sessionId: string;
   intent?: string;
-  params?: Record<string, any>;
+  params?: Record<string, Object>;
   history: DialogTurn[];
   startTime: number;
 }
@@ -155,7 +155,7 @@ export class XiaoyiAgentService {
   private context: common.UIAbilityContext | null = null;
   private state: XiaoyiAgentState = XiaoyiAgentState.UNINITIALIZED;
   private agentConfigs: Map<string, AgentConfig> = new Map();
-  private intentHandlers: Map<string, (params: any) => Promise<AgentResponse>> = new Map();
+  private intentHandlers: Map<string, (params: Record<string, Object>) => Promise<AgentResponse>> = new Map();
 
   // 小艺技能相关
   private skills: XiaoyiSkill[] = [];
@@ -278,10 +278,16 @@ export class XiaoyiAgentService {
    * 获取智能体配置
    */
   getAgentConfig(): XiaoyiAgentConfig {
-    return {
-      ...this.DEFAULT_CONFIG,
-      skills: this.skills.filter(s => s.enabled)
+    const result: XiaoyiAgentConfig = {
+      agentId: this.DEFAULT_CONFIG.agentId,
+      name: this.DEFAULT_CONFIG.name,
+      description: this.DEFAULT_CONFIG.description,
+      version: this.DEFAULT_CONFIG.version,
+      skills: this.skills.filter(s => s.enabled),
+      settings: this.DEFAULT_CONFIG.settings,
+      capabilities: this.DEFAULT_CONFIG.capabilities
     };
+    return result;
   }
 
   /**
@@ -347,9 +353,11 @@ export class XiaoyiAgentService {
       // 根据意图生成响应
       let response: string;
 
-      if (intentResult.intent) {
+      if (intentResult['intent']) {
         // 已识别到意图
-        const result = await this.handleIntent(intentResult.intent, intentResult.params || {});
+        const intent = intentResult['intent'] as string;
+        const params = (intentResult['params'] as Record<string, Object>) || {};
+        const result = await this.handleIntent(intent, params);
         response = result.message;
       } else {
         // 无法识别意图，生成引导回复
@@ -369,7 +377,7 @@ export class XiaoyiAgentService {
   /**
    * 识别用户意图
    */
-  private recognizeIntent(utterance: string): { intent?: string; params?: Record<string, any> } {
+  private recognizeIntent(utterance: string): Record<string, Object> {
     const lowerUtterance = utterance.toLowerCase();
 
     // 简历分析意图
@@ -642,7 +650,7 @@ export class XiaoyiAgentService {
   /**
    * 处理技能意图
    */
-  private async handleSkillIntent(skill: XiaoyiSkill, params: any): Promise<AgentResponse> {
+  private async handleSkillIntent(skill: XiaoyiSkill, params: Record<string, Object>): Promise<AgentResponse> {
     hilog.info(DOMAIN, TAG, `Handling skill intent: ${skill.intentName}`);
 
     // 根据技能类型构建不同的响应
@@ -844,7 +852,7 @@ export class XiaoyiAgentService {
   /**
    * 处理意图
    */
-  async handleIntent(intentName: string, params: Record<string, any>): Promise<AgentResponse> {
+  async handleIntent(intentName: string, params: Record<string, Object>): Promise<AgentResponse> {
     hilog.info(DOMAIN, TAG, `Handling intent: ${intentName}`);
 
     const handler = this.intentHandlers.get(intentName);
@@ -873,7 +881,7 @@ export class XiaoyiAgentService {
   /**
    * 拉起智能体
    */
-  async launchAgent(agentId: string, params?: Record<string, any>): Promise<boolean> {
+  async launchAgent(agentId: string, params?: Record<string, Object>): Promise<boolean> {
     if (!this.context) {
       hilog.error(DOMAIN, TAG, 'Context not initialized');
       return false;
@@ -910,7 +918,7 @@ export class XiaoyiAgentService {
 
   // ==================== 意图处理器 ====================
 
-  private async handleAnalyzeResume(params: Record<string, any>): Promise<AgentResponse> {
+  private async handleAnalyzeResume(params: Record<string, Object>): Promise<AgentResponse> {
     const userId = await storage.get('userId', '');
     if (!userId) {
       return {
@@ -944,17 +952,19 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleInterviewPractice(params: Record<string, any>): Promise<AgentResponse> {
-    const { jobType, difficulty, company } = params;
+  private async handleInterviewPractice(params: Record<string, Object>): Promise<AgentResponse> {
+    const jobType = params['jobType'];
+    const difficulty = params['difficulty'];
+    const company = params['company'];
 
     return {
       success: true,
       message: `正在为您准备${company ? company + '的' : ''}面试练习...`,
       actions: [
-        { 
-          type: 'open_page', 
-          target: 'pages/Interview', 
-          params: { jobType, difficulty, company, mode: 'practice' } 
+        {
+          type: 'open_page',
+          target: 'pages/Interview',
+          params: { jobType, difficulty, company, mode: 'practice' }
         }
       ],
       suggestions: [
@@ -983,7 +993,7 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleAssessAbility(params: Record<string, any>): Promise<AgentResponse> {
+  private async handleAssessAbility(params: Record<string, Object>): Promise<AgentResponse> {
     return {
       success: true,
       message: '正在评估您的能力...',
@@ -993,8 +1003,9 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleCircleSelection(params: Record<string, any>): Promise<AgentResponse> {
-    const { selectedText, context } = params;
+  private async handleCircleSelection(params: Record<string, Object>): Promise<AgentResponse> {
+    const selectedText = params['selectedText'];
+    const context = params['context'];
 
     return {
       success: true,
@@ -1006,7 +1017,7 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleVoiceMemo(params: Record<string, any>): Promise<AgentResponse> {
+  private async handleVoiceMemo(params: Record<string, Object>): Promise<AgentResponse> {
     return {
       success: true,
       message: '语音备忘已记录',
@@ -1016,7 +1027,7 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleAnalyzeOffer(params: Record<string, any>): Promise<AgentResponse> {
+  private async handleAnalyzeOffer(params: Record<string, Object>): Promise<AgentResponse> {
     return {
       success: true,
       message: '正在分析Offer...',
@@ -1042,8 +1053,9 @@ export class XiaoyiAgentService {
     };
   }
 
-  private async handleCareerAdvice(params: Record<string, any>): Promise<AgentResponse> {
-    const { industry, experience } = params;
+  private async handleCareerAdvice(params: Record<string, Object>): Promise<AgentResponse> {
+    const industry = params['industry'];
+    const experience = params['experience'];
 
     return {
       success: true,

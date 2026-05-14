@@ -147,8 +147,8 @@ export class InterviewService {
       // 优先加载 v2 面试题数据（4000题，15岗位）
       let v2Loaded = false;
       try {
-        const v2Data = await this.dataLoadService.loadLocalJson<any>('data/interview_questions_v2.json');
-        if (v2Data !== null && v2Data.questions && v2Data.questions.length > 0) {
+        const v2Data = await this.dataLoadService.loadLocalJson<Object>('data/interview_questions_v2.json');
+        if (v2Data !== null && (v2Data as Record<string, Object>)['questions'] && ((v2Data as Record<string, Object>)['questions'] as Object[]).length > 0) {
           this.loadedQuestions = this.dataConverter.convertInterviewQuestionsV2(v2Data);
           if (this.loadedQuestions.length > 0) {
             v2Loaded = true;
@@ -162,7 +162,7 @@ export class InterviewService {
       // v1 回退：加载旧版面试题数据
       if (!v2Loaded) {
         try {
-          const rawData = await this.dataLoadService.loadLocalJson<any>('data/interview_questions.json');
+          const rawData = await this.dataLoadService.loadLocalJson<Object>('data/interview_questions.json');
           if (rawData !== null) {
             this.loadedQuestions = this.dataConverter.convertInterviewQuestions(rawData);
             hilog.info(DOMAIN, TAG, `面试题数据加载成功（v1回退），共 ${this.loadedQuestions.length} 道题目`);

@@ -70,10 +70,15 @@ export interface FilterParams {
   [key: string]: string | string[] | undefined;
 }
 
+interface CacheEntry {
+  data: Object;
+  timestamp: number;
+}
+
 export class DataLoadService {
   private static instance: DataLoadService;
   private resMgr: resourceManager.ResourceManager | null = null;
-  private cache: Map<string, { data: any; timestamp: number }> = new Map();
+  private cache: Map<string, CacheEntry> = new Map();
 
   private constructor() {
   }
@@ -277,9 +282,16 @@ export class DataLoadService {
       if (rawContent === null && config.strategy !== DataLoadStrategy.LOCAL_ONLY) {
         // 尝试从API加载
         try {
-          const apiData = await this.tryLoadApi<any>(config.apiEndpoint);
+          const apiData = await this.tryLoadApi<Object>(config.apiEndpoint);
           if (apiData !== null) {
-            const rawList: any[] = Array.isArray(apiData) ? apiData : (apiData.data || apiData.items || apiData.questions || apiData.articles || []);
+            let rawList: Object[];
+            if (Array.isArray(apiData)) {
+              rawList = apiData as Object[];
+            } else {
+              const apiObj = apiData as Record<string, Object>;
+              rawList = ((apiObj['data'] as Object[]) || (apiObj['items'] as Object[]) ||
+                (apiObj['questions'] as Object[]) || (apiObj['articles'] as Object[]) || []) as Object[];
+            }
             const chunked = rawList.slice(0, limit) as T[];
             this.setCache(config.cacheKey, chunked, config.cacheExpiry || 24 * 60 * 60 * 1000);
             this.log(`API分块加载成功: ${config.cacheKey}, 返回 ${chunked.length}/${rawList.length} 条`);
@@ -298,15 +310,17 @@ export class DataLoadService {
 
       // 解析JSON并截取前N条
       const contentStr = this.uint8ArrayToString(rawContent);
-      const parsed: any = JSON.parse(contentStr);
+      const parsed: Object = JSON.parse(contentStr);
 
       // 兼容多种顶层结构
-      let rawList: any[] = [];
+      let rawList: Object[] = [];
       if (Array.isArray(parsed)) {
-        rawList = parsed;
+        rawList = parsed as Object[];
       } else if (parsed) {
-        rawList = parsed.questions || parsed.articles || parsed.assessments ||
-                  parsed.data || parsed.items || parsed.list || [];
+        const parsedObj = parsed as Record<string, Object>;
+        rawList = ((parsedObj['questions'] as Object[]) || (parsedObj['articles'] as Object[]) ||
+          (parsedObj['assessments'] as Object[]) || (parsedObj['data'] as Object[]) ||
+          (parsedObj['items'] as Object[]) || (parsedObj['list'] as Object[]) || []) as Object[];
       }
 
       const chunked = rawList.slice(0, limit) as T[];
@@ -328,7 +342,7 @@ export class DataLoadService {
    * @param filters 筛选参数（可选）
    * @returns 分页结果
    */
-  async loadPaginated<T extends Record<string, any>>(
+  async loadPaginated<T extends Record<string, Object>>(
     config: DataLoadConfig,
     params: PaginationParams,
     filters?: FilterParams
@@ -356,8 +370,8 @@ export class DataLoadService {
           filtered = filtered.filter((item: T) => {
             let found = false;
             for (const key in item) {
-              const val = (item as Record<string, any>)[key];
-              if (typeof val === 'string' && val.toLowerCase().includes(keyword)) {
+              const val = (item as Record<string, Object>)[key];
+              if (typeof val === 'string' && (val as string).toLowerCase().includes(keyword)) {
                 found = true;
                 break;
               }
@@ -427,7 +441,7 @@ export class DataLoadService {
    * @param field 搜索字段名
    * @returns 匹配的数据列表
    */
-  async search<T extends Record<string, any>>(
+  async search<T extends Record<string, Object>>(
     config: DataLoadConfig,
     keyword: string,
     field: string
@@ -447,7 +461,7 @@ export class DataLoadService {
       return allData.filter((item: T) => {
         const val = item[field];
         if (typeof val === 'string') {
-          return val.toLowerCase().includes(lowerKeyword);
+          return (val as string).toLowerCase().includes(lowerKeyword);
         }
         return false;
       });
@@ -465,7 +479,7 @@ export class DataLoadService {
    * @param idField ID字段名，默认 'id'
    * @returns 匹配的数据项，未找到返回null
    */
-  async getById<T extends Record<string, any>>(
+  async getById<T extends Record<string, Object>>(
     config: DataLoadConfig,
     id: string,
     idField?: string
@@ -501,7 +515,7 @@ export class DataLoadService {
    * @param data 缓存数据
    * @param expiry 过期时间（毫秒），默认24小时
    */
-  setCache(key: string, data: any, expiry?: number): void {
+  setCache(key: string, data: Object, expiry?: number): void {
     const ttl = expiry || 24 * 60 * 60 * 1000;
     this.cache.set(key, {
       data: data,
@@ -563,7 +577,7 @@ export class DataLoadService {
    * @param fields 搜索字段列表
    * @returns 匹配的数据列表
    */
-  filterByKeyword<T extends Record<string, any>>(items: T[], keyword: string, fields: string[]): T[] {
+  filterByKeyword<T extends Record<string, Object>>(items: T[], keyword: string, fields: string[]): T[] {
     if (!keyword || keyword.length === 0) {
       return items;
     }
@@ -572,7 +586,7 @@ export class DataLoadService {
     return items.filter((item: T) => {
       for (let i = 0; i < fields.length; i++) {
         const val = item[fields[i]];
-        if (typeof val === 'string' && val.toLowerCase().includes(lowerKeyword)) {
+        if (typeof val === 'string' && (val as string).toLowerCase().includes(lowerKeyword)) {
           return true;
         }
       }
@@ -587,7 +601,7 @@ export class DataLoadService {
    * @param value 目标值
    * @returns 匹配的数据列表
    */
-  filterByField<T extends Record<string, any>>(items: T[], field: string, value: string): T[] {
+  filterByField<T extends Record<string, Object>>(items: T[], field: string, value: string): T[] {
     return items.filter((item: T) => {
       return item[field] === value;
     });
@@ -622,7 +636,7 @@ export class DataLoadService {
    * @param ascending 是否升序，默认true
    * @returns 排序后的数据列表
    */
-  sortByField<T extends Record<string, any>>(items: T[], field: string, ascending?: boolean): T[] {
+  sortByField<T extends Record<string, Object>>(items: T[], field: string, ascending?: boolean): T[] {
     const isAsc = ascending !== false;
     const sorted = items.slice(); // 浅拷贝避免修改原数组
     sorted.sort((a: T, b: T) => {
@@ -635,7 +649,7 @@ export class DataLoadService {
 
       // 处理数字类型
       if (typeof valA === 'number' && typeof valB === 'number') {
-        return isAsc ? (valA - valB) : (valB - valA);
+        return isAsc ? ((valA as number) - (valB as number)) : ((valB as number) - (valA as number));
       }
 
       // 处理字符串类型

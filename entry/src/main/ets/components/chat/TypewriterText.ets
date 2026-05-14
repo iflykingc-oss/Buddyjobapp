@@ -17,7 +17,7 @@ import {
   Spacing,
   SemanticSpacing,
   Duration
-} from '../constants/design-tokens';
+} from '../../constants/design-tokens';
 
 /**
  * 打字机效果文本组件

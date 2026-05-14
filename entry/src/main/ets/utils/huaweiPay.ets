@@ -1,9 +1,10 @@
 import promptAction from '@ohos.promptAction';
 import { ApiService } from '../services/ApiService';
 import { API_ENDPOINTS } from '../constants/config';
+import { ESObject } from '@arkts.lang';
 
 // 声明 HMS IAP 模块
-declare const purchase: any;
+declare const purchase: ESObject;
 
 export interface Product {
   productId: string;

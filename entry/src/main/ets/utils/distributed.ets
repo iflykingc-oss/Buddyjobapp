@@ -13,9 +13,9 @@ export interface ContinueData {
   // 当前页面路径
   pageUrl: string;
   // 页面状态数据
-  pageState: Record<string, any>;
+  pageState: Record<string, Object>;
   // 用户信息
-  userInfo?: Record<string, any>;
+  userInfo?: Record<string, Object>;
   // 时间戳
   timestamp: number;
 }
@@ -25,7 +25,7 @@ export interface ResumePageState {
   // 是否有简历
   hasResume: boolean;
   // 分析结果
-  analysisResult: any;
+  analysisResult: Object;
   // 选中的文件名
   selectedFileName: string;
   // 当前编辑的简历内容
@@ -43,11 +43,11 @@ export interface AssessmentPageState {
   // 答案记录
   answers: Record<string, string | string[]>;
   // 测评列表
-  assessmentList: any[];
+  assessmentList: Object[];
   // 是否显示结果
   showResult: boolean;
   // 结果数据
-  result?: any;
+  result?: Object;
 }
 
 // 分布式数据对象类型
@@ -359,7 +359,7 @@ export class PageStateSync {
   /**
    * 开始自动同步
    */
-  startAutoSync(getState: () => Record<string, any>): void {
+  startAutoSync(getState: () => Record<string, Object>): void {
     // 立即同步一次
     this.syncState(getState());
 
@@ -367,7 +367,7 @@ export class PageStateSync {
     this.timer = setInterval(() => {
       const state = getState();
       const stateStr = JSON.stringify(state);
-      
+
       // 只有状态变化时才同步
       if (stateStr !== this.lastState) {
         this.syncState(state);
@@ -389,7 +389,7 @@ export class PageStateSync {
   /**
    * 立即同步状态
    */
-  syncState(state: Record<string, any>): void {
+  syncState(state: Record<string, Object>): void {
     try {
       if (this.pageName === 'pages/Resume') {
         this.distributedManager.saveResumeState(state as ResumePageState);
