@@ -5,8 +5,6 @@
     "versionCode": 100001,
     "versionName": "1.0.1",
     "icon": "$media:app_icon",
-    "label": "$string:app_name",
-    "targetSdkVersion": "6.1.1(24)",
-    "compatibleSdkVersion": "6.1.1(24)"
+    "label": "$string:app_name"
   }
 }
