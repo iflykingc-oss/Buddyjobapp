@@ -53,10 +53,6 @@
         "reason": "$string:permission_network_info_reason"
       },
       {
-        "name": "ohos.permission.PUSH_TOKEN",
-        "reason": "$string:permission_push_token_reason"
-      },
-      {
         "name": "ohos.permission.RECEIVE_PUSH_MESSAGE",
         "reason": "$string:permission_push_message_reason"
       },
