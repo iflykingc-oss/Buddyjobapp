@@ -194,6 +194,11 @@ export struct OfferRadarChart {
         .onReady(() => {
           this.drawChart();
         })
+        .onVisibleAreaChange((isVisible: boolean) => {
+          if (isVisible) {
+            this.drawChart();
+          }
+        })
     }
     .width('100%')
     .alignItems(HorizontalAlign.Center)

@@ -34,7 +34,6 @@
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "continuable": true,
-        "preload": "lazy",
         "supportModes": [
           "portrait",
           "landscape",

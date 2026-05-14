@@ -268,7 +268,9 @@ export struct OfferScoreCard {
       this.buildDimensionScores()
 
       // 市场对比信息
-      this.buildMarketComparison()
+      if (this.result.marketComparison) {
+        this.buildMarketComparison()
+      }
     }
     .width('100%')
   }

@@ -1,4 +1,5 @@
 import router from '@ohos.router';
+import { promptAction } from '@kit.ArkUI';
 
 /**
  * 路由跳转工具
@@ -8,35 +9,47 @@ export class Router {
   /**
    * 跳转到新页面
    */
-  static push(url: string, params?: Record<string, Object>): void {
-    router.pushUrl({
-      url,
-      params: params || {},
-      transition: {
-        type: router.TransitionType.Push,
-        duration: 300,
-        curve: Curve.EaseInOut
-      }
-    }).catch((err: Error) => {
-      console.error(`[Router] Push ${url} failed: ${err.message}`);
-    });
+  static async push(url: string, params?: Record<string, Object>): Promise<void> {
+    try {
+      await router.pushUrl({
+        url,
+        params: params || {},
+        transition: {
+          type: router.TransitionType.Push,
+          duration: 300,
+          curve: Curve.EaseInOut
+        }
+      });
+    } catch (err) {
+      console.error(`[Router] Push ${url} failed: ${(err as Error).message}`);
+      promptAction.showToast({
+        message: '页面跳转失败，请稍后重试',
+        duration: 2000
+      });
+    }
   }
 
   /**
    * 替换当前页面
    */
-  static replace(url: string, params?: Record<string, Object>): void {
-    router.replaceUrl({
-      url,
-      params: params || {},
-      transition: {
-        type: router.TransitionType.Push,
-        duration: 300,
-        curve: Curve.EaseInOut
-      }
-    }).catch((err: Error) => {
-      console.error(`[Router] Replace ${url} failed: ${err.message}`);
-    });
+  static async replace(url: string, params?: Record<string, Object>): Promise<void> {
+    try {
+      await router.replaceUrl({
+        url,
+        params: params || {},
+        transition: {
+          type: router.TransitionType.Push,
+          duration: 300,
+          curve: Curve.EaseInOut
+        }
+      });
+    } catch (err) {
+      console.error(`[Router] Replace ${url} failed: ${(err as Error).message}`);
+      promptAction.showToast({
+        message: '页面跳转失败，请稍后重试',
+        duration: 2000
+      });
+    }
   }
 
   /**
