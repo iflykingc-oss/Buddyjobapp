@@ -169,11 +169,6 @@
             ]
           }
         ]
-      },
-      {
-        "name": "BackupExtension",
-        "srcEntry": "./ets/extensionability/BackupExtension.ets",
-        "type": "backupExtension"
       }
     ],
     "intents": [
