@@ -1,53 +1,72 @@
 {
-  "color_primary": {
-    "value": "#8B5CF6"
-  },
-  "color_primary_light": {
-    "value": "#A78BFA"
-  },
-  "color_primary_dark": {
-    "value": "#7C3AED"
-  },
-  "color_secondary": {
-    "value": "#6366F1"
-  },
-  "color_success": {
-    "value": "#64BB5C"
-  },
-  "color_warning": {
-    "value": "#FF9800"
-  },
-  "color_error": {
-    "value": "#E84026"
-  },
-  "color_info": {
-    "value": "#007DFF"
-  },
-  "color_text_primary": {
-    "value": "#0C0E14"
-  },
-  "color_text_secondary": {
-    "value": "#3D4654"
-  },
-  "color_text_hint": {
-    "value": "#66707A"
-  },
-  "color_text_disabled": {
-    "value": "#99A0A6"
-  },
-  "color_background": {
-    "value": "#F1F3F5"
-  },
-  "color_surface": {
-    "value": "#FFFFFF"
-  },
-  "color_border": {
-    "value": "#C4C7CC"
-  },
-  "color_divider": {
-    "value": "#E3E5E8"
-  },
-  "start_window_background": {
-    "value": "#FFFFFF"
-  }
+  "color": [
+    {
+      "name": "color_primary",
+      "value": "#8B5CF6"
+    },
+    {
+      "name": "color_primary_light",
+      "value": "#A78BFA"
+    },
+    {
+      "name": "color_primary_dark",
+      "value": "#7C3AED"
+    },
+    {
+      "name": "color_secondary",
+      "value": "#6366F1"
+    },
+    {
+      "name": "color_success",
+      "value": "#64BB5C"
+    },
+    {
+      "name": "color_warning",
+      "value": "#FF9800"
+    },
+    {
+      "name": "color_error",
+      "value": "#E84026"
+    },
+    {
+      "name": "color_info",
+      "value": "#007DFF"
+    },
+    {
+      "name": "color_text_primary",
+      "value": "#0C0E14"
+    },
+    {
+      "name": "color_text_secondary",
+      "value": "#3D4654"
+    },
+    {
+      "name": "color_text_hint",
+      "value": "#66707A"
+    },
+    {
+      "name": "color_text_disabled",
+      "value": "#99A0A6"
+    },
+    {
+      "name": "color_background",
+      "value": "#F1F3F5"
+    },
+    {
+      "name": "color_surface",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "color_border",
+      "value": "#C4C7CC"
+    },
+    {
+      "name": "color_divider",
+      "value": "#E3E5E8"
+    },
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    }
+  ]
 }
