@@ -30,7 +30,7 @@
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "continuable": true,
-        "orientation": "all",
+        "orientation": "unspecified",
         "skills": [
           {
             "entities": [
