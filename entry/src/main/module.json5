@@ -58,15 +58,27 @@
       },
       {
         "name": "ohos.permission.ACCESS_BIOMETRIC",
-        "reason": "$string:permission_biometric_reason"
+        "reason": "$string:permission_biometric_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
       },
       {
         "name": "ohos.permission.READ_FILE",
-        "reason": "$string:permission_read_file_reason"
+        "reason": "$string:permission_read_file_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
       },
       {
         "name": "ohos.permission.WRITE_FILE",
-        "reason": "$string:permission_write_file_reason"
+        "reason": "$string:permission_write_file_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
       },
       {
         "name": "ohos.permission.DISTRIBUTED_DATASYNC",
@@ -74,7 +86,11 @@
       },
       {
         "name": "ohos.permission.MICROPHONE",
-        "reason": "$string:permission_microphone_reason"
+        "reason": "$string:permission_microphone_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
       }
     ],
     "metadata": [
