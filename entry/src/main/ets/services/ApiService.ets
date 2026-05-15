@@ -86,7 +86,8 @@ export class ApiService {
 
   private constructor() {
     this.baseUrl = AppStorage.get<string>('baseUrl') || Config.API_BASE_URL;
-    this.token = AppStorage.get<string>('token');
+    const storedToken: string | undefined = AppStorage.get<string>('token');
+    this.token = storedToken || null;
   }
 
   /**
@@ -455,10 +456,14 @@ export class ApiService {
     // 构建URL
     let url = processedConfig.url;
     let hasParams = false;
-    for (const key in processedConfig.params) {
-      if (processedConfig.params[key] !== undefined) {
-        hasParams = true;
-        break;
+    if (processedConfig.params) {
+      const paramKeys: string[] = Object.keys(processedConfig.params);
+      for (let i = 0; i < paramKeys.length; i++) {
+        const key: string = paramKeys[i];
+        if (processedConfig.params[key] !== undefined) {
+          hasParams = true;
+          break;
+        }
       }
     }
     if (processedConfig.params && hasParams) {
@@ -474,7 +479,9 @@ export class ApiService {
     };
     if (processedConfig.headers) {
       const extraHeaders = processedConfig.headers;
-      for (const key in extraHeaders) {
+      const headerKeys: string[] = Object.keys(extraHeaders);
+      for (let i = 0; i < headerKeys.length; i++) {
+        const key: string = headerKeys[i];
         header[key] = extraHeaders[key];
       }
     }
@@ -491,7 +498,7 @@ export class ApiService {
 
     // 执行带重试的请求
     const shouldRetryRequest = processedConfig.retry !== false; // 默认启用重试
-    let lastError: Record<string, Object> | null = null;
+    let lastError: Record<string, Object> | undefined = undefined;
     let attempt = 0;
 
     while (true) {
@@ -500,7 +507,7 @@ export class ApiService {
         this.pendingRequests.delete(requestId);
         return {
           success: false,
-          error: this.createApiError(ErrorCode.UNKNOWN, 'Request cancelled', null, undefined)
+          error: this.createApiError(ErrorCode.UNKNOWN, 'Request cancelled', undefined, undefined)
         };
       }
 
@@ -521,15 +528,16 @@ export class ApiService {
         this.pendingRequests.delete(requestId);
 
         // 应用响应拦截器
-        let processedResponse = response;
+        let processedResponse: ApiResponse<T> = response;
         try {
-          processedResponse = await this.executeResponseInterceptors(response);
+          const interceptedResponse: ApiResponse<Object> = await this.executeResponseInterceptors(response as ApiResponse<Object>);
+          processedResponse = interceptedResponse as ApiResponse<T>;
         } catch (interceptorError) {
           this.logError(this.createApiError(ErrorCode.UNKNOWN, 'Response interceptor error', interceptorError as Object), requestId);
         }
 
         // 记录响应
-        this.logResponse(processedResponse, requestId);
+        this.logResponse(processedResponse as ApiResponse<Object>, requestId);
 
         return processedResponse;
 
@@ -621,18 +629,18 @@ export class ApiService {
         Router.replace('pages/Login');
         return {
           success: false,
-          data: null as T,
+          data: undefined as T,
           error: this.createApiError(
             ErrorCode.UNAUTHORIZED,
             '登录已过期，请重新登录',
-            null,
+            undefined,
             401
           )
         };
       }
 
       // 处理其他错误码
-      let resultData: Record<string, Object> | null = null;
+      let resultData: Record<string, Object> | undefined = undefined;
       try {
         resultData = JSON.parse(response.result as string);
       } catch (e) {
@@ -643,7 +651,7 @@ export class ApiService {
 
       return {
         success: false,
-        data: null as T,
+        data: undefined as T,
         error: this.createApiError(
           this.getErrorCode(response.code),
           errorMsg,

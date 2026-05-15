@@ -18,9 +18,85 @@ export enum LogLevel {
 }
 
 // ============================================
+// 主配置对象类型定义
+// ============================================
+interface FeatureFlags {
+  enableAIChat: boolean;
+  enableVoiceInterview: boolean;
+  enableResumeAnalysis: boolean;
+  enableAssessment: boolean;
+  enableOfferAnalysis: boolean;
+  enableKanban: boolean;
+  enableResumeOptimization: boolean;
+  enableCrossDevice: boolean;
+  enableDistributed: boolean;
+  enableXiaoyiAgent: boolean;
+  enableContinuation: boolean;
+  enableNewFeatureX: boolean;
+}
+
+interface HMSConfig {
+  ENABLE_HMS: boolean;
+  PUSH_TOPICS: {
+    ALL_USERS: string;
+    VIP_USERS: string;
+    NEW_USERS: string;
+  };
+}
+
+interface NetworkConfig {
+  timeout: number;
+  maxRetries: number;
+  retryInterval: number;
+  checkUrl: string;
+}
+
+interface LoggingConfig {
+  enabled: boolean;
+  level: LogLevel;
+  disableInProduction: boolean;
+}
+
+interface DataConfig {
+  assessmentFile: string;
+  interviewFile: string;
+  knowledgeFile: string;
+  batchSize: number;
+  preloadCategories: boolean;
+  lazyLoadContent: boolean;
+  maxCachedItems: number;
+  preloadPages: number;
+}
+
+interface AppConfig {
+  environment: Environment;
+  API_VERSION: string;
+  featureFlags: FeatureFlags;
+  defaultRetryCount: number;
+  defaultRetryDelay: number;
+  requestTimeout: number;
+  STORAGE_TOKEN: string;
+  STORAGE_USER_INFO: string;
+  STORAGE_CHAT_HISTORY: string;
+  STORAGE_SETTINGS: string;
+  PAGE_SIZE: number;
+  REQUEST_TIMEOUT: number;
+  MAX_MESSAGE_LENGTH: number;
+  VERIFY_CODE_COOLDOWN: number;
+  ANIMATION_DURATION: number;
+  appVersion: string;
+  buildNumber: number;
+  HMS: HMSConfig;
+  network: NetworkConfig;
+  logging: LoggingConfig;
+  dataConfig: DataConfig;
+  readonly API_BASE_URL: string;
+}
+
+// ============================================
 // 主配置对象
 // ============================================
-export const Config = {
+export const Config: AppConfig = {
   // ============================================
   // 环境配置
   // ============================================
@@ -191,9 +267,40 @@ export const Config = {
 };
 
 // ============================================
+// API 端点类型定义
+// ============================================
+interface ApiEndpoints {
+  LOGIN: string;
+  SEND_CODE: string;
+  LOGOUT: string;
+  USER_INFO: string;
+  UPDATE_USER: string;
+  CHAT_SEND: string;
+  CHAT_HISTORY: string;
+  CHAT_SESSIONS: string;
+  RESUME_UPLOAD: string;
+  RESUME_ANALYZE: string;
+  RESUME_RESULT: string;
+  ASSESSMENT_LIST: string;
+  ASSESSMENT_START: string;
+  ASSESSMENT_SUBMIT: string;
+  ASSESSMENT_RESULT: string;
+  PAYMENT_PRODUCTS: string;
+  PAYMENT_VERIFY: string;
+  PUSH_REGISTER: string;
+  PUSH_UNREGISTER: string;
+  PUSH_MESSAGES: string;
+  PUSH_READ: string;
+  KNOWLEDGE_LIST: string;
+  KNOWLEDGE_DETAIL: string;
+  ANNOUNCEMENTS: string;
+  ANNOUNCEMENTS_DETAIL: string;
+}
+
+// ============================================
 // API 端点
 // ============================================
-export const API_ENDPOINTS = {
+export const API_ENDPOINTS: ApiEndpoints = {
   // 认证
   LOGIN: '/auth/login',
   SEND_CODE: '/auth/sendCode',
@@ -236,23 +343,56 @@ export const API_ENDPOINTS = {
   // 公告
   ANNOUNCEMENTS: '/announcements',
   ANNOUNCEMENTS_DETAIL: '/announcements/detail',
-} as const;
+};
+
+// ============================================
+// Tab 配置类型定义
+// ============================================
+interface TabItem {
+  index: number;
+  title: string;
+  icon: string;
+}
+
+interface TabConfig {
+  CHAT: TabItem;
+  RESUME: TabItem;
+  ASSESSMENT: TabItem;
+  KNOWLEDGE: TabItem;
+  PROFILE: TabItem;
+}
 
 // ============================================
 // Tab 配置
 // ============================================
-export const TAB_CONFIG = {
+export const TAB_CONFIG: TabConfig = {
   CHAT: { index: 0, title: '聊天', icon: 'ic_chat' },
   RESUME: { index: 1, title: '简历', icon: 'ic_resume' },
   ASSESSMENT: { index: 2, title: '测评', icon: 'ic_assessment' },
   KNOWLEDGE: { index: 3, title: '知识库', icon: 'ic_knowledge' },
   PROFILE: { index: 4, title: '我的', icon: 'ic_profile' },
-} as const;
+};
+
+// ============================================
+// 会员配置类型定义
+// ============================================
+interface VipItem {
+  productId: string;
+  name: string;
+  duration: number;
+  price: number;
+}
+
+interface VipConfig {
+  MONTHLY: VipItem;
+  QUARTERLY: VipItem;
+  YEARLY: VipItem;
+}
 
 // ============================================
 // 会员配置
 // ============================================
-export const VIP_CONFIG = {
+export const VIP_CONFIG: VipConfig = {
   MONTHLY: {
     productId: 'vip_monthly',
     name: '月度会员',
@@ -271,34 +411,49 @@ export const VIP_CONFIG = {
     duration: 365,
     price: 168.0,
   },
-} as const;
+};
+
+// ============================================
+// 环境特定的常量类型定义
+// ============================================
+interface EnvConfig {
+  apiBaseUrl: string;
+  enableDebugTools: boolean;
+  enableMockData: boolean;
+  logLevel: LogLevel;
+}
+
+class EnvironmentConfigClass {
+  private configs: Map<Environment, EnvConfig> = new Map([
+    [Environment.DEVELOPMENT, {
+      apiBaseUrl: 'https://dev-api.buddyjob.com',
+      enableDebugTools: true,
+      enableMockData: true,
+      logLevel: LogLevel.DEBUG,
+    }],
+    [Environment.TESTING, {
+      apiBaseUrl: 'https://test-api.buddyjob.com',
+      enableDebugTools: true,
+      enableMockData: false,
+      logLevel: LogLevel.INFO,
+    }],
+    [Environment.PRODUCTION, {
+      apiBaseUrl: 'https://api.buddyjob.com',
+      enableDebugTools: false,
+      enableMockData: false,
+      logLevel: LogLevel.WARN,
+    }],
+  ]);
+
+  get(env: Environment): EnvConfig | undefined {
+    return this.configs.get(env);
+  }
+}
 
 // ============================================
 // 环境特定的常量
 // ============================================
-export const EnvironmentConfig = {
-  // 开发环境
-  [Environment.DEVELOPMENT]: {
-    apiBaseUrl: 'https://dev-api.buddyjob.com',
-    enableDebugTools: true,
-    enableMockData: true,
-    logLevel: LogLevel.DEBUG,
-  },
-  // 测试环境
-  [Environment.TESTING]: {
-    apiBaseUrl: 'https://test-api.buddyjob.com',
-    enableDebugTools: true,
-    enableMockData: false,
-    logLevel: LogLevel.INFO,
-  },
-  // 生产环境
-  [Environment.PRODUCTION]: {
-    apiBaseUrl: 'https://api.buddyjob.com',
-    enableDebugTools: false,
-    enableMockData: false,
-    logLevel: LogLevel.WARN,
-  },
-} as const;
+export const EnvironmentConfig = new EnvironmentConfigClass();
 
 // ============================================
 // 工具函数
@@ -307,8 +462,8 @@ export const EnvironmentConfig = {
 /**
  * 获取当前环境的配置
  */
-export function getEnvironmentConfig() {
-  return EnvironmentConfig[Config.environment];
+export function getEnvironmentConfig(): EnvConfig | undefined {
+  return EnvironmentConfig.get(Config.environment);
 }
 
 /**
@@ -335,6 +490,8 @@ export function isProduction(): boolean {
 /**
  * 获取功能开关值
  */
-export function isFeatureEnabled(featureKey: keyof typeof Config.featureFlags): boolean {
-  return Config.featureFlags[featureKey] ?? false;
+export function isFeatureEnabled(featureKey: keyof FeatureFlags): boolean {
+  const flags: FeatureFlags = Config.featureFlags;
+  const value: boolean | undefined = flags[featureKey];
+  return value ?? false;
 }

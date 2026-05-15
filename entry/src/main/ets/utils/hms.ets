@@ -259,7 +259,7 @@ export class HMSUtils {
   async getHMSCoreVersion(): Promise<string | null> {
     try {
       if (this.agcInstance) {
-        const version = this.agcInstance.getSDKVersion();
+        const version: string = this.agcInstance.getSDKVersion();
         return version || null;
       }
       return null;
@@ -287,7 +287,7 @@ export class HMSAccountUtils {
    */
   static async silentSignIn(): Promise<hmsAccount.SignInResult | null> {
     try {
-      const result = await hmsAccount.silentSignIn();
+      const result: hmsAccount.SignInResult = await hmsAccount.silentSignIn();
       if (result && result.accessToken) {
         console.info('[HMSAccountUtils] Silent sign in success');
         return result;
@@ -307,7 +307,7 @@ export class HMSAccountUtils {
       const signInOptions: hmsAccount.SignInOptions = {
         scopes: scopes || ['openid', 'profile'],
       };
-      const result = await hmsAccount.signIn(signInOptions);
+      const result: hmsAccount.SignInResult = await hmsAccount.signIn(signInOptions);
       console.info('[HMSAccountUtils] Sign in success');
       return result;
     } catch (error) {
@@ -321,7 +321,7 @@ export class HMSAccountUtils {
    */
   static async getAccountInfo(): Promise<hmsAccount.AccountInfo | null> {
     try {
-      const result = await hmsAccount.getAccountInfo();
+      const result: hmsAccount.AccountInfo = await hmsAccount.getAccountInfo();
       return result;
     } catch (error) {
       console.error('[HMSAccountUtils] Get account info failed:', error);
@@ -370,7 +370,7 @@ export class HMSPushUtils {
    */
   static async getToken(): Promise<string | null> {
     try {
-      const token = await hmsPush.getToken();
+      const token: string = await hmsPush.getToken();
       console.info('[HMSPushUtils] Get token success:', token.substring(0, 10) + '...');
       return token;
     } catch (error) {
