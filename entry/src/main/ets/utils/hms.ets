@@ -8,59 +8,56 @@ import { hmsPush } from '@hw-agconnect/push';
 /**
  * HMS Core 错误码定义
  */
-export const HMSErrorCode = {
-  // 通用错误码
-  SUCCESS: 0,
-  UNKNOWN_ERROR: -1,
-  TIMEOUT: -2,
-  NETWORK_ERROR: -3,
-  HMS_CORE_NOT_AVAILABLE: -4,
-  HMS_VERSION_TOO_OLD: -5,
-
-  // 华为账号错误码
-  ACCOUNT_AUTH_CANCELLED: 2012,
-  ACCOUNT_AUTH_FAILED: 2013,
-  ACCOUNT_AUTH_NETWORK_ERROR: 2014,
-  ACCOUNT_AUTH_SERVICE_UNAVAILABLE: 2015,
-  ACCOUNT_AUTH_TOKEN_EXPIRED: 2016,
-
-  // 华为支付错误码
-  PAYMENT_CANCELLED: 60001,
-  PAYMENT_FAILED: 60002,
-  PAYMENT_PRODUCT_NOT_EXIST: 60003,
-  PAYMENT_PRODUCT_ALREADY_OWNED: 60004,
-  PAYMENT_USER_NOT_LOGIN: 60005,
-
-  // 华为推送错误码
-  PUSH_TOKEN_INVALID: 70001,
-  PUSH_SERVICE_ERROR: 70002,
-  PUSH_NETWORK_ERROR: 70003,
-} as const;
+export class HMSErrorCode {
+  static readonly SUCCESS: number = 0;
+  static readonly UNKNOWN_ERROR: number = -1;
+  static readonly TIMEOUT: number = -2;
+  static readonly NETWORK_ERROR: number = -3;
+  static readonly HMS_CORE_NOT_AVAILABLE: number = -4;
+  static readonly HMS_VERSION_TOO_OLD: number = -5;
+  static readonly ACCOUNT_AUTH_CANCELLED: number = 2012;
+  static readonly ACCOUNT_AUTH_FAILED: number = 2013;
+  static readonly ACCOUNT_AUTH_NETWORK_ERROR: number = 2014;
+  static readonly ACCOUNT_AUTH_SERVICE_UNAVAILABLE: number = 2015;
+  static readonly ACCOUNT_AUTH_TOKEN_EXPIRED: number = 2016;
+  static readonly PAYMENT_CANCELLED: number = 60001;
+  static readonly PAYMENT_FAILED: number = 60002;
+  static readonly PAYMENT_PRODUCT_NOT_EXIST: number = 60003;
+  static readonly PAYMENT_PRODUCT_ALREADY_OWNED: number = 60004;
+  static readonly PAYMENT_USER_NOT_LOGIN: number = 60005;
+  static readonly PUSH_TOKEN_INVALID: number = 70001;
+  static readonly PUSH_SERVICE_ERROR: number = 70002;
+  static readonly PUSH_NETWORK_ERROR: number = 70003;
+}
 
 /**
  * HMS Core 错误信息映射
  */
-const ErrorMessageMap: Record<number, string> = {
-  [HMSErrorCode.SUCCESS]: '操作成功',
-  [HMSErrorCode.UNKNOWN_ERROR]: '未知错误',
-  [HMSErrorCode.TIMEOUT]: '请求超时',
-  [HMSErrorCode.NETWORK_ERROR]: '网络错误',
-  [HMSErrorCode.HMS_CORE_NOT_AVAILABLE]: 'HMS Core 服务不可用',
-  [HMSErrorCode.HMS_VERSION_TOO_OLD]: 'HMS Core 版本过低',
-  [HMSErrorCode.ACCOUNT_AUTH_CANCELLED]: '用户取消授权',
-  [HMSErrorCode.ACCOUNT_AUTH_FAILED]: '授权失败',
-  [HMSErrorCode.ACCOUNT_AUTH_NETWORK_ERROR]: '授权网络错误',
-  [HMSErrorCode.ACCOUNT_AUTH_SERVICE_UNAVAILABLE]: '账号服务不可用',
-  [HMSErrorCode.ACCOUNT_AUTH_TOKEN_EXPIRED]: '登录态已过期',
-  [HMSErrorCode.PAYMENT_CANCELLED]: '支付已取消',
-  [HMSErrorCode.PAYMENT_FAILED]: '支付失败',
-  [HMSErrorCode.PAYMENT_PRODUCT_NOT_EXIST]: '商品不存在',
-  [HMSErrorCode.PAYMENT_PRODUCT_ALREADY_OWNED]: '已拥有该商品',
-  [HMSErrorCode.PAYMENT_USER_NOT_LOGIN]: '用户未登录',
-  [HMSErrorCode.PUSH_TOKEN_INVALID]: '推送令牌无效',
-  [HMSErrorCode.PUSH_SERVICE_ERROR]: '推送服务错误',
-  [HMSErrorCode.PUSH_NETWORK_ERROR]: '推送网络错误',
-};
+function getErrorMessageMap(): Map<number, string> {
+  const map = new Map<number, string>();
+  map.set(0, '操作成功');
+  map.set(-1, '未知错误');
+  map.set(-2, '请求超时');
+  map.set(-3, '网络错误');
+  map.set(-4, 'HMS Core 服务不可用');
+  map.set(-5, 'HMS Core 版本过低');
+  map.set(2012, '用户取消授权');
+  map.set(2013, '授权失败');
+  map.set(2014, '授权网络错误');
+  map.set(2015, '账号服务不可用');
+  map.set(2016, '登录态已过期');
+  map.set(60001, '支付已取消');
+  map.set(60002, '支付失败');
+  map.set(60003, '商品不存在');
+  map.set(60004, '已拥有该商品');
+  map.set(60005, '用户未登录');
+  map.set(70001, '推送令牌无效');
+  map.set(70002, '推送服务错误');
+  map.set(70003, '推送网络错误');
+  return map;
+}
+
+const ErrorMessageMap = getErrorMessageMap();
 
 /**
  * HMS Core 服务类型
@@ -180,22 +177,23 @@ export class HMSUtils {
    * 获取错误信息
    */
   getErrorMessage(errorCode: number): string {
-    return ErrorMessageMap[errorCode] || `未知错误 (代码: ${errorCode})`;
+    return ErrorMessageMap.get(errorCode) || `未知错误 (代码: ${errorCode})`;
   }
 
   /**
    * 处理 HMS 错误
    */
-  handleHMSError(error: BusinessError | Error | any, showToast: boolean = true): string {
+  handleHMSError(error: BusinessError | Error | Object, showToast: boolean = true): string {
     let errorCode = HMSErrorCode.UNKNOWN_ERROR;
     let errorMessage = '操作失败';
 
     if (error && typeof error === 'object') {
-      if ('code' in error) {
-        errorCode = error.code;
+      const errorObj = error as Record<string, Object>;
+      if (errorObj.code !== undefined) {
+        errorCode = errorObj.code as number;
         errorMessage = this.getErrorMessage(errorCode);
-      } else if ('message' in error) {
-        errorMessage = error.message;
+      } else if (errorObj.message !== undefined) {
+        errorMessage = errorObj.message as string;
       }
     } else if (typeof error === 'string') {
       errorMessage = error;
@@ -314,7 +312,7 @@ export class HMSAccountUtils {
       return result;
     } catch (error) {
       console.error('[HMSAccountUtils] Sign in failed:', error);
-      throw error;
+      throw new Error('Sign in failed');
     }
   }
 
@@ -427,11 +425,11 @@ export class HMSPushUtils {
    * 注册 Token 回调
    */
   static onToken(callback: (token: string) => void): void {
-    this.tokenCallback = callback;
+    HMSPushUtils.tokenCallback = callback;
     hmsPush.onToken((token: string) => {
       console.info('[HMSPushUtils] Token received:', token.substring(0, 10) + '...');
-      if (this.tokenCallback) {
-        this.tokenCallback(token);
+      if (HMSPushUtils.tokenCallback) {
+        HMSPushUtils.tokenCallback(token);
       }
     });
   }
@@ -440,11 +438,11 @@ export class HMSPushUtils {
    * 注册消息接收回调
    */
   static onMessage(callback: (message: hmsPush.PushMessage) => void): void {
-    this.messageCallback = callback;
+    HMSPushUtils.messageCallback = callback;
     hmsPush.onMessage((message: hmsPush.PushMessage) => {
       console.info('[HMSPushUtils] Message received:', message);
-      if (this.messageCallback) {
-        this.messageCallback(message);
+      if (HMSPushUtils.messageCallback) {
+        HMSPushUtils.messageCallback(message);
       }
     });
   }
@@ -463,8 +461,8 @@ export class HMSPushUtils {
    * 取消注册回调
    */
   static offAll(): void {
-    this.tokenCallback = null;
-    this.messageCallback = null;
+    HMSPushUtils.tokenCallback = null;
+    HMSPushUtils.messageCallback = null;
     hmsPush.offToken();
     hmsPush.offMessage();
     hmsPush.offMessageClicked();
@@ -474,46 +472,35 @@ export class HMSPushUtils {
 /**
  * HMS 权限配置
  */
-export const HMSPermissions = {
-  // 推送相关权限
-  PUSH: [
+export class HMSPermissions {
+  static readonly PUSH: Permissions[] = [
     'ohos.permission.INTERNET',
     'ohos.permission.GET_NETWORK_INFO',
-  ] as Permissions[],
+  ];
 
-  // 账号相关权限
-  ACCOUNT: [
+  static readonly ACCOUNT: Permissions[] = [
     'ohos.permission.INTERNET',
-  ] as Permissions[],
+  ];
 
-  // 支付相关权限
-  IAP: [
+  static readonly IAP: Permissions[] = [
     'ohos.permission.INTERNET',
     'ohos.permission.GET_NETWORK_INFO',
-  ] as Permissions[],
+  ];
 
-  // 所有 HMS 权限
-  ALL: [
+  static readonly ALL: Permissions[] = [
     'ohos.permission.INTERNET',
     'ohos.permission.GET_NETWORK_INFO',
-  ] as Permissions[],
-};
+  ];
+}
 
 /**
  * HMS 配置常量
  */
-export const HMSConfig = {
-  // 超时时间（毫秒）
-  TIMEOUT: 30000,
-
-  // 重试次数
-  MAX_RETRY_COUNT: 3,
-
-  // 重试延迟（毫秒）
-  RETRY_DELAY: 1000,
-
-  // 登录态刷新阈值（毫秒），提前 5 分钟刷新
-  TOKEN_REFRESH_THRESHOLD: 5 * 60 * 1000,
-};
+export class HMSConfig {
+  static readonly TIMEOUT: number = 30000;
+  static readonly MAX_RETRY_COUNT: number = 3;
+  static readonly RETRY_DELAY: number = 1000;
+  static readonly TOKEN_REFRESH_THRESHOLD: number = 5 * 60 * 1000;
+}
 
 export default HMSUtils.getInstance();

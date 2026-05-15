@@ -1,6 +1,23 @@
 import router from '@ohos.router';
 import { promptAction } from '@kit.ArkUI';
 
+interface RouterParams {
+  url: string;
+  params?: Record<string, Object>;
+}
+
+interface TransitionOptions {
+  type: router.TransitionType;
+  duration: number;
+  curve: Curve;
+}
+
+interface RouterOptions {
+  url: string;
+  params: Record<string, Object>;
+  transition: TransitionOptions;
+}
+
 /**
  * 路由跳转工具
  * 统一管理路由跳转和转场动画
@@ -11,7 +28,7 @@ export class Router {
    */
   static async push(url: string, params?: Record<string, Object>): Promise<void> {
     try {
-      await router.pushUrl({
+      const options: RouterOptions = {
         url,
         params: params || {},
         transition: {
@@ -19,7 +36,8 @@ export class Router {
           duration: 300,
           curve: Curve.EaseInOut
         }
-      });
+      };
+      await router.pushUrl(options);
     } catch (err) {
       console.error(`[Router] Push ${url} failed: ${(err as Error).message}`);
       promptAction.showToast({
@@ -34,7 +52,7 @@ export class Router {
    */
   static async replace(url: string, params?: Record<string, Object>): Promise<void> {
     try {
-      await router.replaceUrl({
+      const options: RouterOptions = {
         url,
         params: params || {},
         transition: {
@@ -42,7 +60,8 @@ export class Router {
           duration: 300,
           curve: Curve.EaseInOut
         }
-      });
+      };
+      await router.replaceUrl(options);
     } catch (err) {
       console.error(`[Router] Replace ${url} failed: ${(err as Error).message}`);
       promptAction.showToast({
@@ -63,7 +82,8 @@ export class Router {
    * 返回到指定页面
    */
   static backTo(url: string): void {
-    router.back({ url });
+    const options: RouterParams = { url };
+    router.back(options);
   }
 }
 
