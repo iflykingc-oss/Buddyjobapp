@@ -349,7 +349,7 @@ struct Splash {
       Column() {
         // Logo 外圈光晕
         Column() {
-          Image($r('app.media.media_icon'))
+          Image($r('app.media.app_icon'))
             .width(100)
             .height(100)
             .borderRadius(SemanticRadius.Component)

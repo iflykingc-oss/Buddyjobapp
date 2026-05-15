@@ -20,7 +20,6 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
-@Entry
 @Component
 struct FavoritesPage {
   @State favoriteList: FavoriteItem[] = [];

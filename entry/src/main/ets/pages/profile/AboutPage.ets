@@ -12,7 +12,6 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
-@Entry
 @Component
 struct AboutPage {
   @State appVersion: string = '1.0.1';

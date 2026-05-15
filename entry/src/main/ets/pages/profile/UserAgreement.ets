@@ -12,7 +12,6 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
-@Entry
 @Component
 struct UserAgreement {
   private agreementContent: string = `BuddyJob AI（以下简称"我们"）为用户提供 AI 驱动的求职辅助服务，包括但不限于简历分析、岗位测评、智能对话和求职知识库。本条款构成您与我们之间具有法律约束力的协议。

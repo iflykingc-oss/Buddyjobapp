@@ -17,7 +17,6 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
-@Entry
 @Component
 struct SettingsPage {
   @StorageProp('isDarkMode') isDarkMode: boolean = false;

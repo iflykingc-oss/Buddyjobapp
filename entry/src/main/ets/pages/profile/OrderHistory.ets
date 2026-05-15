@@ -23,7 +23,6 @@ interface OrderItem {
   createTime: string;
 }
 
-@Entry
 @Component
 struct OrderHistory {
   @State orderList: OrderItem[] = [];

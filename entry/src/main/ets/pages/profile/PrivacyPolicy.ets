@@ -12,7 +12,6 @@ import {
   ComponentSizes
 } from '../../constants/design-tokens';
 
-@Entry
 @Component
 struct PrivacyPolicy {
   @StorageProp('isDarkMode') isDarkMode: boolean = false;
