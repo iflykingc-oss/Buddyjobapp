@@ -1,296 +1,396 @@
 {
-  "app_name": {
-    "value": "一职搭子"
-  },
-  "entry_label": {
-    "value": "一职搭子"
-  },
-  "tab_chat": {
-    "value": "聊天"
-  },
-  "tab_resume": {
-    "value": "简历"
-  },
-  "tab_assessment": {
-    "value": "测评"
-  },
-  "tab_knowledge": {
-    "value": "知识库"
-  },
-  "tab_profile": {
-    "value": "我的"
-  },
-  "input_placeholder": {
-    "value": "输入您的问题..."
-  },
-  "send_button": {
-    "value": "发送"
-  },
-  "loading_text": {
-    "value": "AI 正在思考..."
-  },
-  "upload_resume": {
-    "value": "点击上传简历"
-  },
-  "upload_hint": {
-    "value": "支持 PDF、Word 格式"
-  },
-  "analyzing": {
-    "value": "正在分析简历..."
-  },
-  "ats_score": {
-    "value": "ATS 评分"
-  },
-  "dimension_analysis": {
-    "value": "多维度分析"
-  },
-  "suggestions": {
-    "value": "优化建议"
-  },
-  "score_excellent": {
-    "value": "优秀"
-  },
-  "score_good": {
-    "value": "良好"
-  },
-  "score_need_improve": {
-    "value": "待优化"
-  },
-  "login_title": {
-    "value": "登录一职搭子"
-  },
-  "phone_login": {
-    "value": "手机号登录"
-  },
-  "verify_code_login": {
-    "value": "验证码登录"
-  },
-  "get_code": {
-    "value": "获取验证码"
-  },
-  "login_button": {
-    "value": "登录"
-  },
-  "profile_title": {
-    "value": "个人中心"
-  },
-  "vip_member": {
-    "value": "VIP会员"
-  },
-  "order_history": {
-    "value": "订单记录"
-  },
-  "settings": {
-    "value": "设置"
-  },
-  "logout": {
-    "value": "退出登录"
-  },
-  "error_network": {
-    "value": "网络请求失败"
-  },
-  "error_server": {
-    "value": "服务暂时不可用，请稍后重试"
-  },
-  "error_login_required": {
-    "value": "请先登录"
-  },
-  "app_slogan": {
-    "value": "智能求职助手"
-  },
-  "chat_title": {
-    "value": "一职搭子"
-  },
-  "chat_placeholder": {
-    "value": "向我提问，获取求职建议"
-  },
-  "chat_input_hint": {
-    "value": "输入你的问题..."
-  },
-  "chat_thinking": {
-    "value": "AI 正在思考..."
-  },
-  "phone_number": {
-    "value": "手机号"
-  },
-  "phone_input_hint": {
-    "value": "请输入手机号"
-  },
-  "verify_code": {
-    "value": "验证码"
-  },
-  "verify_code_hint": {
-    "value": "请输入验证码"
-  },
-  "agreement_prefix": {
-    "value": "我已阅读并同意"
-  },
-  "user_agreement": {
-    "value": "《用户协议》"
-  },
-  "privacy_policy": {
-    "value": "《隐私政策》"
-  },
-  "powered_by": {
-    "value": "一职搭子 出品"
-  },
-  "assessment_title": {
-    "value": "岗位测评"
-  },
-  "start_assessment": {
-    "value": "开始测评"
-  },
-  "back": {
-    "value": "返回"
-  },
-  "prev_question": {
-    "value": "上一题"
-  },
-  "next_question": {
-    "value": "下一题"
-  },
-  "submit": {
-    "value": "提交"
-  },
-  "retry_assessment": {
-    "value": "重新测评"
-  },
-  "resume_analysis": {
-    "value": "简历分析"
-  },
-  "resume_format_hint": {
-    "value": "支持 PDF、Word 格式，最大 10MB"
-  },
-  "analyzing_resume": {
-    "value": "正在分析简历..."
-  },
-  "knowledge_base": {
-    "value": "知识库"
-  },
-  "search_knowledge": {
-    "value": "搜索知识库"
-  },
-  "ai_assistant": {
-    "value": "AI 求职助手"
-  },
-  "skip": {
-    "value": "跳过"
-  },
-  "next_step": {
-    "value": "下一步"
-  },
-  "try_now": {
-    "value": "立即体验"
-  },
-  "phone_invalid": {
-    "value": "请输入正确的手机号"
-  },
-  "send_code_failed": {
-    "value": "发送验证码失败，请稍后重试"
-  },
-  "code_error": {
-    "value": "验证码错误或已过期"
-  },
-  "my_favorites": {
-    "value": "我的收藏"
-  },
-  "history_records": {
-    "value": "历史记录"
-  },
-  "help_feedback": {
-    "value": "帮助与反馈"
-  },
-  "about_us": {
-    "value": "关于我们"
-  },
-  "open_vip": {
-    "value": "开通VIP"
-  },
-  "vip_benefits": {
-    "value": "VIP权益"
-  },
-  "login_expired": {
-    "value": "登录已过期，请重新登录"
-  },
-  "request_failed": {
-    "value": "请求失败"
-  },
-  "network_error": {
-    "value": "网络连接失败"
-  },
-  "permission_internet_reason": {
-    "value": "用于访问网络服务"
-  },
-  "permission_network_info_reason": {
-    "value": "用于获取网络状态"
-  },
-  "permission_set_network_reason": {
-    "value": "用于网络设置"
-  },
-  "permission_wifi_state_reason": {
-    "value": "用于获取WiFi状态"
-  },
-  "permission_wifi_info_reason": {
-    "value": "用于获取WiFi信息"
-  },
-  "permission_push_token_reason": {
-    "value": "用于接收消息推送"
-  },
-  "permission_push_message_reason": {
-    "value": "用于接收推送消息"
-  },
-  "permission_biometric_reason": {
-    "value": "用于生物识别认证"
-  },
-  "permission_read_media_reason": {
-    "value": "用于读取媒体文件"
-  },
-  "permission_write_media_reason": {
-    "value": "用于保存媒体文件"
-  },
-  "permission_read_image_reason": {
-    "value": "用于读取图片文件"
-  },
-  "permission_write_image_reason": {
-    "value": "用于保存图片文件"
-  },
-  "permission_read_file_reason": {
-    "value": "用于读取文件"
-  },
-  "permission_write_file_reason": {
-    "value": "用于保存文件"
-  },
-  "permission_distributed_reason": {
-    "value": "用于跨设备数据同步"
-  },
-  "permission_softbus_reason": {
-    "value": "用于分布式软总线设备发现与连接"
-  },
-  "permission_camera_reason": {
-    "value": "用于拍摄简历或头像照片"
-  },
-  "permission_microphone_reason": {
-    "value": "用于语音面试练习和语音输入"
-  },
-  "hms_app_id": {
-    "value": ""
-  },
-  "hms_cp_id": {
-    "value": ""
-  },
-  "hms_product_id": {
-    "value": ""
-  },
-  "hms_client_id": {
-    "value": ""
-  },
-  "hms_client_secret": {
-    "value": ""
-  },
-  "hms_api_key": {
-    "value": ""
-  },
-  "hms_cert_fingerprint": {
-    "value": ""
-  }
+  "string": [
+    {
+      "name": "app_name",
+      "value": "一职搭子"
+    },
+    {
+      "name": "entry_label",
+      "value": "一职搭子"
+    },
+    {
+      "name": "tab_chat",
+      "value": "聊天"
+    },
+    {
+      "name": "tab_resume",
+      "value": "简历"
+    },
+    {
+      "name": "tab_assessment",
+      "value": "测评"
+    },
+    {
+      "name": "tab_knowledge",
+      "value": "知识库"
+    },
+    {
+      "name": "tab_profile",
+      "value": "我的"
+    },
+    {
+      "name": "input_placeholder",
+      "value": "输入您的问题..."
+    },
+    {
+      "name": "send_button",
+      "value": "发送"
+    },
+    {
+      "name": "loading_text",
+      "value": "AI 正在思考..."
+    },
+    {
+      "name": "upload_resume",
+      "value": "点击上传简历"
+    },
+    {
+      "name": "upload_hint",
+      "value": "支持 PDF、Word 格式"
+    },
+    {
+      "name": "analyzing",
+      "value": "正在分析简历..."
+    },
+    {
+      "name": "ats_score",
+      "value": "ATS 评分"
+    },
+    {
+      "name": "dimension_analysis",
+      "value": "多维度分析"
+    },
+    {
+      "name": "suggestions",
+      "value": "优化建议"
+    },
+    {
+      "name": "score_excellent",
+      "value": "优秀"
+    },
+    {
+      "name": "score_good",
+      "value": "良好"
+    },
+    {
+      "name": "score_need_improve",
+      "value": "待优化"
+    },
+    {
+      "name": "login_title",
+      "value": "登录一职搭子"
+    },
+    {
+      "name": "phone_login",
+      "value": "手机号登录"
+    },
+    {
+      "name": "verify_code_login",
+      "value": "验证码登录"
+    },
+    {
+      "name": "get_code",
+      "value": "获取验证码"
+    },
+    {
+      "name": "login_button",
+      "value": "登录"
+    },
+    {
+      "name": "profile_title",
+      "value": "个人中心"
+    },
+    {
+      "name": "vip_member",
+      "value": "VIP会员"
+    },
+    {
+      "name": "order_history",
+      "value": "订单记录"
+    },
+    {
+      "name": "settings",
+      "value": "设置"
+    },
+    {
+      "name": "logout",
+      "value": "退出登录"
+    },
+    {
+      "name": "error_network",
+      "value": "网络请求失败"
+    },
+    {
+      "name": "error_server",
+      "value": "服务暂时不可用，请稍后重试"
+    },
+    {
+      "name": "error_login_required",
+      "value": "请先登录"
+    },
+    {
+      "name": "app_slogan",
+      "value": "智能求职助手"
+    },
+    {
+      "name": "chat_title",
+      "value": "一职搭子"
+    },
+    {
+      "name": "chat_placeholder",
+      "value": "向我提问，获取求职建议"
+    },
+    {
+      "name": "chat_input_hint",
+      "value": "输入你的问题..."
+    },
+    {
+      "name": "chat_thinking",
+      "value": "AI 正在思考..."
+    },
+    {
+      "name": "phone_number",
+      "value": "手机号"
+    },
+    {
+      "name": "phone_input_hint",
+      "value": "请输入手机号"
+    },
+    {
+      "name": "verify_code",
+      "value": "验证码"
+    },
+    {
+      "name": "verify_code_hint",
+      "value": "请输入验证码"
+    },
+    {
+      "name": "agreement_prefix",
+      "value": "我已阅读并同意"
+    },
+    {
+      "name": "user_agreement",
+      "value": "《用户协议》"
+    },
+    {
+      "name": "privacy_policy",
+      "value": "《隐私政策》"
+    },
+    {
+      "name": "powered_by",
+      "value": "一职搭子 出品"
+    },
+    {
+      "name": "assessment_title",
+      "value": "岗位测评"
+    },
+    {
+      "name": "start_assessment",
+      "value": "开始测评"
+    },
+    {
+      "name": "back",
+      "value": "返回"
+    },
+    {
+      "name": "prev_question",
+      "value": "上一题"
+    },
+    {
+      "name": "next_question",
+      "value": "下一题"
+    },
+    {
+      "name": "submit",
+      "value": "提交"
+    },
+    {
+      "name": "retry_assessment",
+      "value": "重新测评"
+    },
+    {
+      "name": "resume_analysis",
+      "value": "简历分析"
+    },
+    {
+      "name": "resume_format_hint",
+      "value": "支持 PDF、Word 格式，最大 10MB"
+    },
+    {
+      "name": "analyzing_resume",
+      "value": "正在分析简历..."
+    },
+    {
+      "name": "knowledge_base",
+      "value": "知识库"
+    },
+    {
+      "name": "search_knowledge",
+      "value": "搜索知识库"
+    },
+    {
+      "name": "ai_assistant",
+      "value": "AI 求职助手"
+    },
+    {
+      "name": "skip",
+      "value": "跳过"
+    },
+    {
+      "name": "next_step",
+      "value": "下一步"
+    },
+    {
+      "name": "try_now",
+      "value": "立即体验"
+    },
+    {
+      "name": "phone_invalid",
+      "value": "请输入正确的手机号"
+    },
+    {
+      "name": "send_code_failed",
+      "value": "发送验证码失败，请稍后重试"
+    },
+    {
+      "name": "code_error",
+      "value": "验证码错误或已过期"
+    },
+    {
+      "name": "my_favorites",
+      "value": "我的收藏"
+    },
+    {
+      "name": "history_records",
+      "value": "历史记录"
+    },
+    {
+      "name": "help_feedback",
+      "value": "帮助与反馈"
+    },
+    {
+      "name": "about_us",
+      "value": "关于我们"
+    },
+    {
+      "name": "open_vip",
+      "value": "开通VIP"
+    },
+    {
+      "name": "vip_benefits",
+      "value": "VIP权益"
+    },
+    {
+      "name": "login_expired",
+      "value": "登录已过期，请重新登录"
+    },
+    {
+      "name": "request_failed",
+      "value": "请求失败"
+    },
+    {
+      "name": "network_error",
+      "value": "网络连接失败"
+    },
+    {
+      "name": "permission_internet_reason",
+      "value": "用于访问网络服务"
+    },
+    {
+      "name": "permission_network_info_reason",
+      "value": "用于获取网络状态"
+    },
+    {
+      "name": "permission_set_network_reason",
+      "value": "用于网络设置"
+    },
+    {
+      "name": "permission_wifi_state_reason",
+      "value": "用于获取WiFi状态"
+    },
+    {
+      "name": "permission_wifi_info_reason",
+      "value": "用于获取WiFi信息"
+    },
+    {
+      "name": "permission_push_token_reason",
+      "value": "用于接收消息推送"
+    },
+    {
+      "name": "permission_push_message_reason",
+      "value": "用于接收推送消息"
+    },
+    {
+      "name": "permission_biometric_reason",
+      "value": "用于生物识别认证"
+    },
+    {
+      "name": "permission_read_media_reason",
+      "value": "用于读取媒体文件"
+    },
+    {
+      "name": "permission_write_media_reason",
+      "value": "用于保存媒体文件"
+    },
+    {
+      "name": "permission_read_image_reason",
+      "value": "用于读取图片文件"
+    },
+    {
+      "name": "permission_write_image_reason",
+      "value": "用于保存图片文件"
+    },
+    {
+      "name": "permission_read_file_reason",
+      "value": "用于读取文件"
+    },
+    {
+      "name": "permission_write_file_reason",
+      "value": "用于保存文件"
+    },
+    {
+      "name": "permission_distributed_reason",
+      "value": "用于跨设备数据同步"
+    },
+    {
+      "name": "permission_softbus_reason",
+      "value": "用于分布式软总线设备发现与连接"
+    },
+    {
+      "name": "permission_camera_reason",
+      "value": "用于拍摄简历或头像照片"
+    },
+    {
+      "name": "permission_microphone_reason",
+      "value": "用于语音面试练习和语音输入"
+    },
+    {
+      "name": "hms_app_id",
+      "value": ""
+    },
+    {
+      "name": "hms_cp_id",
+      "value": ""
+    },
+    {
+      "name": "hms_product_id",
+      "value": ""
+    },
+    {
+      "name": "hms_client_id",
+      "value": ""
+    },
+    {
+      "name": "hms_client_secret",
+      "value": ""
+    },
+    {
+      "name": "hms_api_key",
+      "value": ""
+    },
+    {
+      "name": "hms_cert_fingerprint",
+      "value": ""
+    }
+  ]
 }
