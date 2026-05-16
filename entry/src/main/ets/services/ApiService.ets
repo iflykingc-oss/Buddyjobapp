@@ -22,6 +22,18 @@ export interface ApiError {
   statusCode?: number;
 }
 
+export class RequestConfigWithHeader {
+  url: string = '';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET';
+  data?: Object;
+  params?: Record<string, string>;
+  headers?: Record<string, string>;
+  timeout?: number;
+  retry?: boolean;
+  requestId?: string;
+  header: Record<string, string> = {};
+}
+
 // 请求配置接口
 export interface RequestConfig {
   url: string;
@@ -512,17 +524,18 @@ export class ApiService {
       }
 
       try {
-        const response = await this.executeRequest<T>({
-          url: finalUrl,
-          method: processedConfig.method,
-          data: processedConfig.data,
-          params: processedConfig.params,
-          headers: header,
-          timeout: processedConfig.timeout,
-          retry: processedConfig.retry,
-          requestId: processedConfig.requestId,
-          header
-        }, requestId);
+        const requestConfigWithHeader = new RequestConfigWithHeader();
+        requestConfigWithHeader.url = finalUrl;
+        requestConfigWithHeader.method = processedConfig.method;
+        requestConfigWithHeader.data = processedConfig.data;
+        requestConfigWithHeader.params = processedConfig.params;
+        requestConfigWithHeader.headers = header;
+        requestConfigWithHeader.timeout = processedConfig.timeout;
+        requestConfigWithHeader.retry = processedConfig.retry;
+        requestConfigWithHeader.requestId = processedConfig.requestId;
+        requestConfigWithHeader.header = header;
+
+        const response = await this.executeRequest<T>(requestConfigWithHeader, requestId);
 
         // 移除待处理请求
         this.pendingRequests.delete(requestId);
@@ -586,7 +599,7 @@ export class ApiService {
       )
     };
 
-    this.logResponse(errorResponse, requestId);
+    this.logResponse(errorResponse as ApiResponse<Object>, requestId);
     return errorResponse;
   }
 
@@ -597,13 +610,13 @@ export class ApiService {
    * @returns API响应结果
    */
   private async executeRequest<T>(
-    config: RequestConfig & { header: Record<string, string> },
+    config: RequestConfigWithHeader,
     requestId: string
   ): Promise<ApiResponse<T>> {
     const timeout = config.timeout || Config.REQUEST_TIMEOUT;
 
     try {
-      const response = await request.httpRequest({
+      const response: request.HttpResponse = await request.httpRequest({
         url: config.url,
         method: this.mapMethod(config.method),
         header: config.header,
@@ -795,7 +808,9 @@ export class ApiService {
    */
   private buildQuery(params: Record<string, string>): string {
     const parts: string[] = [];
-    for (const key in params) {
+    const keys = Object.keys(params);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
       const value = params[key];
       if (value !== null && value !== undefined) {
         parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);

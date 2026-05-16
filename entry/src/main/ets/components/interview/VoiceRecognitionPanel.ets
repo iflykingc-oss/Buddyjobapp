@@ -379,11 +379,12 @@ export struct VoiceRecognitionPanel {
   private async startListening(): Promise<void> {
     // 初始化服务
     if (!this.speechService.isInitialized) {
-      const initSuccess = await this.speechService.initialize({
+      const config: Record<string, Object> = {
         language: this.currentLanguage,
         enablePunctuation: true,
         enableInterimResults: true
-      });
+      };
+      const initSuccess = await this.speechService.initialize(config);
 
       if (!initSuccess) {
         this.errorMessage = '语音服务初始化失败';

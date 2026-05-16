@@ -49,8 +49,8 @@ export class AssessmentService {
       // 优先加载 v2 测评数据（4000题，9大类型）
       let v2Loaded = false;
       try {
-        const v2Data = await this.dataLoadService.loadLocalJson<any>('data/assessment_questions.json');
-        if (v2Data !== null && v2Data.assessments && v2Data.assessments.length > 0) {
+        const v2Data = await this.dataLoadService.loadLocalJson<Record<string, Object>>('data/assessment_questions.json');
+        if (v2Data !== null && (v2Data as Record<string, Object>)['assessments'] && ((v2Data as Record<string, Object>)['assessments'] as Object[]).length > 0) {
           const v2Assessments = this.dataConverter.convertAssessmentV2(v2Data);
           if (v2Assessments.length > 0) {
             this.loadedAssessments = this.loadedAssessments.concat(v2Assessments);
@@ -65,7 +65,7 @@ export class AssessmentService {
       // v1 回退：加载 MBTI 数据（93题标准版）
       if (!v2Loaded) {
         try {
-          const mbtiData = await this.dataLoadService.loadLocalJson<any>('data/mbti_questions_93.json');
+          const mbtiData = await this.dataLoadService.loadLocalJson<Record<string, Object>>('data/mbti_questions_93.json');
           if (mbtiData !== null) {
             const mbtiAssessment = this.dataConverter.convertMBTI(mbtiData);
             this.loadedAssessments.push(mbtiAssessment);
@@ -77,7 +77,7 @@ export class AssessmentService {
 
         // 加载 Holland 数据
         try {
-          const hollandData = await this.dataLoadService.loadLocalJson<any>('data/holland_questions.json');
+          const hollandData = await this.dataLoadService.loadLocalJson<Record<string, Object>>('data/holland_questions.json');
           if (hollandData !== null) {
             const hollandAssessment = this.dataConverter.convertHolland(hollandData);
             this.loadedAssessments.push(hollandAssessment);

@@ -45,7 +45,7 @@ export interface DataMetadata {
 /**
  * 单个数据源的加载状态
  */
-interface DataLoadState {
+export interface DataLoadState {
   /** 元数据是否已加载 */
   metadataLoaded: boolean;
   /** 全量数据是否已加载到内存 */
@@ -408,15 +408,7 @@ export class LazyDataLoader {
    * 获取数据源加载状态
    * @param dataKey 数据源标识
    */
-  getLoadState(dataKey: string): {
-    metadataLoaded: boolean;
-    fullyLoaded: boolean;
-    loading: boolean;
-    loadedCount: number;
-    totalCount: number;
-    hasError: boolean;
-    errorMessage: string | null;
-  } {
+  getLoadState(dataKey: string): DataLoadState {
     const state = this.loadStates.get(dataKey);
     if (!state) {
       return {

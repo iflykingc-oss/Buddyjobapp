@@ -14,7 +14,7 @@ export interface HistoryItem {
   title: string;
   content: string;
   timestamp: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, Object>;
 }
 
 const HISTORY_STORAGE_KEY = 'buddyjob_history';

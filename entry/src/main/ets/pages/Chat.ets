@@ -34,7 +34,7 @@ import {
   DarkSemanticColors
 } from '../constants/design-tokens';
 import { promptAction, messageManager } from '@kit.ArkUI';
-import { pasteboard } from '@kit.ArkData';
+import { pasteboard } from '@kit.BasicServicesKit';
 
 const WARNING_STORAGE_KEY = 'chat_warning_dismissed';
 const WARNING_MESSAGE = '当前对话记录仅保存在本地，关闭页面后自动清除';

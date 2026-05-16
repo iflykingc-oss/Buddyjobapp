@@ -274,14 +274,18 @@ export class PushService {
       case PushMessageType.CHAT:
         // 跳转到聊天页面
         if (message.payload && message.payload['sessionId']) {
-          Router.push('pages/Chat', { sessionId: message.payload['sessionId'] });
+          Router.push('pages/Chat', {
+            sessionId: message.payload['sessionId']
+          } as Record<string, Object>);
         }
         break;
 
       case PushMessageType.SYSTEM:
         // 跳转到系统通知详情
         if (message.payload && message.payload['noticeId']) {
-          Router.push('pages/NotificationDetail', { noticeId: message.payload['noticeId'] });
+          Router.push('pages/NotificationDetail', {
+            noticeId: message.payload['noticeId']
+          } as Record<string, Object>);
         }
         break;
 
@@ -293,7 +297,9 @@ export class PushService {
       case PushMessageType.ORDER:
         // 跳转到订单详情
         if (message.payload && message.payload['orderId']) {
-          Router.push('pages/OrderDetail', { orderId: message.payload['orderId'] });
+          Router.push('pages/OrderDetail', {
+            orderId: message.payload['orderId']
+          } as Record<string, Object>);
         }
         break;
 
@@ -340,11 +346,11 @@ export class PushService {
    */
   private async reportTokenToServer(token: string): Promise<void> {
     try {
-      const response = await this.apiService.post(API_ENDPOINTS.PUSH_REGISTER, {
+      const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_REGISTER, {
         pushToken: token,
         platform: 'huawei',
-        deviceType: 'harmony',
-      });
+        deviceType: 'harmony'
+      } as Record<string, Object>);
 
       if (response.success) {
         console.info('[PushService] Token reported to server successfully');
@@ -366,9 +372,9 @@ export class PushService {
       if (result) {
         // 通知服务器删除 token
         if (this.pushToken) {
-          await this.apiService.post(API_ENDPOINTS.PUSH_UNREGISTER, {
-            pushToken: this.pushToken,
-          });
+          await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_UNREGISTER, {
+            pushToken: this.pushToken
+          } as Record<string, Object>);
         }
 
         this.pushToken = '';
@@ -434,7 +440,9 @@ export class PushService {
    */
   private async markMessageAsRead(messageId: string): Promise<void> {
     try {
-      await this.apiService.post(API_ENDPOINTS.PUSH_READ, { messageId });
+      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_READ, {
+        messageId: messageId
+      } as Record<string, Object>);
     } catch (error) {
       console.error('[PushService] Mark message as read failed:', error);
     }
@@ -447,7 +455,7 @@ export class PushService {
     try {
       const response = await this.apiService.get<PushMessage[]>(
         API_ENDPOINTS.PUSH_MESSAGES,
-        { unreadOnly: true }
+        { unreadOnly: true } as Record<string, Object>
       );
 
       if (response.success && response.data) {
@@ -464,7 +472,13 @@ export class PushService {
   /**
    * 发送本地通知（用于测试）
    */
-  sendLocalNotification(message: Omit<PushMessage, 'messageId' | 'timestamp'>): void {
+  sendLocalNotification(message: {
+    type: PushMessageType;
+    title: string;
+    content: string;
+    payload?: Record<string, Object>;
+    isRead?: boolean;
+  }): void {
     const fullMessage: PushMessage = {
       messageId: `local_${Date.now()}`,
       timestamp: Date.now(),

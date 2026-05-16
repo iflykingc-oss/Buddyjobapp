@@ -17,7 +17,16 @@ const DOMAIN = 0x0001;
  * AppGallery Connect 配置
  * 注意：需要在华为开发者联盟创建应用后获取以下配置
  */
-const AGC_CONFIG = {
+interface AGCConfigType {
+  appId: string;
+  apiKey: string;
+  clientId: string;
+  clientSecret: string;
+  projectId: string;
+  packageName: string;
+}
+
+const AGC_CONFIG: AGCConfigType = {
   // 从 AppGallery Connect 获取的 App ID
   appId: '',
   // 从 AppGallery Connect 获取的 API Key
@@ -37,7 +46,7 @@ export default class EntryAbility extends UIAbility {
   private authService: AuthService = AuthService.getInstance();
   private pushService: PushService = PushService.getInstance();
 
-  onCreate(want, launchParam) {
+  onCreate(want: Record<string, Object>, launchParam: Record<string, Object>): void {
     hilog.info(DOMAIN, TAG, 'Ability onCreate');
 
     // 启动优化：记录启动开始时间
@@ -160,7 +169,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(DOMAIN, TAG, 'Ability onBackground');
   }
 
-  onNewWant(want, launchParam) {
+  onNewWant(want: Record<string, Object>, launchParam: Record<string, Object>): void {
     hilog.info(DOMAIN, TAG, 'Ability onNewWant');
 
     // MultiApi 处理 Want 回调
@@ -196,7 +205,12 @@ export default class EntryAbility extends UIAbility {
         HMSServiceType.IAP,
       ]);
 
-      hilog.info(DOMAIN, TAG, 'HMS Service availability: %{public}s', JSON.stringify(Object.fromEntries(serviceResults)));
+      // 转换 Map 为对象用于日志输出
+      const resultsObj: Record<string, boolean> = {};
+      serviceResults.forEach((value: boolean, key: string) => {
+        resultsObj[key] = value;
+      });
+      hilog.info(DOMAIN, TAG, 'HMS Service availability: %{public}s', JSON.stringify(resultsObj));
 
       // 4. 初始化推送服务
       if (serviceResults.get(HMSServiceType.PUSH)) {

@@ -18,8 +18,8 @@ import {
 interface ContinuationPanelProps {
   visible: boolean;
   currentPageUrl: string;
-  currentPageParams?: Record<string, any>;
-  businessData?: Record<string, any>;
+  currentPageParams?: Record<string, Object>;
+  businessData?: Record<string, Object>;
   onContinuationSuccess?: (data: ContinuationData) => void;
   onContinuationFailed?: () => void;
   onClose: () => void;
@@ -28,10 +28,10 @@ interface ContinuationPanelProps {
 @CustomDialog
 export struct ContinuationPanel {
   controller: CustomDialogController;
-  
+
   @Prop currentPageUrl: string = '';
-  @Prop currentPageParams: Record<string, any> = {};
-  @Prop businessData: Record<string, any> = {};
+  @Prop currentPageParams: Record<string, Object> = {};
+  @Prop businessData: Record<string, Object> = ;
   
   @State devices: DistributedDevice[] = [];
   @State selectedDevice: DistributedDevice | null = null;

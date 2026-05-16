@@ -3,8 +3,6 @@
  * 基于 HarmonyOS 6.0 FunctionComponent
  * 提供一键拉起智能体的UI组件
  */
-import { common } from '@kit.AbilityKit';
-import { FunctionController, FunctionComponent } from '@kit.AgentFrameworkKit';
 import {
   BrandColors,
   NeutralColors,
@@ -15,6 +13,8 @@ import {
   FontSize,
   FontWeight
 } from '../../constants/design-tokens';
+import { common } from '@kit.AbilityKit';
+import { FunctionController, FunctionComponent } from '@kit.AgentFrameworkKit';
 
 // 智能体类型
 export enum AgentType {

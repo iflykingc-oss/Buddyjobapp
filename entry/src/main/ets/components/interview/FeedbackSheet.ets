@@ -317,10 +317,10 @@ export struct FeedbackSheet {
       // STAR分析详情
       if (this.showStarAnalysis) {
         Column() {
-          this.StarItem('S - 情境', this.feedback!.starAnalysis!.situation)
-          this.StarItem('T - 任务', this.feedback!.starAnalysis!.task)
-          this.StarItem('A - 行动', this.feedback!.starAnalysis!.action)
-          this.StarItem('R - 结果', this.feedback!.starAnalysis!.result)
+          this.StarItem('S - 情境', this.feedback!.starAnalysis!.situation.score, this.feedback!.starAnalysis!.situation.comment)
+          this.StarItem('T - 任务', this.feedback!.starAnalysis!.task.score, this.feedback!.starAnalysis!.task.comment)
+          this.StarItem('A - 行动', this.feedback!.starAnalysis!.action.score, this.feedback!.starAnalysis!.action.comment)
+          this.StarItem('R - 结果', this.feedback!.starAnalysis!.result.score, this.feedback!.starAnalysis!.result.comment)
         }
         .margin({ top: Spacing.Space4 })
       }
@@ -337,7 +337,7 @@ export struct FeedbackSheet {
    * STAR单项
    */
   @Builder
-  StarItem(title: string, data: { score: number; comment: string }) {
+  StarItem(title: string, score: number, comment: string) {
     Row() {
       Text(title)
         .fontSize(FontSize.Sm)
@@ -352,15 +352,15 @@ export struct FeedbackSheet {
           .borderRadius(3)
 
         Row()
-          .width(`${data.score}%`)
+          .width(`${score}%`)
           .height(6)
-          .backgroundColor(this.getScoreColor(data.score))
+          .backgroundColor(this.getScoreColor(score))
           .borderRadius(3)
       }
       .layoutWeight(1)
       .height(6)
 
-      Text(data.score.toString())
+      Text(score.toString())
         .fontSize(FontSize.Xs)
         .fontWeight(FontWeight.Medium)
         .fontColor(this.getScoreColor(data.score))

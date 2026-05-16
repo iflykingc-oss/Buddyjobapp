@@ -168,7 +168,7 @@ export struct VoiceInputButton {
   build() {
     Column() {
       // 已识别的文字展示
-      if (this.recognizedText || this.textInput || this.interimText) {
+      if (this.internalRecognizedText || this.textInput || this.interimText) {
         this.RecognizedTextDisplay()
       }
 

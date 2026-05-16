@@ -87,7 +87,7 @@ export class KnowledgeService {
       // 优先加载 v2 知识库数据（2000篇，43子分类）
       let v2Loaded = false;
       try {
-        const v2Data = await this.dataLoadService.loadLocalJson<any>('data/knowledge_articles_v2.json');
+        const v2Data = await this.dataLoadService.loadLocalJson<Record<string, Object>>('data/knowledge_articles_v2.json');
         if (v2Data !== null && v2Data.articles && v2Data.articles.length > 0) {
           this.loadedArticles = this.dataConverter.convertKnowledgeArticlesV2(v2Data);
           if (this.loadedArticles.length > 0) {
@@ -102,7 +102,7 @@ export class KnowledgeService {
       // v1 回退：加载旧版知识库文章数据
       if (!v2Loaded) {
         try {
-          const rawData = await this.dataLoadService.loadLocalJson<any>('data/knowledge_articles.json');
+          const rawData = await this.dataLoadService.loadLocalJson<Record<string, Object>>('data/knowledge_articles.json');
           if (rawData !== null) {
             this.loadedArticles = this.dataConverter.convertKnowledgeArticles(rawData);
             console.info(`[KnowledgeService] 知识库文章加载成功（v1回退），共 ${this.loadedArticles.length} 篇文章`);

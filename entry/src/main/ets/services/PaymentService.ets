@@ -40,34 +40,45 @@ export interface SubscriptionProduct extends Product {
 }
 
 /**
+ * 会员套餐项
+ */
+export interface MembershipProductItem {
+  productId: string;
+  type: ProductType;
+  name: string;
+  desc: string;
+  period: string;
+}
+
+/**
  * 会员套餐定义
  */
-export const MEMBERSHIP_PRODUCTS = {
+export class MEMBERSHIP_PRODUCTS {
   // 月度会员
-  VIP_MONTHLY: {
+  static VIP_MONTHLY: MembershipProductItem = {
     productId: 'vip_monthly',
     type: ProductType.SUBSCRIPTION,
     name: '月度会员',
     desc: '享受30天会员权益',
     period: 'P1M',
-  },
+  };
   // 年度会员
-  VIP_YEARLY: {
+  static VIP_YEARLY: MembershipProductItem = {
     productId: 'vip_yearly',
     type: ProductType.SUBSCRIPTION,
     name: '年度会员',
     desc: '享受365天会员权益，立省40%',
     period: 'P1Y',
-  },
+  };
   // 季度会员
-  VIP_QUARTERLY: {
+  static VIP_QUARTERLY: MembershipProductItem = {
     productId: 'vip_quarterly',
     type: ProductType.SUBSCRIPTION,
     name: '季度会员',
     desc: '享受90天会员权益',
     period: 'P3M',
-  },
-} as const;
+  };
+}
 
 /**
  * 购买结果
@@ -185,7 +196,7 @@ export class PaymentService {
       // 优先从服务器获取商品信息
       const response = await this.apiService.post<{ products: Product[] }>(
         API_ENDPOINTS.PAYMENT_PRODUCTS,
-        { productIds, priceType }
+        { productIds: productIds, priceType: priceType } as Record<string, Object>
       );
 
       if (response.success && response.data) {
@@ -232,13 +243,21 @@ export class PaymentService {
    * 执行购买
    */
   private async doPurchase(
-    productId: string, 
+    productId: string,
     priceType: ProductType,
     callback?: PaymentCallback
   ): Promise<PurchaseResult> {
     // 保存回调
     if (callback) {
-      this.callbacks = { ...this.callbacks, ...callback };
+      if (callback.onSuccess) {
+        this.callbacks.onSuccess = callback.onSuccess;
+      }
+      if (callback.onError) {
+        this.callbacks.onError = callback.onError;
+      }
+      if (callback.onCancelled) {
+        this.callbacks.onCancelled = callback.onCancelled;
+      }
     }
 
     try {
@@ -300,16 +319,18 @@ export class PaymentService {
       }
 
       // 用户取消或其他错误
-      const errorMessage = (result as any)?.msg || '支付已取消';
+      const resultObj = result as Record<string, Object>;
+      const errorMessage = (resultObj['msg'] as string) || '支付已取消';
+      const errorCode = resultObj['code'] ? String(resultObj['code']) : 'CANCELLED';
       const errorResult: PurchaseResult = {
         success: false,
-        errorCode: (result as any)?.code?.toString() || 'CANCELLED',
+        errorCode: errorCode,
         errorMessage: errorMessage
       };
-      
-      this.callbacks.onError?.({ 
-        code: errorResult.errorCode!, 
-        message: errorMessage 
+
+      this.callbacks.onError?.({
+        code: errorCode,
+        message: errorMessage
       });
       
       return errorResult;
@@ -317,18 +338,18 @@ export class PaymentService {
     } catch (error) {
       console.error('[PaymentService] Purchase failed:', error);
       const errorMessage = this.hmsUtils.handleHMSError(error, false);
-      
+
       const errorResult: PurchaseResult = {
         success: false,
         errorCode: 'UNKNOWN',
         errorMessage: errorMessage
       };
-      
-      this.callbacks.onError?.({ 
-        code: errorResult.errorCode, 
-        message: errorMessage 
+
+      this.callbacks.onError?.({
+        code: 'UNKNOWN',
+        message: errorMessage
       });
-      
+
       return errorResult;
     }
   }
@@ -364,18 +385,37 @@ export class PaymentService {
    */
   private async verifyPurchase(orderInfo: OrderInfo, isSubscription: boolean = false): Promise<boolean> {
     try {
-      const endpoint = isSubscription 
+      const endpoint = isSubscription
         ? API_ENDPOINTS.PAYMENT_VERIFY + '/subscription'
         : API_ENDPOINTS.PAYMENT_VERIFY;
 
-      const response = await this.apiService.post<{ 
+      const requestData: Record<string, Object> = {
+        orderId: orderInfo.orderId,
+        productId: orderInfo.productId,
+        purchaseToken: orderInfo.purchaseToken,
+        purchaseTime: orderInfo.purchaseTime,
+        purchaseState: orderInfo.purchaseState,
+        platform: 'huawei'
+      };
+
+      if (orderInfo.consumptionState !== undefined) {
+        requestData['consumptionState'] = orderInfo.consumptionState;
+      }
+      if (orderInfo.subscriptionId !== undefined) {
+        requestData['subscriptionId'] = orderInfo.subscriptionId;
+      }
+      if (orderInfo.expirationDate !== undefined) {
+        requestData['expirationDate'] = orderInfo.expirationDate;
+      }
+      if (orderInfo.autoRenewing !== undefined) {
+        requestData['autoRenewing'] = orderInfo.autoRenewing;
+      }
+
+      const response = await this.apiService.post<{
         verified: boolean;
         vipExpireTime?: number;
         subscriptionStatus?: SubscriptionStatus;
-      }>(endpoint, {
-        ...orderInfo,
-        platform: 'huawei'
-      });
+      }>(endpoint, requestData);
 
       if (response.success && response.data?.verified) {
         // 更新用户 VIP 状态
@@ -421,7 +461,7 @@ export class PaymentService {
       // 查询服务器
       const response = await this.apiService.get<OrderInfo>(
         `${API_ENDPOINTS.PAYMENT_VERIFY}/query`,
-        { orderId }
+        { orderId: orderId } as Record<string, Object>
       );
 
       if (response.success && response.data) {
@@ -498,9 +538,14 @@ export class PaymentService {
    */
   async querySubscriptionStatus(productId?: string): Promise<SubscriptionStatus | null> {
     try {
+      const params: Record<string, Object> = {};
+      if (productId !== undefined) {
+        params['productId'] = productId;
+      }
+
       const response = await this.apiService.get<SubscriptionStatus>(
         API_ENDPOINTS.PAYMENT_VERIFY + '/subscription/status',
-        { productId }
+        params
       );
 
       if (response.success && response.data) {
@@ -519,9 +564,9 @@ export class PaymentService {
    */
   async cancelSubscription(productId: string): Promise<boolean> {
     try {
-      const response = await this.apiService.post(
+      const response = await this.apiService.post<Record<string, Object>>(
         API_ENDPOINTS.PAYMENT_VERIFY + '/subscription/cancel',
-        { productId }
+        { productId: productId } as Record<string, Object>
       );
 
       if (response.success) {
@@ -605,11 +650,11 @@ export class PaymentService {
         AppStorage.setOrCreate('userInfo', JSON.stringify(userInfo));
         
         // 通知服务器更新
-        await this.apiService.post(API_ENDPOINTS.UPDATE_USER, {
-          vipLevel,
+        await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.UPDATE_USER, {
+          vipLevel: vipLevel,
           vipExpireTime: expireTime,
           vipProductId: productId
-        });
+        } as Record<string, Object>);
       }
     } catch (e) {
       console.error('[PaymentService] Update VIP status failed:', e);

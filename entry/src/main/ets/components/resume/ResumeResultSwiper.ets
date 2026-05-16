@@ -27,7 +27,7 @@ import {
 } from '../../constants/design-tokens';
 
 // Swiper 控制器
-import { SwiperController } from '@ohos.arkui';
+import { SwiperController } from '@kit.ArkUI';
 
 @Component
 export struct ResumeResultSwiper {

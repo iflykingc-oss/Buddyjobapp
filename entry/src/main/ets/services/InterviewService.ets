@@ -1320,9 +1320,9 @@ export class InterviewService {
   async getInterviewHistory(
     page?: number,
     pageSize?: number
-  ): Promise<{ items: any[]; total: number }> {
+  ): Promise<{ items: InterviewSession[]; total: number }> {
     try {
-      const response = await this.apiService.get<{ items: any[]; total: number }>(
+      const response = await this.apiService.get<{ items: InterviewSession[]; total: number }>(
         '/interview/history',
         { page: page ?? 1, pageSize: pageSize ?? 20 }
       );

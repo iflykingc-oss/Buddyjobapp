@@ -35,13 +35,15 @@ interface FeatureFlags {
   enableNewFeatureX: boolean;
 }
 
+export class PushTopics {
+  ALL_USERS: string = 'all_users';
+  VIP_USERS: string = 'vip_users';
+  NEW_USERS: string = 'new_users';
+}
+
 interface HMSConfig {
   ENABLE_HMS: boolean;
-  PUSH_TOPICS: {
-    ALL_USERS: string;
-    VIP_USERS: string;
-    NEW_USERS: string;
-  };
+  PUSH_TOPICS: PushTopics;
 }
 
 interface NetworkConfig {
@@ -90,32 +92,17 @@ interface AppConfig {
   network: NetworkConfig;
   logging: LoggingConfig;
   dataConfig: DataConfig;
-  readonly API_BASE_URL: string;
 }
 
 // ============================================
 // 主配置对象
 // ============================================
-export const Config: AppConfig = {
+export const Config = {
   // ============================================
   // 环境配置
   // ============================================
   // 当前环境（可根据构建类型自动切换）
   environment: Environment.DEVELOPMENT,
-
-  // 获取 API 基础 URL（根据环境自动切换）
-  get API_BASE_URL(): string {
-    switch (this.environment) {
-      case Environment.DEVELOPMENT:
-        return 'https://dev-api.buddyjob.com';
-      case Environment.TESTING:
-        return 'https://test-api.buddyjob.com';
-      case Environment.PRODUCTION:
-        return 'https://api.buddyjob.com';
-      default:
-        return 'https://api.buddyjob.com';
-    }
-  },
 
   // API 版本
   API_VERSION: 'v1',
@@ -124,31 +111,19 @@ export const Config: AppConfig = {
   // 功能开关
   // ============================================
   featureFlags: {
-    // AI 对话
     enableAIChat: true,
-    // 语音面试
     enableVoiceInterview: true,
-    // 简历分析
     enableResumeAnalysis: true,
-    // 测评功能
     enableAssessment: true,
-    // offer 分析
     enableOfferAnalysis: true,
-    // 看板功能
     enableKanban: true,
-    // 简历优化
     enableResumeOptimization: true,
-    // 跨设备面试
     enableCrossDevice: true,
-    // 分布式功能
     enableDistributed: true,
-    // 小艺助手
     enableXiaoyiAgent: true,
-    // 接续功能
     enableContinuation: true,
-    // 新功能 X（灰度测试用）
     enableNewFeatureX: false,
-  },
+  } as FeatureFlags,
 
   // ============================================
   // 重试配置
@@ -200,29 +175,19 @@ export const Config: AppConfig = {
   // HMS Core 配置
   // ============================================
   HMS: {
-    // 是否启用 HMS Core
     ENABLE_HMS: true,
-    // 推送主题
-    PUSH_TOPICS: {
-      ALL_USERS: 'all_users',
-      VIP_USERS: 'vip_users',
-      NEW_USERS: 'new_users',
-    },
-  },
+    PUSH_TOPICS: new PushTopics()
+  } as HMSConfig,
 
   // ============================================
   // 网络配置
   // ============================================
   network: {
-    // 网络超时时间（毫秒）
     timeout: 30000,
-    // 最大重试次数
     maxRetries: 3,
-    // 重试间隔（毫秒）
     retryInterval: 1000,
-    // 网络检测 URL
     checkUrl: 'https://www.baidu.com',
-  },
+  } as NetworkConfig,
 
   // ============================================
   // 日志配置
@@ -424,25 +389,25 @@ interface EnvConfig {
 }
 
 class EnvironmentConfigClass {
-  private configs: Map<Environment, EnvConfig> = new Map([
+  private configs: Map<Environment, EnvConfig> = new Map<Environment, EnvConfig>([
     [Environment.DEVELOPMENT, {
       apiBaseUrl: 'https://dev-api.buddyjob.com',
       enableDebugTools: true,
       enableMockData: true,
       logLevel: LogLevel.DEBUG,
-    }],
+    } as EnvConfig],
     [Environment.TESTING, {
       apiBaseUrl: 'https://test-api.buddyjob.com',
       enableDebugTools: true,
       enableMockData: false,
       logLevel: LogLevel.INFO,
-    }],
+    } as EnvConfig],
     [Environment.PRODUCTION, {
       apiBaseUrl: 'https://api.buddyjob.com',
       enableDebugTools: false,
       enableMockData: false,
       logLevel: LogLevel.WARN,
-    }],
+    } as EnvConfig],
   ]);
 
   get(env: Environment): EnvConfig | undefined {
@@ -492,6 +457,32 @@ export function isProduction(): boolean {
  */
 export function isFeatureEnabled(featureKey: keyof FeatureFlags): boolean {
   const flags: FeatureFlags = Config.featureFlags;
-  const value: boolean | undefined = flags[featureKey];
-  return value ?? false;
+  switch (featureKey) {
+    case 'enableAIChat':
+      return flags.enableAIChat;
+    case 'enableVoiceInterview':
+      return flags.enableVoiceInterview;
+    case 'enableResumeAnalysis':
+      return flags.enableResumeAnalysis;
+    case 'enableAssessment':
+      return flags.enableAssessment;
+    case 'enableOfferAnalysis':
+      return flags.enableOfferAnalysis;
+    case 'enableKanban':
+      return flags.enableKanban;
+    case 'enableResumeOptimization':
+      return flags.enableResumeOptimization;
+    case 'enableCrossDevice':
+      return flags.enableCrossDevice;
+    case 'enableDistributed':
+      return flags.enableDistributed;
+    case 'enableXiaoyiAgent':
+      return flags.enableXiaoyiAgent;
+    case 'enableContinuation':
+      return flags.enableContinuation;
+    case 'enableNewFeatureX':
+      return flags.enableNewFeatureX;
+    default:
+      return false;
+  }
 }

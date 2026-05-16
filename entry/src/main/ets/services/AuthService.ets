@@ -92,7 +92,7 @@ export class AuthService {
     }
 
     try {
-      const result = await HMSAccountUtils.silentSignIn();
+      const result: hmsAccount.SignInResult | null = await HMSAccountUtils.silentSignIn();
 
       if (result && result.accessToken) {
         console.info('[AuthService] Huawei silent sign in success');
@@ -141,7 +141,7 @@ export class AuthService {
     } catch (error) {
       console.error('[AuthService] Huawei login failed:', error);
       this.hmsUtils.handleHMSError(error);
-      throw error;
+      throw new Error(String(error));
     }
   }
 
@@ -181,22 +181,25 @@ export class AuthService {
    * 使用华为账号信息登录后端
    */
   private async loginWithHuaweiAccount(accountInfo: HuaweiAccountInfo): Promise<LoginResult> {
+    const loginData = {
+      openId: accountInfo.openId,
+      unionId: accountInfo.unionId,
+      authorizationCode: accountInfo.authorizationCode || '',
+      accessToken: accountInfo.accessToken || '',
+      displayName: accountInfo.displayName,
+      photoUrl: accountInfo.photoUrl || '',
+      email: accountInfo.email || '',
+      phone: accountInfo.phone || ''
+    } as Record<string, Object>;
+
     const response = await this.apiService.post<LoginResult>(
       API_ENDPOINTS.LOGIN + '/huawei',
-      {
-        openId: accountInfo.openId,
-        unionId: accountInfo.unionId,
-        authorizationCode: accountInfo.authorizationCode,
-        accessToken: accountInfo.accessToken,
-        displayName: accountInfo.displayName,
-        photoUrl: accountInfo.photoUrl,
-        email: accountInfo.email,
-        phone: accountInfo.phone,
-      }
+      loginData
     );
 
     if (!response.success || !response.data) {
-      throw new Error(response.error || '华为账号登录失败');
+      const errorMsg = typeof response.error === 'string' ? response.error : '华为账号登录失败';
+      throw new Error(errorMsg);
     }
 
     // 保存 token 和用户信息
@@ -228,10 +231,11 @@ export class AuthService {
         AppStorage.setOrCreate('huaweiAccountInfo', JSON.stringify(accountInfo));
 
         // 通知后端刷新
-        await this.apiService.post(API_ENDPOINTS.LOGIN + '/huawei/refresh', {
+        const refreshData = {
           openId: accountInfo.openId,
-          accessToken: accountInfo.accessToken,
-        });
+          accessToken: accountInfo.accessToken || ''
+        } as Record<string, Object>;
+        await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGIN + '/huawei/refresh', refreshData);
 
         console.info('[AuthService] Huawei token refreshed successfully');
         return true;
@@ -289,10 +293,10 @@ export class AuthService {
    * 发送验证码（手机号登录）
    */
   async sendCode(phone: string): Promise<void> {
-    const response = await this.apiService.post(API_ENDPOINTS.SEND_CODE, {
+    const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.SEND_CODE, {
       phone: phone,
       type: 'login'
-    });
+    } as Record<string, Object>);
 
     if (!response.success) {
       throw new Error(response.error || '发送验证码失败');
@@ -306,7 +310,7 @@ export class AuthService {
     const response = await this.apiService.post<LoginResult>(API_ENDPOINTS.LOGIN, {
       phone: phone,
       code: code
-    });
+    } as Record<string, Object>);
 
     if (!response.success || !response.data) {
       throw new Error(response.error || '登录失败');
@@ -359,7 +363,7 @@ export class AuthService {
         }
       }
 
-      await this.apiService.post(API_ENDPOINTS.LOGOUT);
+      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGOUT, {} as Record<string, Object>);
     } finally {
       // 清除定时器
       if (this.tokenRefreshTimer) {

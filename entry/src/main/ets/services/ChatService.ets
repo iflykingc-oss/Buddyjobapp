@@ -175,7 +175,7 @@ export class ChatService {
   private accumulatedContent: string = '';
   private currentCallbacks: StreamCallbacks | null = null;
   private currentConfig: SSEConfig | null = null;
-  private lastRequestBody: Record<string, any> = {};
+  private lastRequestBody: Record<string, Object> = {};
   private streamTimer: number = -1;
 
   // 场景模式相关
@@ -232,11 +232,13 @@ export class ChatService {
    * @returns 所有场景配置数组
    */
   getAllSceneConfigs(): SceneConfig[] {
-    const configs: SceneConfig[] = [];
-    for (const key in SCENE_CONFIGS) {
-      configs.push(SCENE_CONFIGS[key]);
-    }
-    return configs;
+    return [
+      SCENE_CONFIGS[ChatScene.GENERAL],
+      SCENE_CONFIGS[ChatScene.RESUME_OPTIMIZE],
+      SCENE_CONFIGS[ChatScene.INTERVIEW_PREP],
+      SCENE_CONFIGS[ChatScene.CAREER_PLAN],
+      SCENE_CONFIGS[ChatScene.OFFER_NEGOTIATION]
+    ];
   }
 
   // ==================== 上下文记忆相关方法 ====================
@@ -306,15 +308,19 @@ export class ChatService {
    * @param content 用户消息内容
    * @returns 包含上下文信息的请求体
    */
-  buildRequestWithContext(content: string): Record<string, any> {
-    return {
-      content: content,
-      conversationId: AppStorage.get<string>('currentConversationId'),
-      scene: this.currentScene,
-      context: this.contextMessages.slice(-10).map(m => ({
+  buildRequestWithContext(content: string): Record<string, Object> {
+    const contextArray: Object[] = this.contextMessages.slice(-10).map(m => {
+      return {
         role: m.role,
         content: m.content
-      }))
+      } as Object;
+    });
+
+    return {
+      content: content as Object,
+      conversationId: (AppStorage.get<string>('currentConversationId') || '') as Object,
+      scene: this.currentScene as Object,
+      context: contextArray as Object
     };
   }
 
@@ -337,9 +343,9 @@ export class ChatService {
 
     try {
       const response = await this.apiService.post<SendMessageResult>(API_ENDPOINTS.CHAT_SEND, {
-        content: content,
-        conversationId: AppStorage.get<string>('currentConversationId'),
-        scene: this.currentScene
+        content: content as Object,
+        conversationId: (AppStorage.get<string>('currentConversationId') || '') as Object,
+        scene: this.currentScene as Object
       });
 
       if (response.success && response.data) {
@@ -395,14 +401,18 @@ export class ChatService {
     this.retryCount = 0;
 
     // 构建请求体（包含场景和上下文）
-    const requestBody = {
-      content: content,
-      conversationId: conversationId,
-      scene: this.currentScene,
-      context: this.contextMessages.slice(-10).map(m => ({
+    const contextArray: Object[] = this.contextMessages.slice(-10).map(m => {
+      return {
         role: m.role,
         content: m.content
-      }))
+      } as Object;
+    });
+
+    const requestBody: Record<string, Object> = {
+      content: content as Object,
+      conversationId: (conversationId || '') as Object,
+      scene: this.currentScene as Object,
+      context: contextArray as Object
     };
 
     // 添加用户消息到上下文
@@ -425,9 +435,9 @@ export class ChatService {
   /**
    * 连接 SSE
    */
-  private async connectSSE(body: object): Promise<void> {
+  private async connectSSE(body: Record<string, Object>): Promise<void> {
     // 保存请求体，用于断线重连
-    this.lastRequestBody = { ...body };
+    this.lastRequestBody = body;
 
     if (!this.currentConfig) {
       return;
@@ -444,7 +454,7 @@ export class ChatService {
       const timeout = this.currentConfig.timeout || 60000;
 
       // 发起请求
-      const response = await this.httpRequest.request(
+      const response: http.HttpResponse = await this.httpRequest.request(
         this.currentConfig.url,
         {
           method: http.RequestMethod.POST,
@@ -657,7 +667,7 @@ export class ChatService {
    * @param messageId 消息ID
    * @returns 是否撤回成功
    */
-  async recallMessage(messageId: string): Promise<boolean> {
+  async recallMessageSingle(messageId: string): Promise<boolean> {
     const sessionId = AppStorage.get<string>('currentConversationId') || '';
     return this.recallMessage(sessionId, messageId);
   }
@@ -673,7 +683,7 @@ export class ChatService {
       // 调用API删除服务器端消息
       const response = await this.apiService.delete<{ success: boolean }>(
         `${API_ENDPOINTS.CHAT_HISTORY}/${messageId}`,
-        { sessionId: sessionId }
+        { sessionId: sessionId as Object }
       );
 
       if (response.success) {
@@ -713,7 +723,7 @@ export class ChatService {
    */
   async getChatHistory(sessionId: string): Promise<Message[]> {
     const response = await this.apiService.get<Message[]>(API_ENDPOINTS.CHAT_HISTORY, {
-      sessionId: sessionId
+      sessionId: sessionId as Object
     });
 
     if (!response.success || !response.data) {
@@ -742,7 +752,7 @@ export class ChatService {
   async analyzeResume(fileUri: string): Promise<ResumeAnalysisResult> {
     try {
       const response = await this.apiService.post<ResumeAnalysisResult>(API_ENDPOINTS.RESUME_ANALYZE, {
-        fileUri: fileUri
+        fileUri: fileUri as Object
       });
 
       if (response.success && response.data) {

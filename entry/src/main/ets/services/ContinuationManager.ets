@@ -25,9 +25,9 @@ export interface ContinuationData {
   // 页面路由
   pageUrl: string;
   // 页面参数
-  pageParams?: Record<string, any>;
+  pageParams?: Record<string, Object>;
   // 业务数据
-  businessData?: Record<string, any>;
+  businessData?: Record<string, Object>;
   // 用户信息
   userInfo?: {
     userId: string;
@@ -260,12 +260,12 @@ export class ContinuationDataBuilder {
     return this;
   }
 
-  setPageParams(params: Record<string, any>): ContinuationDataBuilder {
+  setPageParams(params: Record<string, Object>): ContinuationDataBuilder {
     this.data.pageParams = params;
     return this;
   }
 
-  setBusinessData(businessData: Record<string, any>): ContinuationDataBuilder {
+  setBusinessData(businessData: Record<string, Object>): ContinuationDataBuilder {
     this.data.businessData = businessData;
     return this;
   }
