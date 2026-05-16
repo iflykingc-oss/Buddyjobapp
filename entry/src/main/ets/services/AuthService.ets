@@ -181,7 +181,7 @@ export class AuthService {
    * 使用华为账号信息登录后端
    */
   private async loginWithHuaweiAccount(accountInfo: HuaweiAccountInfo): Promise<LoginResult> {
-    const loginData = {
+    const loginData: HuaweiLoginRequest = {
       openId: accountInfo.openId,
       unionId: accountInfo.unionId,
       authorizationCode: accountInfo.authorizationCode || '',
@@ -190,7 +190,7 @@ export class AuthService {
       photoUrl: accountInfo.photoUrl || '',
       email: accountInfo.email || '',
       phone: accountInfo.phone || ''
-    } as Record<string, Object>;
+    };
 
     const response = await this.apiService.post<LoginResult>(
       API_ENDPOINTS.LOGIN + '/huawei',
@@ -363,7 +363,7 @@ export class AuthService {
         }
       }
 
-      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGOUT, {} as Record<string, Object>);
+      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGOUT, new Object() as Record<string, Object>);
     } finally {
       // 清除定时器
       if (this.tokenRefreshTimer) {
