@@ -2,7 +2,7 @@
  * 简历结果 Swiper 展示组件
  */
 
-import { ResumeAnalysisResult, ScoreItem } from '../../services/ResumeService';
+import { ResumeAnalysisResult, Dimension, Suggestion } from '../../models/Resume';
 
 @Component
 export struct ResumeResultSwiper {
@@ -29,17 +29,17 @@ export struct ResumeResultSwiper {
         .textAlign(TextAlign.Center)
         .padding({ left: 16, right: 16 })
 
-      ForEach(this.result.scoreItems, (item: ScoreItem) => {
+      ForEach(this.result.dimensions, (dim: Dimension) => {
         Row() {
-          Text(item.label)
+          Text(dim.name)
             .fontSize(13)
             .fontColor('#555555')
             .width(80)
-          Progress({ value: item.score, total: item.maxScore, type: ProgressType.Linear })
+          Progress({ value: dim.score, total: dim.maxScore, type: ProgressType.Linear })
             .width(120)
             .height(6)
             .color('#2563EB')
-          Text(`${item.score}/${item.maxScore}`)
+          Text(`${dim.score}/${dim.maxScore}`)
             .fontSize(12)
             .fontColor('#888888')
             .margin({ left: 8 })
@@ -61,7 +61,7 @@ export struct ResumeResultSwiper {
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
         .fontColor('#333333')
-      ForEach(this.result.suggestions, (suggestion: string, index: number) => {
+      ForEach(this.result.suggestions, (item: Suggestion, index: number) => {
         Row({ space: 8 }) {
           Text(`${(index as number) + 1}`)
             .fontSize(12)
@@ -69,9 +69,12 @@ export struct ResumeResultSwiper {
             .width(20)
             .height(20)
             .textAlign(TextAlign.Center)
-            .backgroundColor('#2563EB')
+            .backgroundColor(
+              item.priority === 'high' ? '#DC2626' :
+              item.priority === 'medium' ? '#F59E0B' : '#6B7280'
+            )
             .borderRadius(10)
-          Text(suggestion)
+          Text(item.content)
             .fontSize(13)
             .fontColor('#444444')
             .layoutWeight(1)
@@ -89,12 +92,10 @@ export struct ResumeResultSwiper {
   @Builder
   buildStrengthsCard() {
     Column({ space: 12 }) {
-      Row({ space: 8 }) {
-        Text('优势')
-          .fontSize(16)
-          .fontWeight(FontWeight.Medium)
-          .fontColor('#16A34A')
-      }
+      Text('优势')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .fontColor('#16A34A')
       ForEach(this.result.strengths, (item: string) => {
         Row({ space: 6 }) {
           Text('✓')
@@ -177,14 +178,13 @@ export struct ResumeResultSwiper {
   }
 
   @Builder
-  buildActionBar() {
+  buildDots() {
     Row({ space: 8 }) {
       ForEach([0, 1, 2, 3], (i: number) => {
         Circle()
           .width(i === this.currentIndex ? 16 : 6)
           .height(6)
           .fill(i === this.currentIndex ? '#2563EB' : '#D1D5DB')
-          .animation({ duration: 200 })
       })
     }
     .justifyContent(FlexAlign.Center)
@@ -208,7 +208,7 @@ export struct ResumeResultSwiper {
       .loop(false)
       .cachedCount(2)
 
-      this.buildActionBar()
+      this.buildDots()
     }
     .width('100%')
   }
