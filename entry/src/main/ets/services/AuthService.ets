@@ -46,17 +46,6 @@ export interface HuaweiAccountInfo {
   expireTime: number;
 }
 
-export interface HuaweiLoginRequest {
-  openId: string;
-  unionId: string;
-  authorizationCode: string;
-  accessToken: string;
-  displayName: string;
-  photoUrl: string;
-  email: string;
-  phone: string;
-}
-
 /**
  * 认证服务 - 支持华为账号登录和手机号登录
  */
