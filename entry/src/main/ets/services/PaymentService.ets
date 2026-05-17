@@ -124,9 +124,14 @@ export interface SubscriptionStatus {
 /**
  * 支付回调处理
  */
+export interface PaymentError {
+  code: string;
+  message: string;
+}
+
 export interface PaymentCallback {
   onSuccess?: (result: PurchaseResult) => void;
-  onError?: (error: { code: string; message: string }) => void;
+  onError?: (error: PaymentError) => void;
   onCancelled?: () => void;
 }
 
@@ -194,9 +199,10 @@ export class PaymentService {
   async getProducts(productIds: string[], priceType: ProductType = ProductType.CONSUMABLE): Promise<Product[]> {
     try {
       // 优先从服务器获取商品信息
-      const response = await this.apiService.post<{ products: Product[] }>(
+      const productsReqData: Record<string, Object> = { productIds: productIds as unknown as Object, priceType: priceType as unknown as Object };
+      const response = await this.apiService.post<ProductListResponse>(
         API_ENDPOINTS.PAYMENT_PRODUCTS,
-        { productIds: productIds, priceType: priceType } as Record<string, Object>
+        productsReqData
       );
 
       if (response.success && response.data) {
@@ -488,8 +494,10 @@ export class PaymentService {
       const payAction = new PayAction(MultiMedia.HUAWEI);
       const result = await payAction.getPendingOrders();
       
-      if (result && (result as any).code === HMSErrorCode.SUCCESS) {
-        return (result as any).orders || [];
+      const resultRecord = result as Record<string, Object>;
+      if (resultRecord['code'] === HMSErrorCode.SUCCESS) {
+        const orders = resultRecord['orders'];
+        return Array.isArray(orders) ? orders as OrderInfo[] : [];
       }
 
       return [];

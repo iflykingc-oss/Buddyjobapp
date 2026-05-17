@@ -80,6 +80,17 @@ export interface PushServiceConfig {
 }
 
 /**
+ * 本地通知输入参数
+ */
+export interface LocalNotificationInput {
+  type: PushMessageType;
+  title: string;
+  content: string;
+  payload?: Record<string, Object>;
+  isRead?: boolean;
+}
+
+/**
  * 推送服务 - 集成华为 Push Kit
  */
 export class PushService {
@@ -274,18 +285,16 @@ export class PushService {
       case PushMessageType.CHAT:
         // 跳转到聊天页面
         if (message.payload && message.payload['sessionId']) {
-          Router.push('pages/Chat', {
-            sessionId: message.payload['sessionId']
-          } as Record<string, Object>);
+          const chatParams: Record<string, Object> = { sessionId: message.payload['sessionId'] };
+          Router.push('pages/Chat', chatParams);
         }
         break;
 
       case PushMessageType.SYSTEM:
         // 跳转到系统通知详情
         if (message.payload && message.payload['noticeId']) {
-          Router.push('pages/NotificationDetail', {
-            noticeId: message.payload['noticeId']
-          } as Record<string, Object>);
+          const noticeParams: Record<string, Object> = { noticeId: message.payload['noticeId'] };
+          Router.push('pages/NotificationDetail', noticeParams);
         }
         break;
 
@@ -297,9 +306,8 @@ export class PushService {
       case PushMessageType.ORDER:
         // 跳转到订单详情
         if (message.payload && message.payload['orderId']) {
-          Router.push('pages/OrderDetail', {
-            orderId: message.payload['orderId']
-          } as Record<string, Object>);
+          const orderParams: Record<string, Object> = { orderId: message.payload['orderId'] };
+          Router.push('pages/OrderDetail', orderParams);
         }
         break;
 
@@ -346,11 +354,12 @@ export class PushService {
    */
   private async reportTokenToServer(token: string): Promise<void> {
     try {
-      const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_REGISTER, {
+      const registerData: Record<string, Object> = {
         pushToken: token,
         platform: 'huawei',
         deviceType: 'harmony'
-      } as Record<string, Object>);
+      };
+      const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_REGISTER, registerData);
 
       if (response.success) {
         console.info('[PushService] Token reported to server successfully');
@@ -372,9 +381,8 @@ export class PushService {
       if (result) {
         // 通知服务器删除 token
         if (this.pushToken) {
-          await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_UNREGISTER, {
-            pushToken: this.pushToken
-          } as Record<string, Object>);
+          const unregisterData: Record<string, Object> = { pushToken: this.pushToken };
+          await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_UNREGISTER, unregisterData);
         }
 
         this.pushToken = '';
@@ -440,9 +448,8 @@ export class PushService {
    */
   private async markMessageAsRead(messageId: string): Promise<void> {
     try {
-      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_READ, {
-        messageId: messageId
-      } as Record<string, Object>);
+      const readData: Record<string, Object> = { messageId: messageId };
+      await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.PUSH_READ, readData);
     } catch (error) {
       console.error('[PushService] Mark message as read failed:', error);
     }
@@ -455,7 +462,7 @@ export class PushService {
     try {
       const response = await this.apiService.get<PushMessage[]>(
         API_ENDPOINTS.PUSH_MESSAGES,
-        { unreadOnly: true } as Record<string, Object>
+        { unreadOnly: true } as unknown as Record<string, Object>
       );
 
       if (response.success && response.data) {
@@ -472,13 +479,7 @@ export class PushService {
   /**
    * 发送本地通知（用于测试）
    */
-  sendLocalNotification(message: {
-    type: PushMessageType;
-    title: string;
-    content: string;
-    payload?: Record<string, Object>;
-    isRead?: boolean;
-  }): void {
+  sendLocalNotification(message: LocalNotificationInput): void {
     const fullMessage: PushMessage = {
       messageId: `local_${Date.now()}`,
       timestamp: Date.now(),

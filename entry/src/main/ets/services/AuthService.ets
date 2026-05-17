@@ -18,6 +18,20 @@ export interface HuaweiAuthParams {
 }
 
 /**
+ * 华为账号登录请求体
+ */
+export interface HuaweiLoginRequest {
+  openId: string;
+  unionId: string;
+  authorizationCode: string;
+  accessToken: string;
+  displayName: string;
+  photoUrl: string;
+  email: string;
+  phone: string;
+}
+
+/**
  * 华为账号信息
  */
 export interface HuaweiAccountInfo {
@@ -30,6 +44,17 @@ export interface HuaweiAccountInfo {
   authorizationCode?: string;
   accessToken?: string;
   expireTime: number;
+}
+
+export interface HuaweiLoginRequest {
+  openId: string;
+  unionId: string;
+  authorizationCode: string;
+  accessToken: string;
+  displayName: string;
+  photoUrl: string;
+  email: string;
+  phone: string;
 }
 
 /**
@@ -222,7 +247,7 @@ export class AuthService {
     }
 
     try {
-      const result = await HMSAccountUtils.silentSignIn();
+      const result: hmsAccount.SignInResult | null = await HMSAccountUtils.silentSignIn();
 
       if (result && result.accessToken) {
         const accountInfo = this.parseHuaweiAccountInfo(result);
@@ -231,10 +256,10 @@ export class AuthService {
         AppStorage.setOrCreate('huaweiAccountInfo', JSON.stringify(accountInfo));
 
         // 通知后端刷新
-        const refreshData = {
+        const refreshData: Record<string, Object> = {
           openId: accountInfo.openId,
           accessToken: accountInfo.accessToken || ''
-        } as Record<string, Object>;
+        };
         await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGIN + '/huawei/refresh', refreshData);
 
         console.info('[AuthService] Huawei token refreshed successfully');
@@ -293,10 +318,8 @@ export class AuthService {
    * 发送验证码（手机号登录）
    */
   async sendCode(phone: string): Promise<void> {
-    const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.SEND_CODE, {
-      phone: phone,
-      type: 'login'
-    } as Record<string, Object>);
+    const sendCodeData: Record<string, Object> = { phone: phone, type: 'login' };
+    const response = await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.SEND_CODE, sendCodeData);
 
     if (!response.success) {
       throw new Error(response.error || '发送验证码失败');
@@ -307,10 +330,8 @@ export class AuthService {
    * 验证码登录（手机号登录）
    */
   async loginWithCode(phone: string, code: string): Promise<LoginResult> {
-    const response = await this.apiService.post<LoginResult>(API_ENDPOINTS.LOGIN, {
-      phone: phone,
-      code: code
-    } as Record<string, Object>);
+    const loginCodeData: Record<string, Object> = { phone: phone, code: code };
+    const response = await this.apiService.post<LoginResult>(API_ENDPOINTS.LOGIN, loginCodeData);
 
     if (!response.success || !response.data) {
       throw new Error(response.error || '登录失败');

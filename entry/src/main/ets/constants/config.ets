@@ -97,7 +97,7 @@ interface AppConfig {
 // ============================================
 // 主配置对象
 // ============================================
-export const Config = {
+export const Config: AppConfig = {
   // ============================================
   // 环境配置
   // ============================================
@@ -199,7 +199,7 @@ export const Config = {
     level: LogLevel.INFO,
     // 是否在生产环境禁用日志
     disableInProduction: false,
-  },
+  } as LoggingConfig,
 
   // ============================================
   // 数据文件配置（懒加载优化）
@@ -228,7 +228,7 @@ export const Config = {
     maxCachedItems: 500,
     // 启动时预加载的页数
     preloadPages: 1,
-  },
+  } as DataConfig,
 };
 
 // ============================================

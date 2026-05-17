@@ -66,6 +66,16 @@ export interface DataLoadState {
   lastError: string | null;
 }
 
+export interface DataLoadStateView {
+  metadataLoaded: boolean;
+  fullyLoaded: boolean;
+  loading: boolean;
+  loadedCount: number;
+  totalCount: number;
+  hasError: boolean;
+  errorMessage: string | null;
+}
+
 export class LazyDataLoader {
   private static instance: LazyDataLoader;
 
@@ -140,7 +150,7 @@ export class LazyDataLoader {
       // 读取文件内容
       const rawContent = await this.resMgr.getRawFileContent(filePath);
       const contentStr = this.uint8ArrayToString(rawContent);
-      const parsedData = JSON.parse(contentStr);
+      const parsedData: Record<string, Object> = JSON.parse(contentStr) as Record<string, Object>;
 
       // 提取数组数据
       const dataArray: Object[] = Array.isArray(parsedData) ? parsedData as Object[] :
@@ -248,7 +258,7 @@ export class LazyDataLoader {
       // 读取全量数据（rawfile 不支持随机读取，需要读取全文件后分批）
       const rawContent = await this.resMgr!.getRawFileContent(filePath);
       const contentStr = this.uint8ArrayToString(rawContent);
-      const parsedData = JSON.parse(contentStr);
+      const parsedData: Record<string, Object> = JSON.parse(contentStr) as Record<string, Object>;
 
       const dataArray: Object[] = Array.isArray(parsedData) ? parsedData as Object[] :
         (parsedData['data'] && Array.isArray(parsedData['data'])) ? parsedData['data'] as Object[] :
@@ -408,29 +418,23 @@ export class LazyDataLoader {
    * 获取数据源加载状态
    * @param dataKey 数据源标识
    */
-  getLoadState(dataKey: string): DataLoadState {
+  getLoadState(dataKey: string): DataLoadStateView {
     const state = this.loadStates.get(dataKey);
     if (!state) {
-      return {
+      const emptyState: DataLoadState = {
         metadataLoaded: false,
         fullyLoaded: false,
         loading: false,
-        loadedCount: 0,
-        totalCount: 0,
-        hasError: true,
-        errorMessage: '数据源未初始化',
+        items: [],
+        totalItems: 0,
+        metadata: null,
+        preloadedBatch: null,
+        preloadedBatchPage: 0,
+        lastError: '数据源未初始化',
       };
+      return emptyState;
     }
-
-    return {
-      metadataLoaded: state.metadataLoaded,
-      fullyLoaded: state.fullyLoaded,
-      loading: state.loading,
-      loadedCount: state.items.length,
-      totalCount: state.totalItems,
-      hasError: state.lastError !== null,
-      errorMessage: state.lastError,
-    };
+    return state;
   }
 
   // ==================== 缓存管理 ====================

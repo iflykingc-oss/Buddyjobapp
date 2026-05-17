@@ -12,8 +12,8 @@
  * const service = ChatService.getInstance();
  * service.setScene(ChatScene.INTERVIEW_PREP);
  * const cancel = await service.sendMessageStream('如何准备面试？', {
- *   onMessage: (content, done) => { /* 更新UI */ },
- *   onComplete: (content) => { /* 保存消息 */ }
+ *   onMessage: (content, done) => { },
+ *   onComplete: (content) => { }
  * });
  *
  * @since 1.0.0
