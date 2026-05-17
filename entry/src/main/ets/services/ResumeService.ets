@@ -490,12 +490,13 @@ export class ResumeService {
 
       try {
         // 调用上传 API
-        const response = await this.apiService.post<UploadResponse>(API_ENDPOINTS.RESUME_UPLOAD, {
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: validation.fileType,
-          content: fileContent
-        });
+        const uploadBody: Record<string, Object> = {
+          fileName: file.name as Object,
+          fileSize: file.size as Object,
+          fileType: (validation.fileType ?? '') as Object,
+          content: fileContent as Object
+        };
+        const response = await this.apiService.post<UploadResponse>(API_ENDPOINTS.RESUME_UPLOAD, uploadBody);
 
         if (!response.success || !response.data) {
           throw new Error(response.error || '文件上传失败');
