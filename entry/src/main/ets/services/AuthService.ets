@@ -246,8 +246,8 @@ export class AuthService {
 
         // 通知后端刷新
         const refreshData: Record<string, Object> = {
-          openId: accountInfo.openId,
-          accessToken: accountInfo.accessToken || ''
+          openId: accountInfo.openId as Object,
+          accessToken: (accountInfo.accessToken || '') as Object
         };
         await this.apiService.post<Record<string, Object>>(API_ENDPOINTS.LOGIN + '/huawei/refresh', refreshData);
 
